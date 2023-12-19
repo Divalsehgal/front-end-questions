@@ -1,31 +1,15 @@
-// !----------------------------------------------------------------Iterator with Generator function----------------------------------------------------------------
-
-
-
-
-function iterator(rangeStart, rangeEnd) {
-  if (rangeStart == 0 && rangeEnd == 0) {
-    return null;
+function* getIdGenerator(initialValue = 0) {
+  let id = initialValue;
+  while (true) {
+    yield id++;
   }
-
-  var iterate = function* (start = 0, end = 5, step = 1) {
-    let iterationCount = 0;
-    for (let i = start; i <= end; i += step) {
-      yield i;
-      iterationCount = i;
-    }
-    return iterationCount;
-  };
-
-  var values = iterate(rangeStart, rangeEnd);
-  var tmp = [];
-
-  while (values.next().value != undefined) {
-    tmp.push(values.next().value);
-  }
-  return tmp.join("");
 }
 
+const idGenerator = getIdGenerator(10);
 
+console.log(idGenerator.next().value); // 0
 
-console.log(iterator(0, 7));
+console.log(idGenerator.next().value); // 1
+console.log(idGenerator.next().value); // 2
+console.log(idGenerator.next().value); // 3
+
