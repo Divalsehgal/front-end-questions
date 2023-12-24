@@ -6,35 +6,35 @@ This project is a collection of solutions and implementations for various progra
 
 ## Folder Structure
 
-### 1. **dp (Dynamic Programming)**
-   - This folder contains solutions and implementations related to dynamic programming questions.
+1. **dp (Dynamic Programming):**
+   - Solutions and implementations related to dynamic programming questions.
 
-### 2. **dsa (Data Structures and Algorithms)**
-   - This folder is dedicated to data structures and algorithmic problems.
+2. **dsa (Data Structures and Algorithms):**
+   - Dedicated to data structures and algorithmic problems.
 
-### 3. **fcc (Free Code Camp)**
-   - Solutions for problems from Free Code Camp are stored in this folder.
+3. **fcc (Free Code Camp):**
+   - Solutions for problems from Free Code Camp.
 
-### 4. **generators**
-   - Code related to generators is placed in this folder.
+4. **generators:**
+   - Code related to generators.
 
-### 5. **jsquestion**
-   - General JavaScript-related questions and challenges are stored here.
+5. **jsquestion:**
+   - General JavaScript-related questions and challenges.
 
-### 6. **lc (LeetCode)**
-   - Solutions and implementations for problems from LeetCode are organized in this folder.
+6. **lc (LeetCode):**
+   - Solutions and implementations for problems from LeetCode.
 
-### 7. **map**
-   - This folder contains code related to mapping and dictionary problems.
+7. **map:**
+   - Code related to mapping and dictionary problems.
 
-### 8. **pollyfills**
-   - Implementations of polyfills for missing JavaScript features are stored in this folder.
+8. **pollyfills:**
+   - Implementations of polyfills for missing JavaScript features.
 
-### 9. **set**
-   - Code related to set operations and problems is placed in this folder.
+9. **set:**
+   - Code related to set operations and problems.
 
-### 10. **sorting**
-    - Sorting algorithms and related problems can be found in this folder.
+10. **sorting:**
+    - Algorithms and related problems for sorting.
 
 ## Usage
 
