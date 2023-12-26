@@ -2,42 +2,99 @@
   box-sizing: border-box;
 }
 
+html {
+  font-size: 16px;
+}
+
 body {
-  margin: 0;
-  font-family: sans-serif;
-  background: #f5f6f7;
+  font-family: 'Open Sans', sans-serif;
 }
 
-.header {
+.label {
+  border: 2px solid black;
+  width: 270px;
+  margin: 20px auto;
+  padding: 0 7px;
+}
+
+header h1 {
   text-align: center;
-  text-transform: uppercase;
-  padding: 32px;
-  background-color: #0a0a23;
-  color: #fff;
-  border-bottom: 4px solid #fdb347;
+  margin: -4px 0;
+  letter-spacing: 0.15px
 }
 
-.gallery {
+p {
+  margin: 0;
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  gap: 16px;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 20px 10px;
+  justify-content: space-between;
 }
 
-.gallery img {
-  width: 100%;
-  max-width: 350px;
-  height: 300px;
-  object-fit: cover;
-  border-radius: 10px;
+.divider {
+  border-bottom: 1px solid #888989;
+  margin: 2px 0;
 }
 
-.gallery::after {
-  content: "";
-  width: 350px;
+.bold {
+  font-weight: 800;
+}
+
+.large {
+  height: 10px;
+}
+
+.large, .medium {
+  background-color: black;
+  border: 0;
+}
+
+.medium {
+  height: 5px;
+}
+
+.small-text {
+  font-size: 0.85rem;
+}
+
+
+.calories-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.calories-info h2 {
+  margin: 0;
+}
+
+.left-container p {
+  margin: -5px -2px;
+  font-size: 2em;
+  font-weight: 700;
+}
+
+.calories-info span {
+  margin: -7px -2px;
+  font-size: 2.4em;
+  font-weight: 700;
+}
+
+.right {
+  justify-content: flex-end;
+}
+
+.indent {
+  margin-left: 1em;
+}
+
+.double-indent {
+  margin-left: 2em;
+}
+
+.daily-value p:not(.no-divider) {
+  border-bottom: 1px solid #888989;
+}
+
+.note {
+  font-size: 0.6rem;
+  margin: 5px 0;
 }
