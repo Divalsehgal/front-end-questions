@@ -44,12 +44,15 @@ promise.then(()=>console.log('string are equal')).catch(()=>console.log('string 
 
 // and resolve , reject function for execution
 
-// three states
+// following states
 
 // fulfilled
 // pending
 // reject
 // value
+// is Called
+// is Fulfilled
+// is Rejected
 
 function myPromise(executor) {
   let onResolve,
