@@ -21,4 +21,3 @@ const quickSort = (arr) => {
 
 
 const arr = [64, 25, 12, 22, 11, 0, -8, 22];
-console.log(quickSort(arr));
