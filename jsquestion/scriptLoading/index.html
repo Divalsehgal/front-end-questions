@@ -1,0 +1,64 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preload" href="./script4.js" as="script" />
+    <title>Async and Defer Example</title>
+  </head>
+
+  <body>
+    <h1>Async and Defer Example</h1>
+    <script async src="./script1.js"></script>
+    <script defer src="./script2.js"></script>
+    <script async src="./script3.js"></script>
+    <script defer src="./script4.js"></script>
+    <script>
+      console.log("script5");
+    </script>
+  </body>
+</html> -->
+<!-- 
+
+      <link rel="preload" href="./script4.js" as="script" />
+  this will make sure that script will download first from rest of the script 
+  but it wont manipluate the execution order
+ -->
+
+<!-- 
+     Async scripts are fetched asynchronously and executed as soon as they are downloaded,
+         without blocking the parsing of the HTML or 
+        waiting for other scripts or resources to download.
+      -->
+
+<!-- 
+    Deferred scripts are guaranteed to execute in the order they appear in the HTML,
+    after the HTML content is fully parsed but before the DOMContentLoaded event is fired.
+    They do not block the parsing of the HTML content
+     -->
+
+<!-- 
+    Inline scripts are executed immediately as they are encountered during HTML parsing. 
+     They don't block parsing or rendering of the page
+     -->
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preload" href="./script4.js" as="script" />
+    <title>Async and Defer Example</title>
+  </head>
+
+  <body>
+    <h1>Async and Defer Example</h1>
+    <script src="./script1.js"></script>
+    <script defer src="./script2.js"></script>
+    <script src="./script3.js"></script>
+    <script src="./script4.js"></script>
+    <script>
+      console.log("script5");
+    </script>
+  </body>
+</html>
