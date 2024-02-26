@@ -21,17 +21,17 @@ console.log(a[b]);
 // However, when we stringify an object, it becomes "[object Object]".
 
 
-function getInfo(member, year) {
-    member.name = 'Lydia';
-    year = '1998';
-}
+// function getInfo(member, year) {
+//     member.name = 'Lydia';
+//     year = '1998';
+// }
 
-const person = { name: 'Sarah' };
-const birthYear = '1997';
+// const person = { name: 'Sarah' };
+// const birthYear = '1997';
 
-getInfo(person, birthYear);
+// getInfo(person, birthYear);
 
-console.log(person, birthYear);
+// console.log(person, birthYear);
 
 //Arguments are passed by value,
 //unless their value is an object, then they're passed by reference.
@@ -39,12 +39,12 @@ console.log(person, birthYear);
 
 
 
-const person = { name: 'Lydia' };
+// const person = { name: 'Lydia' };
 
-Object.defineProperty(person, 'age', { value: 21 });
+// Object.defineProperty(person, 'age', { value: 21 });
 
-console.log(person);
-console.log(Object.keys(person));
+// console.log(person);
+// console.log(Object.keys(person));
 
 
 
@@ -55,11 +55,35 @@ console.log(Object.keys(person));
 
 
 
-const settings = {
-    username: 'lydiahallie',
-    level: 19,
-    health: 90,
-};
+// const settings = {
+//     username: 'lydiahallie',
+//     level: 19,
+//     health: 90,
+// };
 
-const data = JSON.stringify(settings, ['level', 'health']);
-console.log(data);
+// const data = JSON.stringify(settings, ['level', 'health']);
+// console.log(data);
+
+/*
+The second argument of JSON.stringify is the replacer. The replacer can either be a function or an array, and lets you control what and how the values should be stringified.
+
+If the replacer is an array, only the property names included in the array will be added to the JSON string. In this case, only the properties with the names "level" and "health" are included, "username" is excluded. data is now equal to "{"level":19, "health":90}".
+
+If the replacer is a function, this function gets called on every property in the object you're stringifying. The value returned from this function will be the value of the property when it's added to the JSON string. If the value is undefined, this property is excluded from the JSON string.
+
+
+
+*/
+
+
+
+function Employee(id, name) {
+    this.empId = id;
+    this.empName = name;
+}
+function Manager(id, name, department) {
+    Employee.call(this, id, name);
+    this.dept = department;
+}
+var newManager = new Manager(34, "Alex Smith", "Sales");
+console.log(newManager.empId); //
