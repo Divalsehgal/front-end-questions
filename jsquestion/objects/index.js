@@ -87,3 +87,21 @@ function Manager(id, name, department) {
 }
 var newManager = new Manager(34, "Alex Smith", "Sales");
 console.log(newManager.empId); //
+
+
+
+var status = '😎';
+
+setTimeout(() => {
+    const status = '😍';
+
+    const data = {
+        status: '🥑',
+        getStatus() {
+            return this.status;
+        },
+    };
+
+    console.log(data.getStatus());
+    console.log(data.getStatus.call(this));
+}, 0);

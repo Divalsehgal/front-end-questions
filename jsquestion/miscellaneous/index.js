@@ -42,3 +42,10 @@ console.log(Object.assign({}, obj1, obj2, obj3))
 
 var obj = { hasOwnProperty: 1, foo: 2 }
 obj.hasOwnProperty("foo")
+
+
+
+
+let newList = [1, 2, 3].push(4);
+
+console.log(newList.push(5));
