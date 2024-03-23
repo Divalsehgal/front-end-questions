@@ -2,8 +2,8 @@ function captilise(str) {
   const arr = str.split(" ");
   let res = [];
 
-  for (let i = 0; i < arr.length; i++) {
-    res = res + " " + arr[i][0].toUpperCase() + arr[i].slice(1);
+  for (let item of arr) {
+    res = res + " " + item[0].toUpperCase() + item.slice(1);
   }
   return res;
 }
@@ -16,8 +16,8 @@ String.prototype.capitalise = function captilise() {
   const arr = this.split(" ");
   let res = [];
 
-  for (let i = 0; i < arr.length; i++) {
-    res = res + " " + arr[i][0].toUpperCase() + arr[i].slice(1);
+  for (let item of arr) {
+    res = res + " " + item[0].toUpperCase() + item.slice(1);
   }
   return res;
 };

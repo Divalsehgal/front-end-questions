@@ -29,7 +29,7 @@ function PriorityQueue() {
   };
 
   this.isEmpty = function () {
-    return this.collection.length === 0 ? true : false;
+    return this.collection.length === 0 ;
   };
 
 }

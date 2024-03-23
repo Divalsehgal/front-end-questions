@@ -22,6 +22,6 @@ let myFunc = function (id, city) {
   console.log(`${this.name}, ${id}, ${city}`);
 };
 
-newFunc = myFunc.myBind(obj1, "a_random_id");
+const newFunc = myFunc.myBind(obj1, "a_random_id");
 newFunc("New York");
 greet3();

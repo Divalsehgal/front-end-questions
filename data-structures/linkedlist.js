@@ -21,7 +21,6 @@ class LinkedList {
     }
     this.head = node;
   }
-
   addToTail() {}
 
   removeHead() {}

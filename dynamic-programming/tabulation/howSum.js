@@ -12,4 +12,5 @@ const howSum = (targetSum, array) => {
 };
 console.log(howSum(7, [5, 3, 4]));
 
-console.log(howSum(7, [2, 3]));
+console.log(howSum(7, [2, 3, 6, 7]));
+
