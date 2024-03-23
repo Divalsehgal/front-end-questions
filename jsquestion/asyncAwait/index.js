@@ -8,7 +8,7 @@ async function get() {
 
 get();
 
-function get() {
+function get1() {
   fetch("https://dummyjson.com/products")
     .then((res) => res.json()) // but bere it will take this as a callaback res.json function then on resolve it will invoke
     .then((res1) => {
@@ -16,4 +16,4 @@ function get() {
     });
 }
 
-get();
+get1();

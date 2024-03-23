@@ -1,4 +1,4 @@
-var students = new Map([
+const students = new Map([
   ["stu1", "maths"],
   ["stu2", "science"],
   ["stu3", "english"],
@@ -6,4 +6,16 @@ var students = new Map([
   ["stu5", "social"],
   ["stu6", "IT"],
 ]);
-for (let i of students.entries()) console.log(i[0], i[1]);
+for (const i of students.entries()) console.log(i[0], i[1]);
+
+
+const map = new Map([
+  [150, "abc"],
+  [120, "def"],
+]);
+let it = map.entries();
+console.log("3", it.next());
+it = map.values();
+console.log("4", it.next());
+it = map.keys();
+console.log("5", it.next());

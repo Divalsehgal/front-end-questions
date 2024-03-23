@@ -1,11 +1,12 @@
 //CANSUM
+// Whether we can create target sum from given array 
 
 function canSum(targetSum, array, memo = {}) {
   if (targetSum in memo) return memo[targetSum];
   if (targetSum === 0) return true;
   if (targetSum < 0) return false;
-  for (let i = 0; i < array.length; i++) {
-    const rem = targetSum - array[i];
+  for (let item of array) {
+    const rem = targetSum - item;
     if (canSum(rem, array, memo) === true) {
       memo[targetSum] = true;
       return true;

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Chivo+Mono:ital,wght@0,100..900;1,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+        .container {
+            line-height: 24px;
+            font-family: 'Chivo Mono', monospace;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <ol>
+        </ol>
+        <div>
+            <script>
+                const array = [
+                    { id: 1, text: "The <cite> tag is used to define the title of a creative work,such as a book, movie, song, etc., within a block of text" },
+                    {
+                        id: 2,
+                        text: "To achieve bidirectional isolation in HTML, you can use the <bdi> (Bidirectional Isolation) tag. This tag is used to isolate a span of text that might be formatted in a different direction from its surrounding text"
+                    },
+                    {
+                        id: 3,
+                        text: "The <track> tag in HTML is used in conjunction with the <audio> and <video> elements to specify external text track files for media elements."
+                    },
+                    {
+                        id: 4,
+                        text: "The rem unit in CSS is based on the font size of the root element (html), not on the font size of the parent element as em units are. rem stands for 'root em' . 1 rem is equal to the computed value of the font- size property of the root element(html). If the font - size of the(html) element is not explicitly set in CSS, browsers typically use a default value, often 16 pixels"
+                    },
+                    {
+                        id: 5,
+                        text: "<dfn>: Defines a definition term. < dl >: Defines a description list. < bdo >: Defines the direction of text display, either right- to - left or left - to - right, overriding the default direction of the document."
+                    },
+                    {
+                        id: 6,
+                        text: "the key distinction is that display: flex; creates a block-level flex container, while display: inline-flex; creates an inline-level flex container."
+                    },
+
+
+                ]
+                const container = document.querySelector(".container ol");
+                for (let i of array) {
+                    const ele = document.createElement("li")
+                    ele.textContent = i.text;
+                    container.appendChild(ele)
+                }
+            </script>
+</body>
+
+</html>
