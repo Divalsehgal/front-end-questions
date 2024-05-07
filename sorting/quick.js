@@ -19,5 +19,7 @@ const quickSort = (arr) => {
 };
 
 
-
+//O(log(n))
+//in-place
+//unstable i.e. (order is not same)
 const arr = [64, 25, 12, 22, 11, 0, -8, 22];
