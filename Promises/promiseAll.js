@@ -5,7 +5,7 @@ const p2 = new Promise((res, rej) => {
   setTimeout(() => res("hi this side dival"), 2000);
 });
 const p3 = new Promise((res, rej) => {
-  setTimeout(() => res("hi i am the fast"), 1000);
+  setTimeout(() => rej("hi i am the fast"), 1000);
 });
 
 Promise.all([p1, p2, p3])

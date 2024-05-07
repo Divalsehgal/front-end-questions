@@ -105,3 +105,28 @@ setTimeout(() => {
     console.log(data.getStatus());
     console.log(data.getStatus.call(this));
 }, 0);
+
+
+
+
+
+let du = {
+    price: 199,
+    get: function () {
+        return this.price;
+    },
+};
+let r = Object.create(du);
+r.price = 299;
+//delete r.price;
+console.log(r.get(), r.__proto__.get(), r);
+
+const o1 = {
+    x: 10, y: 20
+};
+
+let o2 = o1;
+o2.x = 100;
+console.log(o1.x, o2.x, o1, o2)
+
+

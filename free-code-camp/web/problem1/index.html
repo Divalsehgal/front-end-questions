@@ -2,6 +2,17 @@
 <!-- tell system the version of html here it is html5 -->
 
 <html lang="en">
+<!-- 
+1.Setting the lang attribute to "ar" (Arabic) aids 
+screen readers in correctly pronouncing content for Arabic-speaking users.
+
+2.It enhances accessibility by ensuring that visually
+impaired individuals can understand the text accurately.
+
+3.Additionally, search engines utilize this information to index and
+display Arabic content more effectively in search results, improving
+visibility for relevant queries. -->
+
   <head>
     <!--universal character encding  -->
     <!--encoding standard that aims to cover all characters from all writing systems in world  -->
@@ -83,16 +94,10 @@
           </fieldset>
           <fieldset>
             <legend>What's your cat's personality?</legend>
-            <input
-              id="loving"
-              type="checkbox"
-              name="personality"
-              value="loving"
-              checked
-            />
-            <label for="loving">Loving</label>
-            <input id="lazy" type="checkbox" name="personality" value="lazy" />
-            <label for="lazy">Lazy</label>
+  
+            <label for="loving">Loving <input id="loving" type="checkbox" name="personality" value="loving" checked /></label>
+            
+            <label for="lazy">Lazy <input id="lazy" type="checkbox" name="personality" value="lazy" /></label>
             <input
               id="energetic"
               type="checkbox"

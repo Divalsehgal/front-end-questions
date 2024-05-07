@@ -10,5 +10,5 @@ const p3 = new Promise((res, rej) => {
 
 Promise.any([p1,p2,p3]).then((r)=>console.log(r)).catch((err)=>console.log(err))
 
-// if all fails return aggragate error in array
+// if all fails return aggregate error in array
 // otherwise return the first return promise success
