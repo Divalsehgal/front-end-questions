@@ -1,0 +1,11 @@
+.timer-container{
+    display: inline-flex;
+    gap: 10px;
+    flex-direction: column;
+    .time{
+        display: flex;
+        gap: 10px;
+        border: 1px solid gray;
+        padding: 4px;
+    }
+}

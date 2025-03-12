@@ -54,16 +54,16 @@ class BinarySearchTree {
     }
 
     min(root) {
-        if (!root?.left) {
-            return root?.value;
+        if (!root || !root.left) {
+            return root ? root.value : null;
         } else {
             return this.min(root.left);
         }
     }
 
     max(root) {
-        if (!root?.right) {
-            return root?.value;
+        if (!root || !root.right) {
+            return root ? root.value : null;
         } else {
             return this.max(root.right);
         }
@@ -133,7 +133,6 @@ class BinarySearchTree {
                 queue.push(curr.right);
             }
         }
-        console.log(queue);
     }
 
     height(node) {
@@ -151,14 +150,14 @@ class BinarySearchTree {
             return;
         }
         if (level === 1) {
-            console.log(`${node.element} `);
+            console.log(`${node.value} `);
         } else if (level > 1) {
             this.printLevel(node.left, level - 1);
             this.printLevel(node.right, level - 1);
         }
     }
 
-    isBST(node, min, max) {
+    isBST(node = this.root, min = Number.MIN_SAFE_INTEGER, max = Number.MAX_SAFE_INTEGER) {
         if (!node) {
             return true;
         }
@@ -172,10 +171,8 @@ class BinarySearchTree {
     }
 }
 
-// TODO level order and delete
-
 const bst = new BinarySearchTree();
-// console.log(bst.isEmpty());
+console.log("Is BST empty?", bst.isEmpty());
 bst.insert(10);
 bst.insert(5);
 bst.insert(15);
@@ -185,17 +182,27 @@ bst.insert(13);
 bst.insert(17);
 bst.insert(2);
 
-// bst.inOrder();
-// bst.preOrder();
-// bst.postOrder();
-// bst.levelOrder();
-// bst.printLevel(bst.root, 3);
-// console.log(bst.min());
-// console.log(bst.max());
-// console.log(bst.height(bst.root));
+console.log("\nIn-order traversal:");
+bst.inOrder(bst.root);
 
+console.log("\nPre-order traversal:");
+bst.preOrder(bst.root);
 
+console.log("\nPost-order traversal:");
+bst.postOrder(bst.root);
 
+console.log("\nLevel-order traversal (before deletion):");
 bst.levelOrder();
+
+console.log("\nTree height:", bst.height(bst.root));
+console.log("Min value:", bst.min(bst.root));
+console.log("Max value:", bst.max(bst.root));
+console.log("Is valid BST?", bst.isBST());
+
+console.log("\nDeleting 15...");
 bst.delete(15);
+
+console.log("\nLevel-order traversal (after deletion):");
 bst.levelOrder();
+
+console.log("\nIs still valid BST?", bst.isBST());

@@ -1,41 +1,45 @@
-const stack = [1, 2, 3, 4, 5];
-
-//left to right
-// if you want to pop use pop() method
-// and you want to to do right to left use shift()
-//console.log(stack.pop())
-
-// console.log(stack.push(7),stack)
-
-//console.log(stack.unshift(), stack);
-
 class Stack {
-  constructor(...items) {
+  constructor(items = []) {
     this.reverse = false;
-    this.stack = [...items];
+    this.stack = [...items]; // Creates a copy of the input array
   }
 
-  push(...items) {
+  push(item) {
     if (this.reverse) {
-      this.stack.unshift(...items);
+      this.stack.unshift(item);
     } else {
-      this.stack.push(...items);
+      this.stack.push(item);
     }
-    return this.stack;
+    return this.stack.length;
   }
 
   pop() {
     if (this.reverse) {
-      this.stack.shift();
+      return this.stack.shift();
     } else {
-      this.stack.pop();
+      return this.stack.pop();
     }
-    return this.stack;
+  }
+
+  peek() {
+    if (this.reverse) {
+      return this.stack[0];
+    } else {
+      return this.stack[this.stack.length - 1];
+    }
+  }
+
+  isEmpty() {
+    return this.stack.length === 0;
+  }
+
+  size() {
+    return this.stack.length;
   }
 }
 
-const r = new Stack(1, 2, 3, 4, 5);
-r.reverse = true;
+const r = new Stack([1, 2, 3, 4, 5]);
 console.log(r);
-console.log(r.pop());
-console.log(r.push(2));
+console.log(r.pop()); // Should print 1 (first item in the stack when reversed)
+console.log(r.push(2)); // Should print 5 (new length)
+console.log(r);
