@@ -1,0 +1,28 @@
+.progress-bar-container {
+  display: inline-flex;
+  gap: 10px;
+  flex-direction: column;
+
+  .bar {
+    padding: 20px;
+    border: 1px solid black;
+    display: flex;
+    width: 300px;
+
+    height: 500px;
+    flex-direction: column;
+    gap: 5px;
+    .progress {
+      width: 300px;
+      border: 1px solid black;
+      position: relative;
+      height: 60px;
+      background-color: gray;
+      .inner {
+        width: 0px;
+        height: 60px;
+        background-color: black;
+      }
+    }
+  }
+}
