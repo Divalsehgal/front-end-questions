@@ -1,0 +1,13 @@
+.popover-container {
+  .popover-inner {
+    position: relative;
+    .popover {
+      position: absolute;
+      height: 300px;
+      width: 300px;
+      background-color: aqua;
+      border: 1px solid gray;
+      padding: 10px;
+    }
+  }
+}
