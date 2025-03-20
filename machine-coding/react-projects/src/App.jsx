@@ -6,6 +6,8 @@ import Calender from "./google-calender/Calender";
 import InfiniteReloading from "./infinite-reloading/InfiniteReloading";
 import Popover from "./Popover/Popover";
 import Carousel from "./image-carousel/Carousel";
+import Otp from "./otp-input/otp";
+
 export default function App() {
   return (
     <>
@@ -17,7 +19,8 @@ export default function App() {
       {/* <Calender/> */}
       {/* <InfiniteReloading /> */}
       {/* <Popover/> */}
-      <Carousel/>
+      {/* <Carousel/> */}
+      <Otp/>
     </>
   );
 }

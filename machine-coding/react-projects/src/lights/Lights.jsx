@@ -6,7 +6,6 @@ function Lights() {
   );
 
   const clickHandler = (r, c) => {
-    console.log(r, c);
     setGrid((prev) => {
       return prev.map((row, rid) => {
         return row.map((cell, cid) => {

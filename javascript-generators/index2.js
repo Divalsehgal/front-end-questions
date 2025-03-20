@@ -7,8 +7,11 @@ function* startGame() {
 }
 
 const game = startGame();
-console.log(/* 1 */); // Do you love JavaScript?
-console.log(/* 2 */); // JavaScript loves you back ❤️
+
+
+console.log(game.next().value); // JavaScript loves you back ❤️
+game.next("Yes")
+console.log(game.next().value); // JavaScript loves you back ❤️
 
 /*
 
