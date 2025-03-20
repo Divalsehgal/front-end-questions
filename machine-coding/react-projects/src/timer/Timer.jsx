@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import "./Timer.scss";
 import { useEffect } from "react";
+import { useRef } from "react";
 function Timer() {
   const [time, setTime] = useState({ hour: 2, minute: 2, second: 5 });
   const [isStart, setIsStart] = useState(false);
-
+  const intervalRef=useRef(0);
   const startHandler = () => {
     setIsStart(!isStart);
   };
 
   useEffect(() => {
-    let interval;
     if (isStart) {
-      interval = setInterval(() => {
+      intervalRef.current = setInterval(() => {
         setTime((prev) => {
           let totalTime = prev.hour * 3600 + prev.minute * 60 + prev.second;
           totalTime--;
@@ -27,10 +27,10 @@ function Timer() {
         });
       }, 1000);
     } else {
-      clearInterval(interval);
+      clearInterval(intervalRef.current);
     }
     return () => {
-      clearInterval(interval);
+      clearInterval(intervalRef.current);
     };
   }, [isStart]);
 

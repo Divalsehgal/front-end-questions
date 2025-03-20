@@ -26,8 +26,18 @@
   but it wont manipluate the execution order
  -->
 
+<!-- ✅ Use async for independent scripts (Google Analytics, ads, third-party tracking). -->
 
+<!--  Use async for:
 
+Google Tag Manager (GTM)
+Google Analytics (gtag.js)
+Ad networks (Facebook Pixel, AdSense)
+✅ Use defer for:
+
+External JavaScript libraries (e.g., jQuery, Lodash, Chart.js)
+Main application scripts (React, Vue, Next.js hydration)
+Large scripts that manipulate the DOM -->
 <!-- 
     Deferred scripts are download while parsing of DOM 
     but execute them only after content is fully parsed 
@@ -41,8 +51,6 @@
      they are encountered during HTML parsing. 
      They don't block parsing or rendering of the page
      -->
-
-<!-- async will run before defer -->
 
 
 <!-- Async scripts are fetched asynchronously
@@ -58,6 +66,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="preload" href="./script4.js" as="script" /> <!-- preloading imp resource as script  -->
   <title>Async and Defer Example</title>
+
+
+  <meta name="theme-color" content="#226DAA" />
+
+
+
 </head>
 
 

@@ -1,9 +1,9 @@
 function updateInventory(arr1, arr2) {
   let res = {};
 
-  for (let i = 0; i < arr1.length; i++) {
+  for (const element of arr1) {
     for (let j = 0; j < arr2.length; j++) {
-      const common = arr2[j].indexOf(arr1[i][1]) === 1;
+      const common = arr2[j].indexOf(element[1]) === 1;
       if (!common) {
         const second = arr2[j][1];
         if (!res[second]) {
@@ -11,15 +11,15 @@ function updateInventory(arr1, arr2) {
         }
       } else {
         const temp = [];
-        const one = arr1[i][0] + arr2[j][0];
-        const second = arr1[i][1];
+        const one = element[0] + arr2[j][0];
+        const second = element[1];
         temp.push(one, second);
         res[second] = temp;
       }
     }
-    const second = arr1[i][1];
+    const second = element[1];
     if (!res[second]) {
-      res[second] = arr1[i];
+      res[second] = element;
     }
   }
   const result = Object.values(res)
@@ -52,7 +52,10 @@ function updateInventory(arr1, arr2) {
 
 // var newInv = [[2, "Hair Pin"], [3, "Half-Eaten Apple"], [67, "Bowling Ball"], [7, "Toothpaste"]]
 
-updateInventory(
+
+
+
+console.log(updateInventory(
   [
     [21, "Bowling Ball"],
     [2, "Dirty Sock"],
@@ -65,4 +68,4 @@ updateInventory(
     [67, "Bowling Ball"],
     [7, "Toothpaste"],
   ]
-);
+))

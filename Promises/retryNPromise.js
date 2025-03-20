@@ -1,59 +1,53 @@
-const p1 = new Promise(function (resolve) {
-    setTimeout(function () {
-        resolve("first resolved after 1 second")
-    }, 1000)
-})
-
-// const p2 = new Promise(function (_, reject) {
-//     setTimeout(function () {
-//         reject("second rejected after 2 second")
-//     }, 2000)
-// })
-
-const p3 = new Promise(function (resolve) {
-    setTimeout(function () {
-        resolve("second resolved after 3 second")
-    }, 3000)
-})
-
-// const p4 = new Promise(function (_, reject) {
-//     setTimeout(function () {
-//         reject("fourth resolved")
-//     }, 1000)
-// })
-
-
-// Promise.all([p1, p3]).then((result) => {
-//   return result.map((r)=>console.log(r))
-// }).catch((err) => console.log(err));
-
-
 const waitFun = (delay) => {
-    return new Promise(function (resolve, reject) {
-        setTimeout(function () {
-            resolve()
-        }, delay)
-    })
-}
-function retry(fn, retry, delay, finalError) {
-    return new Promise(function (resolve, reject) {
+    return new Promise((resolve) => setTimeout(resolve, delay));
+};
 
-        return fn().then(function () {
-            resolve()
-        }).catch((err) => {
-            if (retry > 0) {
-                return waitFun(delay)
-                    .then(retry(fn, retry - 1, delay, finalError))
-                    .then(resolve)
-                    .catch(reject)
+async function retry(fn, retries, delay, finalError) {
+
+    return fn()
+        .then((result) => result) // Return the result if successful
+        .catch((err) => {
+            console.log(`Retry attempts left: ${retries}, Error: ${err}`);
+            for (let i = 0; i < retries; i++) {
+                if (retries > 0) { 
+                    return waitFun(delay)
+                        .then(() => retry(fn, retries - 1, delay, finalError)); // Ensure proper chaining
+                }
             }
-            return reject(finalError)
-        })
-    })
+
+            return Promise.reject(finalError); // Properly reject the final error
+        });
+}
+
+async function retry1(fn, retries, delay, finalError) {
+    for (let i = 0; i <= retries; i++) {
+        try {
+            return await fn(); // Try executing the function
+        } catch (err) {
+            console.log(`Attempt ${i + 1} failed: ${err}`);
+            if (i < retries) {
+                await waitFun(delay); // Wait before retrying
+            } else {
+                throw finalError; // Final failure after all retries
+            }
+        }
+    }
+}
+
+async function asyncFn() {
+    console.log("Trying...");
+    return Promise.reject("Error occurred"); // Simulate failure
 }
 
 
-retry(asyncFn, retries = 3, delay = 1000, finalError = 'Failed');
+// recursive
+retry(asyncFn, 3, 2000, "Failed")
+    .then(() => console.log("Success"))
+    .catch((err) => console.log("Final error:", err));
 
 
+//iterative
 
+// retry1(asyncFn, 3, 2000, "Failed")
+//     .then(() => console.log("Success"))
+//     .catch((err) => console.log("Final error:", err));
