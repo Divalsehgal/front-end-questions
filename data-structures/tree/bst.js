@@ -96,6 +96,7 @@ class BinarySearchTree {
         return root;
     }
 
+    //left root right
     inOrder(root) {
         if (root) {
             this.inOrder(root.left);
@@ -104,6 +105,8 @@ class BinarySearchTree {
         }
     }
 
+    // root left right
+    // dfs
     preOrder(root) {
         if (root) {
             console.log(root.value);
@@ -111,7 +114,8 @@ class BinarySearchTree {
             this.preOrder(root.right);
         }
     }
-
+     
+    //left right root
     postOrder(root) {
         if (root) {
             this.postOrder(root.left);
@@ -120,18 +124,23 @@ class BinarySearchTree {
         }
     }
 
+    //bfs
     levelOrder() {
-        const queue = [];
-        queue.push(this.root);
+        if (!this.root) return []; // Edge case: Empty tree
+
+        const queue = [this.root]; // Start with root node
+        const result = []; // To store level order traversal
+
         while (queue.length) {
-            let curr = queue.shift();
-            if (curr.left) {
-                queue.push(curr.left);
-            }
-            if (curr.right) {
-                queue.push(curr.right);
-            }
+            let curr = queue.shift(); // Remove first element from queue
+            result.push(curr.value); // Store current node's value
+
+            // Enqueue left and right children
+            if (curr.left) queue.push(curr.left);
+            if (curr.right) queue.push(curr.right);
         }
+
+        return result; // Return level order traversal
     }
 
     height(node) {
@@ -191,7 +200,7 @@ console.log("\nPost-order traversal:");
 bst.postOrder(bst.root);
 
 console.log("\nLevel-order traversal (before deletion):");
-bst.levelOrder();
+console.log(bst.levelOrder())
 
 console.log("\nTree height:", bst.height(bst.root));
 console.log("Min value:", bst.min(bst.root));
