@@ -16,11 +16,11 @@ export default function App() {
       {/* <ProgressBar /> */}
       {/* <Timer/> */}
       {/* <Lights /> */}
-      {/* <Calender/> */}
+      <Calender/>
       {/* <InfiniteReloading /> */}
       {/* <Popover/> */}
       {/* <Carousel/> */}
-      <Otp/>
+      {/* <Otp/> */}
     </>
   );
 }

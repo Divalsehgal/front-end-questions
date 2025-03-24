@@ -1,17 +1,22 @@
+*{
+  box-sizing: border-box;
+}
 .calender-container {
   position: relative;
-  
+
   .time {
     display: flex;
     flex-direction: column;
-    gap: 50px;
+    gap: 40px;
     flex: 0.2;
+
 
     .time-item {
       width: 100%;
 
       .block {
         flex: 1;
+        
         border: 1px solid gray;
       }
     }

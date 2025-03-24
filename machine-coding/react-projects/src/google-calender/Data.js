@@ -40,100 +40,48 @@ export const NonConflictingData = [
 export const timeToMinutes = (str) => {
     const [hour, minutes] = str.split(":").map(Number);
     return hour * 60 + minutes;
-}
+};
+
 export const ConflictingData = [
-    {
-        startTime: "00:00",
-        endTime: "01:30",
-        color: "#f6be23",
-        title: "#TeamDevkode",
-    },
-    {
-        startTime: "3:30",
-        endTime: "7:30",
-        color: "#f6501e",
-        title: "#TeamDevkode",
-    },
-    {
-        startTime: "4:30",
-        endTime: "8:30",
-        color: "#f6501e",
-        title: "#TeamDevkode",
-    },
-    {
-        startTime: "6:30",
-        endTime: "9:00",
-        color: "#f6501e",
-        title: "Demo",
-    },
-    {
-        startTime: "11:00",
-        endTime: "13:30",
-        color: "#029be5",
-        title: "#TeamDevkode",
-    },
-    {
-        startTime: "12:00",
-        endTime: "13:30",
-        color: "#029be5",
-        title: "#TeamDevkode",
-    },
-    {
-        startTime: "9:30",
-        endTime: "10:30",
-        color: "#029be5",
-        title: "#TeamDevkode",
-    },
-    {
-        startTime: "16:00",
-        endTime: "17:00",
-        color: "#029be5",
-        title: "#TeamDevkode",
-    },
-    {
-        startTime: "15:00",
-        endTime: "17:00",
-        color: "#029be5",
-        title: "#TeamDevkode",
-    },
-    {
-        startTime: "18:00",
-        endTime: "19:00",
-        color: "#f6501e",
-        title: "#TeamDevkode",
-    },
-    {
-        startTime: "20:30",
-        endTime: "22:30",
-        color: "#029be5",
-        title: "#TeamDevkode",
-    },
-    {
-        startTime: "20:30",
-        endTime: "22:30",
-        color: "#029be5",
-        title: "#TeamDevkode",
-    },
-]
+    { startTime: "00:00", endTime: "01:30", color: "#f6be23", title: "#TeamDevkode" },
+    { startTime: "3:30", endTime: "7:30", color: "#f6501e", title: "#TeamDevkode" },
+    { startTime: "4:30", endTime: "8:30", color: "#f6501e", title: "#TeamDevkode" },
+    { startTime: "6:30", endTime: "9:00", color: "#f6501e", title: "Demo" },
+    { startTime: "11:00", endTime: "13:30", color: "#029be5", title: "#TeamDevkode" },
+    { startTime: "12:00", endTime: "13:30", color: "#029be5", title: "#TeamDevkode" },
+    { startTime: "9:30", endTime: "10:30", color: "#029be5", title: "#TeamDevkode" },
+    { startTime: "16:00", endTime: "17:00", color: "#029be5", title: "#TeamDevkode" },
+    { startTime: "15:00", endTime: "17:00", color: "#029be5", title: "#TeamDevkode" },
+    { startTime: "18:00", endTime: "19:00", color: "#f6501e", title: "#TeamDevkode" },
+    { startTime: "20:30", endTime: "22:30", color: "#029be5", title: "#TeamDevkode" },
+    { startTime: "20:30", endTime: "22:30", color: "#029be5", title: "#TeamDevkode" },
+];
 
-ConflictingData.forEach(item => item.count = 0);
-// Sort events by startTime to enable easier overlap checking
-ConflictingData.sort((a, b) => timeToMinutes(a.startTime) - timeToMinutes(b.startTime));
+// Step 1: Convert meetings to events with indexes
+let events = [];
+ConflictingData.forEach((item, index) => {
+    events.push({ time: timeToMinutes(item.startTime), type: 1, index });
+    events.push({ time: timeToMinutes(item.endTime), type: -1, index });
+});
 
-for (let i = 0; i < ConflictingData.length - 1; i++) {
-    const citem = ConflictingData[i];
-    const cItemEndTime = timeToMinutes(citem.endTime);
+// Step 2: Sort events
+events.sort((a, b) => a.time - b.time || a.type - b.type);
 
-    for (let j = i + 1; j < ConflictingData.length - 1; j++) {
-        const nitem = ConflictingData[j];
-        const nItemStartTime = timeToMinutes(nitem.startTime);
+let active_meetings = 0;
+let meetingCount = new Map(); // Stores count per meeting
 
-
-        if (cItemEndTime <= nItemStartTime) { break };
-
-        nitem.count = nitem.count + 1
+// Step 3: Process events
+for (let event of events) {
+    active_meetings += event.type; // Increment for start, decrement for end
+    if (event.type === 1) {
+        meetingCount.set(event.index, active_meetings);
     }
 }
+
+// Step 4: Assign the count back to ConflictingData
+ConflictingData.forEach((item, index) => {
+    item.count = meetingCount.get(index) || 0;
+});
 
 
 export const generateTimeData = () => {
