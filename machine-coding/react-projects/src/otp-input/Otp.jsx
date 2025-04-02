@@ -20,12 +20,14 @@ function Otp({ length = 4 }) {
     }
   };
 
-  const handlerKeyDown = (e, index) => {
-    console.log(e.key === "Backspace" , !otp[index] , index > 0);
-   if (e.key === "Backspace" && !otp[index] && index > 0) {
-     inputRef.current[index - 1]?.focus(); 
-   }
-  };
+const handlerKeyDown = (e, index) => {
+  console.log("Key Pressed:", e.key, "Index:", index, "Value:", e.target.value);
+
+  if (e.key === "Backspace" && e.target.value === "" && index > 0) {
+    inputRef.current[index - 1]?.focus();
+  }
+};
+
 
   return (
     <div>

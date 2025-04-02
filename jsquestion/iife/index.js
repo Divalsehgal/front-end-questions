@@ -25,6 +25,7 @@ const r = "Dival";
   console.log(y);
 })();
 
+//x is new and scoped to catch
 
 
 
@@ -32,6 +33,7 @@ const r = "Dival";
   return (function () {
     console.log(a)
     a = 6;
+    console.log(a)
   })()
 })(21)
 

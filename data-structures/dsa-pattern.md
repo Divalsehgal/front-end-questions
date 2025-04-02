@@ -21,3 +21,6 @@
 - Use three loops with `left` and `right` pointers.
 - Skip duplicates using an object or a set.
 
+
+In Linked List 
+we need to traverse with fast pointer and slow pointer 

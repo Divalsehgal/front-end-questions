@@ -1,0 +1,165 @@
+:root {
+    --color-mode: 'light';
+    --color-dark: #141414;
+    --color-dark-alpha: rgba(0, 0, 0, 0.1);
+    --color-light: #efefef;
+    --color-light-alpha: rgba(255, 255, 255, 0.9);
+
+    /* https://twitter.com/Una/status/1129401554732277760 */
+
+
+    /* https://css-tricks.com/the-many-ways-to-change-an-svg-fill-on-hover-and-when-to-use-them/ */
+    --icon-sun-filter: invert(0.61) sepia(0.8) saturate(5) hue-rotate(0deg) brightness(0.92);
+
+
+    --icon-moon-filter: invert(0.75);
+
+    --background: #efefef;
+    --text-color: #141414;
+    --button-icon: var(--icon-moon);
+    --button-icon-filter: var(--icon-moon-filter);
+    --button-background: var(--color-dark);
+    --button-color: var(--color-light);
+    --border-color: var(--color-dark-alpha);
+}
+
+body {
+    background: var(--background);
+    color: var(--text-color);
+    transition: background 500ms ease-in-out, color 200ms ease;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --color-mode: 'dark';
+    }
+
+    :root:not([data-user-color-scheme]) {
+        --background: var(--color-dark);
+        --text-color: var(--color-light);
+        --button-icon: var(--icon-sun);
+        --button-icon-filter: var(--icon-sun-filter);
+        --button-background: var(--color-light);
+        --button-color: var(--color-dark);
+        --border-color: var(--color-light-alpha);
+    }
+}
+
+[data-user-color-scheme="dark"] {
+    --background: var(--color-dark);
+    --text-color: var(--color-light);
+    --button-icon: var(--icon-sun);
+    --button-icon-filter: var(--icon-sun-filter);
+    --button-background: var(--color-light-alpha);
+    --button-color: var(--color-dark);
+    --border-color: var(--color-light-alpha);
+}
+
+/* Remove _all_ animations and transitions for people that prefer not to see them */
+@media (prefers-reduced-motion: reduce) {
+    body {
+        scroll-behavior: auto;
+    }
+
+    * {
+        -webkit-animation: none !important;
+        animation: none !important;
+        transition: none !important;
+    }
+}
+
+/* If there’s no JS, there’s no need for the user toggle component to show */
+.no-js .user-toggle {
+    display: none;
+}
+
+.user-toggle {
+    margin: 2rem auto 0 auto;
+    padding-top: 2.5rem;
+    max-width: 20rem;
+    border-top: 1px solid var(--border-color);
+    text-align: center;
+}
+
+.toggle-button {
+    display: inline-flex;
+    background: var(--button-background);
+    color: var(--button-color);
+    border: none;
+    font: inherit;
+    font-size: 1.5rem;
+    padding: 0.5rem 1rem;
+    transition: background 500ms ease-in-out, color 200ms ease;
+}
+
+.toggle-button__icon {
+    background: var(--button-icon);
+    width: 1.2em;
+    height: 1.2em;
+    margin: 0 0 0 0.5em;
+    filter: var(--button-icon-filter);
+    transform: translateY(1px);
+    /* Optical adjustment */
+    transition: filter 500ms ease-in-out;
+}
+
+.toggle-button:focus {
+    outline: 1px solid var(--button-background);
+    outline-offset: 0.5rem;
+}
+
+
+
+
+
+
+
+
+
+
+/* Presentational demo styles */
+
+body {
+    font-family: sans-serif;
+    padding: 2rem 1rem;
+    line-height: 1.4;
+    display: grid;
+    place-items: center;
+}
+
+article {
+    max-width: 75ch;
+    margin: 0 auto;
+}
+
+article>*+* {
+    margin-top: 1em;
+}
+
+h1 {
+    font-size: 2.5rem;
+    line-height: 1.1;
+}
+
+p {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+code {
+    font-weight: 700;
+    font-size: 1.3em;
+    white-space: pre;
+}
+
+.visually-hidden {
+    display: block;
+    height: 1px;
+    width: 1px;
+    overflow: hidden;
+    clip: rect(1px 1px 1px 1px);
+    clip: rect(1px, 1px, 1px, 1px);
+    clip-path: inset(1px);
+    white-space: nowrap;
+    position: absolute;
+}

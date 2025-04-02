@@ -5,6 +5,11 @@ async function get() {
 
   console.log(json); // and this line wll eventually have to wait
 }
+// If the response body is JSON, you must call.json() to parse it into a JavaScript object.
+// If the response is text, HTML, or binary data, you’ll need to use.text(), .blob(), 
+// or other methods depending on the content type.
+// Some libraries or frameworks like axios
+// may handle the parsing for you, so you don’t need to manually call.json().
 
 get();
 
