@@ -13,3 +13,6 @@ const expect = function (val) {
 };
 
 console.log(expect(5).notToBe(null))
+
+
+// Create here a calculator class

@@ -13,6 +13,7 @@ const map = new Map([
   [150, "abc"],
   [120, "def"],
 ]);
+console.log("here",map.values());
 let it = map.entries();
 console.log("3", it.next());
 it = map.values();

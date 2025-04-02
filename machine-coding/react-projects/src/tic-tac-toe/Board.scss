@@ -1,0 +1,24 @@
+.board-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  flex-direction: column;
+  padding: 8px;
+  background-color: beige;
+  box-shadow: inset;
+  gap: 4px;
+
+  .board-boxes {
+    display: flex;
+    flex-direction: column;
+  }
+  .row {
+    display: flex;
+    .box {
+      height: 50px;
+      border: 1px solid black;
+      width: 50px;
+    }
+  }
+}
