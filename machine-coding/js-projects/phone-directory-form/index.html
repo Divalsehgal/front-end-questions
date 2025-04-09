@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+      <title>Phone Directory</title>
+    <link href="./index.css"  rel="stylesheet" type="text/css"/>
+  </head>
+  <body>
+    <main>
+    <h1 class="margin20 textCenter fs20">Phone Directory</h1>
+    <div class="textCenter">
+      <div class="textCenter inputContent">
+        <div class="txtLeft marginTB40 fb">
+          <form class="txtLeft" onSubmit="event.preventDefault();">
+
+          <input type="text" maxlength="20" id="name" required value="" aria-label="Contact Name" placeholder="Contact Name"/>
+
+          <input type="number" required maxlength="10" id="mobile" value="" aria-label="Mobile Number" placeholder="Mobile Number"/>
+
+          <input type="email" required id="email" value="" aria-label="Email" placeholder="Email"/>
+
+          <input type="submit" class="btn" id="submit" value="Add Vendor"/>
+          <div id="error" class="dn error padT10 textCenter">Invalid Input!</div>
+          </form>
+        </div>
+      </div>
+
+      <form class="marginT40" onSubmit="event.preventDefault();">
+        <label for="search">Search contact by Mobile No:</label>
+        <input type="text" id="search" value=""/>
+      </form>
+      
+      <div class="marginT40 padL10 tab cursorPtr" id="contactsSummary">Contacts Summary</div>
+      <div id="contactSummary" class="contactSummary">
+        <table aria-labelledby="contactsSummary" id="summaryTable">
+          <thead>
+            <tr>
+              <th><button id="nameColumn">Name</button></th>
+              <th>Mobile</th> 
+              <th>Email</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Admin</td>
+              <td>9999999999</td> 
+              <td>admin@xyzcompany.com</td>
+            </tr>
+          </tbody>
+        </table>
+        <div id="noResult" class="noResult dn">No Results Found</div>
+      </div>
+    </div>
+  </main>
+  <script>
+    window.contactsList = [{
+      name: 'Admin',
+      mobile: '9999999999',
+      email: 'admin@xyzcompany.com'
+    }];
+  </script>
+  <script src="./index.js" type="text/javascript"></script>
+</body>
+</html>

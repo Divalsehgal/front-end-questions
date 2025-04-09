@@ -5,7 +5,6 @@ function flat(arr) {
     for (const i of arr) {
         if (Array.isArray(i)) {
             temp.push(...flat(i))
-
         } else {
             temp.push(i)
         }

@@ -1,0 +1,73 @@
+[
+  {
+    "postId": 1,
+    "postData": {
+      "title": "First Post",
+      "content": "Just had a great cup of coffee at my favorite cafe! ☕️ #CoffeeLovers"
+    },
+    "postLikes": 20,
+    "postTimeStamp": "2024-02-09T09:00:00Z",
+    "postComments": [
+      {
+        "commentId": 1,
+        "commentData": "Sounds amazing! I love that cafe too. 😊",
+        "commentLikes": 5,
+        "commentTimeStamp": "2024-02-09T09:05:00Z",
+        "replies": [
+          {
+            "replyId": 1,
+            "replyData": "It's truly a gem in the neighborhood!",
+            "replyLikes": 2,
+            "replyTimeStamp": "2024-02-09T09:10:00Z"
+          }
+        ]
+      },
+      {
+        "commentId": 2,
+        "commentData": "I'm more of a tea person, but that sounds delightful!",
+        "commentLikes": 3,
+        "commentTimeStamp": "2024-02-09T09:08:00Z",
+        "replies": []
+      }
+    ]
+  },
+  {
+    "postId": 2,
+    "postData": {
+      "title": "Second Post",
+      "content": "Just finished reading a fascinating book. Highly recommend it to everyone! 📚 #BookWorm"
+    },
+    "postLikes": 15,
+    "postTimeStamp": "2024-02-09T10:00:00Z",
+    "postComments": [
+      {
+        "commentId": 1,
+        "commentData": "What book did you read? I'm always looking for new recommendations.",
+        "commentLikes": 3,
+        "commentTimeStamp": "2024-02-09T10:05:00Z",
+        "replies": [
+          {
+            "replyId": 1,
+            "replyData": "I read 'The Alchemist' by Paulo Coelho. It's a life-changing read!",
+            "replyLikes": 2,
+            "replyTimeStamp": "2024-02-09T10:10:00Z"
+          }
+        ]
+      },
+      {
+        "commentId": 2,
+        "commentData": "That's one of my favorites too! It's such an inspiring book.",
+        "commentLikes": 2,
+        "commentTimeStamp": "2024-02-09T10:07:00Z",
+        "replies": [
+          {
+            "replyId": 2,
+            "replyData": "Absolutely! It teaches so many valuable life lessons.",
+            "replyLikes": 1,
+            "replyTimeStamp": "2024-02-09T10:12:00Z"
+          }
+        ]
+      }
+    ]
+  }
+]
