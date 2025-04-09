@@ -1,3 +1,4 @@
+//power set
 
 function getAllSubsets(arr) {
     let result = [[]]

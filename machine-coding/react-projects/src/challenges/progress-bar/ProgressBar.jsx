@@ -1,14 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useId } from "react";
 import "./ProgressBar.scss";
 import { useEffect } from "react";
 function ProgressBar() {
   const [progressArray, setProgressArray] = useState([]);
+  const id = useId();
 
   const clickHandler = () => {
-    const newItem = { id: Date.now(), value: `bar1${Math.round(Date.now())}` };
+    const newItem = { id: id, value: `bar1${Math.round(id)}` };
     setProgressArray((prev) => [...prev, newItem]);
   };
 
+  // remove the completed progress bar
   const onComplete = (id) => {
     setProgressArray((prev) => {
       return prev.filter((item) => item.id !== id);
@@ -39,11 +41,11 @@ const ProgressBarItem = ({ id, onComplete }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       setWidth((prev) => {
-        if (prev < 300) {
-          return prev + 30;
+        if (prev < 100) {
+          return prev + 20;
         } else {
           onComplete(id);
-          return 300;
+          return 100;
         }
       });
     }, 1000);
@@ -57,7 +59,7 @@ const ProgressBarItem = ({ id, onComplete }) => {
       <div
         className="inner"
         style={{
-          width: width,
+          width: `${width}%`,
         }}
       ></div>
     </div>

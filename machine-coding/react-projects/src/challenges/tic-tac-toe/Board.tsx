@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
 import "./Board.scss";
-import { useFlags } from "../context/featureFlagProvider";
+import { useFlags } from "../../context/featureFlagProvider";
 
 const createCell = (row, col) => ({
   id: `${row}-${col}`,
-  symbol: '',
+  symbol: "",
 });
 
 const initialState = () =>
@@ -14,14 +14,17 @@ const initialState = () =>
 
 function Board() {
   const [player, setPlayer] = useState({ sign: "", no: 1 });
-  const [winner, setWinner] = useState(null);
+  const [winner, setWinner] = useState(0);
   const [data, setData] = useState(initialState());
 
- const features=useFlags();
+  const features = useFlags();
+
   const playerSign = useRef({
     1: null,
     2: null,
   });
+
+  const hideRadioButton = !playerSign.current[1] || !playerSign.current[2];
 
   const clickHandler = (r, c) => {
     if (!player.sign || data[r][c].symbol || winner) return;
@@ -46,15 +49,13 @@ function Board() {
     if (!playerSign.current[1]) {
       playerSign.current[1] = e.target.value;
       playerSign.current[2] = e.target.value === "X" ? "O" : "X";
-    }else{
-      return
     }
     setPlayer({ sign: e.target.value, no: 1 });
   };
 
   const restartGame = () => {
     setData(initialState());
-    setWinner("");
+    setWinner(0);
     setPlayer({ sign: "", no: 1 });
   };
 
@@ -128,28 +129,29 @@ function Board() {
       <div className="board-container">
         <div className="board-boxes">
           <h3>Choose Your Symbol</h3>
-          <fieldset>
-            <label>
-              <input
-                type="radio"
-                className="radio"
-                checked={player.sign === "X"}
-                value="X"
-                onChange={radioButtonClickHandler}
-              />
-              X
-            </label>
-            <label>
-              <input
-                type="radio"
-                className="radio"
-                checked={player.sign === "O"}
-                value="O"
-                onChange={radioButtonClickHandler}
-              />
-              O
-            </label>
-          </fieldset>
+          {hideRadioButton && (
+            <fieldset>
+              <label>
+                <input
+                  type="radio"
+                  className="radio"
+                  checked={player.sign === "X"}
+                  value="X"
+                  onChange={radioButtonClickHandler}
+                />
+                X
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  className="radio"
+                  checked={player.sign === "O"}
+                  value="O"
+                  onChange={radioButtonClickHandler}
+                />
+              </label>
+            </fieldset>
+          )}
           <h3>Current Player: {player.no}</h3>
           {winner && <h2>Winner: {winner} 🎉</h2>}
         </div>

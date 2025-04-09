@@ -12,4 +12,17 @@ function fibonnaciFunction(n, memo = {}) {
   return memo[n];
 }
 console.log("start fibonnaci function");
-console.log(fibonnaciFunction(50));
+console.log(fibonnaciFunction(8));
+
+
+
+
+
+
+
+
+
+
+
+
+
