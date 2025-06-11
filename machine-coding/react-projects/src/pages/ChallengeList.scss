@@ -1,5 +1,29 @@
 .container {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
+  height: 100%;
+  .inner {
+    display: flex;
+    max-width: 800px;
+    flex-direction: column;
+    margin: 0 auto;
+    padding: 20px;
+
+    .list-container {
+      display: flex;
+      flex-direction: column;
+      overflow: auto;
+      height: 500px;
+
+      .list-item {
+        position: relative;
+
+        .hint {
+          display: none;
+        }
+
+        &:hover .hint {
+          display: block;
+        }
+      }
+    }
+  }
 }

@@ -23,4 +23,6 @@ function sym(...args) {
   return [...new Set(args.reduce(diff1, []))];
 }
 
-sym([1, 2, 5], [2, 3, 5], [3, 4, 5]);
+//The symmetric difference between two arrays is the array of elements 
+// which are in either of the array but not in both
+console.log(sym([1, 2, 5], [2, 3, 5], [3, 4, 5]))

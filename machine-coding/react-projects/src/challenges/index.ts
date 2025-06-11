@@ -20,29 +20,6 @@ import Board from "./tic-tac-toe/Board";
 import Timer1 from "./timer1/Timer1";
 import TransferBox from "./transfer-list/page";
 
-export const challengeNamesData = [
-    "Timer",
-    "Popover",
-    "TypeWriterEffect",
-    "Calender",
-    "AllCheckboxes",
-    "CommentReplyBox",
-    "FolderStructure",
-    "FormValidation",
-    "HackerNews",
-    "Carousel",
-    "InfiniteReloading",
-    "Lights",
-    "Mention",
-    "MultiStepper",
-    "Otp",
-    "Circles",
-    "ProgressBar",
-    "SnakeLadderBoard",
-    "Board",
-    "Timer1",
-    "TransferBox",
-] ;
 
 
 export const challenges = {

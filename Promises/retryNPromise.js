@@ -41,13 +41,13 @@ async function asyncFn() {
 
 
 // recursive
-retry(asyncFn, 3, 2000, "Failed")
-    .then(() => console.log("Success"))
-    .catch((err) => console.log("Final error:", err));
+// retry(asyncFn, 3, 2000, "Failed")
+//     .then(() => console.log("Success"))
+//     .catch((err) => console.log("Final error:", err));
 
 
 //iterative
 
-// retry1(asyncFn, 3, 2000, "Failed")
-//     .then(() => console.log("Success"))
-//     .catch((err) => console.log("Final error:", err));
+retry1(asyncFn, 3, 2000, "Failed")
+    .then(() => console.log("Success"))
+    .catch((err) => console.log("Final error:", err));
