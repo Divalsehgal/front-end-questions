@@ -6,25 +6,13 @@ class Dog {
 };
 
 class Labrador extends Dog {
-    // 1
-    constructor(name, size) {
-        this.size = size;
-    }
-    // 2
-    constructor(name, size) {
-        super(name);
-        this.size = size;
-    }
-    // 3
-    constructor(size) {
-        super(name);
-        this.size = size;
-    }
-    // 4
-    constructor(name, size) {
-        this.name = name;
-        this.size = size;
-    }
 
+    constructor(name, size) {
+        super(name);
+        this.size = size;
+    }
 };
 
+const c1=new Labrador('scooby','small')
+
+console.log(c1)

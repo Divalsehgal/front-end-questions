@@ -1,17 +1,17 @@
-function throttle(fn, delay) {
+const s = "tact coa"; // dgoo
 
-    let throttle = false
-
-    return function (...args) {
-        if (throttle) {
-            return
+function isPerm(s) {
+    const arr=s.toString().split('')
+    let l = 0;
+    let r = arr.length - 1;
+    while (l < r) {
+        if (arr[l] !== arr[r]) {
+            return false
         }
-        fn.apply(this, args)
-        throttle=true
-
-        setTimeout(() => {
-            throttle = false
-        }, delay)
+        l++;
+        r--
     }
-
+    return true
 }
+
+console.log(isPerm(s))

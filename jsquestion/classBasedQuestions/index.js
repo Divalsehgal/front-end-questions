@@ -10,7 +10,9 @@ class Chameleon {
 }
 
 const freddie = new Chameleon({ newColor: 'purple' });
-console.log(freddie.colorChange('orange'));
+const freddie1 = new Chameleon();
+
+console.log(freddie.colorChange('orange'), freddie1.newColor);
 
 // static methos can not be called by instances
 

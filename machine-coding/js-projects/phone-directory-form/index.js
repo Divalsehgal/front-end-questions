@@ -4,7 +4,7 @@ const emailInput = document.getElementById('email');
 const submitBtn = document.getElementById('submit');
 const errorBox = document.getElementById('error');
 const summaryTable = document.getElementById('summaryTable').querySelector('tbody');
-
+const searchInput = document.getElementById('search')
 function isValidName(name) {
     return /^[A-Za-z ]{1,20}$/.test(name);
 }
@@ -23,6 +23,10 @@ function resetForm() {
     mobileInput.value = '';
     emailInput.value = '';
 }
+
+searchInput.addEventListener('change',function(e){
+    console.log(e.target.value, summaryTable)
+})
 
 function showError(show) {
     errorBox.style.display = show ? 'block' : 'none';

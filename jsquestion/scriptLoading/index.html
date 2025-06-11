@@ -21,9 +21,10 @@
 
 <!-- 
 
-      <link rel="preload" href="./script4.js" as="script" />
+  <link rel="preload" href="./script4.js" as="script" />
   this will make sure that script will download first from rest of the script 
   but it wont manipluate the execution order
+
  -->
 
 <!-- ✅ Use async for independent scripts (Google Analytics, ads, third-party tracking). -->
@@ -33,17 +34,20 @@
 Google Tag Manager (GTM)
 Google Analytics (gtag.js)
 Ad networks (Facebook Pixel, AdSense)
+
 ✅ Use defer for:
 
 External JavaScript libraries (e.g., jQuery, Lodash, Chart.js)
 Main application scripts (React, Vue, Next.js hydration)
 Large scripts that manipulate the DOM -->
+
 <!-- 
     Deferred scripts are download while parsing of DOM 
     but execute them only after content is fully parsed 
     before the DOMContentLoaded
     and execute in the order they appear in the HTML,
     They do not block the parsing of the HTML content
+    ✅ Best for critical JS needed for app to run
      -->
 
 <!-- 
