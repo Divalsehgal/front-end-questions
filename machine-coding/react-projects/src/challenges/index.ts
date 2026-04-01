@@ -19,7 +19,7 @@ import SnakeLadderBoard from "./snakeAndLadder/SnakeLadderBoard";
 import Board from "./tic-tac-toe/Board";
 import Timer1 from "./timer1/Timer1";
 import TransferBox from "./transfer-list/page";
-
+import  Todo  from "./reducer-todo";
 
 
 export const challenges = {
@@ -43,7 +43,8 @@ export const challenges = {
     SnakeLadderBoard,
     Board,
     Timer1,
-    TransferBox
+    TransferBox,
+    Todo
 };
 
 export const challengeNames = Object.keys(challenges);

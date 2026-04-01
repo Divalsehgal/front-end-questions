@@ -23,4 +23,4 @@ I — Interface Segregation Principle
 Don’t pass unnecessary props/methods
 
 D — Dependency Inversion Principle
-Keeps Abstraction easier for dependency injection
+Keeps Abstraction which is easier for dependency injection

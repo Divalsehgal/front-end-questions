@@ -20,4 +20,6 @@ export const challengeNamesData = [
     { name: "Board", hint: "Basic board layout for games or grids" },
     { name: "Timer1", hint: "Alternative timer implementation" },
     { name: "TransferBox", hint: "Move items between two lists" },
+    { name: "Todo", hint: "Todo list with useReducer" },
+
 ];
