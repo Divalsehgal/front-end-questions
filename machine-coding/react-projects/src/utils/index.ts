@@ -21,5 +21,6 @@ export const challengeNamesData = [
     { name: "Timer1", hint: "Alternative timer implementation" },
     { name: "TransferBox", hint: "Move items between two lists" },
     { name: "Todo", hint: "Todo list with useReducer" },
-
+    { name: "Tabs", hint: "Tabs component with keyboard navigation" },
+    
 ];

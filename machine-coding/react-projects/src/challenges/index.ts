@@ -20,6 +20,7 @@ import Board from "./tic-tac-toe/Board";
 import Timer1 from "./timer1/Timer1";
 import TransferBox from "./transfer-list/page";
 import  Todo  from "./reducer-todo";
+import Tabs from "./tabs";
 
 
 export const challenges = {
@@ -44,7 +45,8 @@ export const challenges = {
     Board,
     Timer1,
     TransferBox,
-    Todo
+    Todo,
+    Tabs
 };
 
 export const challengeNames = Object.keys(challenges);
