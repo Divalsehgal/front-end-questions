@@ -14,11 +14,13 @@ export default function Tabs({ defaultValue, items }) {
 
     switch (e.key) {
       case "ArrowRight":
+        // Move next, wrap to 0 if at end (e.g., (2 + 1) % 3 = 0)
         newIndex = (index + 1) % items.length;
         focusTab(newIndex);
         break;
 
       case "ArrowLeft":
+        // Move prev, wrap to end if at 0 (e.g., (0 - 1 + 3) % 3 = 2)
         newIndex = (index - 1 + items.length) % items.length;
         focusTab(newIndex);
         break;
@@ -46,6 +48,12 @@ export default function Tabs({ defaultValue, items }) {
   return (
     <div className="tabs">
       {/* TAB LIST */}
+      <p>
+        TAB                         PANEL
+        ----------------------------------------
+        id="tab-1"        ←──────→  aria-labelledby="tab-1"
+        aria-controls="panel-1" →   id="panel-1"
+      </p>
       <div className="tabs-list" role="tablist">
         {items.map(({ label, value: itemValue }, index) => {
           const isActive = itemValue === value;

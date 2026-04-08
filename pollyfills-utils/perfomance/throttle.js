@@ -15,7 +15,7 @@ function throttle(callback, delay) {
       clearTimeout(timer);
     }
 
-    setTimeout(() => {
+    timer=setTimeout(() => {
       coolDown = false;
     }, delay);
   }
