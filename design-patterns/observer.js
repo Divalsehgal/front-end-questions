@@ -1,6 +1,8 @@
 /*
 
-“Observer pattern means one object notifies multiple objects when something changes.”
+“Observer pattern means one object
+notifies multiple objects
+when something changes.”
 
 */
 

@@ -1,45 +1,26 @@
-// Array.prototype.myReduce=function myReduce(a,b){
 
-//     let temp=b;
-//     for(let i=0;i<this.length;i++){
-//        if(temp){
-//         temp=a.call(null, temp, this[i]);
-//        }else{
-//         temp=this[i]
-//        }
-//     }
-//     return temp
-
-// }
 
 const arr = [1, 2, 3, 3, 5]
 
 function sum(a, b) {
     return a + b
 }
-// console.log(arr.myReduce(sum, 0));
-
-// console.log(arr.reduce(sum,0));
 
 
+Array.prototype.myReduce = function (callback, initialValue) {
+    let acc = initialValue;
+    let startIndex = 0;
 
-Array.prototype.myReduce = function (a, b) {
-
-
-    let temp = b;
-    for (let i = 0; i < this.length; i++) {
-        if (temp) {
-            temp = a.call(this, temp, this[i])
-        } else {
-            temp = this[i]
-        }
-
-
-
+    if (acc === undefined) {
+        acc = this[0];
+        startIndex = 1;
     }
-    return temp
 
-}
+    for (let i = startIndex; i < this.length; i++) {
+        acc = callback(acc, this[i], i, this);
+    }
 
+    return acc;
+};
 
 console.log(arr.myReduce(sum, 0));
