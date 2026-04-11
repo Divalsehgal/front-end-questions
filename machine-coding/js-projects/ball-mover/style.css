@@ -1,0 +1,42 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+    font-family: sans-serif;
+}
+
+/* The Box: Must be relative so the ball is absolute to it */
+#box {
+    width: 1000px;
+    height: 600px;
+    background-color: white;
+    border: 2px solid #333;
+    position: relative; 
+    cursor: crosshair;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+}
+
+/* The Ball: Positioned absolute inside the box */
+#ball {
+    width: 40px;
+    height: 40px;
+    background: radial-gradient(circle at 30% 30%, #ff5f6d, #ffc371);
+    border-radius: 50%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    /* Smooth transition makes it look nice */
+    transition: all 0.3s ease-out;
+    pointer-events: none; /* Let clicks pass through the ball */
+}
+
+.instruction {
+    position: absolute;
+    top: 20px;
+    text-align: center;
+    color: #666;
+}

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Carousel</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="controls">
+        <div class="slide-config">
+            <label for="visible-slides">Slides Showing:</label>
+            <input type="number" id="visible-slides" value="1" min="1" max="5">
+        </div>
+        <div class="navigation">
+            <button class="prev">Prev</button>
+            <button class="next">Next</button>
+        </div>
+    </div>
+
+    <!-- The viewport limits what we see -->
+    <div class="carousel-viewport">
+        <!-- The carousel is the "strip" that moves -->
+        <div class="carousel" id="carousel"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

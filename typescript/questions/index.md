@@ -53,6 +53,8 @@ function reducer(action: Action) {
   }
 }
 
+5.
+A bad assertion silences the compiler but can cause real run time error while type guards catch problems before they hapens Extra layer 
 
 
 function combine<T extends string | number>(a: T, b: T): T {
@@ -65,3 +67,27 @@ function combine<T extends string | number>(a: T, b: T): T {
 const r1 = combine(5, 3);           // T = number → returns number ✅
 const r2 = combine("hi", "there");  // T = string → returns string ✅
 const r3 = combine(5, "hi");  
+
+6. TypeScript Edge Cases: `keyof any` vs `keyof unknown`
+
+**`type A = keyof any;`**
+- **Result**: `string | number | symbol`
+- **Why?**: Since `any` can be any object, it can have any valid JS key.
+- **Usage**: Use `K extends keyof any` to constrain a generic to any valid object key.
+
+**`type B = keyof unknown;`**
+- **Result**: `never`
+- **Why?**: `unknown` is type-safe. You can't assume it has any keys until you narrow the type.
+- **Comparison**: `any` is "Everything", `unknown` is "Nothing" (until proven otherwise).
+
+| Type | `keyof` Result | Reason |
+| :--- | :--- | :--- |
+| `any` | `string \| number \| symbol` | Can have any valid JS key. |
+| `unknown` | `never` | Cannot assume any keys exist without narrowing. |
+| `never` | `string \| number \| symbol` | Vacuously true (Bottom type logic). |
+
+---
+
+> [!TIP]
+> **Interview Question**: "How do I restrict a generic `K` to only valid object keys?"
+> **Answer**: `K extends keyof any`.
