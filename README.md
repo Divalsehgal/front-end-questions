@@ -6,35 +6,28 @@ This project is a collection of solutions and implementations for various progra
 
 ## Folder Structure
 
-1. **dp (Dynamic Programming):**
-   - Solutions and implementations related to dynamic programming questions.
+The repository is organized by functional domain to help with focused learning:
 
-2. **dsa (Data Structures and Algorithms):**
-   - Dedicated to data structures and algorithmic problems.
+### 1. **javascript/**
+   - Contains core JS concepts (`jsquestion/`, `promises/`, `polyfills-utils/`, `js30/`, etc.).
 
-3. **fcc (Free Code Camp):**
-   - Solutions for problems from Free Code Camp.
+### 2. **dsa/** (Data Structures and Algorithms)
+   - Algorithms, data-structures (`linkedList`, `tree`, `graph`), sorting, and LeetCode (`lc`) solutions.
 
-4. **generators:**
-   - Code related to generators.
+### 3. **typescript/**
+   - TypeScript practice, types, and compiler questions.
 
-5. **jsquestion:**
-   - General JavaScript-related questions and challenges.
+### 4. **react/, nodejs/, html/**
+   - Framework and environment specific questions and principles.
 
-6. **lc (LeetCode):**
-   - Solutions and implementations for problems from LeetCode.
+### 5. **design-patterns/ & principles/**
+   - Architectural patterns and pure software principles.
 
-7. **map:**
-   - Code related to mapping and dictionary problems.
+### 6. **machine-coding/**
+   - System UI problems and full JS/React specific UI projects.
 
-8. **pollyfills:**
-   - Implementations of polyfills for missing JavaScript features.
-
-9. **set:**
-   - Code related to set operations and problems.
-
-10. **sorting:**
-    - Algorithms and related problems for sorting.
+### 7. **testing/**
+   - Information and setups related to writing robust test cases.
 
 ## Usage
 
