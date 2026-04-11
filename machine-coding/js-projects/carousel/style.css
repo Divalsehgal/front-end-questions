@@ -1,0 +1,64 @@
+h1,
+h2 {
+  font-family: Lato, sans-serif;
+}
+
+ul {
+  display: block;
+}
+
+.controls {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.slide-config {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.slide-config input {
+    width: 50px;
+    padding: 4px;
+}
+
+button {
+  width: 60px; /* Slightly wider for text */
+  height: 30px;
+  cursor: pointer;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+button:hover {
+    background-color: #e0e0e0;
+}
+
+/* The viewport acts as a window */
+.carousel-viewport {
+  width: 600px; /* Increased viewport for better visibility of multiple slides */
+  border: 1px solid gray;
+  overflow: hidden; /* Hide the overflow */
+  padding: 10px;
+  background: #fafafa;
+  --slides-showing: 1; /* Default variable */
+}
+
+/* The carousel is the strip containing all images */
+.carousel {
+  display: flex;
+  transition: transform 0.5s ease-in-out; /* Smooth sliding */
+  gap: 10px;
+}
+
+.carousel img {
+  /* Dynamic width calculation: (100% - total gap width) / no of slides */
+  width: calc((100% - (var(--slides-showing) - 1) * 10px) / var(--slides-showing));
+  flex-shrink: 0; /* Prevent images from shrinking */
+  height: auto;
+  border-radius: 8px;
+}
