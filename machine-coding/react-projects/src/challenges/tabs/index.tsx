@@ -1,15 +1,32 @@
-import { useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 
-export default function Tabs({ defaultValue, items }) {
+export interface TabItem {
+  label: React.ReactNode;
+  value: string | number;
+  panel: React.ReactNode;
+}
+
+export interface TabsProps {
+  defaultValue?: string | number;
+  items?: TabItem[];
+}
+
+const defaultItems: TabItem[] = [
+  { label: "HTML", value: "html", panel: "The HyperText Markup Language or HTML is the standard markup language for documents designed to be displayed in a web browser." },
+  { label: "CSS", value: "css", panel: "Cascading Style Sheets is a style sheet language used for describing the presentation of a document written in a markup language such as HTML." },
+  { label: "JavaScript", value: "js", panel: "JavaScript, often abbreviated as JS, is a programming language that is one of the core technologies of the World Wide Web, alongside HTML and CSS." }
+];
+
+export default function Tabs({ defaultValue, items = defaultItems }: TabsProps) {
   const [value, setValue] = useState(defaultValue ?? items[0].value);
-  const tabsRef = useRef([])
+  const tabsRef = useRef<(HTMLButtonElement | null)[]>([]);
 
 
-  const focusTab = (index) => {
+  const focusTab = (index: number) => {
     tabsRef.current[index]?.focus();
   };
 
-  const handleKeyDown = (e, index) => {
+  const handleKeyDown = (e: React.KeyboardEvent, index: number) => {
     let newIndex = index;
 
     switch (e.key) {

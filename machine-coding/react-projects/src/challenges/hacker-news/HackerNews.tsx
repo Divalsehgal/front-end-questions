@@ -31,13 +31,11 @@ export default function HackerNews() {
 
   const fetchHackerStories = async () => {
     const temp: Promise<Response>[] = [];
-    // slicing the from total to only load firstsetof itemsPerPage
-    total.slice(0, itemsPerPage).forEach((m) => {
-      temp.push(fetch(`https://hacker-news.firebaseio.com/v0/item/${m}.json`));
+    const temp1=total.slice(0, itemsPerPage).map((m) => {
+      return fetch(`https://hacker-news.firebaseio.com/v0/item/${m}.json`).then((res)=>res.json());
     });
-    const res = await Promise.all(temp);
-    const result = await Promise.all(res.map(async (m) => await m.json()));
-    setData(result);
+    const res = await Promise.all(temp1);
+    setData(res);
   };
   const loadMoreStories = () => {
     let timer: ReturnType<typeof setTimeout>;

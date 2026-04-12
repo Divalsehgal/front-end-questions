@@ -22,5 +22,5 @@ export const challengeNamesData = [
     { name: "TransferBox", hint: "Move items between two lists" },
     { name: "Todo", hint: "Todo list with useReducer" },
     { name: "Tabs", hint: "Tabs component with keyboard navigation" },
-    
+    { name:"ImperativeHandle", hint: "ImperativeHandle" }
 ];
