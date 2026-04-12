@@ -21,7 +21,7 @@ import Timer1 from "./timer1/Timer1";
 import TransferBox from "./transfer-list/page";
 import  Todo  from "./reducer-todo";
 import Tabs from "./tabs";
-
+import ImperativeHandle from "./ImperativeHandle"
 
 export const challenges = {
     Timer,
@@ -46,7 +46,8 @@ export const challenges = {
     Timer1,
     TransferBox,
     Todo,
-    Tabs
+    Tabs,
+    ImperativeHandle
 };
 
 export const challengeNames = Object.keys(challenges);

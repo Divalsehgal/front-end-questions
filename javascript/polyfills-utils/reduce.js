@@ -7,7 +7,15 @@ function sum(a, b) {
 }
 
 
-Array.prototype.myReduce = function (callback, initialValue) {
+Array.prototype.myReduce = function (callbackFn, initialValue) {
+    if (typeof callbackFn !== "function") {
+        throw new TypeError("Callback must be a function");
+    }
+
+    if (this.length === 0 && initialValue === undefined) {
+        throw new TypeError("Reduce of empty array with no initial value");
+    }
+
     let acc = initialValue;
     let startIndex = 0;
 
@@ -17,10 +25,13 @@ Array.prototype.myReduce = function (callback, initialValue) {
     }
 
     for (let i = startIndex; i < this.length; i++) {
-        acc = callback(acc, this[i], i, this);
+        if (i in this) {
+            acc = callbackFn(acc, this[i], i, this);
+        }
     }
 
     return acc;
 };
+
 
 console.log(arr.myReduce(sum, 0));
