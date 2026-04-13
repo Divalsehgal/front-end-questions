@@ -91,3 +91,17 @@ Consists of browser-provided objects enabling interaction with the browser envir
 - **Location**: Represents the URL of the current page.
 
 ```
+
+
+<meta http-equiv="refresh" content="5">
+
+
+
+<form method="GET">
+  <button type="submit">Reload</button>
+</form>
+
+
+
+<a href="/">Reload</a>
+

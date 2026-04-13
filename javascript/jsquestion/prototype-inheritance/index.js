@@ -1,7 +1,8 @@
 /**
  * PROTOTYPAL INHERITANCE GUIDE
  * 
- * Concept: Objects have a hidden [[Prototype]] property that points to another object.
+ * Concept: Objects have a hidden [[Prototype]]
+ * property that points to another object.
  */
 
 // 1. THE BASIC LINK (__proto__)
@@ -59,6 +60,24 @@ const john = new User("John");
 john.sayHi();
 
 
+// 5. MODERN RUNTIME LINKING: Object.setPrototypeOf()
+// (The officially supported way to link objects instead of using the deprecated __proto__)
+const bird = {
+    fly() { console.log("Flap flap!"); }
+};
+
+const penguin = {
+    swim() { console.log("Splash!"); }
+};
+
+// Properly sets `bird` as the prototype of `penguin`
+Object.setPrototypeOf(penguin, bird);
+
+console.log("\n--- Object.setPrototypeOf ---");
+penguin.swim(); // Own property
+penguin.fly();  // Inherited property (delegated to bird)
+
+
 // ===========================================================================
 // INTERVIEW Q&A SUMMARY:
 // ===========================================================================
@@ -78,3 +97,4 @@ A:
 - Node: All streams/servers inherit EventEmitter.prototype.
 - Vue: Plugin installation often works by augmenting Vue.prototype.
 */
+
