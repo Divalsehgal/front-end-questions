@@ -1,132 +1,86 @@
-const obj = { a: 'one', b: 'two', a: 'three' };
-console.log(obj);
-
-// { a: 'three', b: 'two'}
-// order will remain same but it will update it next vaue
-
-
-
-const a = {};
-const b = { key: 'b' };
-const c = { key: 'c' };
-
-a[b] = 123;
-a[c] = 456;
-
-console.log(a[b]);
-
-
-// Object keys are automatically converted into strings.
-// We are trying to set an object as a key to object a, with the value of 123.
-// However, when we stringify an object, it becomes "[object Object]".
-
-
-// function getInfo(member, year) {
-//     member.name = 'Lydia';
-//     year = '1998';
-// }
-
-// const person = { name: 'Sarah' };
-// const birthYear = '1997';
-
-// getInfo(person, birthYear);
-
-// console.log(person, birthYear);
-
-//Arguments are passed by value,
-//unless their value is an object, then they're passed by reference.
+/**
+ * ========================================================
+ * OBJECT MUTABILITY CONTROLS
+ * Normal vs Object.preventExtensions vs Object.seal vs Object.freeze
+ * ========================================================
+ * 
+ * Under the hood, JavaScript objects rely on Object Property Descriptors
+ * to determine what you can and cannot do to them.
+ * 
+ * The 4 main actions you can perform on an object's properties are:
+ * 1. ADD:       Can we add new properties?
+ * 2. MODIFY:    Can we change the value of existing properties? (controlled by `writable: true`)
+ * 3. DELETE:    Can we delete existing properties? (controlled by `configurable: true`)
+ * 4. RE-CONFIG: Can we change descriptor flags like enumerable/writable later? (also `configurable`)
+ * 
+ * -------------------------------------------------------------------------
+ * THE QUICK CHEAT SHEET MATRIX
+ * -------------------------------------------------------------------------
+ * Action                    | Normal | preventExtensions | seal()  | freeze() |
+ * --------------------------|--------|-------------------|---------|----------|
+ * ADD new properties        |   ✅   |         ❌         |    ❌   |    ❌    |
+ * MODIFY existing values    |   ✅   |         ✅         |    ✅   |    ❌    |
+ * DELETE existing properties|   ✅   |         ✅         |    ❌   |    ❌    |
+ * RE-CONFIGURE descriptors  |   ✅   |         ✅         |    ❌   |    ❌    |
+ * -------------------------------------------------------------------------
+ */
 
 
+// 1. NORMAL OBJECT
+// Everything is permissible by default.
+const person1 = { name: "John" };
+person1.age = 30;     // ✅ ADD works
+person1.name = "Doe"; // ✅ MODIFY works
+delete person1.age;   // ✅ DELETE works
 
 
-// const person = { name: 'Lydia' };
-
-// Object.defineProperty(person, 'age', { value: 21 });
-
-// console.log(person);
-// console.log(Object.keys(person));
-
-
-
-// With the defineProperty method, we can add new properties to an object, or modify existing ones.When we add a property to an object using the defineProperty method, they are by default not enumerable.The Object.keys method returns all enumerable property names from an object, in this case only "name".
-
-// Properties added using the defineProperty method are immutable by default
+// 2. Object.preventExtensions(obj)
+// Stops new properties from being added. Existing properties remain completely unaffected.
+const person2 = { name: "John" };
+Object.preventExtensions(person2);
+person2.age = 25;     // ❌ ADD fails silently (throws an error in strict mode)
+person2.name = "Doe"; // ✅ MODIFY works
+delete person2.name;  // ✅ DELETE works
 
 
+// 3. Object.seal(obj)
+// The "Closed Box" - You can change what's inside the box, but you can't put new things in or take things out.
+// - Sets `configurable: false` on everything.
+const person3 = { name: "John" };
+Object.seal(person3);
+person3.age = 40;     // ❌ ADD fails
+delete person3.name;  // ❌ DELETE fails 
+person3.name = "Doe"; // ✅ MODIFY works perfectly! (This is what makes it different from freeze)
 
 
-// const settings = {
-//     username: 'lydiahallie',
-//     level: 19,
-//     health: 90,
-// };
-
-// const data = JSON.stringify(settings, ['level', 'health']);
-// console.log(data);
-
-/*
-The second argument of JSON.stringify is the replacer. The replacer can either be a function or an array, and lets you control what and how the values should be stringified.
-
-If the replacer is an array, only the property names included in the array will be added to the JSON string. In this case, only the properties with the names "level" and "health" are included, "username" is excluded. data is now equal to "{"level":19, "health":90}".
-
-If the replacer is a function, this function gets called on every property in the object you're stringifying. The value returned from this function will be the value of the property when it's added to the JSON string. If the value is undefined, this property is excluded from the JSON string.
+// 4. Object.freeze(obj)
+// The "Ice Block" - The ultimate lockdown. Nothing can change at all.
+// - Sets `configurable: false` AND `writable: false` on everything.
+const person4 = { name: "John" };
+Object.freeze(person4);
+person4.age = 50;     // ❌ ADD fails
+delete person4.name;  // ❌ DELETE fails
+person4.name = "Doe"; // ❌ MODIFY fails
 
 
-
-*/
-
-
-
-function Employee(id, name) {
-    this.empId = id;
-    this.empName = name;
-}
-function Manager(id, name, department) {
-    Employee.call(this, id, name);
-    this.dept = department;
-}
-var newManager = new Manager(34, "Alex Smith", "Sales");
-console.log(newManager.empId); //
-
-
-
-var status = '😎';
-
-setTimeout(() => {
-    const status = '😍';
-
-    const data = {
-        status: '🥑',
-        getStatus() {
-            return this.status;
-        },
-    };
-
-    console.log(data.getStatus());
-    console.log(data.getStatus.call(this));
-}, 0);
-
-
-
-
-
-let du = {
-    price: 199,
-    get: function () {
-        return this.price;
-    },
-};
-let r = Object.create(du);
-r.price = 299;
-//delete r.price;
-console.log(r.get(), r.__proto__.get(), r);
-
-const o1 = {
-    x: 10, y: 20
-};
-
-let o2 = o1;
-o2.x = 100;
-console.log(o1.x, o2.x, o1, o2)
-
-
+/**
+ * ========================================================
+ * INTERVIEW PRO-TIPS:
+ * ========================================================
+ * 
+ * Q: How do you verify what state an object is in?
+ * A: JS provides helper checks:
+ *    - Object.isExtensible(obj)
+ *    - Object.isSealed(obj)
+ *    - Object.isFrozen(obj)
+ * 
+ * Q: Is Object.freeze() completely safe?
+ * A: NO! freeze() is SHALLOW. If your object contains a nested object,
+ *    the nested object can still be completely modified.
+ * 
+ *    const obj = Object.freeze({ user: { id: 1 } });
+ *    obj.user = { id: 2 }; // ❌ Fails to freeze the main object
+ *    obj.user.id = 99;     // ✅ Works! The inner object is NOT frozen.
+ *    
+ *    To fix this, you must write a custom recursive `deepFreeze()` function.
+ */
