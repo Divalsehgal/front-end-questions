@@ -1,5 +1,5 @@
 class Todo {
-    
+
     constructor() {
         this.list = [];
     }
@@ -38,5 +38,5 @@ li.addList("car")
 li.addList("toy")
 li.deleteList("book")
 li.deleteList("toy")
-li.updateList("car","bus")
+li.updateList("car", "bus")
 console.log(li.getList())

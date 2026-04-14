@@ -2,25 +2,30 @@
 
 ## Preprocessors (Enhance CSS before compiling)
 
-### Examples:
+### Examples
+
 - Sass
 - LESS
 - Stylus
 
-### Features:
+### Features
+
 - Variables
 - Nesting
 - Mixins
 - Functions
 
-### Example (SCSS → Compiled CSS):
+### Example (SCSS → Compiled CSS)
+
 ```scss
 $color: #3498db;
 button {
   background: $color;
 }
 ```
+
 ⬇ Compiles to:
+
 ```css
 button {
   background: #3498db;
@@ -31,17 +36,20 @@ button {
 
 ## Postprocessors (Modify CSS after compilation)
 
-### Examples:
+### Examples
+
 - Autoprefixer
 - PostCSS
 - CSSNano
 
-### Features:
+### Features
+
 - Vendor prefixes
 - Minification
 - Optimization
 
-### Example (Autoprefixer Output):
+### Example (Autoprefixer Output)
+
 ```css
 button {
   display: -webkit-box;
@@ -62,4 +70,3 @@ button {
 
 🚀 **Preprocessors = Write better CSS**  
 ⚡ **Postprocessors = Optimize final CSS**
-
