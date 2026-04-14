@@ -1,6 +1,6 @@
 /*
-Adapter allows two objects with incompatible interfaces to interact with each other.
-
+Adapter allows two objects with incompatible
+interfaces to interact with each other.
 
 */
 
@@ -17,7 +17,9 @@ const BuenosAires = {
     habitants: 3100000
 }
 
-// Our adapter function takes our city and converts the habitants property to the same format all the other cities have
+// Our adapter function takes our city and
+// converts the habitants property to the same
+// format all the other cities have
 const toMillionsAdapter = city => { city.habitants = parseFloat((city.habitants / 1000000).toFixed(1)) }
 
 toMillionsAdapter(BuenosAires)
