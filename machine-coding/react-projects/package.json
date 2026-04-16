@@ -11,12 +11,18 @@
     "test": "vitest"
   },
   "dependencies": {
+    "@base-ui/react": "^1.4.0",
+    "@tailwindcss/vite": "^4.2.2",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
-    "lucide-react": "^0.487.0",
+    "lucide-react": "^1.8.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.5.0",
-    "sass": "^1.85.1"
+    "sass": "^1.85.1",
+    "tailwind-merge": "^3.5.0",
+    "tailwindcss": "^4.2.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",

@@ -42,3 +42,40 @@ s.push(1);
 s.push(2);
 console.log("Stack Peek:", s.peek()); // 2
 console.log("Stack Pop:", s.pop());  // 2
+
+
+// function first<T>(elements: Array<T>): T {
+//     return elements[0] as T;
+// }
+// first<boolean>([true, false]);
+
+
+
+// function first<T>(array: T[]) {
+//     return array[0]
+// }
+
+// console.log(first<boolean>([true, false]))
+
+
+function identity<T>(val: T): T {
+    return val;
+}
+
+function length<T>(elements: T[]): number {
+    return elements.length;
+}
+
+
+type Vehicle<T1,T2> = {
+    car: T1,
+    type: T1,
+    year: T2
+}
+
+const vehicle: Vehicle<string,number> = {
+    car: 'BMW',
+    type: 'Sedan',  
+    year: 2022,
+}
+

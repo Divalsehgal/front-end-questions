@@ -71,3 +71,6 @@ Both tools help solve **prop drilling** by providing centralized, accessible glo
 - The state update logic is extremely complex and you need granular, traceable logs of exactly *when, why, and how* state mutated.
 - You deliberately need powerful middleware integrations (e.g., complex API caching layers).
 - **Classic Examples:** Heavy E-Commerce Stores (Cart/Inventory syncing), Live Data feeds, deeply nested complex form builders.
+
+
+Dynamic import is just a runtime fetch for a JS  file
