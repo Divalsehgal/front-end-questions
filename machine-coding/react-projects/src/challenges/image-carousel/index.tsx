@@ -51,18 +51,18 @@ export default function ImageCarousel() {
     <div className="max-w-4xl mx-auto p-6 space-y-8">
       <div className="flex items-center justify-between">
         <div className="space-y-1">
-          <h2 className="text-2xl font-black text-gray-900 dark:text-white flex items-center gap-2 tracking-tight">
+          <h2 className="text-2xl font-black text-text-main flex items-center gap-2 tracking-tight uppercase">
             <ImageIcon className="w-7 h-7 text-brand-500" />
             VISTA CAROUSEL
           </h2>
-          <p className="text-sm font-medium text-gray-500">
+          <p className="text-sm font-medium text-text-muted">
             Immersive visual storytelling explorer.
           </p>
         </div>
-        <div className="flex items-center gap-2 bg-surface-100 dark:bg-surface-800 p-1 rounded-2xl border border-surface-200 dark:border-surface-700">
+        <div className="flex items-center gap-2 bg-muted p-1 rounded-2xl border border-subtle">
           <button 
             onClick={() => setIsPlaying(!isPlaying)}
-            className="p-2.5 hover:bg-white dark:hover:bg-surface-700 rounded-xl transition-all"
+            className="p-2.5 hover:bg-surface rounded-xl transition-all"
           >
             {isPlaying ? <Pause className="w-4 h-4 text-brand-500" /> : <Play className="w-4 h-4 text-brand-500" />}
           </button>
@@ -71,7 +71,7 @@ export default function ImageCarousel() {
 
       <div className="relative group">
         {/* Main Display */}
-        <div className="relative aspect-[16/9] overflow-hidden rounded-[2.5rem] border-4 border-white dark:border-surface-800 shadow-2xl bg-surface-100 dark:bg-surface-900">
+        <div className="relative aspect-[16/9] overflow-hidden rounded-3xl border-4 border-surface shadow-hard bg-muted">
           {IMAGES.map((src, idx) => (
             <div
               key={src}
@@ -94,8 +94,8 @@ export default function ImageCarousel() {
                   loading[idx] ? "opacity-0" : "opacity-100"
                 )}
               />
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-12 text-white">
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] opacity-80 mb-2 block">Nature Collection v4</span>
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/60 to-transparent p-12 text-text-inverted">
+                <span className="text-tiny font-black uppercase tracking-[0.2em] opacity-80 mb-2 block">Nature Collection v4</span>
                 <h3 className="text-3xl font-black tracking-tight uppercase">Scenic Landscape {idx + 1}</h3>
               </div>
             </div>
@@ -105,7 +105,7 @@ export default function ImageCarousel() {
           <div className="absolute inset-y-0 left-4 flex items-center">
             <button 
               onClick={(e) => { e.stopPropagation(); handlePrev(); }}
-              className="p-4 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-2xl text-white transition-all hover:scale-110 active:scale-90 border border-white/20"
+              className="p-4 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-2xl text-text-inverted transition-all hover:scale-110 active:scale-90 border border-white/20"
             >
               <ChevronLeft className="w-6 h-6" />
             </button>
@@ -113,26 +113,26 @@ export default function ImageCarousel() {
           <div className="absolute inset-y-0 right-4 flex items-center">
             <button 
               onClick={(e) => { e.stopPropagation(); handleNext(); }}
-              className="p-4 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-2xl text-white transition-all hover:scale-110 active:scale-90 border border-white/20"
+              className="p-4 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-2xl text-text-inverted transition-all hover:scale-110 active:scale-90 border border-white/20"
             >
               <ChevronRight className="w-6 h-6" />
             </button>
           </div>
 
-          <button className="absolute top-6 right-6 p-3 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-xl text-white opacity-0 group-hover:opacity-100 transition-opacity border border-white/10">
+          <button className="absolute top-6 right-6 p-3 bg-white/10 hover:bg-white/20 backdrop-blur-md rounded-xl text-text-inverted opacity-0 group-hover:opacity-100 transition-opacity border border-white/10">
             <Maximize2 className="w-5 h-5" />
           </button>
         </div>
 
         {/* Indicators */}
-        <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 flex gap-3 p-2 bg-surface-50 dark:bg-surface-800 rounded-full border border-surface-200 dark:border-surface-700">
+        <div className="absolute -bottom-12 left-1/2 -translate-x-1/2 flex gap-3 p-2 bg-muted rounded-full border border-subtle">
           {IMAGES.map((_, idx) => (
             <button
               key={idx}
               onClick={() => setCurrentIndex(idx)}
               className={cn(
                 "h-2 transition-all rounded-full",
-                currentIndex === idx ? "w-8 bg-brand-500" : "w-2 bg-surface-300 dark:bg-surface-600 hover:bg-surface-400"
+                currentIndex === idx ? "w-8 bg-brand-500" : "bg-text-muted/20 hover:bg-text-muted/40 w-2"
               )}
             />
           ))}
@@ -146,7 +146,7 @@ export default function ImageCarousel() {
             onClick={() => setCurrentIndex(idx)}
             className={cn(
               "aspect-square rounded-2xl overflow-hidden border-2 transition-all hover:brightness-110",
-              currentIndex === idx ? "border-brand-500 p-1 scale-105" : "border-surface-100 dark:border-surface-800 p-0"
+              currentIndex === idx ? "border-brand-500 p-1 scale-105" : "border-subtle p-0"
             )}
           >
             <img src={src} className="w-full h-full object-cover rounded-xl" alt={`Thumb ${idx}`} />

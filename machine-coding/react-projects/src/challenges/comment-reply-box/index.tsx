@@ -78,27 +78,27 @@ export default function CommentReplyBox() {
   return (
     <div className="max-w-2xl mx-auto p-6 space-y-8 pb-20">
       <div className="space-y-4">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+        <h2 className="text-2xl font-bold text-text-main flex items-center gap-2">
           <MessageCircle className="w-6 h-6 text-brand-500" />
           Social Feed
         </h2>
         
         {/* Post Creation Area */}
-        <div className="bg-white dark:bg-surface-800 rounded-2xl border border-surface-200 dark:border-surface-700 shadow-sm overflow-hidden p-4">
+        <div className="bg-surface rounded-2xl border border-subtle shadow-soft overflow-hidden p-4">
           <textarea
             ref={postRef}
             placeholder="What's on your mind?"
-            className="w-full bg-transparent border-none focus:ring-0 text-lg text-gray-900 dark:text-white placeholder:text-gray-400 resize-none min-h-[100px]"
+            className="w-full bg-transparent border-none focus:ring-0 text-lg text-text-main placeholder:text-text-muted resize-none min-h-[100px]"
           />
-          <div className="flex justify-between items-center mt-4 pt-4 border-t border-surface-100 dark:border-surface-700">
+          <div className="flex justify-between items-center mt-4 pt-4 border-t border-subtle">
             <div className="flex gap-2">
-              <button className="p-2 text-surface-500 hover:bg-surface-100 dark:hover:bg-surface-700 rounded-lg transition-colors">
+              <button className="p-2 text-text-muted hover:bg-muted rounded-lg transition-colors">
                 <MoreHorizontal className="w-5 h-5" />
               </button>
             </div>
             <button
               onClick={handleSubmitPost}
-              className="flex items-center gap-2 px-6 py-2 bg-brand-500 hover:bg-brand-600 active:scale-95 text-white font-semibold rounded-xl transition-all shadow-lg shadow-brand-500/20"
+              className="flex items-center gap-2 px-6 py-2 bg-brand-500 hover:bg-brand-600 active:scale-95 text-text-inverted font-semibold rounded-xl transition-all shadow-hard shadow-brand-500/20"
             >
               Post
               <Send className="w-4 h-4" />
@@ -139,31 +139,31 @@ function PostCard({ post, setPosts }: { post: PostProps; setPosts: any }) {
   };
 
   return (
-    <div className="bg-white dark:bg-surface-800 rounded-2xl border border-surface-200 dark:border-surface-700 shadow-sm overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
+    <div className="bg-surface rounded-2xl border border-subtle shadow-soft overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
       <div className="p-5 space-y-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-brand-100 dark:bg-brand-900/30 flex items-center justify-center text-brand-600 dark:text-brand-400">
+          <div className="w-10 h-10 rounded-full bg-brand-500/10 flex items-center justify-center text-brand-500">
             <UserIcon className="w-6 h-6" />
           </div>
           <div>
-            <h4 className="font-bold text-gray-900 dark:text-white leading-tight">Anonymous User</h4>
-            <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+            <h4 className="font-bold text-text-main leading-tight">Anonymous User</h4>
+            <div className="flex items-center gap-2 text-xs text-text-muted">
               <Clock className="w-3 h-3" />
               {formatTimestamp(post.postTimeStamp)}
             </div>
           </div>
         </div>
         
-        <p className="text-gray-800 dark:text-gray-200 whitespace-pre-wrap">{post.postData.content}</p>
+        <p className="text-text-main whitespace-pre-wrap">{post.postData.content}</p>
 
         <div className="flex items-center gap-6 pt-2">
-          <button className="flex items-center gap-2 text-surface-500 hover:text-red-500 transition-colors group">
+          <button className="flex items-center gap-2 text-text-muted hover:text-error transition-colors group">
             <Heart className="w-5 h-5 group-active:scale-125 transition-transform" />
             <span className="text-sm font-medium">{post.postLikes}</span>
           </button>
           <button 
             onClick={() => setShowComments(!showComments)}
-            className="flex items-center gap-2 text-surface-500 hover:text-brand-500 transition-colors"
+            className="flex items-center gap-2 text-text-muted hover:text-brand-500 transition-colors"
           >
             <MessageCircle className="w-5 h-5" />
             <span className="text-sm font-medium">{post.postComments.length} Comments</span>
@@ -172,13 +172,13 @@ function PostCard({ post, setPosts }: { post: PostProps; setPosts: any }) {
       </div>
 
       <Collapsible.Root open={showComments} onOpenChange={setShowComments}>
-        <Collapsible.Panel className="border-t border-surface-100 dark:border-surface-700 bg-surface-50 dark:bg-surface-900/30 overflow-hidden transition-all duration-300 data-[state=closed]:h-0 data-[state=open]:h-auto">
+        <Collapsible.Panel className="border-t border-subtle bg-muted overflow-hidden transition-all duration-300 data-[state=closed]:h-0 data-[state=open]:h-auto">
           <div className="p-5 space-y-6">
             <div className="flex items-center gap-3">
               <input
                 ref={commentRef}
                 placeholder="Write a comment..."
-                className="flex-1 bg-white dark:bg-surface-800 border border-surface-200 dark:border-surface-700 rounded-xl px-4 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 transition-all"
+                className="flex-1 bg-surface border border-subtle rounded-xl px-4 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 transition-all"
                 onKeyDown={(e) => e.key === "Enter" && handleAddComment()}
               />
               <button onClick={handleAddComment} className="p-2 text-brand-500 hover:bg-brand-50 dark:hover:bg-brand-500/10 rounded-lg">
@@ -227,15 +227,15 @@ function CommentItem({ comment, postId, setPosts }: { comment: CommentProps; pos
   return (
     <div className="space-y-3">
       <div className="flex gap-3 px-1">
-        <div className="w-8 h-8 rounded-full bg-surface-200 dark:bg-surface-700 flex items-center justify-center shrink-0">
-          <UserIcon className="w-5 h-5 text-surface-500" />
+        <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center shrink-0">
+          <UserIcon className="w-5 h-5 text-text-muted" />
         </div>
         <div className="flex-1 space-y-1">
-          <div className="bg-white dark:bg-surface-800 p-3 rounded-2xl border border-surface-200 dark:border-surface-700">
-            <p className="text-sm font-bold text-gray-900 dark:text-white mb-1">Commenter</p>
-            <p className="text-sm text-gray-700 dark:text-gray-300">{comment.commentData}</p>
+          <div className="bg-surface p-3 rounded-2xl border border-subtle">
+            <p className="text-sm font-bold text-text-main mb-1">Commenter</p>
+            <p className="text-sm text-text-main/80">{comment.commentData}</p>
           </div>
-          <div className="flex items-center gap-4 text-xs font-semibold text-surface-500 ml-2">
+          <div className="flex items-center gap-4 text-xs font-semibold text-text-muted ml-2">
             <span>{formatTimestamp(comment.commentTimeStamp)}</span>
             <button className="hover:text-brand-500">Like</button>
             <button onClick={() => setShowReplies(!showReplies)} className="hover:text-brand-500">Reply</button>
@@ -244,12 +244,12 @@ function CommentItem({ comment, postId, setPosts }: { comment: CommentProps; pos
       </div>
 
       <Collapsible.Root open={showReplies} onOpenChange={setShowReplies}>
-        <Collapsible.Panel className="ml-11 border-l-2 border-surface-200 dark:border-surface-700 pl-4 space-y-4 overflow-hidden transition-all duration-300 data-[state=closed]:h-0 data-[state=open]:h-auto">
+        <Collapsible.Panel className="ml-11 border-l-2 border-subtle pl-4 space-y-4 overflow-hidden transition-all duration-300 data-[state=closed]:h-0 data-[state=open]:h-auto">
           <div className="flex items-center gap-2 pt-1 pb-2">
             <input
               ref={replyRef}
               placeholder="Write a reply..."
-              className="flex-1 bg-white dark:bg-surface-800 border border-surface-200 dark:border-surface-700 rounded-xl px-4 py-1.5 text-xs outline-none focus:border-brand-500 transition-all"
+              className="flex-1 bg-surface border border-subtle rounded-xl px-4 py-1.5 text-xs outline-none focus:border-brand-500 transition-all"
               onKeyDown={(e) => e.key === "Enter" && handleAddReply()}
             />
             <button onClick={handleAddReply} className="p-1.5 text-brand-500 hover:bg-brand-50 dark:hover:bg-brand-500/10 rounded-lg">
@@ -260,15 +260,15 @@ function CommentItem({ comment, postId, setPosts }: { comment: CommentProps; pos
           <div className="space-y-4">
             {comment.replies.map((reply) => (
               <div key={reply.replyId} className="flex gap-2">
-                <div className="w-6 h-6 rounded-full bg-surface-200 dark:bg-surface-700 flex items-center justify-center shrink-0">
-                  <UserIcon className="w-4 h-4 text-surface-500" />
+                <div className="w-6 h-6 rounded-full bg-muted flex items-center justify-center shrink-0">
+                  <UserIcon className="w-4 h-4 text-text-muted" />
                 </div>
                 <div className="flex-1 space-y-1">
-                  <div className="bg-white dark:bg-surface-800 p-2.5 rounded-xl border border-surface-200 dark:border-surface-700">
-                    <p className="text-xs font-bold text-gray-900 dark:text-white mb-0.5">Replier</p>
-                    <p className="text-xs text-gray-700 dark:text-gray-300">{reply.replyData}</p>
+                  <div className="bg-surface p-2.5 rounded-xl border border-subtle">
+                    <p className="text-xs font-bold text-text-main mb-0.5">Replier</p>
+                    <p className="text-xs text-text-muted">{reply.replyData}</p>
                   </div>
-                  <div className="flex items-center gap-3 text-[10px] font-semibold text-surface-500 ml-1">
+                  <div className="flex items-center gap-3 text-tiny font-semibold text-text-muted ml-1">
                     <span>{formatTimestamp(reply.replyTimeStamp)}</span>
                     <button className="hover:text-brand-500">Like</button>
                   </div>

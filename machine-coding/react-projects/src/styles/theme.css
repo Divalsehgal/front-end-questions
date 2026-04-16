@@ -1,0 +1,74 @@
+/*
+ * THEME BRIDGE (CSS Variables)
+ * 
+ * This file maps our design tokens to CSS variables for Tailwind v4 consumption.
+ */
+
+:root {
+  /* Colors - Primitives */
+  --color-slate-50: #f8fafc;
+  --color-slate-100: #f1f5f9;
+  --color-slate-200: #e2e8f0;
+  --color-slate-300: #cbd5e1;
+  --color-slate-400: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-600: #475569;
+  --color-slate-700: #334155;
+  --color-slate-800: #1e293b;
+  --color-slate-900: #0f172a;
+  --color-slate-950: #020617;
+
+  --color-brand-50: oklch(0.97 0.01 250);
+  --color-brand-100: oklch(0.92 0.03 250);
+  --color-brand-200: oklch(0.85 0.08 250);
+  --color-brand-300: oklch(0.75 0.15 250);
+  --color-brand-400: oklch(0.65 0.22 250);
+  --color-brand-500: oklch(0.55 0.25 250);
+  --color-brand-600: oklch(0.48 0.23 250);
+  --color-brand-700: oklch(0.40 0.20 250);
+  --color-brand-800: oklch(0.32 0.17 250);
+  --color-brand-900: oklch(0.25 0.14 250);
+
+  --color-success: oklch(0.65 0.2 150);
+  --color-error: oklch(0.6 0.2 25);
+  --color-warning: oklch(0.8 0.15 85);
+
+  /* Semantic - Default (Light Mode) */
+  --bg-canvas: var(--color-slate-50);
+  --bg-surface: #ffffff;
+  --bg-muted: var(--color-slate-100);
+
+  --text-main: var(--color-slate-900);
+  --text-muted: var(--color-slate-500);
+  --text-inverted: #ffffff;
+
+  --border-subtle: var(--color-slate-200);
+  --border-strong: var(--color-slate-300);
+
+  /* Scales */
+  --font-size-tiny: 0.625rem;
+  
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-3xl: 2rem;
+  
+  --shadow-soft: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-hard: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+/* DARK MODE OVERRIDES */
+.dark, [data-theme='dark'] {
+  --bg-canvas: var(--color-slate-950);
+  --bg-surface: var(--color-slate-900);
+  --bg-muted: var(--color-slate-800);
+
+  --text-main: var(--color-slate-50);
+  --text-muted: var(--color-slate-400);
+  --text-inverted: var(--color-slate-950);
+
+  --border-subtle: var(--color-slate-800);
+  --border-strong: var(--color-slate-700);
+}

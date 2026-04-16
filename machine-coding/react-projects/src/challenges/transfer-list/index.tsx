@@ -70,11 +70,11 @@ export default function TransferList() {
   return (
     <div className="max-w-4xl mx-auto p-6 space-y-8 pb-20">
       <div className="space-y-1">
-        <h2 className="text-2xl font-black text-gray-900 dark:text-white flex items-center gap-2 tracking-tight uppercase">
+        <h2 className="text-2xl font-black text-text-main flex items-center gap-2 tracking-tight uppercase">
           <ArrowRightLeft className="w-7 h-7 text-brand-500" />
           Transfer Hub
         </h2>
-        <p className="text-sm font-medium text-gray-500">
+        <p className="text-sm font-medium text-text-muted">
           Orchestrate data flow between environments.
         </p>
       </div>
@@ -89,7 +89,7 @@ export default function TransferList() {
         />
 
         {/* Controls */}
-        <div className="flex md:flex-col gap-2 p-2 bg-surface-50 dark:bg-surface-800 rounded-3xl border border-surface-200 dark:border-surface-700">
+        <div className="flex md:flex-col gap-2 p-2 bg-muted rounded-3xl border border-subtle h-fit">
           <ControlButton onClick={transferRight} icon={<ChevronRight />} disabled={!leftItems.some(i => selected.includes(i.id))} />
           <ControlButton onClick={moveAllRight} icon={<ChevronsRight />} disabled={leftItems.length === 0} />
           <ControlButton onClick={transferLeft} icon={<ChevronLeft />} disabled={!rightItems.some(i => selected.includes(i.id))} />
@@ -112,22 +112,22 @@ export default function TransferList() {
 function ListPanel({ title, items, selected, onToggle, variant = "default" }: any) {
   return (
     <div className={cn(
-      "bg-white dark:bg-surface-900 rounded-[2rem] border-2 shadow-xl overflow-hidden flex flex-col h-[400px]",
-      variant === "highlight" ? "border-brand-500/20" : "border-surface-100 dark:border-surface-800"
+      "bg-surface rounded-3xl border-2 shadow-hard overflow-hidden flex flex-col h-[400px]",
+      variant === "highlight" ? "border-brand-500/20" : "border-subtle"
     )}>
       <div className={cn(
         "px-6 py-4 flex items-center justify-between border-b",
-        variant === "highlight" ? "bg-brand-500/5 border-brand-500/10" : "bg-surface-50/50 dark:bg-surface-800/50 border-surface-100 dark:border-surface-800"
+        variant === "highlight" ? "bg-brand-500/5 border-brand-500/10" : "bg-muted border-subtle"
       )}>
-        <span className="text-xs font-black uppercase tracking-widest text-gray-500">{title}</span>
-        <span className="text-xs font-bold px-2 py-0.5 bg-surface-200 dark:bg-surface-800 rounded-full text-gray-500">{items.length}</span>
+        <span className="text-tiny font-black uppercase tracking-widest text-text-muted/50">{title}</span>
+        <span className="text-tiny font-black px-2 py-0.5 bg-muted border border-subtle rounded-full text-text-muted/60">{items.length}</span>
       </div>
       
       <div className="flex-1 overflow-y-auto p-4 space-y-1">
         {items.length === 0 ? (
-          <div className="h-full flex flex-col items-center justify-center text-surface-400 space-y-2">
+          <div className="h-full flex flex-col items-center justify-center text-text-muted/20 space-y-2">
             <Search className="w-8 h-8 opacity-20" />
-            <p className="text-xs font-bold uppercase tracking-widest opacity-40">No items</p>
+            <p className="text-tiny font-black uppercase tracking-widest opacity-40">No items</p>
           </div>
         ) : (
           items.map((item: any) => (
@@ -135,10 +135,10 @@ function ListPanel({ title, items, selected, onToggle, variant = "default" }: an
               key={item.id}
               onClick={() => onToggle(item.id)}
               className={cn(
-                "w-full flex items-center justify-between px-4 py-3 rounded-2xl text-sm font-medium transition-all group",
+                "w-full flex items-center justify-between px-4 py-3 rounded-2xl text-sm font-black transition-all group uppercase tracking-tight",
                 selected.includes(item.id)
-                  ? "bg-brand-500 text-white shadow-lg shadow-brand-500/20 scale-[1.02]"
-                  : "hover:bg-surface-50 dark:hover:bg-surface-800 text-gray-600 dark:text-gray-300"
+                  ? "bg-brand-500 text-text-inverted shadow-soft shadow-brand-500/20 scale-[1.02]"
+                  : "hover:bg-muted text-text-muted group-hover:text-text-main"
               )}
             >
               <span className="truncate">{item.label}</span>
@@ -157,10 +157,10 @@ function ControlButton({ onClick, icon, disabled }: any) {
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        "p-3 rounded-2xl transition-all shadow-sm active:scale-90",
+        "p-3 rounded-2xl transition-all shadow-soft active:scale-90 border",
         disabled 
-          ? "bg-surface-100 dark:bg-surface-900 text-surface-300 opacity-30 cursor-not-allowed" 
-          : "bg-white dark:bg-surface-700 text-brand-500 hover:bg-brand-500 hover:text-white"
+          ? "bg-muted text-text-muted/20 border-transparent opacity-50 cursor-not-allowed" 
+          : "bg-surface border-subtle text-brand-500 hover:bg-brand-500 hover:text-text-inverted hover:border-brand-500 shadow-soft"
       )}
     >
       {React.cloneElement(icon, { className: "w-5 h-5" })}
