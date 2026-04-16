@@ -69,13 +69,13 @@ function FlagCard({ flagKey, label, description, icon: Icon }: any) {
     <div className={cn(
       "p-5 rounded-3xl border-2 transition-all duration-300 group",
       isEnabled 
-        ? "bg-brand-50/50 dark:bg-brand-500/5 border-brand-500/30 shadow-lg shadow-brand-500/5" 
-        : "bg-white dark:bg-surface-900 border-surface-100 dark:border-surface-800 opacity-60 grayscale hover:grayscale-0 hover:opacity-100"
+        ? "bg-brand-500/5 border-brand-500/30 shadow-soft" 
+        : "bg-surface border-subtle opacity-60 grayscale hover:grayscale-0 hover:opacity-100"
     )}>
       <div className="flex items-start justify-between mb-4">
         <div className={cn(
           "p-3 rounded-2xl transition-colors",
-          isEnabled ? "bg-brand-500 text-white" : "bg-surface-100 dark:bg-surface-800 text-gray-400"
+          isEnabled ? "bg-brand-500 text-text-inverted" : "bg-muted text-text-muted/50"
         )}>
           <Icon className="w-5 h-5" />
         </div>
@@ -83,15 +83,15 @@ function FlagCard({ flagKey, label, description, icon: Icon }: any) {
           onClick={() => context?.toggleFlag(flagKey)}
           className={cn(
             "transition-colors",
-            isEnabled ? "text-brand-500" : "text-gray-300 dark:text-gray-600"
+            isEnabled ? "text-brand-500" : "text-text-muted/30"
           )}
         >
           {isEnabled ? <ToggleRight className="w-10 h-10" /> : <ToggleLeft className="w-10 h-10" />}
         </button>
       </div>
       <div className="space-y-1">
-        <h4 className="text-sm font-black text-gray-900 dark:text-white uppercase tracking-tight">{label}</h4>
-        <p className="text-xs font-medium text-gray-500 leading-relaxed">{description}</p>
+        <h4 className="text-sm font-black text-text-main uppercase tracking-tight">{label}</h4>
+        <p className="text-xs font-medium text-text-muted leading-relaxed">{description}</p>
       </div>
     </div>
   );
@@ -103,33 +103,33 @@ function ExperienceDemo() {
 
   return (
     <div className={cn(
-      "mt-8 p-8 rounded-[2.5rem] border-4 transition-all duration-700 relative overflow-hidden",
+      "mt-8 p-8 rounded-3xl border-4 transition-all duration-700 relative overflow-hidden",
       isPremium 
-        ? "bg-brand-500 border-brand-400 text-white shadow-2xl shadow-brand-500/30" 
-        : "bg-surface-100 dark:bg-surface-800 border-surface-200 dark:border-surface-700 text-gray-400"
+        ? "bg-brand-500 border-brand-500/20 text-text-inverted shadow-hard" 
+        : "bg-surface border-subtle text-text-muted"
     )}>
       {isPremium && (
-        <div className="absolute top-0 right-0 p-8 opacity-10 animate-pulse text-white">
+        <div className="absolute top-0 right-0 p-8 opacity-10 animate-pulse text-text-inverted">
           <Sparkles className="w-32 h-32 rotate-12" />
         </div>
       )}
       <div className="relative z-10 space-y-4">
         <div className="flex items-center gap-3">
           <h3 className={cn(
-            "text-2xl font-black uppercase tracking-tighter",
-            isPremium ? "text-white" : "text-gray-900 dark:text-white"
+            "text-2xl font-black uppercase tracking-tighter transition-colors",
+            isPremium ? "text-text-inverted" : "text-text-main"
           )}>
             Application Portal
           </h3>
           {hasBadge && (
-            <span className="px-2 py-0.5 bg-amber-400 text-amber-900 text-[10px] font-black rounded-lg uppercase tracking-widest animate-bounce">
+            <span className="px-2 py-0.5 bg-warning-500 text-warning-950 text-tiny font-black rounded-lg uppercase tracking-widest animate-bounce">
               BETA
             </span>
           )}
         </div>
         <p className={cn(
-          "text-sm font-medium leading-relaxed max-w-sm",
-          isPremium ? "text-brand-50" : "text-gray-500"
+          "text-sm font-medium leading-relaxed max-w-sm transition-colors",
+          isPremium ? "text-text-inverted/70" : "text-text-muted"
         )}>
           {isPremium 
             ? "Welcome to the elite tier. All experimental features and sub-atomic optimizations are currently active in your environment."
@@ -137,10 +137,10 @@ function ExperienceDemo() {
           }
         </p>
         <button className={cn(
-          "px-6 py-2.5 rounded-xl font-black text-xs uppercase tracking-widest transition-all",
+          "px-6 py-2.5 rounded-xl font-black text-tiny uppercase tracking-widest transition-all",
           isPremium 
-            ? "bg-white text-brand-600 shadow-xl" 
-            : "bg-gray-900 text-white dark:bg-white dark:text-black shadow-lg"
+            ? "bg-surface text-brand-500 shadow-soft" 
+            : "bg-text-main text-text-inverted shadow-soft"
         )}>
           {isPremium ? "Access Neural Core" : "Upgrade Engine"}
         </button>
@@ -155,16 +155,16 @@ export default function FeatureFlagChallenge() {
       <div className="max-w-4xl mx-auto p-6 space-y-8 pb-20">
         <div className="flex items-center justify-between">
           <div className="space-y-1">
-            <h2 className="text-2xl font-black text-gray-900 dark:text-white flex items-center gap-2 tracking-tight uppercase">
+            <h2 className="text-2xl font-black text-text-main flex items-center gap-2 tracking-tight uppercase">
               <ShieldCheck className="w-7 h-7 text-brand-500" />
               ORCHESTRATOR
             </h2>
-            <p className="text-sm font-medium text-gray-500">
+            <p className="text-sm font-medium text-text-muted">
               Granular control over environment-specific feature sets.
             </p>
           </div>
-          <div className="p-3 bg-surface-100 dark:bg-surface-800 rounded-2xl">
-             <RefreshCw className="w-5 h-5 text-gray-400 animate-spin-slow" />
+          <div className="p-3 bg-muted rounded-2xl">
+             <RefreshCw className="w-5 h-5 text-text-muted opacity-30 animate-spin-slow" />
           </div>
         </div>
 
@@ -196,7 +196,7 @@ export default function FeatureFlagChallenge() {
         </div>
 
         <div className="space-y-4 pt-4">
-           <h3 className="text-xs font-black uppercase tracking-[0.2em] text-gray-400 ml-1">Live Preview</h3>
+           <h3 className="text-tiny font-black uppercase tracking-[0.2em] text-text-muted ml-1 opacity-50">Live Preview</h3>
            <ExperienceDemo />
         </div>
       </div>

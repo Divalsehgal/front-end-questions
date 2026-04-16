@@ -44,18 +44,18 @@ const CustomInput = ({ placeholder, ref }: { placeholder?: string; ref: React.Re
       "relative group transition-all duration-300",
       isShaking && "animate-shake"
     )}>
-      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-400 group-focus-within:text-brand-500 transition-colors">
+      <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-text-muted group-focus-within:text-brand-500 transition-colors">
         <Keyboard className="w-5 h-5" />
       </div>
       <input
         ref={internalInputRef}
         placeholder={placeholder}
-        className="w-full pl-11 pr-4 py-4 bg-white dark:bg-surface-800 border-2 border-surface-200 dark:border-surface-700 rounded-2xl outline-none transition-all text-gray-900 dark:text-white focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 placeholder:text-gray-400 dark:placeholder:text-gray-500 font-medium"
+        className="w-full pl-11 pr-4 py-4 bg-surface border-2 border-subtle rounded-2xl outline-none transition-all text-text-main focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 placeholder:text-text-muted/50 font-medium"
       />
       
       {/* Visual Indicator of "Controlled" status */}
-      <div className="absolute top-0 right-0 -m-1 p-1 bg-brand-500 rounded-full shadow-lg shadow-brand-500/50">
-        <Cpu className="w-3 h-3 text-white" />
+      <div className="absolute top-0 right-0 -m-1 p-1 bg-brand-500 rounded-full shadow-soft shadow-brand-500/50">
+        <Cpu className="w-3 h-3 text-text-inverted" />
       </div>
     </div>
   );
@@ -73,19 +73,19 @@ export default function ImperativeHandleExample() {
   return (
     <div className="max-w-xl mx-auto p-6 space-y-8 pb-20">
       <div className="space-y-1">
-        <h2 className="text-2xl font-black text-gray-900 dark:text-white flex items-center gap-2 tracking-tight uppercase">
+        <h2 className="text-2xl font-black text-text-main flex items-center gap-2 tracking-tight uppercase">
           <ShieldCheck className="w-7 h-7 text-brand-500" />
           BRIDGE CONTROL
         </h2>
-        <p className="text-sm font-medium text-gray-500">
+        <p className="text-sm font-medium text-text-muted">
           Enabling external orchestration of encapsulation layers.
         </p>
       </div>
 
-      <div className="bg-white dark:bg-surface-900 rounded-[2.5rem] border border-surface-100 dark:border-surface-800 shadow-2xl overflow-hidden">
+      <div className="bg-surface rounded-3xl border border-subtle shadow-hard overflow-hidden">
         <div className="p-8 space-y-8">
           <div className="space-y-3">
-             <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">Exposed Interface Unit</label>
+             <label className="text-tiny font-black text-text-muted uppercase tracking-widest ml-1">Exposed Interface Unit</label>
              <CustomInput ref={customInputRef} placeholder="Enter mission protocols..." />
           </div>
 
@@ -106,17 +106,17 @@ export default function ImperativeHandleExample() {
               onClick={handleClear} 
               icon={<Eraser />} 
               label="Clear" 
-              color="bg-surface-800 shadow-surface-800/20"
+              color="bg-slate-800 shadow-slate-800/20"
             />
           </div>
         </div>
 
-        <div className="bg-surface-50 dark:bg-surface-800/50 p-6 border-t border-surface-100 dark:border-surface-800">
-          <div className="flex items-center gap-2 text-xs font-black text-gray-400 uppercase tracking-widest mb-4">
+        <div className="bg-muted p-6 border-t border-subtle">
+          <div className="flex items-center gap-2 text-xs font-black text-text-muted uppercase tracking-widest mb-4">
             <Terminal className="w-4 h-4" />
             Pattern Explanation
           </div>
-          <p className="text-xs font-medium text-gray-500 dark:text-gray-400 leading-relaxed italic">
+          <p className="text-xs font-medium text-text-muted leading-relaxed italic">
             "By using <span className="text-brand-500 font-bold">useImperativeHandle</span>, we've carefully selected which specific operations (Focus, Shake, Clear) are leaked to the parent, maintaining the child's integrity while allowing remote orchestration."
           </p>
         </div>
@@ -135,7 +135,7 @@ function ControlButton({ onClick, icon, label, color }: any) {
       )}
     >
       {React.cloneElement(icon, { className: "w-5 h-5" })}
-      <span className="text-[10px] font-black uppercase tracking-widest">{label}</span>
+      <span className="text-tiny font-black uppercase tracking-widest">{label}</span>
     </button>
   );
 }

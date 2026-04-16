@@ -25,16 +25,16 @@ export default function ProgressBarChallenge() {
 
   return (
     <div className="p-8 max-w-4xl mx-auto space-y-8">
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-surface p-8 rounded-3xl border border-border-strong shadow-sm">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-surface p-8 rounded-3xl border border-strong shadow-soft">
         <div>
           <h2 className="text-3xl font-display font-black tracking-tight text-text-main flex items-center gap-3">
-            <BarChart3 className="text-primary" /> Active Tasks
+            <BarChart3 className="text-brand-500" /> Active Tasks
           </h2>
           <p className="text-text-muted mt-2">Manage multiple concurrent progress streams with real-time feedback.</p>
         </div>
         <button 
           onClick={addBarHandler}
-          className="flex items-center gap-2 px-6 py-3 bg-primary text-white font-bold rounded-2xl hover:scale-105 transition-all duration-300 shadow-xl shadow-primary/20 active:scale-95 cursor-pointer"
+          className="flex items-center gap-2 px-6 py-3 bg-brand-500 text-text-inverted font-bold rounded-2xl hover:scale-105 transition-all duration-300 shadow-hard shadow-brand-500/20 active:scale-95 cursor-pointer"
         >
           <Plus size={20} /> New Task
         </button>
@@ -50,7 +50,7 @@ export default function ProgressBarChallenge() {
             />
           ))
         ) : (
-          <div className="py-24 flex flex-col items-center justify-center border-2 border-dashed border-border-subtle rounded-3xl text-text-muted bg-surface-sunken">
+          <div className="py-24 flex flex-col items-center justify-center border-2 border-dashed border-subtle rounded-3xl text-text-muted bg-muted">
              <BarChart3 size={48} className="opacity-20 mb-4" />
              <p className="font-semibold text-lg">No active tasks</p>
              <p className="text-sm">Click the "New Task" button to begin</p>
@@ -87,26 +87,26 @@ const ProgressBarItem: React.FC<ProgressBarItemProps> = ({ id, onComplete }) => 
   }, [id, onComplete]);
 
   return (
-    <div className="group animate-in fade-in slide-in-from-right-4 duration-500 bg-surface border border-border-subtle p-6 rounded-2xl shadow-sm hover:border-primary/30 transition-all">
+    <div className="group animate-in fade-in slide-in-from-right-4 duration-500 bg-surface border border-subtle p-6 rounded-2xl shadow-soft hover:border-brand-500/30 transition-all">
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center gap-3">
           {width < 100 ? (
-            <Loader2 className="animate-spin text-primary" size={18} />
+            <Loader2 className="animate-spin text-brand-500" size={18} />
           ) : (
-            <CheckCircle2 className="text-green-500" size={18} />
+            <CheckCircle2 className="text-success-500" size={18} />
           )}
           <span className="font-bold text-text-main text-sm">Task ID: {id.split('-').pop()}</span>
         </div>
-        <span className="text-xs font-mono font-bold text-primary bg-primary/5 px-2 py-1 rounded-md">
+        <span className="text-xs font-mono font-bold text-brand-500 bg-brand-500/5 px-2 py-1 rounded-md">
           {width}%
         </span>
       </div>
 
-      <div className="h-4 w-full bg-surface-sunken rounded-full overflow-hidden border border-border-subtle p-0.5">
+      <div className="h-4 w-full bg-muted rounded-full overflow-hidden border border-subtle p-0.5">
         <div
           className={cn(
             "h-full rounded-full transition-all duration-300 ease-out relative",
-            width === 100 ? "bg-green-500" : "bg-primary"
+            width === 100 ? "bg-success-500" : "bg-brand-500"
           )}
           style={{ width: `${width}%` }}
         >

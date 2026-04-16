@@ -33,23 +33,23 @@ export default function Lights() {
     <div className="max-w-xl mx-auto p-6 space-y-8">
       <div className="flex items-center justify-between">
         <div className="space-y-1">
-          <h2 className="text-2xl font-black text-gray-900 dark:text-white flex items-center gap-2 tracking-tight">
-            <Zap className="w-7 h-7 text-yellow-500 fill-yellow-500/20" />
+          <h2 className="text-2xl font-black text-text-main flex items-center gap-2 tracking-tight">
+            <Zap className="w-7 h-7 text-warning-500 fill-warning-500/20" />
             GLOW GRID
           </h2>
-          <p className="text-sm font-medium text-gray-500">
+          <p className="text-sm font-medium text-text-muted">
             Click cells to activate the pulse effect.
           </p>
         </div>
         <button 
           onClick={resetGrid}
-          className="p-2.5 bg-surface-100 dark:bg-surface-800 hover:bg-surface-200 dark:hover:bg-surface-700 rounded-xl transition-all shadow-sm"
+          className="p-2.5 bg-muted hover:bg-muted/80 rounded-xl transition-all shadow-soft"
         >
-          <RotateCcw className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+          <RotateCcw className="w-5 h-5 text-text-muted" />
         </button>
       </div>
 
-      <div className="bg-white dark:bg-surface-900 p-6 rounded-[2.5rem] border border-surface-200 dark:border-surface-800 shadow-2xl">
+      <div className="bg-surface p-6 rounded-3xl border border-subtle shadow-hard">
         <div className="grid grid-cols-5 gap-3 sm:gap-4 aspect-square">
           {grid.map((row, rIdx) => 
             row.map((isActive, cIdx) => (
@@ -60,8 +60,8 @@ export default function Lights() {
                   "relative rounded-2xl transition-all duration-300 outline-none active:scale-90 overflow-hidden",
                   "border-2",
                   isActive 
-                    ? "bg-yellow-400 border-yellow-300 shadow-[0_0_30px_rgba(250,204,21,0.6)] scale-105 z-10" 
-                    : "bg-surface-50 dark:bg-surface-800 border-surface-100 dark:border-surface-700 hover:border-brand-400 dark:hover:border-brand-600"
+                    ? "bg-warning-500 border-warning-500/50 shadow-[0_0_30px_var(--color-warning-500)]/40 scale-105 z-10" 
+                    : "bg-muted border-subtle hover:border-brand-500"
                 )}
               >
                 {/* Glow effect */}
@@ -76,7 +76,7 @@ export default function Lights() {
                 )}>
                   <Zap className={cn(
                     "w-1/3 h-1/3 transition-all truncate",
-                    isActive ? "text-yellow-900 scale-125" : "text-gray-400"
+                    isActive ? "text-warning-950 scale-125" : "text-text-muted"
                   )} />
                 </div>
               </button>
@@ -86,15 +86,15 @@ export default function Lights() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="flex gap-3 p-4 bg-yellow-50 dark:bg-yellow-900/10 rounded-2xl border border-yellow-100 dark:border-yellow-900/20">
-          <Info className="w-5 h-5 text-yellow-600 dark:text-yellow-400 shrink-0" />
-          <p className="text-xs text-yellow-900/70 dark:text-yellow-300/70 leading-relaxed">
+        <div className="flex gap-3 p-4 bg-warning-500/5 rounded-2xl border border-warning-500/10">
+          <Info className="w-5 h-5 text-warning-500 shrink-0" />
+          <p className="text-tiny text-text-main/70 leading-relaxed">
             The pulse effect uses a combination of scale, shadow, and color transitions for high visual impact.
           </p>
         </div>
-        <div className="flex gap-3 p-4 bg-brand-50 dark:bg-brand-900/10 rounded-2xl border border-brand-100 dark:border-brand-900/20">
+        <div className="flex gap-3 p-4 bg-brand-500/5 rounded-2xl border border-brand-500/10">
           <Grid3X3 className="w-5 h-5 text-brand-500 shrink-0" />
-          <p className="text-xs text-brand-900/70 dark:text-brand-300/70 leading-relaxed">
+          <p className="text-tiny text-text-main/70 leading-relaxed">
             State is managed via a 2D matrix with individual cell timeouts for independent animations.
           </p>
         </div>

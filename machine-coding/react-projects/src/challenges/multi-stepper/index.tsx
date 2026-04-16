@@ -40,13 +40,13 @@ export default function MultiStepper() {
         <p className="text-text-muted mt-2">Smooth, multi-step navigation ported to production-ready Tailwind utilities.</p>
       </div>
 
-      <div className="bg-surface p-12 rounded-[2.5rem] border border-border-strong shadow-sm space-y-16">
+      <div className="bg-surface p-12 rounded-3xl border border-border-strong shadow-soft space-y-16">
         {/* Stepper Visualization */}
         <div className="relative flex justify-between items-center max-w-3xl mx-auto">
           {/* Progress Line */}
-          <div className="absolute top-1/2 left-0 w-full h-1 bg-surface-sunken -translate-y-1/2 z-0 rounded-full overflow-hidden">
+          <div className="absolute top-1/2 left-0 w-full h-1 bg-muted -translate-y-1/2 z-0 rounded-full overflow-hidden">
             <div 
-              className="h-full bg-primary transition-all duration-700 ease-spring"
+              className="h-full bg-brand-500 transition-all duration-700 ease-spring"
               style={{ width: `${((currentStep - 1) / (stepperData.length - 1)) * 100}%` }}
             />
           </div>
@@ -61,17 +61,17 @@ export default function MultiStepper() {
                 <div 
                   className={cn(
                     "w-14 h-14 rounded-2xl flex items-center justify-center transition-all duration-500 border-4",
-                    isCompleted && "bg-primary border-primary text-white scale-110",
-                    isActive && "bg-surface border-primary text-primary shadow-xl shadow-primary/20 scale-125",
-                    !isCompleted && !isActive && "bg-surface-sunken border-border-subtle text-text-muted opacity-50"
+                    isCompleted && "bg-brand-500 border-brand-500 text-text-inverted scale-110",
+                    isActive && "bg-surface border-brand-500 text-brand-500 shadow-hard shadow-brand-500/20 scale-125",
+                    !isCompleted && !isActive && "bg-muted border-border-subtle text-text-muted opacity-50"
                   )}
                 >
-                  {isCompleted ? <Check className="w-6 h-6 stroke-[3px]" /> : <Icon className="w-6 h-6" />}
+                  {isCompleted ? <Check className="w-6 h-6" strokeWidth={3} /> : <Icon className="w-6 h-6" />}
                 </div>
                 
                 <span className={cn(
                   "absolute -bottom-10 whitespace-nowrap font-bold text-sm tracking-tight transition-all duration-300",
-                  isActive ? "text-primary translate-y-0 opacity-100" : "text-text-muted -translate-y-2 opacity-100"
+                  isActive ? "text-brand-500 translate-y-0 opacity-100" : "text-text-muted -translate-y-2 opacity-100"
                 )}>
                   {step.name}
                 </span>
@@ -81,7 +81,7 @@ export default function MultiStepper() {
         </div>
 
         {/* Content Area */}
-        <div className="pt-8 h-48 flex items-center justify-center bg-surface-sunken rounded-3xl border border-border-subtle animate-in zoom-in-95 duration-500">
+        <div className="pt-8 h-48 flex items-center justify-center bg-muted rounded-3xl border border-border-subtle animate-in zoom-in-95 duration-500">
            <div className="text-center space-y-2">
               <h3 className="text-2xl font-black text-text-main uppercase tracking-widest">
                  {stepperData.find(s => s.id === currentStep)?.name} Phase
@@ -95,7 +95,7 @@ export default function MultiStepper() {
           <button 
             onClick={prevHandler} 
             disabled={currentStep === 1}
-            className="flex items-center gap-2 px-8 py-4 bg-surface border border-border-strong rounded-2xl font-bold text-text-main hover:bg-surface-sunken disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer"
+            className="flex items-center gap-2 px-8 py-4 bg-surface border border-border-strong rounded-2xl font-bold text-text-main hover:bg-muted disabled:opacity-30 disabled:cursor-not-allowed transition-all cursor-pointer"
           >
             <ChevronLeft size={20} /> Preview
           </button>
@@ -103,7 +103,7 @@ export default function MultiStepper() {
           <button 
             onClick={nextHandler} 
             disabled={currentStep === stepperData.length}
-            className="flex items-center gap-2 px-8 py-4 bg-primary text-white rounded-2xl font-bold hover:scale-105 active:scale-95 disabled:opacity-30 transition-all shadow-xl shadow-primary/20 cursor-pointer"
+            className="flex items-center gap-2 px-8 py-4 bg-brand-500 text-text-inverted rounded-2xl font-bold hover:scale-105 active:scale-95 disabled:opacity-30 transition-all shadow-hard shadow-brand-500/20 cursor-pointer"
           >
             {currentStep === stepperData.length ? "Complete Purchase" : "Continue"} <ChevronRight size={20} />
           </button>

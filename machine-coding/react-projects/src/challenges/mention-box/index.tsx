@@ -66,13 +66,13 @@ export default function MentionBox() {
 
   return (
     <div className="max-w-xl mx-auto space-y-8 p-6">
-      <div className="space-y-2">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-          <AtSign className="w-6 h-6 text-brand-500" />
+      <div className="space-y-2 text-center md:text-left">
+        <h2 className="text-2xl font-black text-text-main flex items-center gap-2 tracking-tight uppercase justify-center md:justify-start">
+          <AtSign className="w-7 h-7 text-brand-500" />
           Mention Box
         </h2>
-        <p className="text-gray-500 dark:text-gray-400">
-          Type <span className="font-mono text-brand-500">@</span> to see suggestions.
+        <p className="text-sm font-medium text-text-muted">
+          Type <span className="font-mono text-brand-500 font-black">@</span> to see intelligence suggestions.
         </p>
       </div>
 
@@ -86,29 +86,29 @@ export default function MentionBox() {
                 value={inputValue}
                 onChange={handleChange}
                 placeholder="Start typing @name..."
-                className="w-full px-4 py-3 bg-white dark:bg-surface-800 border-2 border-surface-200 dark:border-surface-700 rounded-xl focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all outline-none text-gray-900 dark:text-white placeholder:text-gray-400 group-hover:border-surface-300 dark:group-hover:border-surface-600"
+                className="w-full px-4 py-4 bg-surface border-2 border-subtle rounded-2xl focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all outline-none text-text-main placeholder:text-text-muted/30 group-hover:border-strong font-medium"
               />
             </div>
           </Popover.Trigger>
 
           <Popover.Portal>
             <Popover.Positioner side="bottom" align="start" sideOffset={8}>
-              <Popover.Popup className="w-64 bg-white dark:bg-surface-800 border border-surface-200 dark:border-surface-700 rounded-xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200 z-50">
-                <div className="p-2 space-y-1">
+              <Popover.Popup className="w-64 bg-surface border border-subtle rounded-3xl shadow-hard overflow-hidden animate-in fade-in zoom-in duration-200 z-50 p-2">
+                <div className="space-y-1">
                   {mentionOptions.map((user) => (
                     <button
                       key={user.id}
                       onClick={() => handleSelectUser(user)}
-                      className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-brand-50 dark:hover:bg-brand-500/10 transition-colors text-left group"
+                      className="w-full flex items-center gap-3 px-3 py-2 rounded-2xl hover:bg-muted transition-colors text-left group"
                     >
-                      <div className="w-8 h-8 rounded-full bg-brand-100 dark:bg-brand-900/30 flex items-center justify-center text-brand-600 dark:text-brand-400 shrink-0">
+                      <div className="w-8 h-8 rounded-full bg-brand-500/10 flex items-center justify-center text-brand-500 shrink-0">
                         <UserIcon className="w-4 h-4" />
                       </div>
                       <div className="flex flex-col min-w-0">
-                        <span className="text-sm font-medium text-gray-900 dark:text-white truncate">
+                        <span className="text-sm font-black text-text-main truncate">
                           {user.first_name} {user.last_name}
                         </span>
-                        <span className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                        <span className="text-tiny font-black text-text-muted/50 uppercase tracking-widest truncate">
                           @{user.first_name.toLowerCase()}
                         </span>
                       </div>
@@ -122,26 +122,26 @@ export default function MentionBox() {
       </div>
 
       {/* Context State Demo Section */}
-      <div className="p-6 bg-surface-50 dark:bg-surface-900/50 rounded-2xl border border-surface-200 dark:border-surface-800 space-y-4">
+      <div className="p-6 bg-muted rounded-3xl border border-subtle space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="p-2 bg-brand-100 dark:bg-brand-900/30 rounded-lg text-brand-600">
-              <LogIn className="w-5 h-5" />
+            <div className="p-3 bg-brand-500/10 rounded-2xl text-brand-500">
+              <LogIn className="w-6 h-6" />
             </div>
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wider text-gray-500">Active User (Context)</p>
-              <p className="text-lg font-bold text-gray-900 dark:text-white">{dummyValue.name}</p>
+              <p className="text-tiny font-black uppercase tracking-widest text-text-muted/50">Active User (Context)</p>
+              <p className="text-lg font-black text-text-main tracking-tight uppercase">{dummyValue.name}</p>
             </div>
           </div>
           <button
             onClick={handleDummyChange}
-            className="px-4 py-2 bg-brand-500 hover:bg-brand-600 active:scale-95 text-white font-medium rounded-lg transition-all shadow-lg shadow-brand-500/20"
+            className="px-6 py-2.5 bg-brand-500 hover:bg-brand-600 active:scale-95 text-text-inverted text-tiny font-black uppercase tracking-widest rounded-xl transition-all shadow-soft"
           >
             Update Context
           </button>
         </div>
-        <div className="text-xs text-gray-400 dark:text-gray-500 italic">
-          This section demonstrates state sharing across components via the DummyProvider.
+        <div className="text-tiny font-medium text-text-muted/60 italic px-1">
+          This section demonstrates state sharing across components via the DummyProvider system.
         </div>
       </div>
     </div>

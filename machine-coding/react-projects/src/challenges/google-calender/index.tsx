@@ -20,15 +20,15 @@ export interface EventData {
 // Data Handling logic
 const ConflictingData: EventData[] = [
   { startTime: "00:00", endTime: "01:30", color: "var(--color-brand-500)", title: "Team Sync" },
-  { startTime: "03:30", endTime: "07:30", color: "#f6501e", title: "Project Alpha" },
-  { startTime: "04:30", endTime: "08:30", color: "#f6501e", title: "Deep Work" },
-  { startTime: "06:30", endTime: "09:00", color: "#f6501e", title: "Client Demo" },
+  { startTime: "03:30", endTime: "07:30", color: "var(--color-brand-600)", title: "Project Alpha" },
+  { startTime: "04:30", endTime: "08:30", color: "var(--color-brand-400)", title: "Deep Work" },
+  { startTime: "06:30", endTime: "09:00", color: "var(--color-brand-500)", title: "Client Demo" },
   { startTime: "11:00", endTime: "13:30", color: "var(--color-brand-600)", title: "Lunch Break" },
   { startTime: "12:00", endTime: "13:30", color: "var(--color-brand-400)", title: "Hiring Interview" },
   { startTime: "09:30", endTime: "10:30", color: "var(--color-brand-500)", title: "Status Update" },
   { startTime: "16:00", endTime: "17:00", color: "var(--color-brand-500)", title: "Design Review" },
   { startTime: "15:00", endTime: "17:00", color: "var(--color-brand-600)", title: "All Hands" },
-  { startTime: "18:00", endTime: "19:00", color: "#f6501e", title: "Product Sync" },
+  { startTime: "18:00", endTime: "19:00", color: "var(--color-brand-700)", title: "Product Sync" },
   { startTime: "20:30", endTime: "22:30", color: "var(--color-brand-500)", title: "Night Owls" },
 ];
 
@@ -79,7 +79,7 @@ function EventWidget({ event }: { event: EventData }) {
   return (
     <div
       className={cn(
-        "absolute right-2 rounded-lg border-l-4 p-2 shadow-sm transition-all hover:shadow-md hover:z-10 group cursor-pointer overflow-hidden backdrop-blur-sm"
+        "absolute right-2 rounded-lg border-l-4 p-2 shadow-soft transition-all hover:shadow-hard hover:z-10 group cursor-pointer overflow-hidden backdrop-blur-sm"
       )}
       style={{
         backgroundColor: `${event.color}15`,
@@ -90,12 +90,12 @@ function EventWidget({ event }: { event: EventData }) {
       }}
     >
       <div className="flex justify-between items-start">
-        <h5 className="text-[10px] font-bold truncate text-gray-900 dark:text-white" style={{ color: event.color }}>
+        <h5 className="text-tiny font-bold truncate text-text-main" style={{ color: event.color }}>
           {event.title}
         </h5>
-        <MoreVertical className="w-2.5 h-2.5 text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
+        <MoreVertical className="w-2.5 h-2.5 text-text-muted opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
       </div>
-      <div className="flex items-center gap-1 mt-0.5 text-[8px] font-medium text-gray-500 dark:text-gray-400">
+      <div className="flex items-center gap-1 mt-0.5 text-tiny font-medium text-text-muted">
         <Clock className="w-2 h-2" />
         {event.startTime} - {event.endTime}
       </div>
@@ -108,37 +108,37 @@ export default function GoogleCalendar() {
     <div className="max-w-4xl mx-auto p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-brand-500 text-white rounded-xl shadow-lg shadow-brand-500/20">
+          <div className="p-2 bg-brand-500 text-text-inverted rounded-xl shadow-hard shadow-brand-500/20">
             <CalendarIcon className="w-6 h-6" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Day Planner</h2>
-            <p className="text-sm text-gray-500 font-medium">Monday, Jan 24, 2026</p>
+            <h2 className="text-2xl font-bold text-text-main">Day Planner</h2>
+            <p className="text-sm text-text-muted font-medium">Monday, Jan 24, 2026</p>
           </div>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 bg-white dark:bg-surface-800 border border-surface-200 dark:border-surface-700 rounded-xl hover:bg-surface-50 dark:hover:bg-surface-700 transition-all font-semibold text-sm shadow-sm">
+        <button className="flex items-center gap-2 px-4 py-2 bg-surface border border-subtle rounded-xl hover:bg-muted transition-all font-semibold text-sm shadow-soft">
           <Plus className="w-4 h-4 text-brand-500" />
           Add Event
         </button>
       </div>
 
-      <div className="bg-white dark:bg-surface-800 rounded-3xl border border-surface-200 dark:border-surface-700 shadow-xl overflow-hidden">
+      <div className="bg-surface rounded-3xl border border-subtle shadow-hard overflow-hidden">
         <div className="relative h-[1440px] select-none">
           {/* Hour Grid Lines */}
           <div className="absolute inset-0">
             {HOURS.map((hour) => (
               <div 
                 key={hour.minutes} 
-                className="absolute w-full border-t border-surface-100 dark:border-surface-700/50 flex"
+                className="absolute w-full border-t border-subtle flex"
                 style={{ top: `${hour.minutes}px`, height: '60px' }}
               >
                 <div className="w-[60px] pr-2 text-right -translate-y-2">
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-tighter">
+                  <span className="text-tiny font-bold text-text-muted uppercase tracking-tighter">
                     {hour.label.split(' ')[0]}
-                    <span className="text-[8px] ml-0.5">{hour.label.split(' ')[1]}</span>
+                    <span className="text-tiny opacity-50 ml-0.5">{hour.label.split(' ')[1]}</span>
                   </span>
                 </div>
-                <div className="flex-1 border-l border-surface-100 dark:border-surface-700/50" />
+                <div className="flex-1 border-l border-subtle" />
               </div>
             ))}
           </div>
@@ -154,10 +154,10 @@ export default function GoogleCalendar() {
           
           {/* Current Time Indicator (Dummy Example) */}
           <div 
-            className="absolute left-[60px] right-0 border-t-2 border-red-500 z-20 pointer-events-none flex items-center"
+            className="absolute left-[60px] right-0 border-t-2 border-error z-20 pointer-events-none flex items-center"
             style={{ top: '650px' }}
           >
-            <div className="w-2 h-2 rounded-full bg-red-500 -ml-1" />
+            <div className="w-2 h-2 rounded-full bg-error -ml-1" />
           </div>
         </div>
       </div>

@@ -93,21 +93,21 @@ export default function SnakeAndLadder() {
         key={number} 
         className={cn(
           "relative h-12 sm:h-16 w-full border border-surface-200 dark:border-surface-700/50 flex flex-col items-center justify-center transition-all",
-          (number % 2 === 0) ? "bg-surface-50 dark:bg-surface-900/30" : "bg-white dark:bg-surface-800/30",
-          isSnake && "bg-red-50/50 dark:bg-red-900/10",
-          isLadder && "bg-green-50/50 dark:bg-green-900/10"
+          (number % 2 === 0) ? "bg-muted/30" : "bg-surface/30",
+          isSnake && "bg-error/10",
+          isLadder && "bg-success/10"
         )}
       >
-        <span className="absolute top-1 left-1 text-[10px] font-bold text-gray-400">{number}</span>
+        <span className="absolute top-1 left-1 text-tiny font-bold text-text-muted/60">{number}</span>
         
         {isSnake && (
-          <div className="text-[10px] font-bold text-red-500 animate-pulse flex items-center gap-0.5">
+          <div className="text-tiny font-bold text-error animate-pulse flex items-center gap-0.5">
             <Zap className="w-2.5 h-2.5" />
             {isSnake}
           </div>
         )}
         {isLadder && (
-          <div className="text-[10px] font-bold text-green-500 animate-bounce flex items-center gap-0.5">
+          <div className="text-tiny font-bold text-success animate-bounce flex items-center gap-0.5">
             <ArrowRightLeft className="w-2.5 h-2.5" />
             {isLadder}
           </div>
@@ -118,8 +118,8 @@ export default function SnakeAndLadder() {
             <div 
               key={pIdx}
               className={cn(
-                "w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center shadow-lg border-2 border-white dark:border-surface-900 -mt-1 scale-110",
-                pIdx === 0 ? "bg-brand-500 text-white" : "bg-orange-500 text-white"
+                "w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center shadow-hard border-2 border-surface -mt-1 scale-110",
+                pIdx === 0 ? "bg-brand-500 text-text-inverted" : "bg-orange-500 text-text-inverted"
               )}
             >
               <UserIcon className="w-3 h-3 sm:w-4 sm:h-4" />
@@ -147,43 +147,43 @@ export default function SnakeAndLadder() {
     <div className="max-w-3xl mx-auto p-4 sm:p-8 space-y-8">
       <div className="flex items-center justify-between">
         <div className="space-y-1">
-          <h2 className="text-2xl font-black text-gray-900 dark:text-white flex items-center gap-2 tracking-tight">
+          <h2 className="text-2xl font-black text-text-main flex items-center gap-2 tracking-tight">
             <Trophy className="w-7 h-7 text-yellow-500" />
             SNAKES & LADDERS
           </h2>
-          <p className="text-sm font-medium text-gray-500">{message}</p>
+          <p className="text-sm font-medium text-text-muted">{message}</p>
         </div>
         <button 
           onClick={resetGame}
-          className="p-2.5 bg-surface-100 dark:bg-surface-800 hover:bg-surface-200 dark:hover:bg-surface-700 rounded-xl transition-all"
+          className="p-2.5 bg-muted hover:bg-muted/80 rounded-xl transition-all"
         >
-          <RotateCcw className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+          <RotateCcw className="w-5 h-5 text-text-main" />
         </button>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         {/* Game Board */}
         <div className="lg:col-span-3">
-          <div className="bg-white dark:bg-surface-800 rounded-2xl border-4 border-surface-200 dark:border-surface-700 shadow-2xl overflow-hidden aspect-square">
+          <div className="bg-surface rounded-2xl border-4 border-subtle shadow-hard overflow-hidden aspect-square">
             {renderBoard()}
           </div>
         </div>
 
         {/* Controls */}
         <div className="space-y-6">
-          <div className="bg-white dark:bg-surface-800 rounded-2xl border border-surface-200 dark:border-surface-700 p-6 shadow-sm space-y-6">
+          <div className="bg-surface rounded-2xl border border-subtle p-6 shadow-soft space-y-6">
             <div className="flex justify-between">
               <div className={cn(
                 "w-12 h-12 rounded-xl flex items-center justify-center border-2 transition-all",
-                currentPlayer === 0 ? "bg-brand-500 border-brand-200 scale-110 shadow-lg shadow-brand-500/20" : "bg-surface-100 dark:bg-surface-700 border-transparent opacity-50"
+                currentPlayer === 0 ? "bg-brand-500 border-brand-200 scale-110 shadow-soft shadow-brand-500/20" : "bg-muted border-transparent opacity-50"
               )}>
-                <UserIcon className="w-6 h-6 text-white" />
+                <UserIcon className="w-6 h-6 text-text-inverted" />
               </div>
               <div className={cn(
                 "w-12 h-12 rounded-xl flex items-center justify-center border-2 transition-all",
-                currentPlayer === 1 ? "bg-orange-500 border-orange-200 scale-110 shadow-lg shadow-orange-500/20" : "bg-surface-100 dark:bg-surface-700 border-transparent opacity-50"
+                currentPlayer === 1 ? "bg-orange-500 border-orange-200 scale-110 shadow-soft shadow-orange-500/20" : "bg-muted border-transparent opacity-50"
               )}>
-                <UserIcon className="w-6 h-6 text-white" />
+                <UserIcon className="w-6 h-6 text-text-inverted" />
               </div>
             </div>
 
@@ -214,9 +214,9 @@ export default function SnakeAndLadder() {
             </button>
 
             <div className="text-center space-y-1">
-              <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Target</p>
+              <p className="text-tiny font-bold text-text-muted uppercase tracking-widest">Target</p>
               <div className="flex items-center justify-center gap-2">
-                <span className="text-2xl font-black text-gray-900 dark:text-white">100</span>
+                <span className="text-2xl font-black text-text-main">100</span>
                 <Trophy className="w-5 h-5 text-yellow-500" />
               </div>
             </div>
