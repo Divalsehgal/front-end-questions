@@ -1,0 +1,32 @@
+< !doctype html>
+    <html>
+
+    <head>
+        <title>Async Script</title>
+    </head>
+
+    <body>
+        <!-- Content before the script -->
+        <h1>Async Script Example</h1>
+        <p>This content will be rendered before the async script executes.</p>
+        
+        <!-- In <script async>, the browser downloads the script file asynchronously 
+            (in parallel with HTML parsing) and executes it as soon as it is available 
+            (potentially before HTML parsing completes). 
+            The execution will not necessarily be executed in the order in which it 
+            appears in the HTML document. 
+            This can improve perceived performance because the browser doesn't 
+            wait for the script to download before continuing to render the page.
+            use <script async> when the script is independent of any other scripts on the page,
+            for example, analytics and ads scripts. -->
+
+        <!-- Async script -->
+        <script async src="async.js"></script>
+
+        <!-- Content after the script -->
+        <p>
+            This content may be rendered before or after the async script executes.
+        </p>
+    </body>
+
+    </html>

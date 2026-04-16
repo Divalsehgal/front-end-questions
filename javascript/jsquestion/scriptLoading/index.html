@@ -1,68 +1,10 @@
-<!-- <!DOCTYPE html>
- 
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="preload" href="./script4.js" as="script" />
-    <title>Async and Defer Example</title>
-  </head>
-
-  <body>
-    <h1>Async and Defer Example</h1>
-    <script async src="./script1.js"></script>
-    <script defer src="./script2.js"></script>
-    <script async src="./script3.js"></script>
-    <script defer src="./script4.js"></script>
-    <script>
-      console.log("script5");
-    </script>
-  </body>
-</html> -->
-
-<!-- 
-
-  <link rel="preload" href="./script4.js" as="script" />
-  this will make sure that script will download first from rest of the script 
-  but it wont manipluate the execution order
-
- -->
-
-<!-- ✅ Use async for independent scripts (Google Analytics, ads, third-party tracking). -->
-
-<!--  Use async for:
-
-Google Tag Manager (GTM)
-Google Analytics (gtag.js)
-Ad networks (Facebook Pixel, AdSense)
-
-✅ Use defer for:
-
-External JavaScript libraries (e.g., jQuery, Lodash, Chart.js)
-Main application scripts (React, Vue, Next.js hydration)
-Large scripts that manipulate the DOM -->
-
-<!-- 
-    Deferred scripts are download while parsing of DOM 
-    but execute them only after content is fully parsed 
-    before the DOMContentLoaded
-    and execute in the order they appear in the HTML,
-    They do not block the parsing of the HTML content
-    ✅ Best for critical JS needed for app to run
-     -->
-
-<!-- 
-    Inline scripts are executed immediately as
-     they are encountered during HTML parsing. 
-     They don't block parsing or rendering of the page
-     -->
-
-
-<!-- Async scripts are fetched asynchronously
-   and executed as soon as they are downloaded.
-    Async downloads the scripts and 
-    only paused the DOM for script execution -->
-
+<!--                   <script>	                  <script async>	            <script defer>
+  Parsing behavior	   Blocks HTML parsing	      Runs parallel to parsing	  Runs parallel to parsing
+  Execution order	     In order of appearance	    Not guaranteed	            In order of appearance
+  DOM dependency	     No	                        No	                        Yes (waits for DOM) 
+  Usage                                             analytics and ads scripts.         
+  
+  -->
 <!DOCTYPE html>
 <html lang="en">
 
@@ -71,10 +13,9 @@ Large scripts that manipulate the DOM -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="preload" href="./script4.js" as="script" /> <!-- preloading imp resource as script  -->
   <title>Async and Defer Example</title>
-
-
   <meta name="theme-color" content="#226DAA" />
-
+  <script async src="./script1.js"></script> <!-- async -->
+  <script defer src="./script2.js"></script> <!-- deferred -->
 
 
 </head>
@@ -82,13 +23,25 @@ Large scripts that manipulate the DOM -->
 
 <body>
   <h1>Async and Defer Example</h1>
-  <script src="./script1.js"></script><!-- inline -->
-  <script defer src="./script2.js"></script><!-- deferred  -->
-  <script src="./script3.js"></script> <!-- inline -->
-  <script src="./script4.js"></script> <!-- inline -->
   <script>
-    console.log("script5");
+    console.log("script3");
   </script> <!-- inline -->
 </body>
 
 </html>
+
+<!-- 
+1.The async attribute should be used for scripts that are not critical to the initial 
+rendering of the page and do not depend on each other,
+while the defer attribute should be used 
+for scripts that depend on / is depended on by another script.
+
+2.The async and defer attributes are ignored for scripts that have no src attribute.
+<script> with defer or async that contain document.write() will be ignored with a 
+message like "A call to document.write() from an asynchronously-loaded external 
+script was ignored".
+
+3.Even though async and defer help to make script downloading asynchronous,
+the scripts are still eventually executed on the main thread. 
+
+-->
