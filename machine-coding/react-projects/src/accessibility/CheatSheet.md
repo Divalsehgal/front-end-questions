@@ -20,7 +20,7 @@ Assistive technologies can't "see" the visual layout of your app. ARIA attribute
 
 ### A. `aria-controls` ↔ `id`
 
-`aria-constrols` should match with `id` of the element that it controls.
+`aria-controls` should match with `id` of the element that it controls.
 
 Tells the screen reader that interacting with the current element will affect or control *another* element.
 
