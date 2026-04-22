@@ -9,7 +9,13 @@ import {
   X
 } from "lucide-react";
 
-export const hint = "Advanced Tic Tac Toe using 2D array logic with premium design.";
+export const hint = `
+### Learning Gotchas:
+1. **Array Initialization**: Avoid using \`Array(3).fill(Array(3).fill(null))\` as it creates rows that reference the same memory address. Use nested \`Array.from\` to ensures each cell is a unique object.
+2. **Safety Checks**: Always validate that the cell is empty AND there is no winner before processing a move. Missing these is a common interview pitfall.
+3. **Winner Logic**: Flatten the 2D board into a 1D array to check against a static list of winning index combinations. This is much cleaner than nested loops.
+4. **State Immutability**: Use \`map\` to return a brand new board state rather than mutating the existing array, keeping React's rendering predictable.
+`;
 
 type Player = "p1" | "p2" | null;
 type Cell = { value: string; player: string };
@@ -22,7 +28,7 @@ const tictac: Board = Array.from({ length: 3 }, () =>
 const WINNING_COMBINATIONS = [
   [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
   [0, 3, 6], [1, 4, 7], [2, 5, 8], // Cols
-  [0, 4, 8], [2, 4, 6],             // Diagonals
+  [0, 4, 8], [2, 4, 6],            // Diagonals
 ];
 
 const checkWinner = (board: Board): string | null => {

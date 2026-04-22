@@ -194,7 +194,6 @@ Because they cannot contain anything, they do not require (and are not allowed t
 
 *(Note: The trailing slash `/` is optional in HTML5, but required in React/JSX due to XML strictness).*
 
-
 ---
 
 # Semantic HTML
@@ -232,12 +231,20 @@ For forms, nest `<input>` elements within `<label>` for better accessibility and
 
 ### Select Dropdowns
 
-Similarly, associate `<label>` with `<select>` elements to enhance form accessibility.
+Associate `<label>` with `<select>` elements for accessibility.
+
+**Trivia & Best Practices:**
+
+* **Placeholder Pattern**: Use an empty `value=""` for the first option. To make it a non-selectable prompt, add `disabled hidden selected`.
+
+* **Validation**: If `required` is present on the `<select>`, a value of `""` (empty string) is considered invalid by the browser's native validation.
+* **React (Controlled)**: Unlike HTML where you use the `selected` attribute on an `<option>`, React expects a `value` prop on the `<select>` itself.
+* **React Placeholder**: Initialize your state to `""` to match your placeholder option's value.
 
 ```html
 <label for="referrer">How did you hear about us?</label>
-<select id="referrer" name="referrer">
-  <option value="">(select one)</option>
+<select id="referrer" name="referrer" required>
+  <option value="" disabled selected hidden>(select one)</option>
   <option value="1">Option 1</option>
   <option value="2">Option 2</option>
 </select>
@@ -283,10 +290,10 @@ Provides a structured representation of HTML documents, facilitating dynamic acc
 
 Consists of browser-provided objects enabling interaction with the browser environment.
 
-#### Key Components:
+#### Key Components
 
-- **Navigator**: Offers details about the browser.
-- **Location**: Represents the URL of the current page.
+* **Navigator**: Offers details about the browser.
+* **Location**: Represents the URL of the current page.
 
 ```html
 <!-- Example of a meta refresh: -->

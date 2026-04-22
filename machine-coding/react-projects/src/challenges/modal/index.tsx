@@ -1,4 +1,4 @@
-import React, { useState, useRef, useId, useCallback } from "react";
+import React, { useState, useRef, useId, useCallback, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { X, Maximize2 } from "lucide-react";
 import { cn } from "../../utils/cn";
@@ -30,6 +30,20 @@ function ModalDialog({
       setToggle(false);
     }
   }, [modalRef])
+
+  useEffect(() => {
+    function escapeHandler(e: KeyboardEvent) {
+
+      if (e.key === "Escape") {
+        setToggle(false);
+      }
+    }
+
+    window.addEventListener("keydown", escapeHandler);
+    return () => {
+      window.removeEventListener("keydown", escapeHandler);
+    };
+  }, []);
 
 
   if (!toggle) {

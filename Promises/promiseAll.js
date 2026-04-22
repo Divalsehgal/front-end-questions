@@ -2,6 +2,10 @@
  * @param {Array} iterable
  * @return {Promise<Array>}
  */
+
+// Promise.all: Waits for all promises to fulfill and returns an array of results. 
+// If any promise rejects, it rejects immediately with that error (fail-fast).
+
 export default function promiseAll(iterable) {
   const temp = [];
   let count = 0;
