@@ -1,3 +1,18 @@
+
+
+// Promise.race: Returns the first promise to settle (either fulfill or reject). 
+// Unlike Promise.any, it doesn't wait for a success; it takes the very first outcome.
+
+export default function promiseRace(iterable) {
+  return new Promise((resolve, reject) => {
+    if (iterable.length === 0) return;
+    for (let i = 0; i < iterable.length; i++) {
+      Promise.resolve(iterable[i]).then(resolve, reject);
+    }
+  });
+}
+
+
 const p1 = new Promise((res, rej) => {
   setTimeout(() => rej("hi i am resolved"), 3000);
 });

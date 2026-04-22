@@ -1,3 +1,7 @@
+
+// Promise.any: Returns the first promise that fulfills. 
+// If all promises reject, it returns an AggregateError. It ignores rejections unless they all fail.
+
 export default function promiseAny(iterable) {
   const temp = [];
   let count = 0;
