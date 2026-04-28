@@ -1,0 +1,27 @@
+.portfolio-item {
+  color: var(--accent-light);
+  text-decoration: none;
+  padding: 1.5rem;
+  background: #15151a;
+  border: 1px solid #222;
+  border-radius: 1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.portfolio-item:hover {
+  transform: translateY(-5px);
+  background: #1c1c24;
+  border-color: var(--accent-main);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+}
+
+.portfolio-item strong {
+  font-size: 1.2rem;
+  margin-bottom: 0.25rem;
+}
+
+.knowledge-grid {
+  padding-bottom: 2rem;
+}

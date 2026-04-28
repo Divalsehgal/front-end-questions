@@ -88,3 +88,9 @@ If you have a long scrolling piece of text, and you want the bottom of the text 
 ```
 
 > **Note:** Masking is different from `clip-path`. `clip-path` creates hard vector-based geometric cuts. `mask-image` supports pixels, opacity fades, and alpha-channels.
+
+
+CSS animation - Why transform attribute is preferred ?
+
+Transform is preferred because over other properties such as top left right bottom because when browser see a transform property used it will create a(off loading of resources)composite layer and it delegates
+And that rendering will be done from GPU side Which will help in reducing the reflows and computation for CPU

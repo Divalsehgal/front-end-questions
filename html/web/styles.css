@@ -1,0 +1,336 @@
+:root {
+  --bg: #0a0a0c;
+  --card-bg: #16161a;
+  --text: #e1e1e6;
+  --text-dim: #b0b0b0;
+  --accent: #7b2cbf;
+  --accent-light: #9d4edd;
+  --accent-glow: rgba(123, 44, 191, 0.4);
+  --code-bg: #000;
+  --code-border: #333;
+  --success: #2ecc71;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.6;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header Styling */
+header {
+  text-align: center;
+  padding-bottom: 3rem;
+  margin-bottom: 3rem;
+  border-bottom: 1px solid #2d2d35;
+}
+
+header h1 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, #9d4edd, #c77dff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -2px;
+  margin-bottom: 0.5rem;
+}
+
+header p {
+  color: var(--text-dim);
+  font-size: 1.1rem;
+}
+
+/* Grid Layout */
+.lab-container {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 2rem;
+}
+
+
+@media (max-width: 1000px) {
+  .lab-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Cards */
+.knowledge-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.k-card {
+  background: var(--card-bg);
+  padding: 2rem;
+  border-radius: 1.5rem;
+  border: 1px solid #2d2d35;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+  position: relative;
+}
+
+.k-card:hover {
+  border-color: var(--accent);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+}
+
+.k-card h3 {
+  color: var(--accent-light);
+  margin-bottom: 1rem;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.k-card h3::before {
+  content: '✦';
+  font-size: 0.8rem;
+}
+
+.k-card p {
+  color: var(--text-dim);
+  margin-bottom: 1.5rem;
+  font-size: 1rem;
+}
+
+/* Code Block with Copy */
+.code-block {
+  position: relative;
+  background: var(--code-bg);
+  border: 1px solid var(--code-border);
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.code-block pre {
+  padding: 1.5rem;
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 0.9rem;
+  color: #ff9e00;
+  /* Standard code color */
+}
+
+.copy-btn {
+  position: absolute;
+  top: 0.8rem;
+  right: 0.8rem;
+  background: #212126;
+  border: 1px solid #444;
+  color: #fff;
+  padding: 0.4rem 0.8rem;
+  border-radius: 0.5rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 600;
+}
+
+.copy-btn:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.copy-btn.copied {
+  background: var(--success);
+  border-color: var(--success);
+}
+
+/* Demo Section */
+.demo-section {
+  position: sticky;
+  top: 2rem;
+}
+
+.preview-box {
+  background: #111;
+  padding: 2rem;
+  border-radius: 1.5rem;
+  border: 4px solid #1f1f25;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+.preview-box h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.preview-box h2::after {
+  content: 'LIVE PREVIEW';
+  font-size: 0.6rem;
+  padding: 2px 8px;
+  background: #444;
+  border-radius: 4px;
+  letter-spacing: 1px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #444;
+}
+
+/* Breadcrumb Styling */
+.breadcrumb {
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  display: flex;
+  justify-content: center;
+}
+
+.breadcrumb ol {
+  list-style: none;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.breadcrumb li + li::before {
+  content: "›";
+  margin-right: 0.5rem;
+  color: #555;
+}
+
+.breadcrumb a {
+  color: var(--accent-light);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.breadcrumb a:hover {
+  color: var(--accent);
+}
+
+.breadcrumb [aria-current="page"] {
+  color: var(--text);
+}
+
+/* Wiki Button */
+.wiki-btn {
+  background: transparent;
+  color: var(--accent-light);
+  border: 1px solid var(--accent-light);
+  padding: 0.6rem 1.2rem;
+  border-radius: 2rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.wiki-btn:hover {
+  background: var(--accent-glow);
+  color: #fff;
+}
+
+/* Wiki Modal Styling */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.modal-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal-content {
+  background: var(--card-bg);
+  width: 90%;
+  max-width: 600px;
+  max-height: 85vh;
+  overflow-y: auto;
+  border-radius: 1.5rem;
+  padding: 2.5rem;
+  border: 1px solid #2d2d35;
+  position: relative;
+  transform: translateY(20px);
+  transition: transform 0.3s ease;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+  text-align: left;
+}
+
+.modal-overlay.open .modal-content {
+  transform: translateY(0);
+}
+
+.modal-close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 2rem;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.modal-close:hover {
+  color: #fff;
+}
+
+.modal-content h2 {
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+  color: #fff;
+}
+
+.wiki-section {
+  margin-bottom: 1.5rem;
+}
+
+.wiki-section h3 {
+  color: var(--accent-light);
+  margin-bottom: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.wiki-section p {
+  color: var(--text-dim);
+  font-size: 0.95rem;
+}

@@ -1,0 +1,14 @@
+{
+  "name": "dpjs-web-hub",
+  "version": "1.0.0",
+  "description": "Vanilla HTML learning hub built with Vite",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}

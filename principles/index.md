@@ -7,7 +7,6 @@ Simpler Code
 3.YAGNI (You are not gonna need it)
 Don over Optimise
 
-
 4.SOLID Principles (OOP Core)
 
 S — Single Responsibility Principle
@@ -24,3 +23,6 @@ Don’t pass unnecessary props/methods
 
 D — Dependency Inversion Principle
 Keeps Abstraction which is easier for dependency injection
+
+
+ACID

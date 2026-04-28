@@ -1,83 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Chivo+Mono:ital,wght@0,100..900;1,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
-
-        .container {
-            line-height: 24px;
-            font-family: 'Chivo Mono', monospace;
-        }
-    </style>
-</head>
-
-<body>
-    <div class="container">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Web HTML/CSS Knowledge Hub</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <link rel="stylesheet" href="./home.css" />
+    <script type="module" src="./script.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <header>
+      <nav aria-label="breadcrumb" class="breadcrumb">
         <ol>
+          <li><a href="../../README.md">DPJS Home</a></li>
+          <li aria-current="page">Master Web Index</li>
         </ol>
+      </nav>
+
+      <h1>Master Web Index</h1>
+      <p>A highly focused collection of HTML structural semantics, A11y standards, and CSS Art mastery.</p>
+      
+      <button id="open-wiki-btn" class="wiki-btn">📖 Read Project Wiki</button>
+    </header>
+
+    <!-- Wiki Modal -->
+    <div id="wiki-modal" class="modal-overlay" aria-hidden="true">
+      <div class="modal-content" role="dialog" aria-labelledby="wiki-title" aria-modal="true">
+        <button class="modal-close" aria-label="Close modal">&times;</button>
+        <h2 id="wiki-title">Project Wiki</h2>
+        <div id="wiki-content-container">
+          <!-- Dynamically populated via wiki-data.js -->
         </div>
-        <div class="projects-list">
-            <h2>All Web HTML Problems Index</h2>
-            <ul>
-                <li><a href="./problem1/index.html">Web Problem 1 (Accessibility & Forms)</a></li>
-                <li><a href="./problem2/index.html">Web Problem 2 (Cafe Menu)</a></li>
-                <li><a href="./problem3/index.html">Web Problem 3 (CSS Fundamentals)</a></li>
-                <li><a href="./problem4/index.html">Web Problem 4 (Registration Validation)</a></li>
-                <li><a href="./problem5/index.html">Web Problem 5 (Visual CSS Shapes)</a></li>
-                <li><a href="./problem6/index.html">Web Problem 6 (Photo Gallery Layout)</a></li>
-                <li><a href="./problem7/index.html">Web Problem 7 (Nutrition Formatter)</a></li>
-                <li><a href="./problem8/index.html">Web Problem 8 (Quiz Styling)</a></li>
-                <li><a href="./problem9/index.html">Web Problem 9 (Table Semantics)</a></li>
-                <li><a href="./problem10/index.html">Web Problem 10</a></li>
-                <li><a href="./problem11/index.html">Web Problem 11</a></li>
-                <li><a href="./problem12/index.html">Web Problem 12</a></li>
-                <li><a href="./problem13/index.html">Web Problem 13</a></li>
-                <li><a href="./events/index.html">Web Problem 14 (JavaScript Events)</a></li>
-            </ul>
+      </div>
+    </div>
+
+    <div class="lab-container" >
+      <div class="knowledge-section">
+        <h2>Three Core Web Pillars</h2>
+        <p style="color: #aaa; line-height: 1.6; margin-bottom: 2rem;">
+          To master web development, you must understand three critical domains: 
+          <strong>Semantic Content & Forms</strong> for raw data structure and validation, 
+          <strong>Accessibility (A11y)</strong> for translating visual trees into meaningful screen reader hierarchies via ARIA, and 
+          <strong>Visual Painting</strong> to render shapes using CSS without external imagery.
+        </p>
+        
+        <div id="knowledge-grid" class="knowledge-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem;">
+          <!-- Dynamically populated via Script below -->
         </div>
-            <script>
-                // We place scripts at the end of the document to ensure referenced elements
-                // exist before execution and to prevent JavaScript from blocking asset downloads
-                // as browsers pause other downloads until scripts finish executing.
-                const array = [
-                    { id: 1, text: "The <cite> tag is used to define the title of a creative work,such as a book, movie, song, etc., within a block of text" },
-                    {
-                        id: 2,
-                        text: "To achieve bidirectional isolation in HTML, you can use the <bdi> (Bidirectional Isolation) tag. This tag is used to isolate a span of text that might be formatted in a different direction from its surrounding text"
-                    },
-                    {
-                        id: 3,
-                        text: "The <track> tag in HTML is used in conjunction with the <audio> and <video> elements to specify external text track files for media elements."
-                    },
-                    {
-                        id: 4,
-                        text: "The rem unit in CSS is based on the font size of the root element (html), not on the font size of the parent element as em units are. rem stands for 'root em' . 1 rem is equal to the computed value of the font- size property of the root element(html). If the font - size of the(html) element is not explicitly set in CSS, browsers typically use a default value, often 16 pixels"
-                    },
-                    {
-                        id: 5,
-                        text: "<dfn>: Defines a definition term. < dl >: Defines a description list. < bdo >: Defines the direction of text display, either right- to - left or left - to - right, overriding the default direction of the document."
-                    },
-                    {
-                        id: 6,
-                        text: "the key distinction is that display: flex; creates a block-level flex container, while display: inline-flex; creates an inline-level flex container."
-                    },
+      </div>
 
+      <div class="demo-section">
+        <div class="preview-box">
+          <h2>The Big 3 Labs</h2>
+          <nav style="display: flex; flex-direction: column; gap: 1rem; margin-top: 1rem;">
+            
+            <a href="./semantic-forms-lab/index.html" class="portfolio-item">
+              <span style="font-size: 2rem; margin-bottom: 0.5rem;">📝</span>
+              <strong>Lab 1: Semantic Forms</strong>
+              <span style="font-size: 0.85rem; color: #888;">Fixing unlinked labels, regex validation, and grouping.</span>
+            </a>
+            
+            <a href="./a11y-lab/index.html" class="portfolio-item">
+              <span style="font-size: 2rem; margin-bottom: 0.5rem;">👁️</span>
+              <strong>Lab 2: Advanced A11y</strong>
+              <span style="font-size: 0.85rem; color: #888;">ARIA roles, focus traps, live regions, and composite elements.</span>
+            </a>
 
-
-                ]
-                const container = document.querySelector(".container ol");
-                for (let i of array) {
-                    const ele = document.createElement("li")
-                    ele.textContent = i.text;
-                    container.appendChild(ele)
-                }
-
-               
-            </script>
-</body>
-
+            <a href="./shapes-lab/index.html" class="portfolio-item">
+              <span style="font-size: 2rem; margin-bottom: 0.5rem;">🎨</span>
+              <strong>Lab 3: CSS Shape Engine</strong>
+              <span style="font-size: 0.85rem; color: #888;">Interactive sandbox for building shapes via CSS geometry tricks.</span>
+            </a>
+            
+          </nav>
+        </div>
+      </div>
+    </div>
+  </body>
+  </body>
 </html>
