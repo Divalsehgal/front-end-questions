@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HTML/CSS Concept Lab: Shape Playground</title>
+    <script defer src="../script.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script type="module" crossorigin src="/dpjs/assets/shapes-D5n1w1hY.js"></script>
+    <link rel="modulepreload" crossorigin href="/dpjs/assets/styles-CNw9mgIE.js">
+    <link rel="stylesheet" crossorigin href="/dpjs/assets/styles-CGetOOx-.css">
+    <link rel="stylesheet" crossorigin href="/dpjs/assets/shapes-BS1TDHX3.css">
+  </head>
+  <body>
+    <header>
+      <nav aria-label="breadcrumb" class="breadcrumb">
+        <ol>
+          <li><a href="../index.html">Master Web Index</a></li>
+          <li aria-current="page">Shape Playground</li>
+        </ol>
+      </nav>
+      <h1>Shape Playground</h1>
+      <p>Select a base shape and "play" with CSS properties to understand how they work.</p>
+    </header>
+
+    <div class="lab-container" style="max-width: 900px; margin: auto; grid-template-columns: 1fr;">
+      <div class="playground-container">
+        
+        <!-- Shape Selector -->
+        <div class="control-group" style="width: 100%; text-align: center;">
+          <label>Choose Your Shape</label>
+          <div class="btn-grid" style="justify-content: center;">
+            <button class="btn active shape-btn" onclick="setShape('square', this)">Square</button>
+            <button class="btn shape-btn" onclick="setShape('circle', this)">Circle</button>
+            <button class="btn shape-btn" onclick="setShape('rectangle', this)">Rectangle</button>
+            <button class="btn shape-btn" onclick="setShape('oval', this)">Oval</button>
+            <button class="btn shape-btn" onclick="setShape('triangle', this)">Triangle</button>
+            <button class="btn shape-btn" onclick="setShape('parallelogram', this)">Parallelogram</button>
+            <button class="btn shape-btn" onclick="setShape('pentagon', this)">Pentagon</button>
+            <button class="btn shape-btn" onclick="setShape('hexagon', this)">Hexagon</button>
+            <button class="btn shape-btn" onclick="setShape('star', this)">Star</button>
+          </div>
+        </div>
+
+        <!-- Display Area -->
+        <div class="shape-display-area">
+          <div id="playground-shape" class="active-shape shape-square"></div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+          <div class="control-group">
+            <label>Color Tone</label>
+            <div class="btn-grid">
+              <button class="btn" style="background:#7b2cbf; width:30px; height:30px; padding:0;" onclick="setColor('#7b2cbf')"></button>
+              <button class="btn" style="background:#3a0ca3; width:30px; height:30px; padding:0;" onclick="setColor('#3a0ca3')"></button>
+              <button class="btn" style="background:#f72585; width:30px; height:30px; padding:0;" onclick="setColor('#f72585')"></button>
+              <button class="btn" style="background:#4cc9f0; width:30px; height:30px; padding:0;" onclick="setColor('#4cc9f0')"></button>
+              <button class="btn" style="background:#ffb703; width:30px; height:30px; padding:0;" onclick="setColor('#ffb703')"></button>
+              <button class="btn" style="background:#06d6a0; width:30px; height:30px; padding:0;" onclick="setColor('#06d6a0')"></button>
+            </div>
+          </div>
+          <div class="control-group">
+            <label>Rotation</label>
+            <input type="range" id="rotate-slider" min="0" max="360" value="0" oninput="setRotate(this.value)">
+          </div>
+          <div class="control-group">
+            <label>Scale</label>
+            <input type="range" id="scale-slider" min="0.5" max="2" step="0.1" value="1" oninput="setScale(this.value)">
+          </div>
+          <div class="control-group">
+            <label>Border Radius (%)</label>
+            <input type="range" id="br-slider" min="0" max="50" step="1" value="0" oninput="setBorderRadius(this.value)">
+          </div>
+          <div class="control-group">
+            <label>Width (px)</label>
+            <input type="range" id="width-slider" min="20" max="250" value="120" oninput="setWidth(this.value)">
+          </div>
+          <div class="control-group">
+            <label>Height (px)</label>
+            <input type="range" id="height-slider" min="20" max="250" value="120" oninput="setHeight(this.value)">
+          </div>
+        </div>
+
+        <!-- Live Code -->
+        <div class="live-code" id="css-output">
+          .shape {<br>
+          &nbsp;&nbsp;width: 120px;<br>
+          &nbsp;&nbsp;height: 120px;<br>
+          &nbsp;&nbsp;background: #7b2cbf;<br>
+          }
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

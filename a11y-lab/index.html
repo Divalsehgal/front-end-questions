@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HTML/CSS Concept Lab: Advanced A11y</title>
+    <script defer src="../script.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script type="module" crossorigin src="/dpjs/assets/a11y-BfwF-jaW.js"></script>
+    <link rel="modulepreload" crossorigin href="/dpjs/assets/styles-CNw9mgIE.js">
+    <link rel="stylesheet" crossorigin href="/dpjs/assets/styles-CGetOOx-.css">
+    <link rel="stylesheet" crossorigin href="/dpjs/assets/a11y-DziXs8D_.css">
+  </head>
+  <body>
+    <header role="banner">
+      <nav aria-label="breadcrumb" class="breadcrumb">
+        <ol>
+          <li><a href="../index.html">Master Web Index</a></li>
+          <li aria-current="page">A11y Lab</li>
+        </ol>
+      </nav>
+      <h1>Lab 2: Accessibility (A11y) Deep Dive</h1>
+      <p>ARIA Roles, Relationships, Focus Management, and Live Regions.</p>
+    </header>
+
+    <div class="lab-container">
+      <div class="knowledge-section" id="knowledge-grid">
+         <!-- Cards injected dynamically by content.js -->
+      </div>
+
+      <div class="demo-section">
+        <main class="preview-box" role="main" style="position: relative;">
+          <h2>Interactive Implementations</h2>
+          <p style="font-size:0.8rem; color:#888; margin-bottom: 2rem;">Inspect these elements in DevTools or use a screen reader to experience the ARIA links.</p>
+
+          <!-- Accordion Example -->
+          <div class="demo-card">
+            <h3>1. Expandable Region (Accordion)</h3>
+            <button class="accordion-btn" aria-expanded="false" aria-controls="accordion-panel-1" onclick="toggleAccordion(this)">
+              Click to toggle <span>+</span>
+            </button>
+            <div id="accordion-panel-1" class="accordion-content">
+              This panel is dynamically linked via aria-controls. Screen readers know exactly what that button does.
+            </div>
+          </div>
+
+          <!-- Tabs Example -->
+          <div class="demo-card">
+            <h3>2. Composite Role (Tabs)</h3>
+            <div class="tab-list" role="tablist" aria-label="Settings">
+              <button role="tab" id="tab-1" aria-selected="true" aria-controls="panel-1" class="tab-btn" onclick="switchTab(1)">Profile</button>
+              <button role="tab" id="tab-2" aria-selected="false" aria-controls="panel-2" class="tab-btn" onclick="switchTab(2)">Security</button>
+            </div>
+            <div id="panel-1" role="tabpanel" aria-labelledby="tab-1" aria-hidden="false" class="tab-panel">
+              <p>Profile details section. Linked to Tab 1.</p>
+            </div>
+            <div id="panel-2" role="tabpanel" aria-labelledby="tab-2" aria-hidden="true" class="tab-panel">
+              <p>Security details section. Linked to Tab 2.</p>
+            </div>
+          </div>
+
+          <!-- Modals and Focus Example -->
+          <div class="demo-card">
+            <h3>3. Dialog & Focus Trapping</h3>
+            <button onclick="openModal()" aria-haspopup="dialog" style="padding:0.75rem 1rem; cursor:pointer;">Open Deletion Modal</button>
+          </div>
+
+          <!-- Live Region -->
+          <div class="demo-card">
+            <h3>4. Live Regions (Alert)</h3>
+            <button onclick="triggerAlert()" style="background:#f72585; color:white; border:none; padding:0.5rem 1rem; border-radius:4px; cursor:pointer;">Force Error</button>
+          </div>
+
+          <!-- Invisible Overlays & Containers -->
+          <div id="modal-container" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="dialog-title" aria-hidden="true">
+            <div class="modal-content">
+              <h2 id="dialog-title">Delete Account?</h2>
+              <p id="dialog-desc">This action cannot be undone.</p>
+              <button id="modal-close-btn" onclick="closeModal()" aria-describedby="dialog-desc" style="padding:0.5rem 1rem; cursor:pointer; background:var(--accent-main); color:white; border:none;">Yes, Delete</button>
+            </div>
+          </div>
+
+          <div id="toast-container" aria-live="assertive" role="alert"></div>
+
+        </main>
+      </div>
+    </div>
+  </body>
+  </body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HTML/CSS Concept Lab: Semantic Forms</title>
+    <script defer src="../script.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script type="module" crossorigin src="/dpjs/assets/semanticForms-Bhc2i7KN.js"></script>
+    <link rel="modulepreload" crossorigin href="/dpjs/assets/styles-CNw9mgIE.js">
+    <link rel="stylesheet" crossorigin href="/dpjs/assets/styles-CGetOOx-.css">
+    <link rel="stylesheet" crossorigin href="/dpjs/assets/semanticForms-CW7mKxHP.css">
+  </head>
+  <body>
+    <header>
+      <nav aria-label="breadcrumb" class="breadcrumb">
+        <ol>
+          <li><a href="../index.html">Master Web Index</a></li>
+          <li aria-current="page">Semantic Forms</li>
+        </ol>
+      </nav>
+      <h1>Lab 1: Semantic HTML & Forms</h1>
+      <p>Building forms the right way for accessibility, validation, and user experience.</p>
+    </header>
+
+    <div class="lab-container">
+      <div class="knowledge-section" id="knowledge-grid">
+        <!-- Cards injected dynamically by content.js -->
+      </div>
+
+      <div class="demo-section">
+        <div class="preview-box">
+          <h2>Form Comparisons</h2>
+          
+          <div class="bad-form">
+            <h3 style="color:#f72585; margin-bottom: 1rem;">❌ The Bad Form</h3>
+            <p style="font-size: 0.8rem; color: #888; margin-bottom: 1rem;">Clicking the text "Email" does nothing. No client validation.</p>
+            <div class="field-row">
+              <span>Email:</span>
+              <input type="text">
+            </div>
+            <div>
+              <span>Account Type:</span><br>
+              <input type="radio" name="acc2"> Personal
+              <input type="radio" name="acc2"> Business
+            </div>
+          </div>
+
+          <div class="good-form">
+            <h3 style="color:var(--accent-main); margin-bottom: 1rem;">✅ The Semantic Form</h3>
+            <p style="font-size: 0.8rem; color: #888; margin-bottom: 1rem;">Click the label to focus. Try entering a password shorter than 8 characters.</p>
+            <form action="#noop" method="post">
+              <div class="field-row">
+                <label for="good-email" style="display:block; margin-bottom:0.25rem;">Email Address:</label>
+                <input type="email" id="good-email" required autocomplete="email">
+              </div>
+              <div class="field-row">
+                <label for="good-pwd" style="display:block; margin-bottom:0.25rem;">Password (Min 8):</label>
+                <input type="password" id="good-pwd" pattern=".{8,}" required>
+                <p class="error-text">Password must be at least 8 characters.</p>
+              </div>
+              <fieldset style="border: 1px solid #444; border-radius: 4px; padding: 1rem; margin-top: 1rem;">
+                <legend style="color: var(--accent-main); padding: 0 0.5rem;">Account Type</legend>
+                <label style="cursor: pointer;"><input type="radio" name="acc_type" value="personal"> Personal</label>
+                <label style="cursor: pointer; margin-left: 1rem;"><input type="radio" name="acc_type" value="biz"> Business</label>
+              </fieldset>
+              <button type="submit" style="margin-top: 1rem; background: var(--accent-main); color: #fff; padding: 0.75rem 1rem; border: none; border-radius: 4px; cursor: pointer;">Register</button>
+            </form>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
