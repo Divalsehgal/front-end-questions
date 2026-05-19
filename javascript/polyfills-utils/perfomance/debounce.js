@@ -16,39 +16,30 @@ const debounce = (fn, delay) => {
 };
 
 
+function debounceWithTrailLead(func, wait, { leading = false, trailing = true } = {}) {
+    let timer = null;
+    let lastArgs = null;
+    let lastThis = null;
 
-
-function debounceTrailLead(func, wait, option = { leading: false, trailing: true }) {
-    let timer = null
     return function (...args) {
-        let isInvoked = false
+        lastArgs = args;
+        lastThis = this;
 
-        if (timer === null && option.leading) {
-            func.apply(this, args)
-            isInvoked = true
-        }
+        const callNow = leading && !timer;
 
         clearTimeout(timer);
 
         timer = setTimeout(() => {
-            if (option.trailing && !isInvoked) {
-                func.apply(this, args)
+            if (trailing && !callNow) {
+                func.apply(lastThis, lastArgs);
             }
-            timer = null
-        }, wait)
-    }
+            timer = null;
+        }, wait);
+
+        if (callNow) {
+            func.apply(this, args);
+        }
+    };
 }
 
 
-
-
-
-function updateLayout() {
-    console.log('resizing window')
-}
-
-const debouncedUpdateLayout = debounce(updateLayout, 250);
-
-// Listen for window resize events and call the debounced function
-window.addEventListener("resize", debouncedUpdateLayout);
-//window.addEventListener("resize", updateLayout);

@@ -2,6 +2,8 @@ const arr = [1, 2, 3];
 
 const arr1 = [4,5,6];
 
+//return new array
+
 Array.prototype.myConcat = function myConcat(array) {
   let temp = [...this];
 

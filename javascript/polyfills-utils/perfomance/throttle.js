@@ -1,4 +1,5 @@
-//leading: true, trailing: false)
+
+//Execute at most once in a fixed time window
 
 function throttle(callback, delay) {
   let timer = null;
@@ -15,47 +16,48 @@ function throttle(callback, delay) {
       clearTimeout(timer);
     }
 
-    timer=setTimeout(() => {
+    timer = setTimeout(() => {
       coolDown = false;
     }, delay);
   }
 }
 
-function throttleTrailLead(callback, delay = 1000, options = { leading: true, trailing: false }) {
+//leading: true, trailing: false
+
+//Leading means runs immediately on first trigger
+//Trailing runs at the end of the time window
+
+function throttleWithTrailLead(func, wait = 1000, { leading = true, trailing = true } = {}) {
   let timer = null;
-  let lastArgs, lastThis;
-  let coolDown = false;
+  let lastArgs = null;
+  let lastThis = null;
 
   return function (...args) {
-    if (!coolDown) {
-      if (options.leading) {
-        callback.apply(this, args);  // Leading call immediately
+    if (!timer) {
+      // first call in window
+      if (leading) {
+        func.apply(this, args);
       } else {
-        lastArgs = args;  // Save the arguments for trailing execution
+        lastArgs = args;
         lastThis = this;
       }
 
-      coolDown = true;  // Start cooldown
-
       timer = setTimeout(() => {
-        coolDown = false;
-
-        if (options.trailing && lastArgs) {
-          callback.apply(lastThis, lastArgs);  // Trailing call after delay
-          lastArgs = lastThis = null;  // Reset after trailing execution
+        // run trailing only if we got a new call
+        if (trailing && lastArgs) {
+          func.apply(lastThis, lastArgs);
         }
-      }, delay);
+
+        // reset
+        timer = null;
+        lastArgs = lastThis = null;
+      }, wait);
     } else {
-      lastArgs = args;  // Save arguments for trailing call
-      lastThis = this;
+      // during cooldown → store last call
+      if (trailing) {
+        lastArgs = args;
+        lastThis = this;
+      }
     }
   };
 }
-
-function updateLayout() {
-  console.count('scrolling window');
-}
-
-const throttledUpdateLayout = throttle(updateLayout, 250);
-
-window.addEventListener("scroll", throttledUpdateLayout);

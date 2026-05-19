@@ -1,54 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debounce & Throttle Variants</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 20px;
+            padding-bottom: 200px;
+        }
+        .dashboard {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid #ccc;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+        .grid {
+            display: flex;
+            gap: 20px;
+        }
+        .col {
+            min-width: 200px;
+        }
+        h3 { margin-top: 0; font-size: 16px; }
+        .counter { font-weight: bold; color: #007bff; display: inline-block; min-width: 20px; }
+        .content { margin-top: 180px; }
+        ul { list-style-type: none; padding: 0; }
+        li { padding: 8px; border-bottom: 1px solid #eee; }
+        li:nth-child(even) { background-color: #f9f9f9; }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <div class="grid">
+            <div class="col">
+                <h3>Debounce (Resize Window)</h3>
+                <p>Normal Resize: <span class="counter" id="resize-normal">0</span></p>
+                <p>Trailing Only (Def): <span class="counter" id="deb-trail">0</span></p>
+                <p>Leading Only: <span class="counter" id="deb-lead">0</span></p>
+                <p>Leading & Trailing: <span class="counter" id="deb-both">0</span></p>
+            </div>
+            <div class="col">
+                <h3>Throttle (Scroll Page)</h3>
+                <p>Normal Scroll: <span class="counter" id="scroll-normal">0</span></p>
+                <p>Leading Only (Def): <span class="counter" id="thr-lead">0</span></p>
+                <p>Trailing Only: <span class="counter" id="thr-trail">0</span></p>
+                <p>Leading & Trailing: <span class="counter" id="thr-both">0</span></p>
+            </div>
+        </div>
+    </div>
 
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
+    <div class="content">
+        <h2>Debounce & Throttle Testing</h2>
+        <p>We are using Debouncing for resizing and Throttling for scrolling.</p>
+        <ul id="list">
+            <!-- Populated via script to allow scrolling -->
+        </ul>
+    </div>
 
-    </head>
+    <script src="./debounce.js"></script>
+    <script src="./throttle.js"></script>
+    <script>
+        // Populate the list with items for scrolling
+        const list = document.getElementById('list');
+        for (let i = 0; i < 100; i++) {
+            const li = document.createElement('li');
+            li.textContent = `Item ${i + 1}: quick brown fox jumped over the lazy dog`;
+            list.appendChild(li);
+        }
 
-    <body>
-        Debounce & throttle
-        We are using Debouncing for resizing
-        and Throttling for scrolling
+        // --- TESTING / DEMO SETUP ---
 
-        <li>quick brown fox jumped over the lazy dog</li>
-        <li>quick brown fox jumped over the lazy dog</li><li>quick brown fox
-            jumped over the lazy dog</li><li>quick brown fox jumped over the
-            lazy dog</li><li>quick brown fox jumped over the lazy
-            dog</li><li>quick brown fox jumped over the lazy dog</li><li>quick
-            brown fox jumped over the lazy dog</li><li>quick brown fox jumped
-            over the lazy dog</li><li>quick brown fox jumped over the lazy
-            dog</li><li>quick brown fox jumped over the lazy dog</li><li>quick
-            brown fox jumped over the lazy dog</li><li>quick brown fox jumped
-            over the lazy dog</li><li>quick brown fox jumped over the lazy
-            dog</li><li>quick brown fox jumped over the lazy dog</li><li>quick
-            brown fox jumped over the lazy dog</li><li>quick brown fox jumped
-            over the lazy dog</li><li>quick brown fox jumped over the lazy
-            dog</li><li>quick brown fox jumped over the lazy dog</li><li>quick
-            brown fox jumped over the lazy dog</li><li>quick brown fox jumped
-            over the lazy dog</li><li>quick brown fox jumped over the lazy
-            dog</li><li>quick brown fox jumped over the lazy dog</li><li>quick
-            brown fox jumped over the lazy dog</li><li>quick brown fox jumped
-            over the lazy dog</li><li>quick brown fox jumped over the lazy
-            dog</li><li>quick brown fox jumped over the lazy dog</li><li>quick
-            brown fox jumped over the lazy dog</li><li>quick brown fox jumped
-            over the lazy dog</li><li>quick brown fox jumped over the lazy
-            dog</li><li>quick brown fox jumped over the lazy dog</li><li>quick
-            brown fox jumped over the lazy dog</li><li>quick brown fox jumped
-            over the lazy dog</li><li>quick brown fox jumped over the lazy
-            dog</li><li>quick brown fox jumped over the lazy dog</li><li>quick
-            brown fox jumped over the lazy dog</li><li>quick brown fox jumped
-            over the lazy dog</li><li>quick brown fox jumped over the lazy
-            dog</li><li>quick brown fox jumped over the lazy dog</li><li>quick
-            brown fox jumped over the lazy dog</li><li>quick brown fox jumped
-            over the lazy dog</li><li>quick brown fox jumped over the lazy
-            dog</li><li>quick brown fox jumped over the lazy dog</li><li>quick
-            brown fox jumped over the lazy dog</li><li>quick brown fox jumped
-            over the lazy dog</li>
-        <script src="./debounce.js"></script>
-        <script src="./throttle.js"></script>
-    </body>
+        const updateCount = (id) => {
+            const el = document.getElementById(id);
+            el.innerText = parseInt(el.innerText) + 1;
+        };
 
+        // Resize Events (Debounce Demo)
+        window.addEventListener('resize', () => updateCount('resize-normal'));
+        
+        // Uses debounce from debounce.js
+        window.addEventListener('resize', debounce(() => {
+            updateCount('deb-trail');
+        }, 500));
+        
+        // Uses debounceWithTrailLead from debounce.js
+        window.addEventListener('resize', debounceWithTrailLead(() => {
+            updateCount('deb-lead');
+        }, 500, { leading: true, trailing: false }));
+        
+        window.addEventListener('resize', debounceWithTrailLead(() => {
+            updateCount('deb-both');
+        }, 500, { leading: true, trailing: true }));
+
+        // Scroll Events (Throttle Demo)
+        window.addEventListener('scroll', () => updateCount('scroll-normal'));
+        
+        // Uses throttle from throttle.js
+        window.addEventListener('scroll', throttle(() => {
+            updateCount('thr-lead');
+        }, 500));
+        
+        // Uses throttleWithTrailLead from throttle.js
+        window.addEventListener('scroll', throttleWithTrailLead(() => {
+            updateCount('thr-trail');
+        }, 500, { leading: false, trailing: true }));
+        
+        window.addEventListener('scroll', throttleWithTrailLead(() => {
+            updateCount('thr-both');
+        }, 500, { leading: true, trailing: true }));
+    </script>
+</body>
 </html>

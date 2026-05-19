@@ -15,8 +15,10 @@ const animal = {
 
 const rabbit = {
     jumps: true,
-    __proto__: animal // rabbit inherits from animal
 };
+
+
+rabbit.__proto__ = animal;
 
 console.log("--- Basic Prototype Chain ---");
 console.log("Rabbit eats:", rabbit.eats); // true (from animal)
