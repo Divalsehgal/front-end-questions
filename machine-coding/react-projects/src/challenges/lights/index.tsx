@@ -22,7 +22,7 @@ export default function Lights() {
       setGrid(prev => prev.map((row, rid) => 
         row.map((active, cid) => (rid === r && cid === c ? false : active))
       ));
-    }, 1000);
+    }, 4000);
   }, []);
 
   const resetGrid = () => {

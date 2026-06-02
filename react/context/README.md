@@ -8,8 +8,8 @@ This pattern involves splitting a single Context into two: one for the **Data (S
 
 In standard React Context, any component that consumes the context (via `useContext`) will **re-render whenever any part of the context value changes.**
 
-*   **The Problem:** If you have a `Display` component using the data and an `Update` component using `setValue`, and you put them in one object `{{ value, setValue }}`, the `Update` component will re-render every time `value` changes! In complex apps, this causes a "waterfall" of unnecessary renders.
-*   **The Solution:** By splitting them, components that only need to trigger actions (like buttons) consume the **Actions Context**. Since functions are stable (if memoized), these components **never re-render** when the data changes.
+* **The Problem:** If you have a `Display` component using the data and an `Update` component using `setValue`, and you put them in one object `{{ value, setValue }}`, the `Update` component will re-render every time `value` changes! In complex apps, this causes a "waterfall" of unnecessary renders.
+* **The Solution:** By splitting them, components that only need to trigger actions (like buttons) consume the **Actions Context**. Since functions are stable (if memoized), these components **never re-render** when the data changes.
 
 ### 🚀 Implementation Example
 
@@ -38,16 +38,16 @@ export const Provider = ({ children }) => {
 
 ### 💎 Detailed Benefits of Splitting
 
-*   **Render Isolation:** Components using only `useActions()` **never re-render** when the state changes.
-*   **Stable Function References:** Custom hooks like `useActions` provide functions that don't change between renders, preventing unnecessary `useEffect` triggers in child components.
-*   **Clearer API:** It distinguishes between "Read-only" views and "Interaction-only" controls.
+* **Render Isolation:** Components using only `useActions()` **never re-render** when the state changes.
+* **Stable Function References:** Custom hooks like `useActions` provide functions that don't change between renders, preventing unnecessary `useEffect` triggers in child components.
+* **Clearer API:** It distinguishes between "Read-only" views and "Interaction-only" controls.
 
 ### 🛑 When is it NOT right?
 
-1.  **Low-Frequency Updates:** If your state only changes once (e.g., Auth status, User Settings), the overhead of splitting contexts is not worth the zero performance gain.
-2.  **Small Trees:** If you only have a few components, React's re-rendering is so fast that you won't notice a difference. Don't over-engineer.
-3.  **Tightly Coupled Usage:** If every component that uses an action *also* needs to show the state, you get no benefit but double the boilerplate.
-4.  **Complex State Management:** If your state management logic is so big that you're splitting 10 contexts, use **Zustand** or **Redux** instead. They solve this problem natively using "Selectors".
+1. **Low-Frequency Updates:** If your state only changes once (e.g., Auth status, User Settings), the overhead of splitting contexts is not worth the zero performance gain.
+2. **Small Trees:** If you only have a few components, React's re-rendering is so fast that you won't notice a difference. Don't over-engineer.
+3. **Tightly Coupled Usage:** If every component that uses an action *also* needs to show the state, you get no benefit but double the boilerplate.
+4. **Complex State Management:** If your state management logic is so big that you're splitting 10 contexts, use **Zustand** or **Redux** instead. They solve this problem natively using "Selectors".
 
 ---
 
@@ -73,12 +73,13 @@ A simple utility that takes an array of providers and nests them dynamically usi
 
 ### 🚀 Why use this?
 
-*   **Flattened Entry Point:** Your `App.jsx` remains perfectly vertical. No more code shifting to the right.
-*   **Cleaner Git Diffs:** Adding a new provider is just **adding a single line to an array**. You don't have to re-indent 20 other lines, which keeps your pull requests clean.
-*   **DevTools Optimization:** It reduces the "visual stairs" in the React DevTools, making it easier to find your actual application content.
-*   **Decoupled Architecture:** It treats your global services as a "Stack," making it clear which services wrap others without the mess of deep nesting.
+* **Flattened Entry Point:** Your `App.jsx` remains perfectly vertical. No more code shifting to the right.
+* **Cleaner Git Diffs:** Adding a new provider is just **adding a single line to an array**. You don't have to re-indent 20 other lines, which keeps your pull requests clean.
+* **DevTools Optimization:** It reduces the "visual stairs" in the React DevTools, making it easier to find your actual application content.
+* **Decoupled Architecture:** It treats your global services as a "Stack," making it clear which services wrap others without the mess of deep nesting.
 
 **Implementation:**
+
 ```tsx
 const ProviderComposer = ({ providers, children }) => {
   return (
@@ -92,6 +93,7 @@ const ProviderComposer = ({ providers, children }) => {
 ```
 
 **Usage:**
+
 ```jsx
 <ProviderComposer
   providers={[

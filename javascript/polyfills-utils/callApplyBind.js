@@ -2,20 +2,21 @@ const person = {
   name: "dival",
   id: 1,
 };
+
 function bio(location) {
   console.log(
     "hello" +
-    " " +
-    "my name is " +
-    this.name +
-    " " +
-    "and id is " +
-    this.id +
-    " " +
-    " " +
-    "from" +
-    " " +
-    location
+      " " +
+      "my name is " +
+      this.name +
+      " " +
+      "and id is " +
+      this.id +
+      " " +
+      " " +
+      "from" +
+      " " +
+      location,
   );
 }
 
@@ -61,5 +62,3 @@ temp();
 
 const temp2 = bio.myBind(person, "chamba");
 temp2();
-
-

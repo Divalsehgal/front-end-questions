@@ -1,6 +1,6 @@
-import React, { useState, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { cn } from "../../utils/cn";
-import { Check, CheckSquare, Square, ListTodo, Shuffle } from "lucide-react";
+import { Check, ListTodo, Shuffle } from "lucide-react";
 import { Checkbox } from "@base-ui/react/checkbox";
 
 export const hint = "Advanced checkbox list with 'Select All' and indeterminate state logic";
@@ -26,14 +26,35 @@ export default function AllCheckboxes() {
   const someChecked = useMemo(() => items.some((i) => i.checked) && !allChecked, [items]);
 
   const toggleAll = () => {
-    const nextState = !allChecked;
-    setItems((prev) => prev.map((item) => ({ ...item, checked: nextState })));
+    setItems((prev) => {
+      return prev.map((m) => {
+        return {
+          ...m,
+          checked: !allChecked
+
+        }
+      })
+    })
+
   };
 
   const toggleItem = (id: number) => {
-    setItems((prev) =>
-      prev.map((item) => (item.id === id ? { ...item, checked: !item.checked } : item))
-    );
+    setItems((prev) => {
+      return prev.map((m) => {
+        if (m.id === id) {
+          return {
+            ...m,
+            checked: !m.checked
+          }
+        } else {
+          return m
+        }
+      })
+
+
+    })
+
+
   };
 
   return (
@@ -79,8 +100,8 @@ export default function AllCheckboxes() {
               key={item.id}
               className={cn(
                 "flex items-center gap-3 px-3 py-3 rounded-xl transition-all cursor-pointer group mb-1",
-                item.checked 
-                  ? "bg-brand-500/10" 
+                item.checked
+                  ? "bg-brand-500/10"
                   : "hover:bg-muted"
               )}
             >
@@ -119,7 +140,7 @@ export default function AllCheckboxes() {
             <span className="text-xs font-bold text-text-muted">/ {items.length}</span>
           </div>
         </div>
-        <button 
+        <button
           onClick={() => setItems(items.map(i => ({ ...i, checked: Math.random() > 0.5 })))}
           className="flex items-center justify-center p-4 bg-surface border border-subtle rounded-2xl hover:bg-muted transition-all shadow-soft active:scale-95 group"
         >
