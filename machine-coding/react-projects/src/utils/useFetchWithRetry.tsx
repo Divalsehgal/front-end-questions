@@ -1,38 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 
-type todoResponse = {
-  user: number;
-  id: number;
-  title: string;
-  completed: boolean;
-};
 
-const options: RequestInit = {
-  method: 'GET',
-  headers: {
-    'Content-Type': 'application/json',
-    Authorization: 'Bearer token',
-  },
-  credentials: 'include',
-};
-
-function App() {
-
-  const { data, loading, error } = useFetchWithRetry<todoResponse>({
-    url: 'https://jsonplaceholder.typicoe.com/todos/1',
-    options: options,
-    retries: 3,
-    delay: 1000,
-  });
-
-  return (
-    <div>
-      <h1>Hello StackBlitz!</h1>
-      {loading ? <>loading...</> : data?.title}
-      {error && 'Facing some issue'}
-    </div>
-  );
-}
+// Removed unused example App component. This file provides the useFetchWithRetry hook.
 
 type fetchHook = {
   url: string;
@@ -50,17 +19,17 @@ type UseFetchReturn<T> = {
 const useFetchWithRetry = <T,>({ url, options, retries, delay }: fetchHook): UseFetchReturn<T> => {
   const [data, setData] = useState<T | undefined>();
   const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>('');
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const controller = new AbortController();
-    let timer: ReturnType<typeof setTimeout> | null = null;
+    let timer: ReturnType<typeof setTimeout> | undefined;
     setLoading(true);
 
     const fetchData = async (retry: number) => {
       try {
         const data = await fetch(url, {
-          ...(options ?? {}),
+          ...(options),
           signal: controller.signal,
         });
 
@@ -98,3 +67,5 @@ const useFetchWithRetry = <T,>({ url, options, retries, delay }: fetchHook): Use
 
   return { data, loading, error };
 };
+
+export default useFetchWithRetry;

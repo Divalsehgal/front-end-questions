@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { 
   Trash2, 
   Search, 
@@ -39,7 +39,7 @@ export default function FrequentWord() {
   const results = getFrequentWords(text, banned, limit);
 
   return (
-    <div className="mx-auto min-h-screen max-w-[1400px] space-y-8 p-4 md:p-8">
+    <div className="mx-auto min-h-screen max-w-350 space-y-8 p-4 md:p-8">
       <div className="border-subtle flex flex-col justify-between gap-6 border-b pb-8 md:flex-row md:items-end">
         <div className="space-y-2">
           <div className="mb-2 flex items-center gap-2">
@@ -79,7 +79,7 @@ export default function FrequentWord() {
               </div>
               <div className="flex flex-wrap gap-2">
                  {banned.map((word, idx) => (
-                   <div key={idx} className="border-subtle group flex items-center gap-2 rounded-xl border bg-muted px-4 py-2">
+                   <div key={`${word}-${idx}`} className="border-subtle group flex items-center gap-2 rounded-xl border bg-muted px-4 py-2">
                       <span className="text-sm font-bold text-text-main">{word}</span>
                       <button 
                         onClick={() => setBanned(banned.filter((_, i) => i !== idx))}

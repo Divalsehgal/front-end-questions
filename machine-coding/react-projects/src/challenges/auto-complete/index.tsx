@@ -83,7 +83,9 @@ function AutoComplete({
         if (result?.articles && Array.isArray(result.articles)) {
           setData(
             result.articles
-              .map((article: any) => (article?.title ? String(article.title) : ""))
+              .map((article: any) =>
+                article?.title ? String(article.title) : "",
+              )
               .filter(Boolean),
           );
         } else {
@@ -140,7 +142,9 @@ function AutoComplete({
   );
 
   const showDropdown = Boolean(query && filteredData.length > 0);
-  const showEmptyState = Boolean(query && !loading && filteredData.length === 0);
+  const showEmptyState = Boolean(
+    query && !loading && filteredData.length === 0,
+  );
 
   return (
     <form
@@ -223,9 +227,13 @@ function AutoComplete({
       </div>
 
       {loading && (
-        <div style={{ color: "#6b7280", fontSize: "14px" }}>Loading suggestions...</div>
+        <div style={{ color: "#6b7280", fontSize: "14px" }}>
+          Loading suggestions...
+        </div>
       )}
-      {error && <div style={{ color: "#dc2626", fontSize: "14px" }}>{error}</div>}
+      {error && (
+        <div style={{ color: "#dc2626", fontSize: "14px" }}>{error}</div>
+      )}
 
       <Button
         aria-controls="auto-complete"

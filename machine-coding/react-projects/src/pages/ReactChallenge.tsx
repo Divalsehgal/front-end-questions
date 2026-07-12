@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { challenges } from "../challenges";
 import HintModal from "../components/HintModal";
@@ -65,7 +65,7 @@ export default function ReactChallenge() {
         </nav>
 
         {/* Challenge Container */}
-        <div className="animate-in fade-in zoom-in-95 relative flex min-h-[600px] flex-col overflow-hidden rounded-3xl border border-border-subtle bg-surface shadow-sm delay-100 duration-700">
+        <div className="animate-in fade-in zoom-in-95 relative flex min-h-150 flex-col overflow-hidden rounded-3xl border border-border-subtle bg-surface shadow-sm delay-100 duration-700">
           <div className="flex-1">
             {ChallengeComponent ? (
               <ChallengeComponent />

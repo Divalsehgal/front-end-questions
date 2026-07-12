@@ -19,7 +19,7 @@ const BuenosAires = {
 // a new object whose interface matches the rest of the collection.
 const toMillionsAdapter = city => ({
     ...city,
-    habitants: parseFloat((city.habitants / 1000000).toFixed(1))
+    habitants: Number.parseFloat((city.habitants / 1000000).toFixed(1))
 })
 
 const adaptedBuenosAires = toMillionsAdapter(BuenosAires)

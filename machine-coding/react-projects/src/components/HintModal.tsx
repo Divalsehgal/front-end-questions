@@ -1,7 +1,6 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { createPortal } from "react-dom";
 import { X, Lightbulb, CheckCircle2 } from "lucide-react";
-import { cn } from "../utils/cn";
 
 interface HintModalProps {
   isOpen: boolean;
@@ -10,7 +9,12 @@ interface HintModalProps {
   challengeName?: string;
 }
 
-export default function HintModal({ isOpen, onClose, hint, challengeName }: HintModalProps) {
+export default function HintModal({
+  isOpen,
+  onClose,
+  hint,
+  challengeName,
+}: HintModalProps) {
   // Handle escape key
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -30,46 +34,66 @@ export default function HintModal({ isOpen, onClose, hint, challengeName }: Hint
 
   // Simple Markdown-lite parser (v2 - refined for modal)
   const renderHintContent = (text: string) => {
-    return text.split("\n").map((line, index) => {
+    const lines = text.split("\n");
+    return lines.map((line, index) => {
       const trimmed = line.trim();
-      if (!trimmed) return <div key={index} className="h-4" />;
+      if (!trimmed)
+        return <div key={`empty-${index}`} className="h-4" />;
 
       // Headings
       if (trimmed.startsWith("###")) {
+        const headingText = trimmed.replace(/^###\s*/, "");
         return (
-          <h4 key={index} className="mt-8 mb-4 flex items-center gap-3 text-xl font-black tracking-tighter text-text-main uppercase">
+          <h4
+            key={`heading-${headingText.slice(0, 20)}-${index}`}
+            className="mt-8 mb-4 flex items-center gap-3 text-xl font-black tracking-tighter text-text-main uppercase"
+          >
             <CheckCircle2 className="size-6 text-brand-500" />
-            {trimmed.replace(/^###\s*/, "")}
+            {headingText}
           </h4>
         );
       }
 
       // Numbered Lists
-      const listMatch = trimmed.match(/^(\d+)\.\s*(.*)/);
+      const regex = /^(\d+)\.\s*(.*)/;
+      const listMatch = regex.exec(trimmed);
       if (listMatch) {
         const [_, num, content] = listMatch;
-        const boldMatch = content.match(/^\*\*(.*?)\*\*:\s*(.*)/);
-        
+        const regex = /^\*\*(.*?)\*\*:\s*(.*)/;
+        const boldMatch = regex.exec(content);
+
         if (boldMatch) {
           return (
-            <div key={index} className="bg-surface-sunken/40 group mb-3 flex gap-4 rounded-3xl border border-border-subtle p-5 transition-all duration-300 hover:border-brand-500/30">
-              <span className="flex size-10 flex-shrink-0 items-center justify-center rounded-2xl bg-brand-500 text-sm font-black text-white shadow-soft shadow-brand-500/20">
+            <div
+              key={`list-bold-${num}-${boldMatch[1].slice(0, 20)}`}
+              className="bg-surface-sunken/40 group mb-3 flex gap-4 rounded-3xl border border-border-subtle p-5 transition-all duration-300 hover:border-brand-500/30"
+            >
+              <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-brand-500 text-sm font-black text-white shadow-soft shadow-brand-500/20">
                 {num}
               </span>
               <div className="space-y-1">
-                <p className="text-lg font-bold tracking-tight text-text-main transition-colors group-hover:text-brand-500">{boldMatch[1]}</p>
-                <p className="text-sm leading-relaxed text-text-muted">{boldMatch[2]}</p>
+                <p className="text-lg font-bold tracking-tight text-text-main transition-colors group-hover:text-brand-500">
+                  {boldMatch[1]}
+                </p>
+                <p className="text-sm leading-relaxed text-text-muted">
+                  {boldMatch[2]}
+                </p>
               </div>
             </div>
           );
         }
 
         return (
-          <div key={index} className="bg-surface-sunken/40 mb-3 flex gap-4 rounded-3xl border border-border-subtle p-5 transition-all duration-300 hover:border-brand-500/30">
-            <span className="flex size-10 flex-shrink-0 items-center justify-center rounded-2xl bg-brand-500 text-sm font-black text-white shadow-soft shadow-brand-500/20">
+          <div
+            key={`list-${num}-${content.slice(0, 20)}`}
+            className="bg-surface-sunken/40 mb-3 flex gap-4 rounded-3xl border border-border-subtle p-5 transition-all duration-300 hover:border-brand-500/30"
+          >
+            <span className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-brand-500 text-sm font-black text-white shadow-soft shadow-brand-500/20">
               {num}
             </span>
-            <p className="pt-2 text-sm leading-relaxed text-text-muted">{content}</p>
+            <p className="pt-2 text-sm leading-relaxed text-text-muted">
+              {content}
+            </p>
           </div>
         );
       }
@@ -77,10 +101,20 @@ export default function HintModal({ isOpen, onClose, hint, challengeName }: Hint
       // Regular text with potential bolding
       const parts = line.split(/(\*\*.*?\*\*)/g);
       return (
-        <p key={index} className="mb-3 text-sm leading-relaxed text-text-muted">
+        <p
+          key={`text-${line.slice(0, 20)}-${index}`}
+          className="mb-3 text-sm leading-relaxed text-text-muted"
+        >
           {parts.map((part, i) => {
             if (part.startsWith("**") && part.endsWith("**")) {
-              return <strong key={i} className="font-bold text-text-main">{part.slice(2, -2)}</strong>;
+              return (
+                <strong
+                  key={`bold-${i}-${part.slice(2, 10)}`}
+                  className="font-bold text-text-main"
+                >
+                  {part.slice(2, -2)}
+                </strong>
+              );
             }
             return part;
           })}
@@ -90,17 +124,19 @@ export default function HintModal({ isOpen, onClose, hint, challengeName }: Hint
   };
 
   return createPortal(
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+    <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
       {/* Backdrop */}
-      <div 
+      <div
         className="animate-in fade-in absolute inset-0 bg-canvas/60 backdrop-blur-md duration-300"
         onClick={onClose}
+        onKeyDown={onClose}
       />
 
       {/* Modal Card */}
-      <div 
+      <div
         className="animate-in zoom-in-95 slide-in-from-bottom-8 relative w-full max-w-2xl overflow-hidden rounded-[2.5rem] border border-border-strong bg-surface shadow-2xl duration-500 ease-spring"
         onClick={(e) => e.stopPropagation()}
+        onKeyDown={(e) => e.stopPropagation()}
       >
         {/* Header */}
         <div className="bg-surface-sunken/20 flex items-center justify-between border-b border-border-subtle px-10 py-8">
@@ -127,9 +163,7 @@ export default function HintModal({ isOpen, onClose, hint, challengeName }: Hint
 
         {/* Content */}
         <div className="custom-scrollbar max-h-[70vh] overflow-y-auto p-10">
-          <div className="space-y-2">
-            {renderHintContent(hint)}
-          </div>
+          <div className="space-y-2">{renderHintContent(hint)}</div>
         </div>
 
         {/* Footer */}
@@ -143,6 +177,6 @@ export default function HintModal({ isOpen, onClose, hint, challengeName }: Hint
         </div>
       </div>
     </div>,
-    document.body
+    document.body,
   );
 }
