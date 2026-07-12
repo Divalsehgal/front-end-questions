@@ -1,10 +1,9 @@
 /*
-
 Prototype pattern means creating a new object using another object as a base (blueprint).
 The new object can reuse properties and methods from the original object.
-In JavaScript, this works using prototypal inheritance
-
+In JavaScript, this works using prototypal inheritance.
 */
+
 const enemy = {
     attack: () => console.log("Pim Pam Pum!"),
     flyAway: () => console.log("Flyyyy like an eagle!")
@@ -38,5 +37,5 @@ Object.setPrototypeOf(bug1, enemy)
 // bug1.phrase = "Your debugger doesn't work with me!"
 
 console.log(bug1.phrase)
-console.log(bug1.attack())   // Pim Pam Pum!
-console.log(bug1.flyAway())  // Flyyyy like an eagle!
+bug1.attack()   // Pim Pam Pum!
+bug1.flyAway()  // Flyyyy like an eagle!

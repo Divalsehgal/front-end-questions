@@ -13,21 +13,21 @@ export default function ReactChallenge() {
   const hint = challenge?.hint;
 
   return (
-    <div className="min-h-screen bg-surface selection:bg-primary/20">
+    <div className="selection:bg-primary/20 min-h-screen bg-surface">
       {/* Navigation Header */}
-      <nav className="border-b border-border-subtle bg-surface/80 backdrop-blur-md sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+      <nav className="sticky top-0 z-50 border-b border-border-subtle bg-surface/80 backdrop-blur-md">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
           <div className="flex items-center gap-8">
-            <Link to="/" className="flex items-center gap-2 font-display font-black text-xl italic tracking-tighter hover:text-primary transition-colors duration-300 group">
-              <div className="bg-primary w-5 h-5 rounded rotate-12 group-hover:rotate-45 transition-transform duration-500" />
+            <Link to="/" className="hover:text-primary group flex items-center gap-2 font-display text-xl font-black tracking-tighter italic transition-colors duration-300">
+              <div className="bg-primary size-5 rotate-12 rounded transition-transform duration-500 group-hover:rotate-45" />
               DPJS
             </Link>
-            <div className="h-4 w-px bg-border-subtle hidden md:block" />
+            <div className="hidden h-4 w-px bg-border-subtle md:block" />
             <div className="flex items-center gap-3">
-               <span className="text-[10px] font-black bg-surface-sunken px-2.5 py-0.5 rounded border border-border-subtle uppercase tracking-[0.2em] text-text-muted">
+               <span className="bg-surface-sunken rounded border border-border-subtle px-2.5 py-0.5 text-[10px] font-black tracking-[0.2em] text-text-muted uppercase">
                  Challenge
                </span>
-               <h2 className="text-lg font-black text-text-main hidden md:block tracking-tighter uppercase">{name}</h2>
+               <h2 className="hidden text-lg font-black tracking-tighter text-text-main uppercase md:block">{name}</h2>
             </div>
           </div>
 
@@ -35,46 +35,46 @@ export default function ReactChallenge() {
             {hint && (
               <button
                 onClick={() => setIsHintOpen(true)}
-                className="flex items-center gap-2 px-5 py-2.5 bg-brand-500/10 text-brand-500 font-black text-xs uppercase tracking-widest rounded-xl hover:bg-brand-500 hover:text-white transition-all shadow-soft active:scale-95 group"
+                className="group flex items-center gap-2 rounded-xl bg-brand-500/10 px-5 py-2.5 text-xs font-black tracking-widest text-brand-500 uppercase shadow-soft transition-all hover:bg-brand-500 hover:text-white active:scale-95"
               >
                 <Lightbulb size={16} className="group-hover:animate-pulse" />
                 Learning Gist
               </button>
             )}
-            <div className="w-8 h-8 rounded-full bg-surface-sunken border border-border-subtle" />
+            <div className="bg-surface-sunken size-8 rounded-full border border-border-subtle" />
           </div>
         </div>
       </nav>
 
       {/* Breadcrumbs & Main Content */}
-      <main className="max-w-7xl mx-auto py-8 px-6 space-y-6">
+      <main className="mx-auto max-w-7xl space-y-6 px-6 py-8">
         {/* Breadcrumb Navigation */}
-        <nav className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-text-muted animate-in fade-in slide-in-from-left-4 duration-700">
-          <Link to="/" className="flex items-center gap-1.5 hover:text-primary transition-colors py-1 group">
-            <Home size={12} className="group-hover:-translate-y-0.5 transition-transform" />
+        <nav className="animate-in fade-in slide-in-from-left-4 flex items-center gap-2 text-[10px] font-black tracking-widest text-text-muted uppercase duration-700">
+          <Link to="/" className="hover:text-primary group flex items-center gap-1.5 py-1 transition-colors">
+            <Home size={12} className="transition-transform group-hover:-translate-y-0.5" />
             Home
           </Link>
           <ChevronRight size={10} className="text-border-strong" />
-          <Link to="/" className="hover:text-primary transition-colors py-1">
+          <Link to="/" className="hover:text-primary py-1 transition-colors">
             Challenges
           </Link>
           <ChevronRight size={10} className="text-border-strong" />
-          <span className="text-text-main py-1 px-2 bg-surface-sunken rounded border border-border-subtle">
+          <span className="bg-surface-sunken rounded border border-border-subtle px-2 py-1 text-text-main">
             {name}
           </span>
         </nav>
 
         {/* Challenge Container */}
-        <div className="bg-surface rounded-3xl border border-border-subtle shadow-sm overflow-hidden min-h-[600px] flex flex-col relative animate-in fade-in zoom-in-95 duration-700 delay-100">
+        <div className="animate-in fade-in zoom-in-95 relative flex min-h-[600px] flex-col overflow-hidden rounded-3xl border border-border-subtle bg-surface shadow-sm delay-100 duration-700">
           <div className="flex-1">
             {ChallengeComponent ? (
               <ChallengeComponent />
             ) : (
-              <div className="flex flex-col items-center justify-center h-full py-24 text-center">
-                <span className="text-4xl mb-4">⚠️</span>
+              <div className="flex h-full flex-col items-center justify-center py-24 text-center">
+                <span className="mb-4 text-4xl">⚠️</span>
                 <h1 className="text-2xl font-bold text-text-main">Challenge not found</h1>
-                <p className="text-text-muted mt-2">The challenge you're looking for doesn't exist.</p>
-                <Link to="/" className="mt-6 text-primary font-bold hover:underline">Return to Hub</Link>
+                <p className="mt-2 text-text-muted">The challenge you're looking for doesn't exist.</p>
+                <Link to="/" className="text-primary mt-6 font-bold hover:underline">Return to Hub</Link>
               </div>
             )}
           </div>

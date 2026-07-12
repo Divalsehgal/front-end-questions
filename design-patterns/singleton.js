@@ -1,33 +1,34 @@
 /*
-Singleton Pattern
+Singleton Pattern ensures a class has only one instance
+and provides a global point of access to it.
 
-We want to have all of our app's configuration in a single object.
-And we want to disallow any duplication or modification of that object.
+This example uses a class with a cached instance,
+and prevents modifications after the first creation.
 */
 
-const Config = {
-    start: () => console.log('App has started'),
-    update: () => console.log('App has updated'),
+class ConfigSingleton {
+    constructor() {
+        if (ConfigSingleton.instance) {
+            return ConfigSingleton.instance
+        }
+
+        this.start = () => console.log('App has started')
+        this.update = () => console.log('App has updated')
+        Object.freeze(this)
+
+        ConfigSingleton.instance = this
+    }
 }
 
-// We freeze the object to prevent new properties being added and existing properties being modified or removed
-Object.freeze(Config)
+const configA = new ConfigSingleton()
+const configB = new ConfigSingleton()
 
-Config.start() // "App has started"
-Config.update() // "App has updated"
+console.log(configA === configB) // true
+configA.start()
+configB.update()
 
-Config.name = "Robert" // We try to add a new key
-console.log("Config",Config) // And verify it doesn't work: { start: [Function: start], update: [Function: update] },
-
-
-class ConfigClass {
-    constructor() { }
-    start() { console.log('App has started') }
-    update() { console.log('App has updated') }
-}
-
-const instance = new ConfigClass()
-Object.freeze(instance)
+configA.name = 'Robert' // no effect because instance is frozen
+console.log('Config instance', configA)
 
 
 

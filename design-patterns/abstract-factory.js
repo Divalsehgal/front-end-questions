@@ -1,14 +1,15 @@
 /*
-Abstract Factory pattern allows us to produce related objects
-without specifying concrete classes/functions.
+Abstract Factory pattern provides an interface to create families of related objects
+without specifying their concrete classes.
 
-It's useful in situations where we need to create objects
-that share only some properties and methods
-Basically Adding an abstraction layer over the factory method pattern
+This example creates two families of vehicles:
+- land vehicles: Car, Truck
+- air vehicles: Helicopter, Airplane
+
+The abstract factory returns the right concrete factory,
+and each concrete factory creates related products.
 */
 
-
-// We have a class or "concrete factory" for each vehicle type
 class Car {
     constructor() {
         this.name = "Car"
@@ -25,31 +26,67 @@ class Truck {
     turnOn = () => console.log("RRRRRRRRUUUUUUUUUMMMMMMMMMM!!")
 }
 
-class Motorcycle {
+class Helicopter {
     constructor() {
-        this.name = "Motorcycle"
-        this.wheels = 2
+        this.name = "Helicopter"
+        this.wheels = 0
     }
-    turnOn = () => console.log("sssssssssssssssssssssssssssssshhhhhhhhhhham!!")
+    turnOn = () => console.log("Wrooom wrooom! Helicopter is rising!")
 }
 
-// And and abstract factory that works as a single point of interaction for our clients
-// Given the type parameter it receives, it will call the corresponding concrete factory
-const vehicleFactory = {
-    createVehicle: function (type) {
+class Airplane {
+    constructor() {
+        this.name = "Airplane"
+        this.wheels = 3
+    }
+    turnOn = () => console.log("Vroooom! Airplane is ready for takeoff!")
+}
+
+class LandVehicleFactory {
+    createVehicle(type) {
         switch (type) {
             case "car":
                 return new Car()
             case "truck":
                 return new Truck()
-            case "motorcycle":
-                return new Motorcycle()
             default:
                 return null
         }
     }
 }
 
-const car = vehicleFactory.createVehicle("car") // Car { turnOn: [Function: turnOn], name: 'Car', wheels: 4 }
-const truck = vehicleFactory.createVehicle("truck") // Truck { turnOn: [Function: turnOn], name: 'Truck', wheels: 8 }
-const motorcycle = vehicleFactory.createVehicle("motorcycle") // Motorcycle { turnOn: [Function: turnOn], name: 'Motorcycle', wheels: 2 }
+class AirVehicleFactory {
+    createVehicle(type) {
+        switch (type) {
+            case "helicopter":
+                return new Helicopter()
+            case "airplane":
+                return new Airplane()
+            default:
+                return null
+        }
+    }
+}
+
+const vehicleFactory = {
+    createFactory: function (type) {
+        switch (type) {
+            case "land":
+                return new LandVehicleFactory()
+            case "air":
+                return new AirVehicleFactory()
+            default:
+                return null
+        }
+    }
+}
+
+const landFactory = vehicleFactory.createFactory("land")
+const car = landFactory.createVehicle("car")
+const truck = landFactory.createVehicle("truck")
+
+const airFactory = vehicleFactory.createFactory("air")
+const helicopter = airFactory.createVehicle("helicopter")
+const airplane = airFactory.createVehicle("airplane")
+
+console.log(car, truck, helicopter, airplane)

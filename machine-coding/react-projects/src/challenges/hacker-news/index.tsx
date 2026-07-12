@@ -54,11 +54,11 @@ export default function HackerNews() {
   }, [fetchStories]);
 
   return (
-    <div className="max-w-3xl mx-auto p-6 space-y-8 pb-20">
+    <div className="mx-auto max-w-3xl space-y-8 p-6 pb-20">
       <div className="flex items-center justify-between">
         <div className="space-y-1">
-          <h2 className="text-2xl font-black text-text-main flex items-center gap-2 tracking-tight">
-            <Newspaper className="w-7 h-7 text-brand-500" />
+          <h2 className="flex items-center gap-2 text-2xl font-black tracking-tight text-text-main">
+            <Newspaper className="size-7 text-brand-500" />
             Hacker News
           </h2>
           <p className="text-sm font-medium text-text-muted">
@@ -68,22 +68,22 @@ export default function HackerNews() {
         <button 
           onClick={fetchStories}
           disabled={isLoading}
-          className="p-2.5 bg-muted hover:bg-muted/80 rounded-xl transition-all shadow-soft disabled:opacity-50"
+          className="rounded-xl bg-muted p-2.5 shadow-soft transition-all hover:bg-muted/80 disabled:opacity-50"
         >
-          {isLoading ? <Loader2 className="w-5 h-5 animate-spin" /> : <TrendingUp className="w-5 h-5 text-brand-500" />}
+          {isLoading ? <Loader2 className="size-5 animate-spin" /> : <TrendingUp className="size-5 text-brand-500" />}
         </button>
       </div>
 
       {error ? (
-        <div className="p-8 bg-error/10 border-2 border-error/20 rounded-3xl text-center space-y-4">
+        <div className="space-y-4 rounded-3xl border-2 border-error/20 bg-error/10 p-8 text-center">
           <p className="font-bold text-error">{error}</p>
-          <button onClick={fetchStories} className="px-6 py-2 bg-error text-text-inverted font-bold rounded-xl shadow-soft shadow-error/20">Retry</button>
+          <button onClick={fetchStories} className="rounded-xl bg-error px-6 py-2 font-bold text-text-inverted shadow-soft shadow-error/20">Retry</button>
         </div>
       ) : (
         <div className="space-y-4">
           {isLoading && stories.length === 0 ? (
             Array(10).fill(0).map((_, i) => (
-              <div key={i} className="h-24 w-full bg-muted animate-pulse rounded-2xl" />
+              <div key={i} className="h-24 w-full animate-pulse rounded-2xl bg-muted" />
             ))
           ) : (
             stories.map((story, idx) => (
@@ -100,44 +100,44 @@ function StoryCard({ story, index }: { story: Story; index: number }) {
   const domain = story.url ? new URL(story.url).hostname.replace("www.", "") : "";
 
   return (
-    <div className="group bg-surface border border-subtle rounded-2xl p-4 sm:p-5 hover:shadow-hard transition-all hover:border-brand-500/20 animate-in fade-in slide-in-from-bottom-2 duration-500">
+    <div className="group border-subtle animate-in fade-in slide-in-from-bottom-2 rounded-2xl border bg-surface p-4 transition-all duration-500 hover:border-brand-500/20 hover:shadow-hard sm:p-5">
       <div className="flex gap-4">
         {/* Rank / Upvotes */}
-        <div className="flex flex-col items-center justify-center min-w-[3rem] px-2 py-1 bg-muted rounded-xl group-hover:bg-brand-500/10 transition-colors">
-          <ChevronUp className="w-4 h-4 text-brand-500" />
-          <span className="text-sm font-black text-text-main leading-none mt-0.5">{story.score}</span>
+        <div className="flex min-w-[3rem] flex-col items-center justify-center rounded-xl bg-muted px-2 py-1 transition-colors group-hover:bg-brand-500/10">
+          <ChevronUp className="size-4 text-brand-500" />
+          <span className="mt-0.5 text-sm leading-none font-black text-text-main">{story.score}</span>
         </div>
 
         {/* Content */}
-        <div className="flex-1 space-y-2 min-w-0">
+        <div className="min-w-0 flex-1 space-y-2">
           <div className="flex flex-col gap-1">
             <a 
               href={story.url} 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-base sm:text-lg font-bold text-text-main hover:text-brand-500 transition-colors leading-tight line-clamp-2"
+              className="line-clamp-2 text-base leading-tight font-bold text-text-main transition-colors hover:text-brand-500 sm:text-lg"
             >
               {story.title}
             </a>
             {domain && (
-              <span className="text-tiny sm:text-xs font-bold text-text-muted uppercase tracking-widest flex items-center gap-1">
-                <ExternalLink className="w-3 h-3" />
+              <span className="text-tiny flex items-center gap-1 font-bold tracking-widest text-text-muted uppercase sm:text-xs">
+                <ExternalLink className="size-3" />
                 {domain}
               </span>
             )}
           </div>
 
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-tiny sm:text-xs font-semibold text-text-muted">
-            <span className="flex items-center gap-1 hover:text-brand-500 transition-colors cursor-help">
-              <TrendingUp className="w-3 h-3" />
+          <div className="text-tiny flex flex-wrap items-center gap-x-4 gap-y-2 font-semibold text-text-muted sm:text-xs">
+            <span className="flex cursor-help items-center gap-1 transition-colors hover:text-brand-500">
+              <TrendingUp className="size-3" />
               {story.by}
             </span>
             <span className="flex items-center gap-1">
-              <Clock className="w-3 h-3" />
+              <Clock className="size-3" />
               {new Date(story.time * 1000).toLocaleDateString()}
             </span>
-            <button className="flex items-center gap-1 hover:text-brand-500 transition-colors">
-              <MessageSquare className="w-3 h-3" />
+            <button className="flex items-center gap-1 transition-colors hover:text-brand-500">
+              <MessageSquare className="size-3" />
               {story.descendants || 0}
             </button>
           </div>

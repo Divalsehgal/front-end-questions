@@ -68,6 +68,11 @@ const htmlConceptsData = [
     title: "Select Dropdowns",
     description: "Use an empty value=\"\" for the first option as a placeholder. Add disabled hidden selected to make it a non-selectable prompt.",
     code: "<select required>\n  <option value=\"\" disabled selected hidden>(select one)</option>\n  <option value=\"1\">Option 1</option>\n</select>"
+  },
+  {
+    title: "<div> vs <section> - Semantic HTML",
+    description: "div is a generic, non-semantic container with no inherent meaning, used for layout and grouping. section is a semantic HTML5 element that groups related content with a heading, helping screen readers navigate content structure for accessibility. Semantic HTML improves accessibility for assistive technologies, enhances SEO for search engines, and creates a more meaningful document structure.",
+    code: "<!-- Non-semantic: No meaning -->\n<div>\n  <h2>My Articles</h2>\n  <article>Article 1</article>\n  <article>Article 2</article>\n</div>\n\n<!-- Semantic: Clear structure for screen readers & SEO -->\n<section>\n  <h2>My Articles</h2>\n  <article>Article 1</article>\n  <article>Article 2</article>\n</section>"
   }
 ];
 

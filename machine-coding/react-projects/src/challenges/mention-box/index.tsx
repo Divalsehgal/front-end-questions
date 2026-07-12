@@ -65,50 +65,50 @@ export default function MentionBox() {
   };
 
   return (
-    <div className="max-w-xl mx-auto space-y-8 p-6">
+    <div className="mx-auto max-w-xl space-y-8 p-6">
       <div className="space-y-2 text-center md:text-left">
-        <h2 className="text-2xl font-black text-text-main flex items-center gap-2 tracking-tight uppercase justify-center md:justify-start">
-          <AtSign className="w-7 h-7 text-brand-500" />
+        <h2 className="flex items-center justify-center gap-2 text-2xl font-black tracking-tight text-text-main uppercase md:justify-start">
+          <AtSign className="size-7 text-brand-500" />
           Mention Box
         </h2>
         <p className="text-sm font-medium text-text-muted">
-          Type <span className="font-mono text-brand-500 font-black">@</span> to see intelligence suggestions.
+          Type <span className="font-mono font-black text-brand-500">@</span> to see intelligence suggestions.
         </p>
       </div>
 
       <div className="relative">
         <Popover.Root open={open} onOpenChange={setOpen}>
           <Popover.Trigger asChild>
-            <div className="relative group">
+            <div className="group relative">
               <input
                 ref={inputRef}
                 type="text"
                 value={inputValue}
                 onChange={handleChange}
                 placeholder="Start typing @name..."
-                className="w-full px-4 py-4 bg-surface border-2 border-subtle rounded-2xl focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 transition-all outline-none text-text-main placeholder:text-text-muted/30 group-hover:border-strong font-medium"
+                className="border-subtle group-hover:border-strong w-full rounded-2xl border-2 bg-surface p-4 font-medium text-text-main transition-all outline-none placeholder:text-text-muted/30 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10"
               />
             </div>
           </Popover.Trigger>
 
           <Popover.Portal>
             <Popover.Positioner side="bottom" align="start" sideOffset={8}>
-              <Popover.Popup className="w-64 bg-surface border border-subtle rounded-3xl shadow-hard overflow-hidden animate-in fade-in zoom-in duration-200 z-50 p-2">
+              <Popover.Popup className="border-subtle animate-in fade-in zoom-in z-50 w-64 overflow-hidden rounded-3xl border bg-surface p-2 shadow-hard duration-200">
                 <div className="space-y-1">
                   {mentionOptions.map((user) => (
                     <button
                       key={user.id}
                       onClick={() => handleSelectUser(user)}
-                      className="w-full flex items-center gap-3 px-3 py-2 rounded-2xl hover:bg-muted transition-colors text-left group"
+                      className="group flex w-full items-center gap-3 rounded-2xl px-3 py-2 text-left transition-colors hover:bg-muted"
                     >
-                      <div className="w-8 h-8 rounded-full bg-brand-500/10 flex items-center justify-center text-brand-500 shrink-0">
-                        <UserIcon className="w-4 h-4" />
+                      <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-brand-500/10 text-brand-500">
+                        <UserIcon className="size-4" />
                       </div>
-                      <div className="flex flex-col min-w-0">
-                        <span className="text-sm font-black text-text-main truncate">
+                      <div className="flex min-w-0 flex-col">
+                        <span className="truncate text-sm font-black text-text-main">
                           {user.first_name} {user.last_name}
                         </span>
-                        <span className="text-tiny font-black text-text-muted/50 uppercase tracking-widest truncate">
+                        <span className="text-tiny truncate font-black tracking-widest text-text-muted/50 uppercase">
                           @{user.first_name.toLowerCase()}
                         </span>
                       </div>
@@ -122,25 +122,25 @@ export default function MentionBox() {
       </div>
 
       {/* Context State Demo Section */}
-      <div className="p-6 bg-muted rounded-3xl border border-subtle space-y-4">
+      <div className="border-subtle space-y-4 rounded-3xl border bg-muted p-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="p-3 bg-brand-500/10 rounded-2xl text-brand-500">
-              <LogIn className="w-6 h-6" />
+            <div className="rounded-2xl bg-brand-500/10 p-3 text-brand-500">
+              <LogIn className="size-6" />
             </div>
             <div>
-              <p className="text-tiny font-black uppercase tracking-widest text-text-muted/50">Active User (Context)</p>
-              <p className="text-lg font-black text-text-main tracking-tight uppercase">{dummyValue.name}</p>
+              <p className="text-tiny font-black tracking-widest text-text-muted/50 uppercase">Active User (Context)</p>
+              <p className="text-lg font-black tracking-tight text-text-main uppercase">{dummyValue.name}</p>
             </div>
           </div>
           <button
             onClick={handleDummyChange}
-            className="px-6 py-2.5 bg-brand-500 hover:bg-brand-600 active:scale-95 text-text-inverted text-tiny font-black uppercase tracking-widest rounded-xl transition-all shadow-soft"
+            className="text-tiny rounded-xl bg-brand-500 px-6 py-2.5 font-black tracking-widest text-text-inverted uppercase shadow-soft transition-all hover:bg-brand-600 active:scale-95"
           >
             Update Context
           </button>
         </div>
-        <div className="text-tiny font-medium text-text-muted/60 italic px-1">
+        <div className="text-tiny px-1 font-medium text-text-muted/60 italic">
           This section demonstrates state sharing across components via the DummyProvider system.
         </div>
       </div>

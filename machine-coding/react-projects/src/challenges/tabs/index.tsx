@@ -16,25 +16,25 @@ const defaultItems = [
 
 const TabsDemo = () => {
   return (
-    <div className="p-8 max-w-2xl mx-auto">
+    <div className="mx-auto max-w-2xl p-8">
       <div className="mb-8">
-        <h2 className="text-3xl font-display font-black tracking-tight text-text-main">Base UI Tabs</h2>
-        <p className="text-text-muted mt-2">
+        <h2 className="font-display text-3xl font-black tracking-tight text-text-main">Base UI Tabs</h2>
+        <p className="mt-2 text-text-muted">
           An accessible, headless tabs component refactored with Tailwind v4 utilities.
         </p>
       </div>
 
       <Tabs.Root defaultValue="html" className="flex flex-col gap-6">
         {/* Tab List */}
-        <Tabs.List className="flex gap-2 p-1.5 bg-muted rounded-2xl border border-border-subtle self-start">
+        <Tabs.List className="flex gap-2 self-start rounded-2xl border border-border-subtle bg-muted p-1.5">
           {defaultItems.map((item) => (
             <Tabs.Tab 
               key={item.value} 
               value={item.value}
               className={cn(
-                "px-6 py-2.5 rounded-xl text-sm font-bold transition-all duration-300 outline-none cursor-pointer",
+                "cursor-pointer rounded-xl px-6 py-2.5 text-sm font-bold transition-all duration-300 outline-none",
                 "text-text-muted hover:text-text-main",
-                "data-[selected]:bg-surface data-[selected]:text-brand-500 data-[selected]:shadow-hard data-[selected]:shadow-brand-500/10 data-[selected]:border data-[selected]:border-border-subtle",
+                "data-[selected]:border data-[selected]:border-border-subtle data-[selected]:bg-surface data-[selected]:text-brand-500 data-[selected]:shadow-hard data-[selected]:shadow-brand-500/10",
                 "focus-visible:ring-2 focus-visible:ring-brand-500/50"
               )}
             >
@@ -49,16 +49,16 @@ const TabsDemo = () => {
             key={item.value} 
             value={item.value}
             className={cn(
-              "p-8 bg-surface rounded-3xl border border-border-subtle shadow-soft",
+              "rounded-3xl border border-border-subtle bg-surface p-8 shadow-soft",
               "animate-in fade-in slide-in-from-bottom-4 duration-500 ease-spring",
-              "focus:outline-none focus:ring-2 focus:ring-brand-500/20"
+              "focus:ring-2 focus:ring-brand-500/20 focus:outline-none"
             )}
           >
-            <div className="flex gap-4 items-start mb-4">
-              <div className="w-2 h-8 bg-brand-500 rounded-full shrink-0" />
-              <h3 className="text-xl font-bold text-text-main uppercase tracking-widest">{item.label} Overview</h3>
+            <div className="mb-4 flex items-start gap-4">
+              <div className="h-8 w-2 shrink-0 rounded-full bg-brand-500" />
+              <h3 className="text-xl font-bold tracking-widest text-text-main uppercase">{item.label} Overview</h3>
             </div>
-            <p className="text-text-main leading-relaxed text-lg">
+            <p className="text-lg leading-relaxed text-text-main">
               {item.panel}
             </p>
           </Tabs.Panel>

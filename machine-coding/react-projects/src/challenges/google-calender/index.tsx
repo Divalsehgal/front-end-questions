@@ -48,7 +48,7 @@ const processedEvents = (() => {
 
   let active_meetings = 0;
   const meetingCount = new Map();
-  for (let event of events) {
+  for (const event of events) {
     active_meetings += event.type;
     if (event.type === 1) {
       meetingCount.set(event.index, active_meetings);
@@ -79,7 +79,7 @@ function EventWidget({ event }: { event: EventData }) {
   return (
     <div
       className={cn(
-        "absolute right-2 rounded-lg border-l-4 p-2 shadow-soft transition-all hover:shadow-hard hover:z-10 group cursor-pointer overflow-hidden backdrop-blur-sm"
+        "group absolute right-2 cursor-pointer overflow-hidden rounded-lg border-l-4 p-2 shadow-soft backdrop-blur-sm transition-all hover:z-10 hover:shadow-hard"
       )}
       style={{
         backgroundColor: `${event.color}15`,
@@ -89,14 +89,14 @@ function EventWidget({ event }: { event: EventData }) {
         left: `${leftOffset + 60}px`, // 60px is the width of the time label column
       }}
     >
-      <div className="flex justify-between items-start">
-        <h5 className="text-tiny font-bold truncate text-text-main" style={{ color: event.color }}>
+      <div className="flex items-start justify-between">
+        <h5 className="text-tiny truncate font-bold text-text-main" style={{ color: event.color }}>
           {event.title}
         </h5>
-        <MoreVertical className="w-2.5 h-2.5 text-text-muted opacity-0 group-hover:opacity-100 transition-opacity shrink-0" />
+        <MoreVertical className="size-2.5 shrink-0 text-text-muted opacity-0 transition-opacity group-hover:opacity-100" />
       </div>
-      <div className="flex items-center gap-1 mt-0.5 text-tiny font-medium text-text-muted">
-        <Clock className="w-2 h-2" />
+      <div className="text-tiny mt-0.5 flex items-center gap-1 font-medium text-text-muted">
+        <Clock className="size-2" />
         {event.startTime} - {event.endTime}
       </div>
     </div>
@@ -105,47 +105,47 @@ function EventWidget({ event }: { event: EventData }) {
 
 export default function GoogleCalendar() {
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-6">
+    <div className="mx-auto max-w-4xl space-y-6 p-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-brand-500 text-text-inverted rounded-xl shadow-hard shadow-brand-500/20">
-            <CalendarIcon className="w-6 h-6" />
+          <div className="rounded-xl bg-brand-500 p-2 text-text-inverted shadow-hard shadow-brand-500/20">
+            <CalendarIcon className="size-6" />
           </div>
           <div>
             <h2 className="text-2xl font-bold text-text-main">Day Planner</h2>
-            <p className="text-sm text-text-muted font-medium">Monday, Jan 24, 2026</p>
+            <p className="text-sm font-medium text-text-muted">Monday, Jan 24, 2026</p>
           </div>
         </div>
-        <button className="flex items-center gap-2 px-4 py-2 bg-surface border border-subtle rounded-xl hover:bg-muted transition-all font-semibold text-sm shadow-soft">
-          <Plus className="w-4 h-4 text-brand-500" />
+        <button className="border-subtle flex items-center gap-2 rounded-xl border bg-surface px-4 py-2 text-sm font-semibold shadow-soft transition-all hover:bg-muted">
+          <Plus className="size-4 text-brand-500" />
           Add Event
         </button>
       </div>
 
-      <div className="bg-surface rounded-3xl border border-subtle shadow-hard overflow-hidden">
+      <div className="border-subtle overflow-hidden rounded-3xl border bg-surface shadow-hard">
         <div className="relative h-[1440px] select-none">
           {/* Hour Grid Lines */}
           <div className="absolute inset-0">
             {HOURS.map((hour) => (
               <div 
                 key={hour.minutes} 
-                className="absolute w-full border-t border-subtle flex"
+                className="border-subtle absolute flex w-full border-t"
                 style={{ top: `${hour.minutes}px`, height: '60px' }}
               >
-                <div className="w-[60px] pr-2 text-right -translate-y-2">
-                  <span className="text-tiny font-bold text-text-muted uppercase tracking-tighter">
+                <div className="w-[60px] -translate-y-2 pr-2 text-right">
+                  <span className="text-tiny font-bold tracking-tighter text-text-muted uppercase">
                     {hour.label.split(' ')[0]}
-                    <span className="text-tiny opacity-50 ml-0.5">{hour.label.split(' ')[1]}</span>
+                    <span className="text-tiny ml-0.5 opacity-50">{hour.label.split(' ')[1]}</span>
                   </span>
                 </div>
-                <div className="flex-1 border-l border-subtle" />
+                <div className="border-subtle flex-1 border-l" />
               </div>
             ))}
           </div>
 
           {/* Events Layer */}
-          <div className="absolute inset-0 z-10 pointer-events-none">
-            <div className="relative h-full pointer-events-auto">
+          <div className="pointer-events-none absolute inset-0 z-10">
+            <div className="pointer-events-auto relative h-full">
               {processedEvents.map((event, idx) => (
                 <EventWidget key={`${event.title}-${idx}`} event={event} />
               ))}
@@ -154,10 +154,10 @@ export default function GoogleCalendar() {
           
           {/* Current Time Indicator (Dummy Example) */}
           <div 
-            className="absolute left-[60px] right-0 border-t-2 border-error z-20 pointer-events-none flex items-center"
+            className="pointer-events-none absolute right-0 left-[60px] z-20 flex items-center border-t-2 border-error"
             style={{ top: '650px' }}
           >
-            <div className="w-2 h-2 rounded-full bg-error -ml-1" />
+            <div className="-ml-1 size-2 rounded-full bg-error" />
           </div>
         </div>
       </div>

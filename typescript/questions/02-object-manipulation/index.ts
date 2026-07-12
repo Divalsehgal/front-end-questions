@@ -34,3 +34,41 @@ type User = { name: string; age: number; email: string };
 const baseUser: User = { name: "Carol", age: 28, email: "c@x.com" };
 const updatedUser = update(baseUser, { age: 29 });
 console.log("Updated User:", updatedUser);
+
+// 4. Pick vs Omit for Type Safety
+// Problem: User type contains sensitive data we don't want to expose.
+interface UserFull {
+    id: number;
+    name: string;
+    email: string;
+    password: string; // ❌ Sensitive - should not be exposed
+    createdAt: Date;  // ❌ Internal - may not need to expose
+}
+
+// Solution 1: Pick - Select only the fields you need
+type UserSummary = Pick<UserFull, "id" | "name" | "email">;
+// Result: { id: number; name: string; email: string }
+
+// Solution 2: Omit - Exclude sensitive/unnecessary fields
+type UserPublic = Omit<UserFull, "password" | "createdAt">;
+// Result: { id: number; name: string; email: string }
+
+// Function implementation
+function getUserSummary(user: UserFull): UserSummary {
+    return {
+        id: user.id,
+        name: user.name,
+        email: user.email
+    };
+}
+
+const fullUser: UserFull = {
+    id: 1,
+    name: "Alice",
+    email: "alice@example.com",
+    password: "secret123",
+    createdAt: new Date()
+};
+
+const summary: UserSummary = getUserSummary(fullUser);
+console.log("User Summary:", summary); // Only safe fields exposed

@@ -78,11 +78,11 @@ export default function OverlappingCircles() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-6">
+    <div className="mx-auto max-w-4xl space-y-6 p-6">
       <div className="flex items-center justify-between">
         <div className="space-y-1">
-          <h2 className="text-2xl font-black text-text-main flex items-center gap-2 tracking-tight">
-            <MousePointerClick className="w-7 h-7 text-brand-500" />
+          <h2 className="flex items-center gap-2 text-2xl font-black tracking-tight text-text-main">
+            <MousePointerClick className="size-7 text-brand-500" />
             VIRTUAL CANVAS
           </h2>
           <p className="text-sm font-medium text-text-muted">
@@ -91,9 +91,9 @@ export default function OverlappingCircles() {
         </div>
         <button 
           onClick={clearCanvas}
-          className="flex items-center gap-2 px-4 py-2 bg-surface border border-subtle rounded-xl hover:bg-muted transition-all font-semibold text-sm shadow-soft"
+          className="border-subtle flex items-center gap-2 rounded-xl border bg-surface px-4 py-2 text-sm font-semibold shadow-soft transition-all hover:bg-muted"
         >
-          <RefreshCcw className="w-4 h-4 text-brand-500" />
+          <RefreshCcw className="size-4 text-brand-500" />
           Clear All
         </button>
       </div>
@@ -104,10 +104,10 @@ export default function OverlappingCircles() {
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseUp}
-        className="relative h-[500px] bg-surface border-2 border-dashed border-subtle rounded-3xl shadow-inner overflow-hidden cursor-crosshair group"
+        className="border-subtle group relative h-[500px] cursor-crosshair overflow-hidden rounded-3xl border-2 border-dashed bg-surface shadow-inner"
       >
         {/* Helper Grid Line (Optional aesthetics) */}
-        <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{ backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
+        <div className="pointer-events-none absolute inset-0 opacity-[0.03]" style={{ backgroundImage: 'radial-gradient(circle, currentColor 1px, transparent 1px)', backgroundSize: '30px 30px' }} />
 
         {/* Existing Circles */}
         {circles.map(circle => <CircleItem key={circle.id} circle={circle} />)}
@@ -116,27 +116,27 @@ export default function OverlappingCircles() {
         {currentCircle && <CircleItem circle={currentCircle} isPreview />}
 
         {circles.length === 0 && !currentCircle && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-text-muted/40 space-y-2 pointer-events-none">
-            <div className="p-4 bg-muted rounded-full">
-              <MousePointer2 className="w-8 h-8" />
+          <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center space-y-2 text-text-muted/40">
+            <div className="rounded-full bg-muted p-4">
+              <MousePointer2 className="size-8" />
             </div>
             <p className="font-medium text-text-muted">Click and drag anywhere to begin</p>
           </div>
         )}
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div className="p-4 bg-brand-500/5 rounded-2xl border border-brand-500/10 flex gap-3">
-          <Info className="w-5 h-5 text-brand-500 shrink-0" />
-          <p className="text-tiny text-text-main/70 leading-relaxed font-medium">Uses Euclidean distance formula to detect precise overlaps in real-time.</p>
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div className="flex gap-3 rounded-2xl border border-brand-500/10 bg-brand-500/5 p-4">
+          <Info className="size-5 shrink-0 text-brand-500" />
+          <p className="text-tiny leading-relaxed font-medium text-text-main/70">Uses Euclidean distance formula to detect precise overlaps in real-time.</p>
         </div>
-        <div className="p-4 bg-brand-500/5 rounded-2xl border border-brand-500/10 flex gap-3">
-          <Info className="w-5 h-5 text-brand-500 shrink-0" />
-          <p className="text-tiny text-text-main/70 leading-relaxed font-medium">Collision logic updates the visual state before the mouse button is released.</p>
+        <div className="flex gap-3 rounded-2xl border border-brand-500/10 bg-brand-500/5 p-4">
+          <Info className="size-5 shrink-0 text-brand-500" />
+          <p className="text-tiny leading-relaxed font-medium text-text-main/70">Collision logic updates the visual state before the mouse button is released.</p>
         </div>
-        <div className="p-4 bg-muted rounded-2xl border border-subtle flex gap-3">
-          <Info className="w-5 h-5 text-text-muted shrink-0" />
-          <p className="text-tiny text-text-muted leading-relaxed font-medium">Supports infinite circles with high performance canvas reconciliation.</p>
+        <div className="border-subtle flex gap-3 rounded-2xl border bg-muted p-4">
+          <Info className="size-5 shrink-0 text-text-muted" />
+          <p className="text-tiny leading-relaxed font-medium text-text-muted">Supports infinite circles with high performance canvas reconciliation.</p>
         </div>
       </div>
     </div>
@@ -148,7 +148,7 @@ function CircleItem({ circle, isPreview }: { circle: Circle; isPreview?: boolean
     <div
       className={cn(
         "absolute rounded-full border-2 transition-colors",
-        isPreview ? "opacity-40 animate-pulse border-white/50" : "animate-in zoom-in duration-300 border-text-inverted shadow-hard"
+        isPreview ? "animate-pulse border-white/50 opacity-40" : "animate-in zoom-in border-text-inverted shadow-hard duration-300"
       )}
       style={{
         width: circle.radius * 2,

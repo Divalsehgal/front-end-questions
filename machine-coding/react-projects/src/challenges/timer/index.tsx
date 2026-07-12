@@ -61,102 +61,102 @@ export default function Timer() {
   const t = formatTime(time);
 
   return (
-    <div className="max-w-xl mx-auto p-6 space-y-8">
+    <div className="mx-auto max-w-xl space-y-8 p-6">
       <div className="flex items-center justify-between">
         <div className="space-y-1">
-          <h2 className="text-2xl font-black text-text-main flex items-center gap-2 tracking-tight uppercase">
-            <TimerIcon className="w-7 h-7 text-brand-500" />
+          <h2 className="flex items-center gap-2 text-2xl font-black tracking-tight text-text-main uppercase">
+            <TimerIcon className="size-7 text-brand-500" />
             CHRONO CORE
           </h2>
           <p className="text-sm font-medium text-text-muted">
             Precision instrumentation for temporal events.
           </p>
         </div>
-        <div className="flex items-center gap-2 px-3 py-1.5 bg-brand-500/10 rounded-full border border-brand-500/20">
-          <Zap className="w-3.5 h-3.5 text-brand-500 fill-brand-500/20" />
-          <span className="text-tiny font-black uppercase tracking-widest text-brand-500">10ms Precision</span>
+        <div className="flex items-center gap-2 rounded-full border border-brand-500/20 bg-brand-500/10 px-3 py-1.5">
+          <Zap className="size-3.5 fill-brand-500/20 text-brand-500" />
+          <span className="text-tiny font-black tracking-widest text-brand-500 uppercase">10ms Precision</span>
         </div>
       </div>
 
       {/* Main Display */}
-      <div className="relative group">
-        <div className="bg-surface rounded-[3rem] border-8 border-muted shadow-hard p-12 text-center space-y-4">
-          <div className="flex items-center justify-center font-mono font-black tabular-nums tracking-tighter">
+      <div className="group relative">
+        <div className="space-y-4 rounded-[3rem] border-8 border-muted bg-surface p-12 text-center shadow-hard">
+          <div className="flex items-center justify-center font-mono font-black tracking-tighter tabular-nums">
             <div className="flex flex-col items-center">
-              <span className="text-6xl sm:text-8xl text-text-main leading-none">{t.min}</span>
-              <span className="text-tiny font-black uppercase text-text-muted/40 mt-2 tracking-widest">Min</span>
+              <span className="text-6xl leading-none text-text-main sm:text-8xl">{t.min}</span>
+              <span className="text-tiny mt-2 font-black tracking-widest text-text-muted/40 uppercase">Min</span>
             </div>
-            <span className="text-4xl sm:text-6xl text-brand-500 mx-2 animate-pulse mb-6">:</span>
+            <span className="mx-2 mb-6 animate-pulse text-4xl text-brand-500 sm:text-6xl">:</span>
             <div className="flex flex-col items-center">
-              <span className="text-6xl sm:text-8xl text-text-main leading-none">{t.sec}</span>
-              <span className="text-tiny font-black uppercase text-text-muted/40 mt-2 tracking-widest">Sec</span>
+              <span className="text-6xl leading-none text-text-main sm:text-8xl">{t.sec}</span>
+              <span className="text-tiny mt-2 font-black tracking-widest text-text-muted/40 uppercase">Sec</span>
             </div>
-            <span className="text-2xl sm:text-4xl text-brand-500/50 mx-1 mb-4">.</span>
+            <span className="mx-1 mb-4 text-2xl text-brand-500/50 sm:text-4xl">.</span>
             <div className="flex flex-col items-center">
-              <span className="text-3xl sm:text-5xl text-brand-500 leading-none mb-2">{t.ms}</span>
-              <span className="text-[8px] uppercase text-text-muted/40 tracking-widest">Ms</span>
+              <span className="mb-2 text-3xl leading-none text-brand-500 sm:text-5xl">{t.ms}</span>
+              <span className="text-[8px] tracking-widest text-text-muted/40 uppercase">Ms</span>
             </div>
           </div>
         </div>
 
         {/* Action Buttons */}
-        <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-4">
+        <div className="absolute -bottom-6 left-1/2 flex -translate-x-1/2 items-center gap-4">
           <button
             onClick={resetTimer}
-            className="p-4 bg-surface border-2 border-subtle rounded-2xl shadow-soft hover:bg-muted transition-all text-text-muted hover:text-error-500 group"
+            className="border-subtle hover:text-error-500 group rounded-2xl border-2 bg-surface p-4 text-text-muted shadow-soft transition-all hover:bg-muted"
           >
-            <RotateCcw className="w-6 h-6 group-hover:rotate-180 transition-transform duration-500" />
+            <RotateCcw className="size-6 transition-transform duration-500 group-hover:rotate-180" />
           </button>
           
           <button
             onClick={isActive ? pauseTimer : startTimer}
             className={cn(
-              "w-20 h-20 rounded-3xl flex items-center justify-center transition-all shadow-hard active:scale-95 group",
+              "group flex size-20 items-center justify-center rounded-3xl shadow-hard transition-all active:scale-95",
               isActive 
-                ? "bg-surface text-brand-500 border-4 border-brand-500 shadow-brand-500/10" 
-                : "bg-brand-500 text-text-inverted shadow-brand-500/30 hover:bg-brand-600 border-4 border-brand-400"
+                ? "border-4 border-brand-500 bg-surface text-brand-500 shadow-brand-500/10" 
+                : "border-4 border-brand-400 bg-brand-500 text-text-inverted shadow-brand-500/30 hover:bg-brand-600"
             )}
           >
-            {isActive ? <Pause className="w-10 h-10 fill-current" /> : <Play className="w-10 h-10 fill-current ml-1" />}
+            {isActive ? <Pause className="size-10 fill-current" /> : <Play className="ml-1 size-10 fill-current" />}
           </button>
 
           <button
             onClick={recordLap}
             disabled={!isActive && time === 0}
-            className="p-4 bg-surface border-2 border-subtle rounded-2xl shadow-soft hover:bg-muted transition-all text-text-muted hover:text-brand-500 disabled:opacity-30 disabled:cursor-not-allowed group"
+            className="border-subtle group rounded-2xl border-2 bg-surface p-4 text-text-muted shadow-soft transition-all hover:bg-muted hover:text-brand-500 disabled:cursor-not-allowed disabled:opacity-30"
           >
-            <Flag className="w-6 h-6 group-hover:scale-110 transition-transform" />
+            <Flag className="size-6 transition-transform group-hover:scale-110" />
           </button>
         </div>
       </div>
 
       {/* Laps Section */}
-      <div className="pt-12 space-y-4">
+      <div className="space-y-4 pt-12">
         <div className="flex items-center justify-between px-2">
-           <h3 className="text-tiny font-black uppercase tracking-widest text-text-muted/40 flex items-center gap-2">
-             <History className="w-4 h-4" />
+           <h3 className="text-tiny flex items-center gap-2 font-black tracking-widest text-text-muted/40 uppercase">
+             <History className="size-4" />
              Laps History
            </h3>
-           {laps.length > 0 && <span className="text-tiny font-black uppercase tracking-widest text-brand-500">{laps.length} Splits</span>}
+           {laps.length > 0 && <span className="text-tiny font-black tracking-widest text-brand-500 uppercase">{laps.length} Splits</span>}
         </div>
         
-        <div className="bg-muted border border-subtle rounded-3xl overflow-hidden max-h-[300px] overflow-y-auto">
+        <div className="border-subtle max-h-[300px] overflow-hidden overflow-y-auto rounded-3xl border bg-muted">
           {laps.length === 0 ? (
-            <div className="p-12 text-center text-text-muted/40 italic text-sm font-medium uppercase tracking-widest">
+            <div className="p-12 text-center text-sm font-medium tracking-widest text-text-muted/40 uppercase italic">
               Press the flag icon to record temporal splits.
             </div>
           ) : (
-            <div className="divide-y divide-subtle">
+            <div className="divide-subtle divide-y">
               {laps.map((lapTime, idx) => {
                 const lt = formatTime(lapTime);
                 return (
-                  <div key={idx} className="flex items-center justify-between p-4 hover:bg-surface transition-colors animate-in slide-in-from-top-2 duration-300">
-                    <span className="text-tiny font-black text-text-muted/40 uppercase tracking-widest w-12">#{laps.length - idx}</span>
-                    <span className="flex-1 font-mono font-black text-text-main text-right pr-8">
+                  <div key={idx} className="animate-in slide-in-from-top-2 flex items-center justify-between p-4 transition-colors duration-300 hover:bg-surface">
+                    <span className="text-tiny w-12 font-black tracking-widest text-text-muted/40 uppercase">#{laps.length - idx}</span>
+                    <span className="flex-1 pr-8 text-right font-mono font-black text-text-main">
                        {lt.min}:{lt.sec}<span className="text-brand-500/50">.{lt.ms}</span>
                     </span>
-                    <div className="flex items-center gap-1.5 text-tiny font-black text-brand-500 bg-brand-500/10 px-2 py-1 rounded-lg">
-                       <Clock className="w-3 h-3" />
+                    <div className="text-tiny flex items-center gap-1.5 rounded-lg bg-brand-500/10 px-2 py-1 font-black text-brand-500">
+                       <Clock className="size-3" />
                        SPLIT
                     </div>
                   </div>

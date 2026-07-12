@@ -1,59 +1,27 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import POSTS from "./posts.json";
-import { cn } from "../../utils/cn";
-import { 
-  MessageCircle, 
-  Send, 
-  Heart, 
-  ChevronDown, 
-  ChevronUp, 
-  Clock, 
-  User as UserIcon,
-  Reply as ReplyIcon,
-  MoreHorizontal
-} from "lucide-react";
+import { Send, Clock, User as UserIcon } from "lucide-react";
 import { Collapsible } from "@base-ui/react/collapsible";
+import { formatTimestamp } from "../../utils/formatTimeStamp";
 
 type ReplyProps = {
-  replyId: number;
+  replyId: string;
   replyData: string;
-  replyLikes: number;
   replyTimeStamp: string;
 };
 
 type CommentProps = {
-  commentId: number;
+  commentId: string;
   commentData: string;
-  commentLikes: number;
   commentTimeStamp: string;
   replies: ReplyProps[];
 };
 
 type PostProps = {
-  postLikes: number;
-  postId: number;
+  postId: string;
   postTimeStamp: string;
   postData: { content: string };
   postComments: CommentProps[];
-};
-
-export const hint = "Nested comments and replies with expand/collapse logic";
-
-export const formatTimestamp = (timestamp: string): string => {
-  const currentDate = new Date().getTime();
-  const postDate = new Date(timestamp).getTime();
-  const diffInMinutes = Math.round((currentDate - postDate) / (1000 * 60));
-
-  if (diffInMinutes < 1) return "Just now";
-  if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
-  
-  const diffInHours = Math.round(diffInMinutes / 60);
-  if (diffInHours < 24) return `${diffInHours}h ago`;
-  
-  const diffInDays = Math.round(diffInHours / 24);
-  if (diffInDays < 7) return `${diffInDays}d ago`;
-  
-  return new Date(postDate).toLocaleDateString();
 };
 
 export default function CommentReplyBox() {
@@ -62,52 +30,41 @@ export default function CommentReplyBox() {
 
   const handleSubmitPost = () => {
     if (!postRef.current?.value.trim()) return;
-    
+
     const newPost: PostProps = {
-      postId: Date.now(),
-      postLikes: 0,
+      postId: crypto.randomUUID(),
       postTimeStamp: new Date().toISOString(),
       postData: { content: postRef.current.value },
       postComments: [],
     };
-    
+
     setPosts((prev) => [newPost, ...prev]);
     postRef.current.value = "";
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6 space-y-8 pb-20">
+    <div className="mx-auto max-w-2xl space-y-8 p-6 pb-20">
       <div className="space-y-4">
-        <h2 className="text-2xl font-bold text-text-main flex items-center gap-2">
-          <MessageCircle className="w-6 h-6 text-brand-500" />
-          Social Feed
-        </h2>
-        
         {/* Post Creation Area */}
-        <div className="bg-surface rounded-2xl border border-subtle shadow-soft overflow-hidden p-4">
+        <div className="border-subtle overflow-hidden rounded-2xl border bg-surface p-4 shadow-soft">
           <textarea
             ref={postRef}
             placeholder="What's on your mind?"
-            className="w-full bg-transparent border-none focus:ring-0 text-lg text-text-main placeholder:text-text-muted resize-none min-h-[100px]"
+            className="min-h-[100px] w-full resize-none border-none bg-transparent text-lg text-text-main placeholder:text-text-muted focus:ring-0"
           />
-          <div className="flex justify-between items-center mt-4 pt-4 border-t border-subtle">
-            <div className="flex gap-2">
-              <button className="p-2 text-text-muted hover:bg-muted rounded-lg transition-colors">
-                <MoreHorizontal className="w-5 h-5" />
-              </button>
-            </div>
+          <div className="border-subtle mt-4 flex items-center justify-between border-t pt-4">
             <button
               onClick={handleSubmitPost}
-              className="flex items-center gap-2 px-6 py-2 bg-brand-500 hover:bg-brand-600 active:scale-95 text-text-inverted font-semibold rounded-xl transition-all shadow-hard shadow-brand-500/20"
+              className="flex items-center gap-2 rounded-xl bg-brand-500 px-6 py-2 font-semibold text-text-inverted shadow-hard shadow-brand-500/20 transition-all hover:bg-brand-600 active:scale-95"
             >
               Post
-              <Send className="w-4 h-4" />
+              <Send className="size-4" />
             </button>
           </div>
         </div>
       </div>
 
-      <div className="space-y-6">
+      <div className="space-y-6 p-4">
         {posts.map((post) => (
           <PostCard key={post.postId} post={post} setPosts={setPosts} />
         ))}
@@ -116,81 +73,84 @@ export default function CommentReplyBox() {
   );
 }
 
-function PostCard({ post, setPosts }: { post: PostProps; setPosts: any }) {
+function PostCard({
+  post,
+  setPosts,
+}: Readonly<{ post: PostProps; setPosts: any }>) {
   const [showComments, setShowComments] = useState(false);
   const commentRef = useRef<HTMLInputElement>(null);
 
   const handleAddComment = () => {
     if (!commentRef.current?.value.trim()) return;
-    
+
     const newComment: CommentProps = {
-      commentId: Date.now(),
-      commentLikes: 0,
+      commentId: crypto.randomUUID(),
       commentTimeStamp: new Date().toISOString(),
       commentData: commentRef.current.value,
       replies: [],
     };
 
-    setPosts((prev: PostProps[]) => prev.map(p => 
-      p.postId === post.postId ? { ...p, postComments: [newComment, ...p.postComments] } : p
-    ));
+    setPosts((prev: PostProps[]) =>
+      prev.map((p) =>
+        p.postId === post.postId
+          ? { ...p, postComments: [newComment, ...p.postComments] }
+          : p,
+      ),
+    );
     commentRef.current.value = "";
     setShowComments(true);
   };
 
   return (
-    <div className="bg-surface rounded-2xl border border-subtle shadow-soft overflow-hidden animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <div className="p-5 space-y-4">
+    <div className="border-subtle animate-in fade-in slide-in-from-bottom-4 overflow-hidden rounded-2xl border bg-surface shadow-soft duration-500">
+      <div className="space-y-4 p-5">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-brand-500/10 flex items-center justify-center text-brand-500">
-            <UserIcon className="w-6 h-6" />
-          </div>
-          <div>
-            <h4 className="font-bold text-text-main leading-tight">Anonymous User</h4>
-            <div className="flex items-center gap-2 text-xs text-text-muted">
-              <Clock className="w-3 h-3" />
-              {formatTimestamp(post.postTimeStamp)}
-            </div>
-          </div>
+          <Clock className="size-3" />
+          {formatTimestamp(post.postTimeStamp)}
         </div>
-        
-        <p className="text-text-main whitespace-pre-wrap">{post.postData.content}</p>
+
+        <p className="whitespace-pre-wrap text-text-main">
+          {post.postData.content}
+        </p>
 
         <div className="flex items-center gap-6 pt-2">
-          <button className="flex items-center gap-2 text-text-muted hover:text-error transition-colors group">
-            <Heart className="w-5 h-5 group-active:scale-125 transition-transform" />
-            <span className="text-sm font-medium">{post.postLikes}</span>
-          </button>
-          <button 
+          <button
             onClick={() => setShowComments(!showComments)}
-            className="flex items-center gap-2 text-text-muted hover:text-brand-500 transition-colors"
+            className="flex items-center gap-2 text-text-muted transition-colors hover:text-brand-500"
           >
-            <MessageCircle className="w-5 h-5" />
-            <span className="text-sm font-medium">{post.postComments.length} Comments</span>
+            <span className="text-sm font-medium">
+              {post.postComments.length} Comments
+            </span>
           </button>
         </div>
       </div>
 
       <Collapsible.Root open={showComments} onOpenChange={setShowComments}>
-        <Collapsible.Panel className="border-t border-subtle bg-muted overflow-hidden transition-all duration-300 data-[state=closed]:h-0 data-[state=open]:h-auto">
-          <div className="p-5 space-y-6">
-            <div className="flex items-center gap-3">
-              <input
-                ref={commentRef}
-                placeholder="Write a comment..."
-                className="flex-1 bg-surface border border-subtle rounded-xl px-4 py-2 text-sm outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10 transition-all"
-                onKeyDown={(e) => e.key === "Enter" && handleAddComment()}
-              />
-              <button onClick={handleAddComment} className="p-2 text-brand-500 hover:bg-brand-50 dark:hover:bg-brand-500/10 rounded-lg">
-                <Send className="w-5 h-5" />
-              </button>
-            </div>
+        <Collapsible.Panel className="border-subtle overflow-hidden border-t bg-muted transition-all duration-300 data-[state=closed]:h-0 data-[state=open]:h-auto">
+          <div className="flex items-center gap-3 p-3">
+            <input
+              ref={commentRef}
+              placeholder="Write a comment..."
+              className="border-subtle flex-1 rounded-xl border bg-surface px-4 py-2 text-sm transition-all outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/10"
+              onKeyDown={(e) => e.key === "Enter" && handleAddComment()}
+            />
+            <button
+              onClick={handleAddComment}
+              className="rounded-lg p-2 text-brand-500 hover:bg-brand-50 dark:hover:bg-brand-500/10"
+            >
+              <Send className="size-5" />
+            </button>
+          </div>
 
-            <div className="space-y-6">
-              {post.postComments.map((comment) => (
-                <CommentItem key={comment.commentId} comment={comment} postId={post.postId} setPosts={setPosts} />
-              ))}
-            </div>
+          <div className="space-y-6">
+            {post.postComments.map((comment) => (
+              <CommentItem
+                key={comment.commentId}
+                comment={comment}
+                postId={post.postId}
+                setPosts={setPosts}
+              />
+            ))}
           </div>
         </Collapsible.Panel>
       </Collapsible.Root>
@@ -198,7 +158,11 @@ function PostCard({ post, setPosts }: { post: PostProps; setPosts: any }) {
   );
 }
 
-function CommentItem({ comment, postId, setPosts }: { comment: CommentProps; postId: number; setPosts: any }) {
+function CommentItem({
+  comment,
+  postId,
+  setPosts,
+}: Readonly<{ comment: CommentProps; postId: string; setPosts: any }>) {
   const [showReplies, setShowReplies] = useState(false);
   const replyRef = useRef<HTMLInputElement>(null);
 
@@ -206,20 +170,25 @@ function CommentItem({ comment, postId, setPosts }: { comment: CommentProps; pos
     if (!replyRef.current?.value.trim()) return;
 
     const newReply: ReplyProps = {
-      replyId: Date.now(),
-      replyLikes: 0,
+      replyId: crypto.randomUUID(),
       replyTimeStamp: new Date().toISOString(),
       replyData: replyRef.current.value,
     };
 
-    setPosts((prev: PostProps[]) => prev.map(p => 
-      p.postId === postId ? {
-        ...p,
-        postComments: p.postComments.map(c => 
-          c.commentId === comment.commentId ? { ...c, replies: [newReply, ...c.replies] } : c
-        )
-      } : p
-    ));
+    setPosts((prev: PostProps[]) =>
+      prev.map((p) =>
+        p.postId === postId
+          ? {
+              ...p,
+              postComments: p.postComments.map((c) =>
+                c.commentId === comment.commentId
+                  ? { ...c, replies: [newReply, ...c.replies] }
+                  : c,
+              ),
+            }
+          : p,
+      ),
+    );
     replyRef.current.value = "";
     setShowReplies(true);
   };
@@ -227,50 +196,58 @@ function CommentItem({ comment, postId, setPosts }: { comment: CommentProps; pos
   return (
     <div className="space-y-3">
       <div className="flex gap-3 px-1">
-        <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center shrink-0">
-          <UserIcon className="w-5 h-5 text-text-muted" />
+        <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-muted">
+          <UserIcon className="size-5 text-text-muted" />
         </div>
         <div className="flex-1 space-y-1">
-          <div className="bg-surface p-3 rounded-2xl border border-subtle">
-            <p className="text-sm font-bold text-text-main mb-1">Commenter</p>
+          <div className="border-subtle rounded-2xl border bg-surface p-3">
+            <p className="mb-1 text-sm font-bold text-text-main">Commenter</p>
             <p className="text-sm text-text-main/80">{comment.commentData}</p>
           </div>
-          <div className="flex items-center gap-4 text-xs font-semibold text-text-muted ml-2">
+          <div className="ml-2 flex items-center gap-4 text-xs font-semibold text-text-muted">
             <span>{formatTimestamp(comment.commentTimeStamp)}</span>
-            <button className="hover:text-brand-500">Like</button>
-            <button onClick={() => setShowReplies(!showReplies)} className="hover:text-brand-500">Reply</button>
+            <button
+              onClick={() => setShowReplies(!showReplies)}
+              className="hover:text-brand-500"
+            >
+              Reply
+            </button>
           </div>
         </div>
       </div>
 
       <Collapsible.Root open={showReplies} onOpenChange={setShowReplies}>
-        <Collapsible.Panel className="ml-11 border-l-2 border-subtle pl-4 space-y-4 overflow-hidden transition-all duration-300 data-[state=closed]:h-0 data-[state=open]:h-auto">
+        <Collapsible.Panel className="border-subtle ml-11 space-y-4 overflow-hidden border-l-2 pl-4 transition-all duration-300 data-[state=closed]:h-0 data-[state=open]:h-auto">
           <div className="flex items-center gap-2 pt-1 pb-2">
             <input
               ref={replyRef}
               placeholder="Write a reply..."
-              className="flex-1 bg-surface border border-subtle rounded-xl px-4 py-1.5 text-xs outline-none focus:border-brand-500 transition-all"
+              className="border-subtle flex-1 rounded-xl border bg-surface px-4 py-1.5 text-xs transition-all outline-none focus:border-brand-500"
               onKeyDown={(e) => e.key === "Enter" && handleAddReply()}
             />
-            <button onClick={handleAddReply} className="p-1.5 text-brand-500 hover:bg-brand-50 dark:hover:bg-brand-500/10 rounded-lg">
-              <Send className="w-4 h-4" />
+            <button
+              onClick={handleAddReply}
+              className="rounded-lg p-1.5 text-brand-500 hover:bg-brand-50 dark:hover:bg-brand-500/10"
+            >
+              <Send className="size-4" />
             </button>
           </div>
 
           <div className="space-y-4">
             {comment.replies.map((reply) => (
               <div key={reply.replyId} className="flex gap-2">
-                <div className="w-6 h-6 rounded-full bg-muted flex items-center justify-center shrink-0">
-                  <UserIcon className="w-4 h-4 text-text-muted" />
+                <div className="flex size-6 shrink-0 items-center justify-center rounded-full bg-muted">
+                  <UserIcon className="size-4 text-text-muted" />
                 </div>
                 <div className="flex-1 space-y-1">
-                  <div className="bg-surface p-2.5 rounded-xl border border-subtle">
-                    <p className="text-xs font-bold text-text-main mb-0.5">Replier</p>
+                  <div className="border-subtle rounded-xl border bg-surface p-2.5">
+                    <p className="mb-0.5 text-xs font-bold text-text-main">
+                      Replier
+                    </p>
                     <p className="text-xs text-text-muted">{reply.replyData}</p>
                   </div>
-                  <div className="flex items-center gap-3 text-tiny font-semibold text-text-muted ml-1">
+                  <div className="text-tiny ml-1 flex items-center gap-3 font-semibold text-text-muted">
                     <span>{formatTimestamp(reply.replyTimeStamp)}</span>
-                    <button className="hover:text-brand-500">Like</button>
                   </div>
                 </div>
               </div>

@@ -42,7 +42,7 @@ export default function TypeWriterEffect() {
       <button onClick={resetHandler}>reset</button>
       <button onClick={clickHandler}>start generating</button>
 
-      <div className="h-96 w-full border  bg-primary-light dark:bg-primary-dark">
+      <div className="bg-primary-light dark:bg-primary-dark h-96  w-full border">
         {pdata}
       </div>
     </div>

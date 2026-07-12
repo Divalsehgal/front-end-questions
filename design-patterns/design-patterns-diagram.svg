@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="760" viewBox="0 0 1200 760" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .title { font: bold 32px Inter, Arial, sans-serif; fill: #0f172a; }
+    .group-title { font: bold 18px Inter, Arial, sans-serif; fill: #ffffff; }
+    .box { fill: #ffffff; stroke: #1d4ed8; stroke-width: 3; rx: 16; ry: 16; }
+    .box-secondary { fill: #eff6ff; stroke: #2563eb; stroke-width: 2; rx: 16; ry: 16; }
+    .label { font: 16px Inter, Arial, sans-serif; fill: #0f172a; }
+    .small { font: 14px Inter, Arial, sans-serif; fill: #475569; }
+    .arrow { fill: none; stroke: #475569; stroke-width: 3; marker-end: url(#arrowhead); }
+    .group { fill: #1d4ed8; }
+    .section-bg { fill: #f8fafc; stroke: none; }
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M0,0 L12,6 L0,12 Z" fill="#475569" />
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="760" fill="#ffffff" />
+  <text x="40" y="48" class="title">Design Patterns Overview</text>
+  <text x="40" y="76" class="small">Grouped by Creational, Structural, and Behavioral categories.</text>
+
+  <rect x="30" y="110" width="360" height="580" class="section-bg" rx="24" />
+  <rect x="30" y="110" width="360" height="48" class="group" rx="16" />
+  <text x="60" y="142" class="group-title">Creational</text>
+
+  <rect x="60" y="180" width="300" height="72" class="box" />
+  <text x="80" y="214" class="label">Abstract Factory</text>
+  <text x="80" y="236" class="small">Create families of related objects.</text>
+
+  <rect x="60" y="270" width="300" height="72" class="box" />
+  <text x="80" y="304" class="label">Factory Method</text>
+  <text x="80" y="326" class="small">Decide the concrete type at runtime.</text>
+
+  <rect x="60" y="360" width="300" height="72" class="box" />
+  <text x="80" y="394" class="label">Builder</text>
+  <text x="80" y="416" class="small">Assemble objects step-by-step.</text>
+
+  <rect x="60" y="450" width="300" height="72" class="box" />
+  <text x="80" y="484" class="label">Prototype</text>
+  <text x="80" y="506" class="small">Clone objects from prototypes.</text>
+
+  <rect x="60" y="540" width="300" height="72" class="box" />
+  <text x="80" y="574" class="label">Singleton</text>
+  <text x="80" y="596" class="small">One shared instance globally.</text>
+
+  <rect x="420" y="110" width="360" height="340" class="section-bg" rx="24" />
+  <rect x="420" y="110" width="360" height="48" class="group" rx="16" />
+  <text x="450" y="142" class="group-title">Structural</text>
+
+  <rect x="450" y="180" width="300" height="72" class="box" />
+  <text x="470" y="214" class="label">Decorator</text>
+  <text x="470" y="236" class="small">Extend behavior without mutation.</text>
+
+  <rect x="450" y="270" width="300" height="72" class="box" />
+  <text x="470" y="304" class="label">Facade</text>
+  <text x="470" y="326" class="small">Simplify complex subsystems.</text>
+
+  <rect x="450" y="360" width="300" height="72" class="box" />
+  <text x="470" y="394" class="label">Proxy</text>
+  <text x="470" y="416" class="small">Control access to another object.</text>
+
+  <rect x="810" y="110" width="360" height="250" class="section-bg" rx="24" />
+  <rect x="810" y="110" width="360" height="48" class="group" rx="16" />
+  <text x="840" y="142" class="group-title">Behavioral</text>
+
+  <rect x="840" y="180" width="300" height="72" class="box" />
+  <text x="860" y="214" class="label">Iterator</text>
+  <text x="860" y="236" class="small">Traverse collections consistently.</text>
+
+  <rect x="840" y="270" width="300" height="72" class="box" />
+  <text x="860" y="304" class="label">Observer</text>
+  <text x="860" y="326" class="small">Notify subscribers on change.</text>
+
+  <path d="M 360 240 L 450 240" class="arrow" />
+  <path d="M 360 330 L 450 330" class="arrow" />
+  <path d="M 360 420 L 450 420" class="arrow" />
+  <path d="M 360 510 L 450 530" class="arrow" />
+  <path d="M 630 300 L 840 220" class="arrow" />
+  <path d="M 630 380 L 840 290" class="arrow" />
+
+  <rect x="420" y="470" width="360" height="220" class="box-secondary" />
+  <text x="440" y="500" class="label">Pattern Relationships</text>
+  <text x="440" y="528" class="small">• Factory Method works with Abstract Factory.</text>
+  <text x="440" y="552" class="small">• Builder and Prototype are used for object creation.</text>
+  <text x="440" y="576" class="small">• Decorator and Proxy wrap object behavior.</text>
+  <text x="440" y="600" class="small">• Facade simplifies structural complexity.</text>
+  <text x="440" y="624" class="small">• Iterator and Observer are common behavioral helpers.</text>
+  <text x="440" y="648" class="small">• Singleton is a shared instance within any category.</text>
+
+  <rect x="30" y="710" width="1140" height="36" rx="10" fill="#e2e8f0" />
+  <text x="40" y="736" class="small">Note: this diagram is intended as a quick visual reference for the patterns in the `design-patterns/` folder.</text>
+</svg>

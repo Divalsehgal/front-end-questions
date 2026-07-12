@@ -4,32 +4,47 @@ creating objects that can be modified after creation
 */
 
 
-class Pirates {
+class Pirate {
     constructor(name, phrase) {
         this.name = name
         this.phrase = phrase
         this.species = "straw hats"
     }
-    fly = () => console.log("wuhohoh!!")
-    sayPhrase = () => console.log(this.phrase)
+    fly() {
+        console.log("wuhohoh!!")
+    }
+    sayPhrase() {
+        console.log(this.phrase)
+    }
 }
 
-const alien1 = new Pirates("Zoro", "I'm Zoro the alien!")
-console.log(alien1.name) 
-
-
-
-function AlienPirates(name, phrase) {
-    this.name = name
-    this.phrase = phrase
-    this.species = "alien"
+class AlienPirate extends Pirate {
+    constructor(name, phrase) {
+        super(name, phrase)
+        this.species = "alien"
+    }
+    fly() {
+        console.log("Zzzzzziiiiiinnnnnggggg!!")
+    }
 }
 
-AlienPirates.prototype.fly = () => console.log("Zzzzzziiiiiinnnnnggggg!!")
-AlienPirates.prototype.sayPhrase = () => console.log(this.phrase)
 
-const pirates = new AlienPirates("Zoro", "I'm Zoro the alien!")
 
-console.log(pirates.name) 
-console.log(pirates.phrase) 
-pirates.fly() 
+class PirateFactory {
+    createPirate(type, name, phrase) {
+        switch (type) {
+            case "alien":
+                return new AlienPirate(name, phrase)
+            default:
+                return new Pirate(name, phrase)
+        }
+    }
+}
+
+const factory = new PirateFactory()
+const luffy = factory.createPirate("pirate", "Luffy", "I'm going to be king of the pirates!")
+const zoro = factory.createPirate("alien", "Zoro", "I'm Zoro the alien!")
+
+luffy.sayPhrase()
+zoro.sayPhrase()
+zoro.fly() 

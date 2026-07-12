@@ -58,11 +58,11 @@ export default function TypeWriterEffect() {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6 space-y-8">
+    <div className="mx-auto max-w-2xl space-y-8 p-6">
       <div className="flex items-center justify-between">
         <div className="space-y-1">
-          <h2 className="text-2xl font-black text-text-main flex items-center gap-2 tracking-tight uppercase">
-            <Terminal className="w-7 h-7 text-brand-500" />
+          <h2 className="flex items-center gap-2 text-2xl font-black tracking-tight text-text-main uppercase">
+            <Terminal className="size-7 text-brand-500" />
             VIRTUAL TERMINAL
           </h2>
           <p className="text-sm font-medium text-text-muted">
@@ -71,33 +71,33 @@ export default function TypeWriterEffect() {
         </div>
         <button 
           onClick={reset}
-          className="p-3 bg-muted hover:bg-surface rounded-2xl transition-all shadow-soft active:scale-95 group border border-subtle"
+          className="group border-subtle rounded-2xl border bg-muted p-3 shadow-soft transition-all hover:bg-surface active:scale-95"
         >
-          <RotateCcw className="w-5 h-5 text-text-muted group-hover:rotate-180 transition-transform duration-500" />
+          <RotateCcw className="size-5 text-text-muted transition-transform duration-500 group-hover:rotate-180" />
         </button>
       </div>
 
-      <div className="bg-muted rounded-3xl border-4 border-subtle shadow-hard overflow-hidden relative group">
+      <div className="border-subtle group relative overflow-hidden rounded-3xl border-4 bg-muted shadow-hard">
         {/* Terminal Header */}
-        <div className="bg-surface px-6 py-3 border-b border-subtle flex items-center justify-between">
+        <div className="border-subtle flex items-center justify-between border-b bg-surface px-6 py-3">
           <div className="flex gap-2">
-            <div className="w-3 h-3 rounded-full bg-error-500/50" />
-            <div className="w-3 h-3 rounded-full bg-warning-500/50" />
-            <div className="w-3 h-3 rounded-full bg-success-500/50" />
+            <div className="bg-error-500/50 size-3 rounded-full" />
+            <div className="bg-warning-500/50 size-3 rounded-full" />
+            <div className="bg-success-500/50 size-3 rounded-full" />
           </div>
-          <div className="flex items-center gap-2 text-tiny font-black text-text-muted/40 uppercase tracking-[0.2em]">
-            <Zap className="w-3 h-3 fill-brand-500 text-brand-500" />
+          <div className="text-tiny flex items-center gap-2 font-black tracking-[0.2em] text-text-muted/40 uppercase">
+            <Zap className="size-3 fill-brand-500 text-brand-500" />
             Antigravity Shell v4.0
           </div>
         </div>
 
         {/* Content */}
-        <div className="p-8 min-h-[400px] font-mono text-sm sm:text-base selection:bg-brand-500/30 selection:text-brand-400">
+        <div className="min-h-[400px] p-8 font-mono text-sm selection:bg-brand-500/30 selection:text-brand-400 sm:text-base">
           <pre className="whitespace-pre-wrap">
-            <code className="text-brand-400 leading-relaxed drop-shadow-[0_0_15px_rgba(34,197,94,0.2)]">
+            <code className="leading-relaxed text-brand-400 drop-shadow-[0_0_15px_rgba(34,197,94,0.2)]">
               {text}
               <span className={cn(
-                "w-2.5 h-6 bg-brand-500 inline-block align-middle ml-1",
+                "ml-1 inline-block h-6 w-2.5 bg-brand-500 align-middle",
                 isTyping ? "opacity-100" : "animate-pulse"
               )} />
             </code>
@@ -106,9 +106,9 @@ export default function TypeWriterEffect() {
 
         {/* Controls Overlay */}
         <div className="absolute top-16 right-6 flex flex-col gap-2">
-          <div className="p-4 bg-surface/80 backdrop-blur-md rounded-2xl border border-subtle flex flex-col gap-4">
+          <div className="border-subtle flex flex-col gap-4 rounded-2xl border bg-surface/80 p-4 backdrop-blur-md">
              <div className="space-y-2">
-                <div className="flex justify-between items-center text-tiny font-black text-text-muted/40 uppercase tracking-widest">
+                <div className="text-tiny flex items-center justify-between font-black tracking-widest text-text-muted/40 uppercase">
                   <span>Speed</span>
                   <span className="text-brand-500">{speed}ms</span>
                 </div>
@@ -124,34 +124,34 @@ export default function TypeWriterEffect() {
              <button 
                onClick={() => setIsTyping(!isTyping)}
                className={cn(
-                 "flex items-center justify-center gap-2 py-2 rounded-xl text-tiny font-black uppercase tracking-widest transition-all",
+                 "text-tiny flex items-center justify-center gap-2 rounded-xl py-2 font-black tracking-widest uppercase transition-all",
                  isTyping ? "bg-error-500/10 text-error-500" : "bg-brand-500 text-text-inverted"
                )}
              >
-               {isTyping ? <Settings2 className="w-3 h-3" /> : <Play className="w-3 h-3 fill-current" />}
+               {isTyping ? <Settings2 className="size-3" /> : <Play className="size-3 fill-current" />}
                {isTyping ? "Pause" : "Resume"}
              </button>
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="p-5 bg-brand-500/5 border border-brand-500/10 rounded-3xl flex gap-4">
-          <div className="p-3 bg-brand-500/10 rounded-2xl text-brand-500 shrink-0">
-            <Sparkles className="w-5 h-5" />
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="flex gap-4 rounded-3xl border border-brand-500/10 bg-brand-500/5 p-5">
+          <div className="shrink-0 rounded-2xl bg-brand-500/10 p-3 text-brand-500">
+            <Sparkles className="size-5" />
           </div>
           <div className="space-y-1">
-            <h4 className="text-tiny font-black text-brand-500 uppercase tracking-widest">Stream Engine</h4>
-            <p className="text-tiny text-text-main/60 leading-relaxed font-medium">Uses a high-precision timeout loop to simulate character-by-character processing.</p>
+            <h4 className="text-tiny font-black tracking-widest text-brand-500 uppercase">Stream Engine</h4>
+            <p className="text-tiny leading-relaxed font-medium text-text-main/60">Uses a high-precision timeout loop to simulate character-by-character processing.</p>
           </div>
         </div>
-        <div className="p-5 bg-muted border border-subtle rounded-3xl flex gap-4">
-          <div className="p-3 bg-surface rounded-2xl text-text-muted shrink-0">
-            <Code2 className="w-5 h-5" />
+        <div className="border-subtle flex gap-4 rounded-3xl border bg-muted p-5">
+          <div className="shrink-0 rounded-2xl bg-surface p-3 text-text-muted">
+            <Code2 className="size-5" />
           </div>
           <div className="space-y-1">
-            <h4 className="text-tiny font-black text-text-muted uppercase tracking-widest">Monospace Core</h4>
-            <p className="text-tiny text-text-muted font-medium leading-relaxed">Rendered with fixed-width typography and glowing shadow effects for terminal authenticity.</p>
+            <h4 className="text-tiny font-black tracking-widest text-text-muted uppercase">Monospace Core</h4>
+            <p className="text-tiny leading-relaxed font-medium text-text-muted">Rendered with fixed-width typography and glowing shadow effects for terminal authenticity.</p>
           </div>
         </div>
       </div>

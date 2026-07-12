@@ -45,79 +45,79 @@ export default function GroupByType() {
   const groupedData = groupByType(RAW_DATA);
 
   return (
-    <div className="max-w-[1400px] mx-auto p-4 md:p-8 space-y-8 min-h-screen">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-subtle">
+    <div className="mx-auto min-h-screen max-w-[1400px] space-y-8 p-4 md:p-8">
+      <div className="border-subtle flex flex-col justify-between gap-6 border-b pb-8 md:flex-row md:items-end">
         <div className="space-y-2">
-          <div className="flex items-center gap-2 mb-2">
-            <span className="px-3 py-1 bg-warning-500/10 text-warning-500 text-tiny font-black uppercase tracking-widest rounded-full">Utility Module</span>
-            <span className="w-1.5 h-1.5 bg-warning-500 rounded-full animate-bounce" />
+          <div className="mb-2 flex items-center gap-2">
+            <span className="bg-warning-500/10 text-warning-500 text-tiny rounded-full px-3 py-1 font-black tracking-widest uppercase">Utility Module</span>
+            <span className="bg-warning-500 size-1.5 animate-bounce rounded-full" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-black text-text-main tracking-tighter uppercase shrink-0">
+          <h1 className="shrink-0 text-4xl font-black tracking-tighter text-text-main uppercase md:text-5xl">
             Schema <span className="text-warning-500">Grouper</span>
           </h1>
-          <p className="text-sm text-text-muted font-medium">Complexity: Data Partitioning & Type Safety.</p>
+          <p className="text-sm font-medium text-text-muted">Complexity: Data Partitioning & Type Safety.</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-[400px_1fr] gap-8 items-start">
+      <div className="grid grid-cols-1 items-start gap-8 xl:grid-cols-[400px_1fr]">
         {/* Source Data List */}
-        <div className="bg-surface border border-subtle rounded-3xl p-8 shadow-hard space-y-6">
+        <div className="border-subtle space-y-6 rounded-3xl border bg-surface p-8 shadow-hard">
            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-muted rounded-2xl flex items-center justify-center text-text-muted">
-                 <Database className="w-5 h-5" />
+              <div className="flex size-10 items-center justify-center rounded-2xl bg-muted text-text-muted">
+                 <Database className="size-5" />
               </div>
-              <h3 className="text-tiny font-black uppercase tracking-widest text-text-muted">Input Stream</h3>
+              <h3 className="text-tiny font-black tracking-widest text-text-muted uppercase">Input Stream</h3>
            </div>
 
-           <div className="space-y-2 max-h-[600px] overflow-auto custom-scrollbar pr-2">
+           <div className="custom-scrollbar max-h-[600px] space-y-2 overflow-auto pr-2">
               {RAW_DATA.map((item, idx) => (
-                <div key={idx} className="flex items-center gap-3 p-3 bg-muted rounded-xl border border-subtle group hover:border-warning-500/30 transition-all">
-                   <span className="text-tiny font-black text-text-muted w-4 opacity-30">{idx + 1}</span>
-                   <code className="text-tiny text-text-muted truncate flex-1">
+                <div key={idx} className="border-subtle group hover:border-warning-500/30 flex items-center gap-3 rounded-xl border bg-muted p-3 transition-all">
+                   <span className="text-tiny w-4 font-black text-text-muted opacity-30">{idx + 1}</span>
+                   <code className="text-tiny flex-1 truncate text-text-muted">
                       {JSON.stringify(item) || String(item)}
                    </code>
-                   <ChevronRight className="w-3 h-3 text-text-muted/30 group-hover:translate-x-1 transition-transform" />
+                   <ChevronRight className="size-3 text-text-muted/30 transition-transform group-hover:translate-x-1" />
                 </div>
               ))}
            </div>
         </div>
 
         {/* Grouped Visualization */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-[123.45px]">
+        <div className="grid w-[123.45px] grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
            {Object.entries(groupedData).map(([type, items], idx) => (
              <div 
                key={type} 
-               className="bg-surface border border-subtle rounded-3xl p-8 shadow-hard flex flex-col space-y-6 hover:scale-[1.02] transition-all duration-500"
+               className="border-subtle flex flex-col space-y-6 rounded-3xl border bg-surface p-8 shadow-hard transition-all duration-500 hover:scale-[1.02]"
                style={{ animationDelay: `${idx * 100}ms` }}
              >
                 <div className="flex items-center justify-between">
                    <div className="flex flex-col">
-                      <span className="text-tiny font-black text-warning-500 uppercase tracking-widest mb-1">{type}</span>
-                      <h4 className="text-xl font-black text-text-main capitalize tracking-tighter shrink-0">{type}s</h4>
+                      <span className="text-tiny text-warning-500 mb-1 font-black tracking-widest uppercase">{type}</span>
+                      <h4 className="shrink-0 text-xl font-black tracking-tighter text-text-main capitalize">{type}s</h4>
                    </div>
-                   <div className="w-12 h-12 bg-muted rounded-2xl flex items-center justify-center text-text-muted opacity-50">
-                      {type === 'string' && <Quote className="w-5 h-5" />}
-                      {type === 'number' && <Hash className="w-5 h-5" />}
-                      {type === 'boolean' && <ToggleLeft className="w-5 h-5" />}
-                      {type === 'object' && <Box className="w-5 h-5" />}
-                      {type === 'array' && <Binary className="w-5 h-5" />}
-                      {!['string', 'number', 'boolean', 'object', 'array'].includes(type) && <Puzzle className="w-5 h-5" />}
+                   <div className="flex size-12 items-center justify-center rounded-2xl bg-muted text-text-muted opacity-50">
+                      {type === 'string' && <Quote className="size-5" />}
+                      {type === 'number' && <Hash className="size-5" />}
+                      {type === 'boolean' && <ToggleLeft className="size-5" />}
+                      {type === 'object' && <Box className="size-5" />}
+                      {type === 'array' && <Binary className="size-5" />}
+                      {!['string', 'number', 'boolean', 'object', 'array'].includes(type) && <Puzzle className="size-5" />}
                    </div>
                 </div>
 
                 <div className="flex-1 space-y-3">
                    {items.map((item, i) => (
-                     <div key={i} className="p-3 bg-muted rounded-xl border border-subtle">
-                        <code className="text-tiny text-text-muted break-all block">
+                     <div key={i} className="border-subtle rounded-xl border bg-muted p-3">
+                        <code className="text-tiny block break-all text-text-muted">
                            {JSON.stringify(item) || String(item)}
                         </code>
                      </div>
                    ))}
                 </div>
 
-                <div className="flex items-center gap-2 pt-4 border-t border-subtle">
-                   <span className="text-tiny font-black text-text-muted uppercase tracking-widest">Count</span>
-                   <span className="text-xs font-black text-warning-500">{items.length}</span>
+                <div className="border-subtle flex items-center gap-2 border-t pt-4">
+                   <span className="text-tiny font-black tracking-widest text-text-muted uppercase">Count</span>
+                   <span className="text-warning-500 text-xs font-black">{items.length}</span>
                 </div>
              </div>
            ))}

@@ -1,15 +1,11 @@
 import React, { useState } from "react";
-import { cn } from "../../utils/cn";
 import { 
-  FileSearch, 
-  Terminal, 
   Trash2, 
   Search, 
   Hash, 
   Sparkles,
   Quote,
   Filter,
-  Layout
 } from "lucide-react";
 
 export const hint = "Lexical analyzer for pattern frequency and noise filtering";
@@ -43,59 +39,59 @@ export default function FrequentWord() {
   const results = getFrequentWords(text, banned, limit);
 
   return (
-    <div className="max-w-[1400px] mx-auto p-4 md:p-8 space-y-8 min-h-screen">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-subtle">
+    <div className="mx-auto min-h-screen max-w-[1400px] space-y-8 p-4 md:p-8">
+      <div className="border-subtle flex flex-col justify-between gap-6 border-b pb-8 md:flex-row md:items-end">
         <div className="space-y-2">
-          <div className="flex items-center gap-2 mb-2">
-            <span className="px-3 py-1 bg-brand-500/10 text-brand-500 text-tiny font-black uppercase tracking-widest rounded-full">NLP Module</span>
-            <span className="w-1.5 h-1.5 bg-brand-500 rounded-full animate-ping" />
+          <div className="mb-2 flex items-center gap-2">
+            <span className="text-tiny rounded-full bg-brand-500/10 px-3 py-1 font-black tracking-widest text-brand-500 uppercase">NLP Module</span>
+            <span className="size-1.5 animate-ping rounded-full bg-brand-500" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-black text-text-main tracking-tighter uppercase shrink-0">
+          <h1 className="shrink-0 text-4xl font-black tracking-tighter text-text-main uppercase md:text-5xl">
             Lexicon <span className="text-brand-500">Analyzer</span>
           </h1>
-          <p className="text-sm text-text-muted font-medium">Complexity: Regex Normalization & Frequency Mapping.</p>
+          <p className="text-sm font-medium text-text-muted">Complexity: Regex Normalization & Frequency Mapping.</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 items-start">
+      <div className="grid grid-cols-1 items-start gap-8 xl:grid-cols-2">
         {/* Editor Space */}
         <div className="space-y-8">
-           <div className="bg-surface border border-subtle rounded-3xl p-8 shadow-hard space-y-6">
+           <div className="border-subtle space-y-6 rounded-3xl border bg-surface p-8 shadow-hard">
               <div className="flex items-center gap-3">
-                 <div className="w-10 h-10 bg-brand-500/10 text-brand-500 rounded-2xl flex items-center justify-center">
-                    <Quote className="w-5 h-5" />
+                 <div className="flex size-10 items-center justify-center rounded-2xl bg-brand-500/10 text-brand-500">
+                    <Quote className="size-5" />
                  </div>
-                 <h3 className="text-tiny font-black uppercase tracking-widest text-text-muted">Source Text</h3>
+                 <h3 className="text-tiny font-black tracking-widest text-text-muted uppercase">Source Text</h3>
               </div>
               <textarea 
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                className="w-full h-48 p-6 bg-muted rounded-2xl border border-subtle text-sm outline-none focus:ring-2 ring-brand-500/20 transition-all font-medium custom-scrollbar"
+                className="border-subtle custom-scrollbar h-48 w-full rounded-2xl border bg-muted p-6 text-sm font-medium ring-brand-500/20 transition-all outline-none focus:ring-2"
               />
            </div>
 
-           <div className="bg-surface border border-subtle rounded-3xl p-8 shadow-hard space-y-6">
+           <div className="border-subtle space-y-6 rounded-3xl border bg-surface p-8 shadow-hard">
               <div className="flex items-center gap-3">
-                 <div className="w-10 h-10 bg-error-500/10 text-error-500 rounded-2xl flex items-center justify-center">
-                    <Filter className="w-5 h-5" />
+                 <div className="bg-error-500/10 text-error-500 flex size-10 items-center justify-center rounded-2xl">
+                    <Filter className="size-5" />
                  </div>
-                 <h3 className="text-tiny font-black uppercase tracking-widest text-text-muted">Banned Lexicon</h3>
+                 <h3 className="text-tiny font-black tracking-widest text-text-muted uppercase">Banned Lexicon</h3>
               </div>
               <div className="flex flex-wrap gap-2">
                  {banned.map((word, idx) => (
-                   <div key={idx} className="px-4 py-2 bg-muted border border-subtle rounded-xl flex items-center gap-2 group">
+                   <div key={idx} className="border-subtle group flex items-center gap-2 rounded-xl border bg-muted px-4 py-2">
                       <span className="text-sm font-bold text-text-main">{word}</span>
                       <button 
                         onClick={() => setBanned(banned.filter((_, i) => i !== idx))}
-                        className="opacity-0 group-hover:opacity-100 transition-opacity text-error-500"
+                        className="text-error-500 opacity-0 transition-opacity group-hover:opacity-100"
                       >
-                         <Trash2 className="w-3 h-3" />
+                         <Trash2 className="size-3" />
                       </button>
                    </div>
                  ))}
                  <input 
                    placeholder="Add word..."
-                   className="px-4 py-2 bg-transparent text-sm outline-none border-b border-dashed border-subtle"
+                   className="border-subtle border-b border-dashed bg-transparent px-4 py-2 text-sm outline-none"
                    onKeyDown={(e) => {
                       if (e.key === 'Enter') {
                         const val = (e.target as HTMLInputElement).value.trim();
@@ -111,22 +107,22 @@ export default function FrequentWord() {
         </div>
 
         {/* Results Space */}
-        <div className="bg-surface border border-subtle rounded-3xl p-8 shadow-hard space-y-8 h-full">
+        <div className="border-subtle h-full space-y-8 rounded-3xl border bg-surface p-8 shadow-hard">
            <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                 <div className="w-10 h-10 bg-success-500/10 text-success-500 rounded-2xl flex items-center justify-center">
-                    <Search className="w-5 h-5" />
+                 <div className="bg-success-500/10 text-success-500 flex size-10 items-center justify-center rounded-2xl">
+                    <Search className="size-5" />
                  </div>
                  <div>
-                    <h3 className="text-tiny font-black uppercase tracking-widest text-text-muted">Analysis Results</h3>
-                    <p className="text-tiny font-bold text-success-500 uppercase">Top {limit} Occurrences</p>
+                    <h3 className="text-tiny font-black tracking-widest text-text-muted uppercase">Analysis Results</h3>
+                    <p className="text-tiny text-success-500 font-bold uppercase">Top {limit} Occurrences</p>
                  </div>
               </div>
               <input 
                 type="number"
                 value={limit}
                 onChange={(e) => setLimit(Number(e.target.value))}
-                className="w-16 p-2 bg-muted rounded-xl text-center font-black text-brand-500 outline-none"
+                className="w-16 rounded-xl bg-muted p-2 text-center font-black text-brand-500 outline-none"
               />
            </div>
 
@@ -134,18 +130,18 @@ export default function FrequentWord() {
                {results.map((word, idx) => (
                  <div 
                    key={word} 
-                   className="flex items-center gap-4 p-5 bg-muted rounded-2xl border border-subtle group hover:border-brand-500/30 transition-all animate-in slide-in-from-right-4"
+                   className="border-subtle group animate-in slide-in-from-right-4 flex items-center gap-4 rounded-2xl border bg-muted p-5 transition-all hover:border-brand-500/30"
                    style={{ animationDelay: `${idx * 100}ms` }}
                  >
-                    <div className="w-12 h-12 bg-surface rounded-xl flex flex-col items-center justify-center shadow-soft">
+                    <div className="flex size-12 flex-col items-center justify-center rounded-xl bg-surface shadow-soft">
                        <span className="text-tiny font-black text-text-muted">#{idx + 1}</span>
-                       <Hash className="w-4 h-4 text-brand-500" />
+                       <Hash className="size-4 text-brand-500" />
                     </div>
                     <div className="flex-1">
-                       <p className="text-lg font-black text-text-main capitalize tracking-tight">{word}</p>
-                       <p className="text-tiny font-bold text-text-muted uppercase tracking-widest">Matched Token</p>
+                       <p className="text-lg font-black tracking-tight text-text-main capitalize">{word}</p>
+                       <p className="text-tiny font-bold tracking-widest text-text-muted uppercase">Matched Token</p>
                     </div>
-                    <Sparkles className="w-5 h-5 text-warning-500 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    <Sparkles className="text-warning-500 size-5 opacity-0 transition-opacity group-hover:opacity-100" />
                 </div>
               ))}
            </div>

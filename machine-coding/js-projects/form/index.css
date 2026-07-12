@@ -1,0 +1,17 @@
+.parent{
+    width: 600px;
+    height: 1500px;
+    position: relative;
+    background-color: blue;
+}
+
+.child{
+    width: 130px;
+    left: 30px;
+    top: 20px;
+
+    height: 60px;
+    background: green;
+    position:sticky
+    ;
+}

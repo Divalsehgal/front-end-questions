@@ -97,9 +97,9 @@ export default function ProgressBarChallenge() {
   ];
 
   return (
-    <div className="max-w-2xl mx-auto p-8 space-y-8 animate-in fade-in duration-500">
+    <div className="animate-in fade-in mx-auto max-w-2xl space-y-8 p-8 duration-500">
       {/* Mode Selector */}
-      <div className="bg-surface-sunken p-1.5 rounded-2xl border border-border-subtle flex gap-2 overflow-x-auto no-scrollbar">
+      <div className="bg-surface-sunken no-scrollbar flex gap-2 overflow-x-auto rounded-2xl border border-border-subtle p-1.5">
         {modes.map((m) => {
           const Icon = m.icon;
           const isActive = mode === m.id;
@@ -108,10 +108,10 @@ export default function ProgressBarChallenge() {
               key={m.id}
               onClick={() => setMode(m.id)}
               className={cn(
-                "flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all whitespace-nowrap",
+                "flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-black tracking-widest whitespace-nowrap uppercase transition-all",
                 isActive 
-                  ? "bg-surface text-brand-500 shadow-soft border border-border-subtle" 
-                  : "text-text-muted hover:text-text-main hover:bg-surface/50"
+                  ? "border border-border-subtle bg-surface text-brand-500 shadow-soft" 
+                  : "text-text-muted hover:bg-surface/50 hover:text-text-main"
               )}
             >
               <Icon size={14} className={cn(isActive && "animate-pulse")} />
@@ -122,42 +122,42 @@ export default function ProgressBarChallenge() {
       </div>
 
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 bg-surface p-8 rounded-3xl border border-subtle shadow-soft">
+      <div className="border-subtle flex flex-col justify-between gap-6 rounded-3xl border bg-surface p-8 shadow-soft md:flex-row md:items-center">
         <div className="space-y-1">
-          <h2 className="text-3xl font-black text-text-main flex items-center gap-3 tracking-tighter">
-            <Layout className="w-8 h-8 text-brand-500" />
+          <h2 className="flex items-center gap-3 text-3xl font-black tracking-tighter text-text-main">
+            <Layout className="size-8 text-brand-500" />
             PROGRESS BARS
           </h2>
-          <p className="text-[10px] font-black text-text-muted uppercase tracking-[0.2em]">
+          <p className="text-[10px] font-black tracking-[0.2em] text-text-muted uppercase">
             Mode: {mode.toUpperCase()} logic enabled
           </p>
         </div>
         <button
           onClick={createProgressBar}
-          className="flex items-center gap-2 px-8 py-4 bg-brand-500 text-white font-bold rounded-2xl hover:bg-brand-600 transition-all shadow-hard shadow-brand-500/20 active:scale-95 flex-shrink-0"
+          className="flex flex-shrink-0 items-center gap-2 rounded-2xl bg-brand-500 px-8 py-4 font-bold text-white shadow-hard shadow-brand-500/20 transition-all hover:bg-brand-600 active:scale-95"
         >
           <Plus size={20} /> Add Bar
         </button>
       </div>
 
       {/* Progress Container */}
-      <div className="flex flex-col gap-4 bg-surface-muted/50 p-6 rounded-[2rem] border border-subtle min-h-[240px]">
+      <div className="bg-surface-muted/50 border-subtle flex min-h-[240px] flex-col gap-4 rounded-[2rem] border p-6">
         {progress.length === 0 ? (
-          <div className="flex-1 flex flex-col items-center justify-center text-text-muted opacity-50 space-y-2">
-            <div className="p-4 rounded-full bg-surface-sunken border border-dashed border-border-subtle">
+          <div className="flex flex-1 flex-col items-center justify-center space-y-2 text-text-muted opacity-50">
+            <div className="bg-surface-sunken rounded-full border border-dashed border-border-subtle p-4">
               <Plus size={48} strokeWidth={1} />
             </div>
-            <p className="font-bold text-sm tracking-tight">No active bars in {mode} mode</p>
+            <p className="text-sm font-bold tracking-tight">No active bars in {mode} mode</p>
           </div>
         ) : (
           <div className="space-y-4">
             {progress.map((p) => (
               <div
                 key={p.id}
-                className="bg-surface border border-border-subtle p-1 rounded-full overflow-hidden shadow-inner-soft h-6 flex animate-in slide-in-from-left-4 fade-in duration-300"
+                className="shadow-inner-soft animate-in slide-in-from-left-4 fade-in flex h-6 overflow-hidden rounded-full border border-border-subtle bg-surface p-1 duration-300"
               >
                 <div
-                  className="bg-brand-500 rounded-full h-full transition-all duration-75"
+                  className="h-full rounded-full bg-brand-500 transition-all duration-75"
                   style={{
                     flex: p.flex,
                   }}

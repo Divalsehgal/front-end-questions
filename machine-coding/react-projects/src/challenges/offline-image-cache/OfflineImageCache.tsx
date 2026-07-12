@@ -92,44 +92,44 @@ const OfflineImageCache: React.FC = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 space-y-8">
+    <div className="mx-auto max-w-4xl space-y-8 p-6">
       <div className="header space-y-2 text-center md:text-left">
-        <h2 className="text-3xl font-black text-text-main flex items-center gap-2 tracking-tighter uppercase justify-center md:justify-start">
-          <Database className="w-8 h-8 text-brand-500" />
+        <h2 className="flex items-center justify-center gap-2 text-3xl font-black tracking-tighter text-text-main uppercase md:justify-start">
+          <Database className="size-8 text-brand-500" />
           Binary Cache Engine
         </h2>
-        <p className="text-sm font-medium text-text-muted max-w-lg">
-          Master Browser Storage by caching binary data locally using <span className="text-brand-500 font-black">IndexedDB</span> for persistent offline access.
+        <p className="max-w-lg text-sm font-medium text-text-muted">
+          Master Browser Storage by caching binary data locally using <span className="font-black text-brand-500">IndexedDB</span> for persistent offline access.
         </p>
       </div>
 
       <div className="space-y-6">
-        <div className="bg-muted p-1 rounded-3xl border border-subtle shadow-soft transition-all focus-within:ring-4 focus-within:ring-brand-500/10">
-          <div className="flex flex-col md:flex-row gap-2">
-            <div className="relative flex-1 group">
-              <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none text-text-muted/30 group-focus-within:text-brand-500 transition-colors">
-                <Search className="w-5 h-5" />
+        <div className="border-subtle rounded-3xl border bg-muted p-1 shadow-soft transition-all focus-within:ring-4 focus-within:ring-brand-500/10">
+          <div className="flex flex-col gap-2 md:flex-row">
+            <div className="group relative flex-1">
+              <div className="pointer-events-none absolute inset-y-0 left-4 flex items-center text-text-muted/30 transition-colors group-focus-within:text-brand-500">
+                <Search className="size-5" />
               </div>
               <input 
                 type="text" 
                 value={url} 
                 onChange={(e) => setUrl(e.target.value)} 
                 placeholder="Enter External Image URL..."
-                className="w-full pl-12 pr-4 py-4 bg-transparent outline-none text-text-main font-medium placeholder:text-text-muted/20"
+                className="w-full bg-transparent py-4 pr-4 pl-12 font-medium text-text-main outline-none placeholder:text-text-muted/20"
               />
             </div>
             <button 
               className={cn(
-                "px-8 py-4 rounded-2xl font-black uppercase tracking-widest text-text-inverted transition-all active:scale-95 flex items-center justify-center gap-2 md:w-auto w-full",
-                loading ? "bg-muted text-text-muted" : "bg-brand-500 hover:bg-brand-600 shadow-hard shadow-brand-500/10"
+                "flex w-full items-center justify-center gap-2 rounded-2xl px-8 py-4 font-black tracking-widest text-text-inverted uppercase transition-all active:scale-95 md:w-auto",
+                loading ? "bg-muted text-text-muted" : "bg-brand-500 shadow-hard shadow-brand-500/10 hover:bg-brand-600"
               )}
               onClick={handleDownloadAndCache}
               disabled={loading}
             >
               {loading ? (
-                <RefreshCw className="w-5 h-5 animate-spin" />
+                <RefreshCw className="size-5 animate-spin" />
               ) : (
-                <ImagePlus className="w-5 h-5" />
+                <ImagePlus className="size-5" />
               )}
               {loading ? 'Processing...' : 'Sync & Cache'}
             </button>
@@ -137,40 +137,40 @@ const OfflineImageCache: React.FC = () => {
         </div>
         
         {error && (
-          <div className="flex items-center gap-2 p-4 bg-error-500/5 border border-error-500/10 rounded-2xl text-error-500 text-tiny font-black uppercase tracking-widest animate-in slide-in-from-top-1">
-            <AlertCircle className="w-4 h-4" />
+          <div className="bg-error-500/5 border-error-500/10 text-error-500 text-tiny animate-in slide-in-from-top-1 flex items-center gap-2 rounded-2xl border p-4 font-black tracking-widest uppercase">
+            <AlertCircle className="size-4" />
             {error}
           </div>
         )}
 
         <div className="flex items-center justify-between px-2">
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-success-500 animate-pulse" />
-            <span className="text-tiny font-black text-text-muted uppercase tracking-widest">
+            <div className="bg-success-500 size-2 animate-pulse rounded-full" />
+            <span className="text-tiny font-black tracking-widest text-text-muted uppercase">
               {images.length} Objects Stored
             </span>
           </div>
           {images.length > 0 && (
             <button 
-              className="flex items-center gap-2 px-4 py-2 bg-error-500/10 hover:bg-error-500 text-error-500 hover:text-text-inverted text-tiny font-black uppercase tracking-widest rounded-xl transition-all active:scale-95 group"
+              className="bg-error-500/10 hover:bg-error-500 text-error-500 text-tiny group flex items-center gap-2 rounded-xl px-4 py-2 font-black tracking-widest uppercase transition-all hover:text-text-inverted active:scale-95"
               onClick={handleClear}
             >
-              <Trash2 className="w-4 h-4 group-hover:rotate-12 transition-transform" />
+              <Trash2 className="size-4 transition-transform group-hover:rotate-12" />
               Purge System
             </button>
           )}
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {images.length === 0 ? (
-          <div className="col-span-full py-20 bg-muted/50 border-2 border-dashed border-subtle rounded-[3rem] flex flex-col items-center justify-center text-center space-y-4">
-            <div className="p-6 bg-surface rounded-full border border-subtle shadow-soft">
-              <HardDrive className="w-12 h-12 text-text-muted/20" />
+          <div className="border-subtle col-span-full flex flex-col items-center justify-center space-y-4 rounded-[3rem] border-2 border-dashed bg-muted/50 py-20 text-center">
+            <div className="border-subtle rounded-full border bg-surface p-6 shadow-soft">
+              <HardDrive className="size-12 text-text-muted/20" />
             </div>
             <div className="space-y-1">
-              <p className="text-lg font-black text-text-main uppercase tracking-tighter">Storage Empty</p>
-              <p className="text-sm font-medium text-text-muted max-w-xs">No images detected in local IndexedDB repository. Paste a URL to begin synchronization.</p>
+              <p className="text-lg font-black tracking-tighter text-text-main uppercase">Storage Empty</p>
+              <p className="max-w-xs text-sm font-medium text-text-muted">No images detected in local IndexedDB repository. Paste a URL to begin synchronization.</p>
             </div>
           </div>
         ) : (

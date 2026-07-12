@@ -34,7 +34,7 @@ const WINNING_COMBINATIONS = [
 const checkWinner = (board: Board): string | null => {
   const flat = board.flat();
 
-  for (let [a, b, c] of WINNING_COMBINATIONS) {
+  for (const [a, b, c] of WINNING_COMBINATIONS) {
     const p = flat[a].player;
 
     if (p && p === flat[b].player && p === flat[c].player) {
@@ -85,11 +85,11 @@ export default function TicTacToe() {
   }, [board]);
 
   return (
-    <div className="max-w-md mx-auto p-6 space-y-8 animate-in fade-in duration-700">
+    <div className="animate-in fade-in mx-auto max-w-md space-y-8 p-6 duration-700">
       <div className="flex items-center justify-between">
         <div className="space-y-1">
-          <h2 className="text-2xl font-black text-text-main flex items-center gap-2 tracking-tight">
-            <Swords className="w-7 h-7 text-brand-500" />
+          <h2 className="flex items-center gap-2 text-2xl font-black tracking-tight text-text-main">
+            <Swords className="size-7 text-brand-500" />
             TIC TAC TOE
           </h2>
           <p className="text-sm font-medium text-text-muted">
@@ -98,37 +98,37 @@ export default function TicTacToe() {
         </div>
         <button
           onClick={resetGame}
-          className="p-3 bg-muted hover:bg-muted/80 rounded-2xl transition-all active:scale-95 shadow-soft group"
+          className="group rounded-2xl bg-muted p-3 shadow-soft transition-all hover:bg-muted/80 active:scale-95"
           title="Reset Game"
         >
-          <RotateCcw className="w-5 h-5 text-text-main group-hover:rotate-180 transition-transform duration-500" />
+          <RotateCcw className="size-5 text-text-main transition-transform duration-500 group-hover:rotate-180" />
         </button>
       </div>
 
       {/* Players Info */}
       <div className="flex gap-4">
         <div className={cn(
-          "flex-1 p-4 rounded-2xl border-2 transition-all duration-300 flex flex-col items-center gap-2",
+          "flex flex-1 flex-col items-center gap-2 rounded-2xl border-2 p-4 transition-all duration-300",
           current === "p1" && !winner ? "border-brand-500 bg-brand-500/10 shadow-hard shadow-brand-500/10" : "border-subtle opacity-50"
         )}>
-          <div className="w-10 h-10 rounded-full bg-brand-500 flex items-center justify-center text-text-inverted shadow-soft">
-            <X className="w-6 h-6" strokeWidth={3} />
+          <div className="flex size-10 items-center justify-center rounded-full bg-brand-500 text-text-inverted shadow-soft">
+            <X className="size-6" strokeWidth={3} />
           </div>
-          <span className="text-xs font-bold uppercase tracking-widest text-brand-500">Player 1 (0)</span>
+          <span className="text-xs font-bold tracking-widest text-brand-500 uppercase">Player 1 (0)</span>
         </div>
         <div className={cn(
-          "flex-1 p-4 rounded-2xl border-2 transition-all duration-300 flex flex-col items-center gap-2",
+          "flex flex-1 flex-col items-center gap-2 rounded-2xl border-2 p-4 transition-all duration-300",
           current === "p2" && !winner ? "border-orange-500 bg-orange-500/10 shadow-hard shadow-orange-500/10" : "border-subtle opacity-50"
         )}>
-          <div className="w-10 h-10 rounded-full bg-orange-500 flex items-center justify-center text-text-inverted shadow-soft">
-            <Circle className="w-5 h-5" strokeWidth={3} />
+          <div className="flex size-10 items-center justify-center rounded-full bg-orange-500 text-text-inverted shadow-soft">
+            <Circle className="size-5" strokeWidth={3} />
           </div>
-          <span className="text-xs font-bold uppercase tracking-widest text-orange-500">Player 2 (1)</span>
+          <span className="text-xs font-bold tracking-widest text-orange-500 uppercase">Player 2 (1)</span>
         </div>
       </div>
 
       {/* Game Board */}
-      <div className="relative group">
+      <div className="group relative">
         <div className="grid grid-cols-1 gap-3">
           {board.map((row, i) => (
             <div key={i} className="grid grid-cols-3 gap-3">
@@ -137,8 +137,8 @@ export default function TicTacToe() {
                   key={j}
                   onClick={() => clickHandler(i, j)}
                   className={cn(
-                    "aspect-square rounded-2xl flex items-center justify-center transition-all duration-300 border-2",
-                    "bg-surface border-subtle shadow-soft text-2xl font-black",
+                    "flex aspect-square items-center justify-center rounded-2xl border-2 transition-all duration-300",
+                    "border-subtle bg-surface text-2xl font-black shadow-soft",
                     "hover:border-brand-500 hover:shadow-hard active:scale-95",
                     !cell.value && !winner && "cursor-pointer",
                     winner && "cursor-default",
@@ -154,18 +154,18 @@ export default function TicTacToe() {
 
         {/* Winner Overlay */}
         {winner && (
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div className="bg-canvas/90 backdrop-blur-md px-8 py-6 rounded-3xl shadow-hard border-2 border-brand-500/20 flex flex-col items-center gap-3 animate-in fade-in zoom-in slide-in-from-bottom-4 duration-500 pointer-events-auto">
-              <div className="p-4 bg-brand-500/10 rounded-2xl text-brand-500">
-                <Trophy className="w-10 h-10" />
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+            <div className="animate-in fade-in zoom-in slide-in-from-bottom-4 pointer-events-auto flex flex-col items-center gap-3 rounded-3xl border-2 border-brand-500/20 bg-canvas/90 px-8 py-6 shadow-hard backdrop-blur-md duration-500">
+              <div className="rounded-2xl bg-brand-500/10 p-4 text-brand-500">
+                <Trophy className="size-10" />
               </div>
-              <h3 className="text-2xl font-black text-text-main uppercase tracking-tighter">
+              <h3 className="text-2xl font-black tracking-tighter text-text-main uppercase">
                 {winner} wins 🎉
               </h3>
               <div className="flex items-center gap-2">
-                <span className="text-sm font-bold text-text-muted uppercase tracking-widest">Victory for</span>
+                <span className="text-sm font-bold tracking-widest text-text-muted uppercase">Victory for</span>
                 <div className={cn(
-                  "px-4 py-1 rounded-lg text-text-inverted font-black text-sm uppercase",
+                  "rounded-lg px-4 py-1 text-sm font-black text-text-inverted uppercase",
                   winner === "p1" ? "bg-brand-500" : "bg-orange-500"
                 )}>
                   {winner === "p1" ? "Player 1" : "Player 2"}
@@ -173,7 +173,7 @@ export default function TicTacToe() {
               </div>
               <button
                 onClick={resetGame}
-                className="mt-4 px-8 py-3 bg-brand-500 text-text-inverted font-bold rounded-xl hover:bg-brand-600 transition-all shadow-soft shadow-brand-500/20 active:scale-95"
+                className="mt-4 rounded-xl bg-brand-500 px-8 py-3 font-bold text-text-inverted shadow-soft shadow-brand-500/20 transition-all hover:bg-brand-600 active:scale-95"
               >
                 Play Again
               </button>

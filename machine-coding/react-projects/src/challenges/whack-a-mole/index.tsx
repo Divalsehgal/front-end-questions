@@ -76,7 +76,7 @@ export default function WhackAMole() {
   return (
     <div className="p-8">
       <h3 className="text-xl font-bold">Time left: {timer}</h3>
-      <h3 className="text-xl font-bold mb-4">Score: {score}</h3>
+      <h3 className="mb-4 text-xl font-bold">Score: {score}</h3>
 
       <div
         style={{

@@ -30,11 +30,11 @@ export default function Lights() {
   };
 
   return (
-    <div className="max-w-xl mx-auto p-6 space-y-8">
+    <div className="mx-auto max-w-xl space-y-8 p-6">
       <div className="flex items-center justify-between">
         <div className="space-y-1">
-          <h2 className="text-2xl font-black text-text-main flex items-center gap-2 tracking-tight">
-            <Zap className="w-7 h-7 text-warning-500 fill-warning-500/20" />
+          <h2 className="flex items-center gap-2 text-2xl font-black tracking-tight text-text-main">
+            <Zap className="text-warning-500 fill-warning-500/20 size-7" />
             GLOW GRID
           </h2>
           <p className="text-sm font-medium text-text-muted">
@@ -43,30 +43,30 @@ export default function Lights() {
         </div>
         <button 
           onClick={resetGrid}
-          className="p-2.5 bg-muted hover:bg-muted/80 rounded-xl transition-all shadow-soft"
+          className="rounded-xl bg-muted p-2.5 shadow-soft transition-all hover:bg-muted/80"
         >
-          <RotateCcw className="w-5 h-5 text-text-muted" />
+          <RotateCcw className="size-5 text-text-muted" />
         </button>
       </div>
 
-      <div className="bg-surface p-6 rounded-3xl border border-subtle shadow-hard">
-        <div className="grid grid-cols-5 gap-3 sm:gap-4 aspect-square">
+      <div className="border-subtle rounded-3xl border bg-surface p-6 shadow-hard">
+        <div className="grid aspect-square grid-cols-5 gap-3 sm:gap-4">
           {grid.map((row, rIdx) => 
             row.map((isActive, cIdx) => (
               <button
                 key={`${rIdx}-${cIdx}`}
                 onClick={() => activateCell(rIdx, cIdx)}
                 className={cn(
-                  "relative rounded-2xl transition-all duration-300 outline-none active:scale-90 overflow-hidden",
+                  "relative overflow-hidden rounded-2xl transition-all duration-300 outline-none active:scale-90",
                   "border-2",
                   isActive 
-                    ? "bg-warning-500 border-warning-500/50 shadow-[0_0_30px_var(--color-warning-500)]/40 scale-105 z-10" 
-                    : "bg-muted border-subtle hover:border-brand-500"
+                    ? "bg-warning-500 border-warning-500/50 z-10 scale-105 shadow-[0_0_30px_var(--color-warning-500)]/40" 
+                    : "border-subtle bg-muted hover:border-brand-500"
                 )}
               >
                 {/* Glow effect */}
                 {isActive && (
-                  <div className="absolute inset-0 bg-white/20 animate-pulse" />
+                  <div className="absolute inset-0 animate-pulse bg-white/20" />
                 )}
                 
                 {/* Visual texture */}
@@ -75,7 +75,7 @@ export default function Lights() {
                   isActive ? "opacity-100" : "opacity-10"
                 )}>
                   <Zap className={cn(
-                    "w-1/3 h-1/3 transition-all truncate",
+                    "size-1/3 truncate transition-all",
                     isActive ? "text-warning-950 scale-125" : "text-text-muted"
                   )} />
                 </div>
@@ -85,16 +85,16 @@ export default function Lights() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div className="flex gap-3 p-4 bg-warning-500/5 rounded-2xl border border-warning-500/10">
-          <Info className="w-5 h-5 text-warning-500 shrink-0" />
-          <p className="text-tiny text-text-main/70 leading-relaxed">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="bg-warning-500/5 border-warning-500/10 flex gap-3 rounded-2xl border p-4">
+          <Info className="text-warning-500 size-5 shrink-0" />
+          <p className="text-tiny leading-relaxed text-text-main/70">
             The pulse effect uses a combination of scale, shadow, and color transitions for high visual impact.
           </p>
         </div>
-        <div className="flex gap-3 p-4 bg-brand-500/5 rounded-2xl border border-brand-500/10">
-          <Grid3X3 className="w-5 h-5 text-brand-500 shrink-0" />
-          <p className="text-tiny text-text-main/70 leading-relaxed">
+        <div className="flex gap-3 rounded-2xl border border-brand-500/10 bg-brand-500/5 p-4">
+          <Grid3X3 className="size-5 shrink-0 text-brand-500" />
+          <p className="text-tiny leading-relaxed text-text-main/70">
             State is managed via a 2D matrix with individual cell timeouts for independent animations.
           </p>
         </div>

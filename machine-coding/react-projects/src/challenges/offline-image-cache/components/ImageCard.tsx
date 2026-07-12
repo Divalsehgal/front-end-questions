@@ -31,45 +31,45 @@ const ImageCard: React.FC<ImageCardProps> = ({ image, onRemove }) => {
   };
 
   return (
-    <div className="group bg-surface rounded-3xl border border-subtle shadow-soft overflow-hidden hover:shadow-hard transition-all duration-300 flex flex-col">
+    <div className="group border-subtle flex flex-col overflow-hidden rounded-3xl border bg-surface shadow-soft transition-all duration-300 hover:shadow-hard">
       <div className="relative aspect-video overflow-hidden">
         <img 
           src={imageUrl} 
           alt={image.name} 
           loading="lazy" 
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+          className="size-full object-cover transition-transform duration-500 group-hover:scale-110"
         />
         <div className="absolute top-3 left-3 flex gap-2">
-          <div className="px-2 py-1 bg-surface/80 backdrop-blur-md border border-subtle rounded-lg flex items-center gap-1.5 shadow-soft">
-            <ImageIcon className="w-3 h-3 text-brand-500" />
-            <span className="text-[10px] font-black text-text-main uppercase tracking-widest">Cached</span>
+          <div className="border-subtle flex items-center gap-1.5 rounded-lg border bg-surface/80 px-2 py-1 shadow-soft backdrop-blur-md">
+            <ImageIcon className="size-3 text-brand-500" />
+            <span className="text-[10px] font-black tracking-widest text-text-main uppercase">Cached</span>
           </div>
         </div>
       </div>
-      <div className="p-4 flex flex-col flex-1 gap-4">
+      <div className="flex flex-1 flex-col gap-4 p-4">
         <div className="space-y-3">
-          <h3 className="text-sm font-black text-text-main truncate uppercase tracking-tight">
+          <h3 className="truncate text-sm font-black tracking-tight text-text-main uppercase">
             {image.name}
           </h3>
           <div className="flex flex-wrap gap-3">
-            <div className="flex items-center gap-1.5 text-tiny font-black text-text-muted/50 uppercase tracking-widest">
-              <Calendar className="w-3.5 h-3.5" />
+            <div className="text-tiny flex items-center gap-1.5 font-black tracking-widest text-text-muted/50 uppercase">
+              <Calendar className="size-3.5" />
               {formatDate(image.timestamp)}
             </div>
-            <div className="flex items-center gap-1.5 text-tiny font-black text-text-muted/50 uppercase tracking-widest">
-              <Clock className="w-3.5 h-3.5" />
+            <div className="text-tiny flex items-center gap-1.5 font-black tracking-widest text-text-muted/50 uppercase">
+              <Clock className="size-3.5" />
               {formatTime(image.timestamp)}
             </div>
           </div>
         </div>
-        <div className="pt-4 border-t border-subtle mt-auto flex items-center justify-between">
-          <span className="text-tiny font-black text-brand-500 uppercase tracking-widest">System Object</span>
+        <div className="border-subtle mt-auto flex items-center justify-between border-t pt-4">
+          <span className="text-tiny font-black tracking-widest text-brand-500 uppercase">System Object</span>
           <button 
-            className="p-2 bg-error-500/10 hover:bg-error-500 text-error-500 hover:text-text-inverted rounded-xl transition-all active:scale-95" 
+            className="bg-error-500/10 hover:bg-error-500 text-error-500 rounded-xl p-2 transition-all hover:text-text-inverted active:scale-95" 
             onClick={() => onRemove(image.id)}
             title="Remove from binary repository"
           >
-            <Trash2 className="w-4 h-4" />
+            <Trash2 className="size-4" />
           </button>
         </div>
       </div>

@@ -71,11 +71,11 @@ export default function InfiniteReloading() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6 space-y-8">
-      <div className="flex items-center justify-between sticky top-0 py-4 bg-canvas/80 backdrop-blur-xl z-20 -mx-6 px-6">
+    <div className="mx-auto max-w-3xl space-y-8 p-6">
+      <div className="sticky top-0 z-20 -mx-6 flex items-center justify-between bg-canvas/80 px-6 py-4 backdrop-blur-xl">
         <div className="space-y-1">
-          <h2 className="text-2xl font-black text-text-main flex items-center gap-2 tracking-tight">
-            <Activity className="w-7 h-7 text-brand-500" />
+          <h2 className="flex items-center gap-2 text-2xl font-black tracking-tight text-text-main">
+            <Activity className="size-7 text-brand-500" />
             INFINITE FLOW
           </h2>
           <p className="text-sm font-medium text-text-muted">
@@ -83,15 +83,15 @@ export default function InfiniteReloading() {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <div className="hidden sm:flex flex-col items-end">
-             <span className="text-tiny font-black text-text-muted uppercase tracking-widest leading-none">Total Loaded</span>
-             <span className="text-lg font-black text-brand-500 leading-none mt-1">{items.length}</span>
+          <div className="hidden flex-col items-end sm:flex">
+             <span className="text-tiny leading-none font-black tracking-widest text-text-muted uppercase">Total Loaded</span>
+             <span className="mt-1 text-lg leading-none font-black text-brand-500">{items.length}</span>
           </div>
           <button 
             onClick={scrollToTop}
-            className="p-3 bg-surface hover:bg-muted rounded-2xl border border-subtle transition-all shadow-soft group"
+            className="border-subtle group rounded-2xl border bg-surface p-3 shadow-soft transition-all hover:bg-muted"
           >
-            <ArrowUp className="w-5 h-5 text-text-muted group-hover:-translate-y-1 transition-transform" />
+            <ArrowUp className="size-5 text-text-muted transition-transform group-hover:-translate-y-1" />
           </button>
         </div>
       </div>
@@ -114,19 +114,19 @@ export default function InfiniteReloading() {
       </div>
 
       {isLoading && (
-        <div className="flex flex-col items-center justify-center p-12 space-y-4">
+        <div className="flex flex-col items-center justify-center space-y-4 p-12">
           <div className="relative">
-            <div className="w-12 h-12 rounded-full border-4 border-brand-500/20 border-t-brand-500 animate-spin" />
-            <Loader2 className="w-6 h-6 text-brand-500 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-pulse" />
+            <div className="size-12 animate-spin rounded-full border-4 border-brand-500/20 border-t-brand-500" />
+            <Loader2 className="absolute top-1/2 left-1/2 size-6 -translate-1/2 animate-pulse text-brand-500" />
           </div>
-          <p className="text-sm font-bold text-brand-500 uppercase tracking-[0.2em] animate-pulse">Syncing Population...</p>
+          <p className="animate-pulse text-sm font-bold tracking-[0.2em] text-brand-500 uppercase">Syncing Population...</p>
         </div>
       )}
 
       {!hasMore && (
-        <div className="p-12 text-center border-2 border-dashed border-subtle rounded-3xl bg-muted">
-          <Hash className="w-10 h-10 text-text-muted/20 mx-auto mb-4" />
-          <h4 className="text-lg font-bold text-text-main uppercase tracking-tight">Stream Exhausted</h4>
+        <div className="border-subtle rounded-3xl border-2 border-dashed bg-muted p-12 text-center">
+          <Hash className="mx-auto mb-4 size-10 text-text-muted/20" />
+          <h4 className="text-lg font-bold tracking-tight text-text-main uppercase">Stream Exhausted</h4>
           <p className="text-sm text-text-muted">You've reached the end of this digital population.</p>
         </div>
       )}
@@ -136,45 +136,45 @@ export default function InfiniteReloading() {
 
 function UserCard({ user, index }: { user: User; index: number }) {
   return (
-    <div className="group bg-surface border-2 border-subtle rounded-2xl sm:rounded-3xl p-4 sm:p-5 hover:border-brand-500/30 hover:shadow-hard transition-all duration-300 hover:-translate-y-1 overflow-hidden relative">
+    <div className="group border-subtle relative overflow-hidden rounded-2xl border-2 bg-surface p-4 transition-all duration-300 hover:-translate-y-1 hover:border-brand-500/30 hover:shadow-hard sm:rounded-3xl sm:p-5">
       {/* Index Badge */}
-      <div className="absolute -top-1 -right-1 w-12 h-12 bg-muted group-hover:bg-brand-500 flex items-end justify-start p-2 rotate-45 group-hover:rotate-0 transition-all rounded-bl-3xl">
-        <span className="text-tiny font-black text-text-muted group-hover:text-text-inverted tracking-widest mt-1">
+      <div className="absolute -top-1 -right-1 flex size-12 rotate-45 items-end justify-start rounded-bl-3xl bg-muted p-2 transition-all group-hover:rotate-0 group-hover:bg-brand-500">
+        <span className="text-tiny mt-1 font-black tracking-widest text-text-muted group-hover:text-text-inverted">
           #{index}
         </span>
       </div>
 
-      <div className="flex items-center gap-4 sm:gap-6 relative z-10">
+      <div className="relative z-10 flex items-center gap-4 sm:gap-6">
         <div className="relative shrink-0">
-          <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl sm:rounded-3xl bg-brand-500/10 p-0.5 group-hover:rotate-6 transition-transform">
+          <div className="size-12 rounded-2xl bg-brand-500/10 p-0.5 transition-transform group-hover:rotate-6 sm:size-16 sm:rounded-3xl">
             <img 
               src={user.picture.large} 
-              className="w-full h-full object-cover rounded-[inherit]" 
+              className="size-full rounded-[inherit] object-cover" 
               alt={user.name.first} 
             />
           </div>
-          <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-success-500 border-2 border-surface rounded-full" />
+          <div className="bg-success-500 absolute -right-1 -bottom-1 size-5 rounded-full border-2 border-surface" />
         </div>
 
-        <div className="flex-1 min-w-0 space-y-1">
-          <h3 className="text-base sm:text-xl font-black text-text-main truncate tracking-tight">
+        <div className="min-w-0 flex-1 space-y-1">
+          <h3 className="truncate text-base font-black tracking-tight text-text-main sm:text-xl">
             {user.name.first} {user.name.last}
           </h3>
-          <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-4">
-            <div className="flex items-center gap-1 text-tiny sm:text-xs font-bold text-text-muted group-hover:text-brand-500 transition-colors">
-              <Mail className="w-3 h-3" />
+          <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:gap-4">
+            <div className="text-tiny flex items-center gap-1 font-bold text-text-muted transition-colors group-hover:text-brand-500 sm:text-xs">
+              <Mail className="size-3" />
               <span className="truncate">{user.email}</span>
             </div>
-            <div className="flex items-center gap-1 text-tiny sm:text-xs font-bold text-text-muted">
-              <span className="bg-muted px-1.5 py-0.5 rounded-md uppercase tracking-tight text-tiny opacity-50">
+            <div className="text-tiny flex items-center gap-1 font-bold text-text-muted sm:text-xs">
+              <span className="text-tiny rounded-md bg-muted px-1.5 py-0.5 tracking-tight uppercase opacity-50">
                 {user.location.country}
               </span>
             </div>
           </div>
         </div>
 
-        <button className="hidden sm:flex opacity-0 group-hover:opacity-100 items-center justify-center p-3 bg-brand-500/10 text-brand-500 rounded-2xl transition-all hover:bg-brand-500 hover:text-text-inverted">
-          <UserIcon className="w-5 h-5" />
+        <button className="hidden items-center justify-center rounded-2xl bg-brand-500/10 p-3 text-brand-500 opacity-0 transition-all group-hover:opacity-100 hover:bg-brand-500 hover:text-text-inverted sm:flex">
+          <UserIcon className="size-5" />
         </button>
       </div>
     </div>
