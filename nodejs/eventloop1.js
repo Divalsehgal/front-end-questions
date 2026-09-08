@@ -18,6 +18,8 @@ console.log("Last line of the file.");
 
 // a=100
 // Last line of the file.
-// Timer expired
-// setImmediate
-// File Reading CB
+// Timer expired / setImmediate -> order NOT guaranteed here (see index.md #4:
+// outside an I/O callback, the setTimeout(0) vs setImmediate race depends on
+// how fast the event loop reaches the Timers phase, so either can print first)
+// File Reading CB (last, since fs.readFile only resolves once the Poll phase
+// gets the completed I/O event, which takes longer than the two timers above)

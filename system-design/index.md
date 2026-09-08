@@ -1,5 +1,7 @@
 ## 📡 RADIO Framework
 
+**R**equirements → **A**rchitecture → **D**ata Model → **I**nterface/API → **O**ptimization
+
 ### **R — Requirements**
 
 **Functional Requirements**

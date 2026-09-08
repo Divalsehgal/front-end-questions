@@ -1,7 +1,3 @@
-Here’s a rewritten and slightly more structured version of your content with clearer formatting and concise language:
-
----
-
 ### 🔍 Choosing the Right Testing Strategy
 
 - **`shallow()`** – Use for **unit testing** a component in isolation (no children, minimal rendering).
@@ -40,19 +36,15 @@ Here’s a rewritten and slightly more structured version of your content with c
 
 ### 🧰 E2E Test Example (Playwright)
 
-// Arrange  
 ```js
+// Arrange
 const page = await browser.newPage();
-```
 
-// Act  
-```js
+// Act
 await page.goto("https://example.com");
 await page.click("text=Login");
-```
 
-// Assert  
-```js
+// Assert
 await expect(page).toHaveURL(/dashboard/);
 ```
 

@@ -11,9 +11,7 @@ const wikiData = [
 
     <link rel="stylesheet" href="./styles.css" />
     <link rel="stylesheet" href="./home.css" />
-    <script defer src="./wiki-data.js"></script>
-    <script defer src="./script.js"></script>
-    <script defer src="./home-data.js"></script>
+    <script type="module" src="./script.js"></script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -41,20 +39,20 @@ const wikiData = [
     description: "We use <code>preconnect</code> for domains like Google Fonts. This instructs the browser to aggressively negotiate the DNS, TCP, and TLS connections in the background, significantly minimizing latency when the CSS subsequently requests the font assets."
   },
   {
-    title: "6. Performance: &lt;script defer&gt;",
-    description: "The <code>defer</code> attribute instructs the browser to download the script file in parallel while continuing to parse the HTML. The script then executes strictly <em>after</em> the fully constructed DOM is ready. This is the optimal way to avoid 'render-blocking' delays."
+    title: "6. Performance: &lt;script type=\"module\"&gt;",
+    description: "We load <code>script.js</code> as an ES module (<code>type=\"module\"</code>) instead of a classic script. This is what lets <code>script.js</code> use <code>import</code> statements to pull in <code>home-data.js</code> and <code>wiki-data.js</code> directly. A nice side effect: module scripts are downloaded in parallel with HTML parsing and always execute <em>after</em> the DOM is ready - just like <code>defer</code> - without needing the <code>defer</code> attribute explicitly."
   },
   {
-    title: "7. Why 'defer' instead of 'async'?",
-    description: "Both <code>defer</code> and <code>async</code> download scripts in the background. However, an <code>async</code> script executes <em>immediately</em> after it finishes downloading, pausing HTML parsing and ignoring script order. Because our <code>script.js</code> relies on data from <code>wiki-data.js</code>, using <code>async</code> could cause race conditions causing the app to break. <code>defer</code> strictly respects the order scripts appear in the standard document flow."
+    title: "7. Why not 'async' here?",
+    description: "An <code>async</code> script executes <em>immediately</em> once it (and, for a module, its imports) finish downloading, without respecting document order relative to other scripts. Module scripts are deferred by default, so ordering and 'wait for the DOM' behavior are already handled for us; adding <code>async</code> to a module script would throw that guarantee away and risk <code>script.js</code> running before its imports are ready. Sticking with the default (non-async) module script is the safe choice."
   },
   {
     title: "8. Why put scripts in the &lt;head&gt; tag?",
-    description: "Historically, developers placed scripts at the very bottom of the <code>&lt;body&gt;</code> to prevent them from blocking the HTML setup. However, placing them in the <code>&lt;head&gt;</code> with the <code>defer</code> attribute is the modern best practice. It triggers the browser to begin fetching the script files much earlier in the network lifecycle, resulting in faster overall execution without interfering with the user's visual rendering."
+    description: "Historically, developers placed scripts at the very bottom of the <code>&lt;body&gt;</code> to prevent them from blocking the HTML setup. However, placing them in the <code>&lt;head&gt;</code> is the modern best practice as long as they're non-blocking - both <code>defer</code> and <code>type=\"module\"</code> qualify. It triggers the browser to begin fetching the script much earlier in the network lifecycle, resulting in faster overall execution without interfering with the user's visual rendering."
   },
   {
     title: "9. Why separate scripts? (Separating Concerns)",
-    description: "We strictly separate Structure (HTML), Presentation (CSS), and Behavior (JS). We even divide JS logic: <code>home-data.js</code> and <code>wiki-data.js</code> hold the raw data, and <code>script.js</code> handles events and rendering. This makes our Vanilla setup clean, scalable, and easy to inspect."
+    description: "We strictly separate Structure (HTML), Presentation (CSS), and Behavior (JS). We even divide JS logic: <code>home-data.js</code> and <code>wiki-data.js</code> hold the raw data, and <code>script.js</code> imports both and handles events and rendering. This makes our Vanilla setup clean, scalable, and easy to inspect."
   }
 ];
 

@@ -18,7 +18,13 @@
 .tab-panel { display: none; padding: 1rem; background: #1c1c24; border-radius: 0.5rem; }
 .tab-panel[aria-hidden="false"] { display: block; }
 
-/* Modals */
+/* Modals
+   Note: ../styles.css (imported by this lab's index.html) already defines a
+   .modal-overlay/.modal-content pair for the wiki modal, animated via an
+   `.open` class + opacity/transform transitions. This lab's demo modal uses a
+   simpler direct display:none/flex toggle (see openModal/closeModal below),
+   so it keeps its own smaller override here rather than sharing the
+   animated version. */
 .modal-overlay {
   position: absolute; top: 0; left: 0; width: 100%; height: 100%;
   background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 100;

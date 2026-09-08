@@ -255,7 +255,12 @@ header p {
   color: #fff;
 }
 
-/* Wiki Modal Styling */
+/* Wiki Modal Styling
+   Note: a11y-lab/styles.css defines its own smaller .modal-overlay/.modal-content
+   pair for its focus-trapping demo (plain display:none/flex toggle, no
+   animation) instead of reusing this animated version - kept separate on
+   purpose since that lab's JS drives visibility differently (see
+   a11y-lab/content.js openModal/closeModal). */
 .modal-overlay {
   position: fixed;
   top: 0;

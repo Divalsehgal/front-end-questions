@@ -1,12 +1,22 @@
-# React + Vite
+# React Machine Coding Challenges
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A Vite + React + TypeScript app collecting React machine-coding interview challenges. Each challenge lives in its own folder under `src/challenges/`, grouped by category:
 
-Currently, two official plugins are available:
+- `ui-widgets/` — carousel, progress bar, tic-tac-toe, modal, tabs, timer, etc.
+- `forms/` — form validation, OTP input, comment reply box, mention box.
+- `data-async/` — infinite scroll, auto-complete, Hacker News client, offline image cache.
+- `state-architecture/` — reducer-based todo, feature flags, transfer list, multi-stepper.
+- `algorithmic/` — snake & ladder, virtual DOM, folder structure, imperative handle.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## How challenges are registered
 
-## Expanding the ESLint configuration
+`src/challenges/index.ts` uses `import.meta.glob('./**/index.{tsx,ts,jsx,js}', { eager: true })` to auto-discover every challenge — dropping a new `<category>/<challenge-name>/index.tsx` file (with a default export and an optional `hint` named export) is enough for it to show up in the app, no manual registration needed. The challenge's key/URL is always derived from its leaf folder name, so nesting under a category doesn't change existing links.
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Running locally
+
+```bash
+npm install
+npm run dev      # start the dev server
+npm run build    # production build
+npm run test     # vitest
+```

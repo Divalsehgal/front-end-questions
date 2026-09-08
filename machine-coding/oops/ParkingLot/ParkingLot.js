@@ -1,3 +1,7 @@
+// Applied OOP class design (LLD) example — see design-patterns/ for the
+// individual GoF patterns this kind of system commonly extends into
+// (e.g. Strategy for pluggable pricing, Factory for vehicle/slot types).
+
 class Slot {
     constructor(id) {
         this.id = id;
