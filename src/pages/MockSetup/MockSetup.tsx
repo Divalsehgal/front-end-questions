@@ -64,7 +64,7 @@ export function MockSetup() {
         </div>
         <label className="flex items-center gap-3 text-sm">
           <input type="checkbox" checked={withCode} onChange={() => setWithCode(!withCode)} className="size-4 accent-brand" />
-          Finish with one coding drill
+          <span>Finish with one coding drill</span>
         </label>
         <div className="flex items-center gap-3">
           <Button onClick={start} disabled={!pool.length && !withCode}>

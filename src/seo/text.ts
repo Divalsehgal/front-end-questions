@@ -3,16 +3,16 @@
 /** Markdown-lite (the Prose dialect) to one line of plain text. Code fences are dropped, inline code keeps its text. */
 export function stripMarkdown(md: string) {
   return md
-    .replace(/```[\s\S]*?(```|$)/g, ' ')
-    .replace(/`([^`]*)`/g, '$1')
-    .replace(/\*\*([^*]+)\*\*/g, '$1')
-    .replace(/(^|\s)[*_]([^*_\s][^*_]*)[*_](?=\s|[.,;:!?)]|$)/g, '$1$2')
-    .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
-    .replace(/^\s*\|?\s*:?-{2,}.*$/gm, ' ')
-    .replace(/\|/g, ' ')
-    .replace(/^\s*(?:[-*+]|\d+\.)\s+/gm, '')
-    .replace(/^#+\s+/gm, '')
-    .replace(/\s+/g, ' ')
+    .replaceAll(/```[\s\S]*?(```|$)/g, ' ')
+    .replaceAll(/`([^`]*)`/g, '$1')
+    .replaceAll(/\*\*([^*]+)\*\*/g, '$1')
+    .replaceAll(/(^|\s)[*_]([^*_\s][^*_]*)[*_](?=\s|[.,;:!?)]|$)/g, '$1$2')
+    .replaceAll(/\[([^\]]+)\]\([^)]*\)/g, '$1')
+    .replaceAll(/^\s*\|?\s*:?-{2,}.*$/gm, ' ')
+    .replaceAll('|', ' ')
+    .replaceAll(/^\s*(?:[-*+]|\d+\.)\s+/gm, '')
+    .replaceAll(/^#+\s+/gm, '')
+    .replaceAll(/\s+/g, ' ')
     .trim();
 }
 
@@ -32,4 +32,4 @@ export function fitFirst(candidates: string[], max: number) {
 }
 
 const ESCAPES: Record<string, string> = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
-export const escapeHtml = (s: string) => s.replace(/[&<>"']/g, (c) => ESCAPES[c]);
+export const escapeHtml = (s: string) => s.replaceAll(/[&<>"']/g, (c) => ESCAPES[c]);

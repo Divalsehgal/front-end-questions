@@ -1,6 +1,14 @@
 /// <reference lib="webworker" />
 // A fresh worker is created for every run, so user code can't leak globals,
 // timers or monkey-patches into the next run, and an infinite loop can be killed.
+//
+// Security: evaluating code with `new Function` is the product here (the learner's own answer
+// and the question's test file). It is contained: this module only ever runs inside a dedicated
+// Web Worker (no DOM, no access to the page, React state or localStorage), talks to the app
+// only through postMessage with plain data, is created per run and terminated by sandbox.ts on
+// reply or after a hard timeout (4s snippets, 20s drills). The code comes from the user's own
+// editor in their own browser, never from another user or a URL, and the site has no accounts,
+// cookies or secrets for it to reach.
 import { transform } from 'sucrase';
 import { formatArgs } from './format';
 import { assert, createClock, fn, runTests } from './harness';

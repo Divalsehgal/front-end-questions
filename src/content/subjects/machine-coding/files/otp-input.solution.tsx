@@ -10,7 +10,7 @@ interface OtpProps {
 }
 
 const Otp: React.FC<OtpProps> = ({ length = 6 }) => {
-  const [otp, setOtp] = useState<string[]>(() => Array(length).fill(""));
+  const [otp, setOtp] = useState<string[]>(() => Array.from({ length }, () => ""));
   const [verified, setVerified] = useState(false);
   const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
 
@@ -28,7 +28,7 @@ const Otp: React.FC<OtpProps> = ({ length = 6 }) => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const input = e.target.value;
-    if (isNaN(Number(input))) return; // numbers only
+    if (Number.isNaN(Number(input))) return; // numbers only
     const newOtp = [...otp];
     newOtp[index] = input.slice(-1); // the last typed digit, so typing over a box replaces it
     setOtp(newOtp);
@@ -57,7 +57,7 @@ const Otp: React.FC<OtpProps> = ({ length = 6 }) => {
     let next = index;
     for (const char of pasted) {
       if (next >= length) break;
-      if (isNaN(Number(char)) || char === ' ') continue; // skip anything that isn't a digit
+      if (Number.isNaN(Number(char)) || char === ' ') continue; // skip anything that isn't a digit
       newOtp[next] = char;
       next++;
     }

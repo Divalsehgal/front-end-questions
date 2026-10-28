@@ -82,7 +82,7 @@ export default function FrequentWord() {
           <div className="flex items-center justify-between">
             <h2 className="font-semibold text-text-main">Top {limit}</h2>
             <label className="flex items-center gap-2 text-sm text-text-muted">
-              N
+              <span>N</span>
               <input
                 type="number"
                 min={1}

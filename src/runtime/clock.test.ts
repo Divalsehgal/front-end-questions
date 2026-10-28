@@ -99,13 +99,14 @@ describe('fake clock', () => {
 });
 
 describe('runTests', () => {
+  // `define` is the harness's own test() (what drill test files call), renamed so it isn't mistaken for a vitest test.
   it('reports passes, failures and timeouts independently', async () => {
     const clock = createClock();
     const results = await runTests(
-      ({ test }) => {
-        test('passes', () => assert.ok(true));
-        test('fails', () => assert.equal(1, 2));
-        test('hangs', () => new Promise(() => {}));
+      ({ test: define }) => {
+        define('passes', () => assert.ok(true));
+        define('fails', () => assert.equal(1, 2));
+        define('hangs', () => new Promise(() => {}));
       },
       clock,
       50,
@@ -121,14 +122,14 @@ describe('runTests', () => {
   });
 
   it('runs async tests and names non-assertion errors', async () => {
-    const results = await runTests(({ test }) => {
-      test('async ok', async () => {
+    const results = await runTests(({ test: define }) => {
+      define('async ok', async () => {
         await Promise.resolve();
       });
-      test('async reject', async () => {
+      define('async reject', async () => {
         throw new TypeError('nope');
       });
-      test('throws a string', () => {
+      define('throws a string', () => {
         throw 'plain';
       });
     }, createClock());
@@ -144,12 +145,12 @@ describe('runTests', () => {
     clock.install();
     const order: string[] = [];
     try {
-      await runTests(({ test }) => {
-        test('one', () => {
+      await runTests(({ test: define }) => {
+        define('one', () => {
           order.push('one');
           setTimeout(() => order.push('leaked'), 1);
         });
-        test('two', () => {
+        define('two', () => {
           clock.tick(10);
           order.push('two');
         });
@@ -164,9 +165,9 @@ describe('runTests', () => {
     const clock = createClock();
     const set = vi.spyOn(clock.real, 'setTimeout');
     const clear = vi.spyOn(clock.real, 'clearTimeout');
-    await runTests(({ test }) => {
-      test('a', () => {});
-      test('b', () => {
+    await runTests(({ test: define }) => {
+      define('a', () => {});
+      define('b', () => {
         throw new Error('x');
       });
     }, clock);

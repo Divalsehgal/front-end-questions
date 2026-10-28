@@ -168,7 +168,7 @@ export default function DataTable() {
     <div className="mx-auto max-w-3xl space-y-3 p-4 text-text-main">
       <div className="flex flex-wrap items-center gap-4">
         <label className="flex items-center gap-2 text-sm">
-          Service
+          <span>Service</span>
           <select
             value={query.service}
             onChange={(e) => dispatch({ type: 'query', query: { ...query, service: e.target.value } })}
@@ -191,7 +191,7 @@ export default function DataTable() {
               failRef.current = e.target.checked; // applies to the next request
             }}
           />
-          Simulate errors
+          <span>Simulate errors</span>
         </label>
       </div>
 

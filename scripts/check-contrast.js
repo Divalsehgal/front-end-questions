@@ -44,7 +44,7 @@ export function parseTokens(css) {
 }
 
 function channel(hex, i) {
-  const c = parseInt(hex.slice(i, i + 2), 16) / 255;
+  const c = Number.parseInt(hex.slice(i, i + 2), 16) / 255;
   return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
 }
 

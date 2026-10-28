@@ -15,12 +15,15 @@ concurrency:
 jobs:
   verify:
     runs-on: ubuntu-latest
+    env:
+      # Empty for forks, Dependabot, and until the secret is added: the Sonar step is then skipped, not failed.
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0 # Sonar needs full history; the sitemap's <lastmod> comes from git dates
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
           cache: npm
@@ -51,9 +54,7 @@ jobs:
       - name: Build and prerender
         run: npm run build
 
+      # Requires SonarCloud's Automatic Analysis to be OFF (the two modes conflict and the scan exits with code 3).
       - name: SonarCloud scan
-        # Skipped for forks and Dependabot, which don't get repository secrets.
-        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
-        uses: SonarSource/sonarqube-scan-action@v5
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        if: ${{ env.SONAR_TOKEN != '' }}
+        uses: SonarSource/sonarqube-scan-action@v6

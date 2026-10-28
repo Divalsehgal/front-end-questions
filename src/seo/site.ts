@@ -20,7 +20,7 @@ function withSlash(url: string) {
 
 /** Router path (no base) with exactly one trailing slash: "/q/js/x" -> "/q/js/x/". "/" stays "/". */
 export function normalizePath(path: string) {
-  const clean = `/${path.split(/[?#]/)[0].replace(/^\/+|\/+$/g, '')}`;
+  const clean = `/${path.split(/[?#]/)[0].replaceAll(/^\/+|\/+$/g, '')}`;
   return clean === '/' ? '/' : `${clean}/`;
 }
 

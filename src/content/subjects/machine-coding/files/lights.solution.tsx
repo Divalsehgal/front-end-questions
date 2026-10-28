@@ -2,8 +2,8 @@ import { useState } from 'react';
 
 const GRID_SIZE = 5;
 
-// Array.from with a function makes a NEW row each time. Array(5).fill(row) would share one row.
-const createGrid = () => Array.from({ length: GRID_SIZE }, () => Array(GRID_SIZE).fill(false));
+// Array.from with a function makes a NEW row each time. new Array(5).fill(row) would share one row.
+const createGrid = () => Array.from({ length: GRID_SIZE }, () => new Array(GRID_SIZE).fill(false));
 
 export default function Lights() {
   const [grid, setGrid] = useState<boolean[][]>(createGrid);
