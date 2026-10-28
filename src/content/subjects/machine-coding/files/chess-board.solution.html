@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Chess board</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 24px;
+      }
+      #board {
+        display: grid;
+        grid-template-columns: repeat(8, 1fr);
+        width: min(400px, 100%);
+        aspect-ratio: 1;
+        border: 2px solid #333;
+      }
+      .square {
+        border: none;
+        padding: 0;
+        cursor: pointer;
+      }
+      .light {
+        background: #f0d9b5;
+      }
+      .dark {
+        background: #b58863;
+      }
+      .square.highlight {
+        background: #f6e05e;
+      }
+      .square.selected {
+        background: #e53e3e;
+      }
+      .square:focus-visible {
+        outline: 3px solid #2563eb;
+        outline-offset: -3px;
+      }
+    </style>
+  </head>
+  <body>
+    <p>Click a square to highlight both diagonals through it.</p>
+    <div id="board" role="group" aria-label="Chess board"></div>
+
+    <script>
+      const SIZE = 8;
+      const board = document.getElementById('board');
+      const files = 'abcdefgh';
+
+      for (let r = 0; r < SIZE; r++) {
+        for (let c = 0; c < SIZE; c++) {
+          const square = document.createElement('button');
+          square.type = 'button';
+          square.className = `square ${(r + c) % 2 === 0 ? 'light' : 'dark'}`;
+          square.dataset.row = String(r);
+          square.dataset.col = String(c);
+          square.setAttribute('aria-label', `${files[c]}${SIZE - r}`);
+          board.appendChild(square);
+        }
+      }
+
+      // One listener for all 64 squares.
+      board.addEventListener('click', (e) => {
+        const target = e.target.closest('.square');
+        if (!target) return;
+        const row = Number(target.dataset.row);
+        const col = Number(target.dataset.col);
+
+        for (const square of board.children) {
+          const r = Number(square.dataset.row);
+          const c = Number(square.dataset.col);
+          // Same r - c: top-left to bottom-right diagonal. Same r + c: the other one.
+          const onDiagonal = r - c === row - col || r + c === row + col;
+          square.classList.toggle('highlight', onDiagonal);
+          square.classList.toggle('selected', square === target);
+          square.setAttribute('aria-pressed', square === target ? 'true' : 'false');
+        }
+      });
+    </script>
+  </body>
+</html>

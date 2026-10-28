@@ -1,0 +1,3 @@
+# Size gate first (covers non-TS files too), then format/lint the staged files.
+node scripts/check-file-size.js
+npx lint-staged

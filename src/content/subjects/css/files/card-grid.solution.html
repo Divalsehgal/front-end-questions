@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 16px; }
+      .cards {
+        list-style: none; padding: 0; margin: 0;
+        display: grid;
+        /* As many 220px+ columns as fit; no media queries needed. */
+        grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
+        gap: 16px;
+      }
+      .card {
+        display: flex; flex-direction: column; /* lets the link sit at the bottom */
+        padding: 16px; border: 1px solid #e5e7eb; border-radius: 12px;
+      }
+      .card h3 { margin: 0 0 8px; }
+      .card p { margin: 0 0 12px; color: #4b5563; }
+      .card a { margin-top: auto; } /* pushes the link to the bottom of every card */
+      .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+    </style>
+  </head>
+  <body>
+    <ul class="cards">
+      <li class="card"><h3>Short</h3><p>One line.</p><a href="#">Read<span class="sr-only"> about Short</span></a></li>
+      <li class="card"><h3>A much longer card title that wraps</h3><p>Several lines of text to make this card taller than the others in its row, so you can check alignment.</p><a href="#">Read<span class="sr-only"> about A much longer card title that wraps</span></a></li>
+      <li class="card"><h3>Medium</h3><p>A couple of lines here.</p><a href="#">Read<span class="sr-only"> about Medium</span></a></li>
+      <li class="card"><h3>Fourth</h3><p>Text.</p><a href="#">Read<span class="sr-only"> about Fourth</span></a></li>
+      <li class="card"><h3>Fifth</h3><p>Text.</p><a href="#">Read<span class="sr-only"> about Fifth</span></a></li>
+    </ul>
+  </body>
+</html>

@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      .accordion { max-width: 32rem; border: 1px solid #ddd; border-radius: 8px; }
+      .accordion h3 { margin: 0; }
+      .accordion button {
+        all: unset; box-sizing: border-box; width: 100%; display: flex; justify-content: space-between;
+        padding: 12px 16px; cursor: pointer; font-weight: 600; border-top: 1px solid #ddd;
+      }
+      .accordion h3:first-child button { border-top: 0; }
+      .accordion button:focus-visible { outline: 2px solid #4f46e5; outline-offset: -2px; }
+      .accordion button[aria-expanded='true'] .icon { transform: rotate(45deg); }
+      .icon { transition: transform 0.2s; }
+      .panel { padding: 0 16px 12px; }
+      @media (prefers-reduced-motion: reduce) { .icon { transition: none; } }
+    </style>
+  </head>
+  <body>
+    <div class="accordion">
+      <h3>
+        <button aria-expanded="false" aria-controls="p1" id="b1">What is ARIA? <span class="icon" aria-hidden="true">+</span></button>
+      </h3>
+      <div class="panel" id="p1" role="region" aria-labelledby="b1" hidden>Attributes that describe roles, states and relationships to assistive technology.</div>
+      <h3>
+        <button aria-expanded="false" aria-controls="p2" id="b2">Why a real button? <span class="icon" aria-hidden="true">+</span></button>
+      </h3>
+      <div class="panel" id="p2" role="region" aria-labelledby="b2" hidden>It is focusable and fires click on Enter and Space natively.</div>
+      <h3>
+        <button aria-expanded="false" aria-controls="p3" id="b3">Why hidden? <span class="icon" aria-hidden="true">+</span></button>
+      </h3>
+      <div class="panel" id="p3" role="region" aria-labelledby="b3" hidden>The hidden attribute removes the panel from layout AND the accessibility tree.</div>
+    </div>
+
+    <script>
+      // One listener for every header: event delegation.
+      document.querySelector('.accordion').addEventListener('click', (e) => {
+        const btn = e.target.closest('button[aria-controls]');
+        if (!btn) return;
+        const open = btn.getAttribute('aria-expanded') === 'true';
+        btn.setAttribute('aria-expanded', String(!open));
+        document.getElementById(btn.getAttribute('aria-controls')).hidden = open;
+      });
+    </script>
+  </body>
+</html>

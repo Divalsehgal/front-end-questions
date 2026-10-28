@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tic Tac Toe</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 24px;
+        color: #1f2937;
+      }
+      #board {
+        display: grid;
+        grid-template-columns: repeat(3, 72px);
+        gap: 4px;
+      }
+      .cell {
+        width: 72px;
+        height: 72px;
+        font-size: 32px;
+        font-weight: 700;
+        border: 1px solid #9ca3af;
+        border-radius: 6px;
+        background: #f9fafb;
+        cursor: pointer;
+      }
+      .cell:disabled {
+        cursor: default;
+        color: inherit;
+      }
+      .cell.win {
+        background: #bbf7d0;
+      }
+      .cell:focus-visible,
+      #reset:focus-visible {
+        outline: 3px solid #2563eb;
+        outline-offset: 2px;
+      }
+      #reset {
+        padding: 6px 14px;
+        font: inherit;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Tic Tac Toe</h1>
+    <div id="board" role="group" aria-label="Board"></div>
+    <p id="status" aria-live="polite"></p>
+    <button type="button" id="reset">Reset</button>
+
+    <script>
+      const LINES = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8], // rows
+        [0, 3, 6], [1, 4, 7], [2, 5, 8], // columns
+        [0, 4, 8], [2, 4, 6], // diagonals
+      ];
+
+      const boardEl = document.getElementById('board');
+      const statusEl = document.getElementById('status');
+      const cells = [];
+
+      let board;
+      let player;
+      let gameOver;
+
+      for (let i = 0; i < 9; i++) {
+        const cell = document.createElement('button');
+        cell.type = 'button';
+        cell.className = 'cell';
+        cell.dataset.index = String(i);
+        cells.push(cell);
+        boardEl.appendChild(cell);
+      }
+
+      function findWinner() {
+        for (const line of LINES) {
+          const [a, b, c] = line;
+          if (board[a] && board[a] === board[b] && board[a] === board[c]) return line;
+        }
+        return null;
+      }
+
+      function render() {
+        cells.forEach((cell, i) => {
+          cell.textContent = board[i] || '';
+          cell.disabled = gameOver || board[i] !== null;
+          const row = Math.floor(i / 3) + 1;
+          const col = (i % 3) + 1;
+          cell.setAttribute('aria-label', `Row ${row}, column ${col}: ${board[i] || 'empty'}`);
+        });
+      }
+
+      function reset() {
+        board = Array(9).fill(null);
+        player = 'X';
+        gameOver = false;
+        cells.forEach((cell) => cell.classList.remove('win'));
+        statusEl.textContent = `Turn: ${player}`;
+        render();
+      }
+
+      // One listener for all nine cells.
+      boardEl.addEventListener('click', (e) => {
+        const cell = e.target.closest('.cell');
+        if (!cell) return;
+        const i = Number(cell.dataset.index);
+        if (gameOver || board[i] !== null) return; // ignore filled cells and moves after the end
+
+        board[i] = player;
+        const line = findWinner();
+        if (line) {
+          gameOver = true;
+          line.forEach((j) => cells[j].classList.add('win'));
+          statusEl.textContent = `${player} wins`;
+        } else if (board.every((v) => v !== null)) {
+          gameOver = true;
+          statusEl.textContent = 'Draw';
+        } else {
+          player = player === 'X' ? 'O' : 'X';
+          statusEl.textContent = `Turn: ${player}`;
+        }
+        render();
+      });
+
+      document.getElementById('reset').addEventListener('click', reset);
+
+      reset();
+    </script>
+  </body>
+</html>

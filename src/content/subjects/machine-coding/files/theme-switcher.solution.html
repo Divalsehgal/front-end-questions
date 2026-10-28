@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Theme switcher</title>
+    <script>
+      // Runs before the body is parsed, so the right theme is set before first paint (no flash).
+      (function () {
+        var choice = 'system';
+        try {
+          choice = localStorage.getItem('theme') || 'system';
+        } catch (e) {}
+        if (['light', 'dark', 'system'].indexOf(choice) === -1) choice = 'system';
+        var dark =
+          choice === 'dark' ||
+          (choice === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
+        document.documentElement.dataset.theme = dark ? 'dark' : 'light';
+        document.documentElement.dataset.choice = choice;
+      })();
+    </script>
+    <style>
+      :root,
+      :root[data-theme='light'] {
+        --bg: #ffffff;
+        --text: #1f2937;
+        --muted: #6b7280;
+        --surface: #f3f4f6;
+        --border: #d1d5db;
+        --accent: #2563eb;
+        color-scheme: light;
+      }
+      :root[data-theme='dark'] {
+        --bg: #111827;
+        --text: #f9fafb;
+        --muted: #9ca3af;
+        --surface: #1f2937;
+        --border: #374151;
+        --accent: #60a5fa;
+        color-scheme: dark;
+      }
+      body {
+        margin: 0;
+        padding: 24px;
+        font-family: system-ui, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        transition: background-color 200ms, color 200ms;
+      }
+      main {
+        max-width: 640px;
+      }
+      .muted {
+        color: var(--muted);
+      }
+      fieldset {
+        display: inline-flex;
+        gap: 0;
+        margin: 0 0 16px;
+        padding: 0;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      legend {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+      }
+      .option input {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+      }
+      .option span {
+        display: block;
+        padding: 8px 16px;
+        background: var(--surface);
+        cursor: pointer;
+      }
+      .option + .option span {
+        border-left: 1px solid var(--border);
+      }
+      .option input:checked + span {
+        background: var(--accent);
+        color: var(--bg);
+        font-weight: 600;
+      }
+      .option input:focus-visible + span {
+        outline: 3px solid var(--accent);
+        outline-offset: -3px;
+      }
+      .card {
+        padding: 16px;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: var(--surface);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Theme switcher</h1>
+      <fieldset id="theme-picker">
+        <legend>Colour theme</legend>
+        <label class="option"><input type="radio" name="theme" value="light" /><span>Light</span></label>
+        <label class="option"><input type="radio" name="theme" value="dark" /><span>Dark</span></label>
+        <label class="option"><input type="radio" name="theme" value="system" /><span>System</span></label>
+      </fieldset>
+      <p id="current" class="muted" aria-live="polite"></p>
+      <div class="card">
+        <h2>Sample content</h2>
+        <p>
+          Every colour on this page comes from a CSS custom property. Changing the
+          <code>data-theme</code> attribute on <code>&lt;html&gt;</code> swaps the whole palette at once.
+        </p>
+      </div>
+    </main>
+
+    <script>
+      const root = document.documentElement;
+      const media = window.matchMedia('(prefers-color-scheme: dark)');
+      const picker = document.getElementById('theme-picker');
+      const current = document.getElementById('current');
+
+      function apply(choice) {
+        const dark = choice === 'dark' || (choice === 'system' && media.matches);
+        root.dataset.theme = dark ? 'dark' : 'light';
+        root.dataset.choice = choice;
+        picker.querySelector(`input[value="${choice}"]`).checked = true;
+        current.textContent =
+          choice === 'system'
+            ? `Following the system setting (currently ${dark ? 'dark' : 'light'})`
+            : `Using the ${choice} theme`;
+      }
+
+      picker.addEventListener('change', (e) => {
+        const choice = e.target.value;
+        try {
+          localStorage.setItem('theme', choice);
+        } catch (err) {
+          // Storage can be unavailable (private mode); the theme still applies for this visit.
+        }
+        apply(choice);
+      });
+
+      // Re-evaluate when the OS setting changes, but only matters while "System" is chosen.
+      media.addEventListener('change', () => {
+        if (root.dataset.choice === 'system') apply('system');
+      });
+
+      apply(root.dataset.choice || 'system');
+    </script>
+  </body>
+</html>

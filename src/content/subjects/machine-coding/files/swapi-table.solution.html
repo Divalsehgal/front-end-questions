@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Star Wars characters</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 24px;
+        max-width: 640px;
+        color: #1f2937;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        padding: 8px;
+        border: 1px solid #d1d5db;
+        text-align: left;
+      }
+      thead {
+        background: #f3f4f6;
+      }
+      .pager {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        margin-top: 12px;
+      }
+      button {
+        padding: 6px 14px;
+        font: inherit;
+        cursor: pointer;
+      }
+      button:disabled {
+        cursor: not-allowed;
+      }
+      #error {
+        color: #b91c1c;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Star Wars characters</h1>
+    <table id="table" aria-busy="false">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Height</th>
+          <th scope="col">Mass</th>
+          <th scope="col">Gender</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <p id="error" role="alert"></p>
+    <div class="pager">
+      <button type="button" id="prev" disabled>Previous</button>
+      <button type="button" id="next" disabled>Next</button>
+    </div>
+
+    <script>
+      const START_URL = 'https://swapi.dev/api/people/';
+      const COLUMNS = ['name', 'height', 'mass', 'gender'];
+
+      const table = document.getElementById('table');
+      const rowsEl = document.getElementById('rows');
+      const errorEl = document.getElementById('error');
+      const prevBtn = document.getElementById('prev');
+      const nextBtn = document.getElementById('next');
+
+      let nextUrl = null;
+      let prevUrl = null;
+
+      function messageRow(text) {
+        const tr = document.createElement('tr');
+        const td = document.createElement('td');
+        td.colSpan = COLUMNS.length;
+        td.textContent = text;
+        tr.appendChild(td);
+        rowsEl.replaceChildren(tr);
+      }
+
+      function renderPeople(people) {
+        rowsEl.replaceChildren(
+          ...people.map((person) => {
+            const tr = document.createElement('tr');
+            for (const key of COLUMNS) {
+              const td = document.createElement('td');
+              td.textContent = person[key];
+              tr.appendChild(td);
+            }
+            return tr;
+          }),
+        );
+      }
+
+      async function load(url) {
+        prevBtn.disabled = true;
+        nextBtn.disabled = true;
+        errorEl.textContent = '';
+        table.setAttribute('aria-busy', 'true');
+        messageRow('Loading...');
+
+        try {
+          const response = await fetch(url);
+          if (!response.ok) throw new Error(`Request failed with status ${response.status}`);
+          const data = await response.json();
+          renderPeople(data.results);
+          nextUrl = data.next;
+          prevUrl = data.previous;
+        } catch (err) {
+          messageRow('No data');
+          errorEl.textContent = `Could not load characters. ${err.message}`;
+        } finally {
+          table.setAttribute('aria-busy', 'false');
+          prevBtn.disabled = !prevUrl;
+          nextBtn.disabled = !nextUrl;
+        }
+      }
+
+      prevBtn.addEventListener('click', () => prevUrl && load(prevUrl));
+      nextBtn.addEventListener('click', () => nextUrl && load(nextUrl));
+
+      load(START_URL);
+    </script>
+  </body>
+</html>

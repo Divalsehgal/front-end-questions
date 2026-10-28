@@ -1,0 +1,167 @@
+@import 'tailwindcss';
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * Semantic tokens built from the brand palette: cream #f9ebe0, teal #208aae, navy #0d2149.
+ * Components only use these, so dark mode is one override block. Every text/background pair
+ * is checked against WCAG 2.2 AA by scripts/check-contrast.js (npm run check:contrast).
+ * Teal itself is only ~3.4:1 on cream: use it for focus, borders, fills and icons, and
+ * --brand-strong for any brand-coloured text.
+ */
+:root {
+  --canvas: #f9ebe0;
+  --surface: #fffcf9;
+  --surface-muted: #f3e2d4;
+  --code-bg: #fff6ee;
+  --border: #e6d3c3;
+  --border-strong: #7d7f92;
+  --text: #0d2149;
+  --text-muted: #475169;
+  --brand: #208aae;
+  --brand-strong: #13617d;
+  --brand-soft: #ddeff5;
+  --focus: #208aae;
+  --primary: #0d2149;
+  --primary-hover: #1b3366;
+  --on-primary: #fffcf9;
+  --on-status: #fff;
+  --success: #1a6638;
+  --success-soft: #e2f1e6;
+  --error: #a3261e;
+  --error-soft: #fbe3df;
+  --warn: #7f4500;
+  --warn-soft: #f8ead2;
+  --syntax-plain: #0d2149;
+  --syntax-comment: #5f6478;
+  --syntax-keyword: #7b2d8b;
+  --syntax-string: #1a6638;
+  --syntax-number: #8f4300;
+  --syntax-function: #13617d;
+  --syntax-tag: #a3261e;
+  --syntax-punctuation: #475169;
+
+  color-scheme: light;
+}
+
+.dark {
+  --canvas: #071530;
+  --surface: #0d2149;
+  --surface-muted: #172e5c;
+  --code-bg: #0a1a3d;
+  --border: #263f70;
+  --border-strong: #7189b4;
+  --text: #f9ebe0;
+  --text-muted: #c1c6d4;
+  --brand: #3fb3d9;
+  --brand-strong: #7acfea;
+  --brand-soft: #103a5c;
+  --focus: #5cc4e4;
+  --primary: #7acfea;
+  --primary-hover: #a1ddf0;
+  --on-primary: #0d2149;
+  --on-status: #071530;
+  --success: #74d79c;
+  --success-soft: #0f3b2e;
+  --error: #ff9e94;
+  --error-soft: #45182a;
+  --warn: #f2c06b;
+  --warn-soft: #3d2d12;
+  --syntax-plain: #f9ebe0;
+  --syntax-comment: #a2aac2;
+  --syntax-keyword: #d9a6f2;
+  --syntax-string: #9ee0b0;
+  --syntax-number: #f5bd7a;
+  --syntax-function: #7acfea;
+  --syntax-tag: #ff9e94;
+  --syntax-punctuation: #c9cedb;
+
+  color-scheme: dark;
+}
+
+/* Inter, self-hosted: one variable latin woff2 (weights 100-900), preloaded in index.html.
+   From @fontsource-variable/inter (SIL Open Font License). */
+@font-face {
+  font-family: Inter;
+  font-style: normal;
+  font-weight: 100 900;
+  src: url('./assets/fonts/inter-latin-wght.woff2') format('woff2');
+  font-display: swap;
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215,
+    U+FEFF, U+FFFD;
+}
+
+/* Arial resized to Inter's metrics, so swapping fonts in doesn't move text (no layout shift). */
+@font-face {
+  font-family: 'Inter Fallback';
+  src: local('Arial');
+  size-adjust: 107.4%;
+  ascent-override: 90.2%;
+  descent-override: 22.48%;
+  line-gap-override: 0%;
+}
+
+@theme {
+  --font-sans: Inter, 'Inter Fallback', ui-sans-serif, system-ui, sans-serif;
+
+  /* System monospace: code needs no web font download. */
+  --font-mono: ui-monospace, sfmono-regular, menlo, consolas, 'Liberation Mono', monospace;
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-surface-muted: var(--surface-muted);
+  --color-code: var(--code-bg);
+  --color-line: var(--border);
+  --color-line-strong: var(--border-strong);
+  --color-text-main: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-brand: var(--brand);
+  --color-brand-strong: var(--brand-strong);
+  --color-brand-soft: var(--brand-soft);
+  --color-focus: var(--focus);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-on-primary: var(--on-primary);
+  --color-on-status: var(--on-status);
+  --color-success: var(--success);
+  --color-success-soft: var(--success-soft);
+  --color-error: var(--error);
+  --color-error-soft: var(--error-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--text);
+  background: var(--canvas);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* One visible focus indicator for every interactive element (WCAG 2.4.7 / 2.4.11). */
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+/* Programmatic focus targets (e.g. <main tabindex="-1"> after "skip to content") need no ring. */
+[tabindex='-1']:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Unlayered, so it beats Tailwind's layered transition/animation utilities without !important. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto;
+    transition-duration: 1ms;
+    animation-duration: 1ms;
+    animation-iteration-count: 1;
+  }
+}

@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>CSS position playground</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 24px;
+        padding-bottom: 80vh; /* room to scroll so fixed can be seen */
+        color: #1f2937;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 16px;
+      }
+      .demo {
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        padding: 12px;
+      }
+      .demo h2 {
+        margin: 0 0 4px;
+        font-size: 1rem;
+        font-family: ui-monospace, monospace;
+      }
+      .demo p {
+        margin: 0 0 12px;
+        font-size: 0.875rem;
+        color: #4b5563;
+      }
+      .stage {
+        background: #f3f4f6;
+        border: 1px dashed #9ca3af;
+        height: 120px;
+      }
+      .box {
+        width: 80px;
+        height: 48px;
+        display: grid;
+        place-items: center;
+        color: #fff;
+        font-size: 0.75rem;
+        border-radius: 4px;
+      }
+      .static .box {
+        position: static;
+        background: #6b7280;
+      }
+      .relative .box {
+        position: relative;
+        top: 20px;
+        left: 30px;
+        background: #2563eb;
+      }
+      .absolute .stage {
+        position: relative; /* the positioned parent */
+      }
+      .absolute .box {
+        position: absolute;
+        right: 8px;
+        bottom: 8px;
+        background: #16a34a;
+      }
+      .sticky .stage {
+        overflow-y: auto;
+      }
+      .sticky .header {
+        position: sticky;
+        top: 0;
+        background: #9333ea;
+        color: #fff;
+        padding: 6px 8px;
+        font-size: 0.75rem;
+      }
+      .sticky .stage li {
+        padding: 4px 8px;
+      }
+      .sticky ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      .zindex .stage {
+        position: relative;
+      }
+      .zindex .box {
+        position: absolute;
+      }
+      .back {
+        top: 16px;
+        left: 16px;
+        background: #dc2626;
+        z-index: 1;
+      }
+      .front {
+        top: 40px;
+        left: 56px;
+        background: #ea580c;
+        z-index: 2;
+      }
+      .fixed-badge {
+        position: fixed;
+        right: 16px;
+        bottom: 16px;
+        padding: 8px 12px;
+        border-radius: 6px;
+        background: #111827;
+        color: #fff;
+        font-size: 0.875rem;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Position property</h1>
+    <div class="grid">
+      <section class="demo static">
+        <h2>static</h2>
+        <p>The default. Sits in normal flow; top/left have no effect.</p>
+        <div class="stage"><div class="box">static</div></div>
+      </section>
+
+      <section class="demo relative">
+        <h2>relative</h2>
+        <p>Shifted 20px down and 30px right from where it would be. Its space in the flow is kept.</p>
+        <div class="stage"><div class="box">relative</div></div>
+      </section>
+
+      <section class="demo absolute">
+        <h2>absolute</h2>
+        <p>Removed from flow and placed at bottom/right of the nearest positioned parent (the grey area).</p>
+        <div class="stage"><div class="box">absolute</div></div>
+      </section>
+
+      <section class="demo fixed">
+        <h2>fixed</h2>
+        <p>Positioned against the viewport. The dark badge in the bottom-right corner stays put while you scroll.</p>
+        <div class="stage"></div>
+      </section>
+
+      <section class="demo sticky">
+        <h2>sticky</h2>
+        <p>Scroll inside the grey area: the header sticks to the top of its scrolling container.</p>
+        <div class="stage">
+          <div class="header">Sticky header</div>
+          <ul id="sticky-list"></ul>
+        </div>
+      </section>
+
+      <section class="demo zindex">
+        <h2>z-index</h2>
+        <p>Two overlapping absolute boxes. The one with the higher z-index is drawn on top.</p>
+        <div class="stage">
+          <div class="box back">z-index: 1</div>
+          <div class="box front">z-index: 2</div>
+        </div>
+      </section>
+    </div>
+
+    <div class="fixed-badge">position: fixed</div>
+
+    <script>
+      const list = document.getElementById('sticky-list');
+      for (let i = 1; i <= 12; i++) {
+        const li = document.createElement('li');
+        li.textContent = `Item ${i}`;
+        list.appendChild(li);
+      }
+    </script>
+  </body>
+</html>

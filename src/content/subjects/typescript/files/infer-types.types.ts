@@ -1,0 +1,10 @@
+type __Equal<X, Y> = (<T>() => T extends X ? 1 : 2) extends (<T>() => T extends Y ? 1 : 2) ? true : false;
+type __Expect<T extends true> = T;
+type __1 = __Expect<__Equal<Flatten<number[]>, number>>;
+type __2 = __Expect<__Equal<Flatten<string>, string>>;
+type __3 = __Expect<__Equal<Flatten<boolean[][]>, boolean[]>>;
+type __4 = __Expect<__Equal<MyReturnType<() => string>, string>>;
+type __5 = __Expect<__Equal<MyReturnType<(a: number) => Promise<boolean>>, Promise<boolean>>>;
+type __6 = __Expect<__Equal<MyParameters<(a: number, b?: string) => void>, [a: number, b?: string]>>;
+type __7 = __Expect<__Equal<MyAwaited<Promise<Promise<number>>>, number>>;
+type __8 = __Expect<__Equal<MyAwaited<string>, string>>;

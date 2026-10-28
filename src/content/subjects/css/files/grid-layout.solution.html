@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body { margin: 0; font-family: system-ui, sans-serif; }
+      .container {
+        display: grid;
+        grid-template-areas:
+          'header  header'
+          'sidebar content'
+          'sidebar widgets';
+        grid-template-columns: 250px 1fr;
+        grid-template-rows: auto 1fr auto; /* auto header: a fixed height can clip its content */
+        min-height: 100vh; /* min-, not height: content can grow */
+        gap: 10px;
+      }
+      .header { grid-area: header; background: #4f46e5; color: white; padding: 16px; }
+      .sidebar { grid-area: sidebar; background: #1f2937; color: white; padding: 16px; }
+      .content { grid-area: content; background: #f3f4f6; padding: 20px; }
+      .widgets { grid-area: widgets; background: #a5f3fc; padding: 20px; }
+
+      /* Mobile: one column, sidebar moves to the bottom. Only the areas change, not the HTML. */
+      /* Note: grid areas change the VISUAL order only; DOM and focus order stay the same. Fine for
+         a static sidebar, but don't reorder interactive content this way (WCAG 1.3.2 / 2.4.3). */
+      @media (width < 768px) {
+        .container {
+          grid-template-areas: 'header' 'content' 'widgets' 'sidebar';
+          grid-template-columns: 1fr;
+          grid-template-rows: auto;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">Header</header>
+      <nav class="sidebar">Sidebar</nav>
+      <main class="content">Main content</main>
+      <aside class="widgets">Widgets</aside>
+    </div>
+  </body>
+</html>

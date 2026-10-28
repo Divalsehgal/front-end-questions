@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      .toast-stack { position: fixed; bottom: 16px; right: 16px; display: flex; flex-direction: column; gap: 8px; }
+      .toasts { display: grid; gap: 8px; }
+      .toast { padding: 10px 14px; border-radius: 8px; color: white; background: #15803d; box-shadow: 0 6px 20px rgb(0 0 0 / 0.2); }
+      .toast.error { background: #c4312b; }
+      button { font: inherit; padding: 8px 14px; margin-right: 8px; }
+    </style>
+  </head>
+  <body>
+    <button id="save">Save</button>
+    <button id="fail">Trigger error</button>
+
+    <!-- Live regions must exist in the DOM BEFORE content is injected, or many screen readers miss it. -->
+    <div class="toast-stack">
+      <div class="toasts" id="assertive" role="alert"></div>
+      <!-- Not aria-atomic: otherwise every visible toast is re-read when a new one is added. -->
+      <div class="toasts" id="polite" role="status"></div>
+    </div>
+
+    <script>
+      function toast(message, { error = false } = {}) {
+        const region = document.getElementById(error ? 'assertive' : 'polite');
+        const el = document.createElement('div');
+        el.className = 'toast' + (error ? ' error' : '');
+        el.textContent = message;
+        region.append(el);
+        setTimeout(() => el.remove(), 4000);
+      }
+      document.getElementById('save').onclick = () => toast('Settings saved');
+      document.getElementById('fail').onclick = () => toast('Could not save: network error', { error: true });
+    </script>
+  </body>
+</html>
