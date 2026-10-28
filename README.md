@@ -87,7 +87,7 @@ The Sonar step needs a one-time setup. Import the repo at sonarcloud.io, turn of
 
 ## Deploying
 
-The site is hosted on **Vercel** (`https://front-end-questions-lilac.vercel.app/`) through its Git integration: every
+The site is hosted on **Vercel** (`https://front-end-grind.vercel.app/`) through its Git integration: every
 push to `main` deploys to production and every pull request gets a preview URL. `vercel.json` sets the build
 (`npm run build` → `dist/`), trailing-slash URLs that match the prerendered folders, rewrites for the client-only
 routes `/review/`, `/mock/` and `/session/`, year-long caching for hashed assets, and basic security headers.
@@ -98,7 +98,7 @@ production. The one-time manual setup is in [docs/LAUNCH_CHECKLIST.md](docs/LAUN
 
 Every page with content is a real URL with its own static HTML, so search engines can index each question.
 
-- **`SITE_URL`** is the only place the public address lives. It defaults to `https://front-end-questions-lilac.vercel.app/`.
+- **`SITE_URL`** is the only place the public address lives. It defaults to `https://front-end-grind.vercel.app/`.
   Override it at build time, for example `SITE_URL=https://fegrind.dev/ npm run build`, or set `SITE_URL` as a Vercel
   environment variable. Vite's `base`, canonical URLs, Open Graph tags, the sitemap and `robots.txt` all derive from
   it, so a custom domain is a one-line change.
@@ -117,7 +117,7 @@ Every page with content is a real URL with its own static HTML, so search engine
   (`npm run icons`).
 
 After the first deploy, the owner needs to verify the site in Google Search Console, submit
-`https://front-end-questions-lilac.vercel.app/sitemap.xml` and request indexing for a few pages. Put the Search
+`https://front-end-grind.vercel.app/sitemap.xml` and request indexing for a few pages. Put the Search
 Console verification code in the `GOOGLE_SITE_VERIFICATION` Vercel environment variable; the build injects the
 `<meta name="google-site-verification">` tag into every page. The full list is in
 [docs/LAUNCH_CHECKLIST.md](docs/LAUNCH_CHECKLIST.md).

@@ -12,7 +12,7 @@ account and settings tasks that only the repository owner can do. Work top to bo
 | **Branch protection**                           | Only lets a PR merge into `main` once `verify` passes, so failing code never reaches production                                           |
 | **Husky** (local)                               | `pre-commit` (file-size limit, lint and format staged files), `commit-msg` (Conventional Commits), `pre-push` (typecheck and tests)       |
 
-Live site: `https://front-end-questions-lilac.vercel.app/` · Repository: `github.com/Divalsehgal/front-end-questions`
+Live site: `https://front-end-grind.vercel.app/` · Repository: `github.com/Divalsehgal/front-end-questions`
 
 ---
 
@@ -26,7 +26,7 @@ The project already exists and is connected to the repository. In the Vercel das
 - [ ] **Settings → Environment Variables** (Production and Preview). Add each one when you need it:
   - `GOOGLE_SITE_VERIFICATION`: the code from Search Console (step 4). The build adds the meta tag to every page.
   - `SITE_URL`: only for a custom domain, for example `https://fegrind.dev/`. Without it, the build uses
-    `https://front-end-questions-lilac.vercel.app/`.
+    `https://front-end-grind.vercel.app/`.
 - [ ] Optional: **Settings → Deployment Protection:** keep Vercel Authentication for **preview** deployments only,
       never production. Previews also send `X-Robots-Tag: noindex`, so Google won't index them.
 
@@ -64,7 +64,7 @@ The project already exists and is connected to the repository. In the Vercel das
 
 - [ ] Open a PR from `feat/grind-app` into `main`. Wait for **verify** and the **Vercel preview**, then click the
       preview link and check a few pages.
-- [ ] Merge. Vercel deploys production. Then check on `https://front-end-questions-lilac.vercel.app/`:
+- [ ] Merge. Vercel deploys production. Then check on `https://front-end-grind.vercel.app/`:
   - pages are styled and interactive, and the browser console has no 404s
   - a deep link such as `/q/react/h-17/` loads directly, and refreshing it works
   - `/review/`, `/mock/` and `/session/` load (rewritten to the app shell)
@@ -80,7 +80,7 @@ URL, Open Graph image and JSON-LD, and the sitemap is generated from the questio
 at the domain root, so `robots.txt` works too. What is left is telling search engines the site exists.
 
 - [ ] [Google Search Console](https://search.google.com/search-console) → **Add property → URL prefix** →
-      `https://front-end-questions-lilac.vercel.app/`.
+      `https://front-end-grind.vercel.app/`.
 - [ ] Choose **HTML tag** verification. Copy only the `content="…"` value into the `GOOGLE_SITE_VERIFICATION` Vercel
       environment variable, then redeploy (Deployments → ⋯ → Redeploy). When the deploy finishes, click **Verify**.
 - [ ] **Sitemaps:** submit `sitemap.xml`. It is a sitemap index of 14 per-subject sitemaps, about 540 URLs.

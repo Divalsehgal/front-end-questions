@@ -6,7 +6,7 @@ import type { Plugin } from 'vite';
 
 // The one place the public URL lives. Override at build time (SITE_URL=https://example.com/ npm run build);
 // Vite's `base` is derived from its pathname, so moving to a custom domain is a one-line change.
-const DEFAULT_SITE_URL = 'https://front-end-questions-lilac.vercel.app/';
+const DEFAULT_SITE_URL = 'https://front-end-grind.vercel.app/';
 const siteUrl = new URL(process.env.SITE_URL || DEFAULT_SITE_URL);
 if (!siteUrl.pathname.endsWith('/')) siteUrl.pathname += '/';
 

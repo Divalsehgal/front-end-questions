@@ -1,6 +1,6 @@
 // Public identity of the site. SITE_URL comes from vite.config.ts (env SITE_URL at build time),
 // so canonical URLs, the sitemap and Open Graph tags all follow a domain change automatically.
-const FALLBACK = 'https://front-end-questions-lilac.vercel.app/';
+const FALLBACK = 'https://front-end-grind.vercel.app/';
 
 /** Absolute site root, always ending in "/". */
 export const SITE_URL = withSlash((import.meta.env.VITE_SITE_URL as string | undefined) ?? FALLBACK);
