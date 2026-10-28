@@ -1,4 +1,4 @@
-# FE Grind
+# FE Questions
 
 An interactive practice app for frontend interviews. Everything that used to live in this repo as notes and solutions
 (JavaScript, TypeScript, React, Next.js, HTML, CSS, DSA, design patterns, system design, testing, Node.js and machine
