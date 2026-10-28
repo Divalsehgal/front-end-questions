@@ -60,7 +60,7 @@ export function FlashcardView({ q, onResult }: Readonly<ViewProps<FlashcardQuest
         </>
       ) : (
         <>
-          <section aria-label="Answer" className="rounded-xl border border-brand/40 bg-surface p-6">
+          <section aria-label="Answer" className="rounded-lg border border-brand/40 bg-surface p-6">
             <Prose text={q.back} />
           </section>
           {rated === null ? (

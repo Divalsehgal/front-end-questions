@@ -1,7 +1,7 @@
 import { cn, focusItem, rovingIndex } from '../lib';
 import type { KeyboardEvent, ReactNode } from 'react';
 
-const CHIP = 'inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium transition-colors';
+const CHIP = 'inline-flex items-center gap-1.5 rounded-md border px-3 py-1 text-xs font-medium transition-colors';
 const chipState = (on: boolean) => (on ? 'border-brand bg-brand-soft text-brand-strong' : 'border-line text-text-muted hover:text-text-main');
 
 type Labelled = { label?: string; labelledBy?: string };

@@ -6,13 +6,13 @@ const FALLBACK = 'https://front-end-grind.vercel.app/';
 export const SITE_URL = withSlash((import.meta.env.VITE_SITE_URL as string | undefined) ?? FALLBACK);
 export const SITE_NAME = 'FE Grind';
 export const AUTHOR = 'Dival Sehgal';
-export const THEME_COLOR = '#0d2149';
+export const THEME_COLOR = '#0b1020';
 export const OG_IMAGE = 'og-image.png';
 export const SITE_DESCRIPTION =
   'Free frontend interview practice: JavaScript, TypeScript, React, Next.js, HTML, CSS, DSA, system design and more. Quizzes, output prediction, coding drills and machine coding. No login.';
 
 /** Routes that only make sense with local progress; kept out of the index and the sitemap. */
-export const NOINDEX_ROUTES = ['/review', '/mock', '/session', '/verify'];
+export const NOINDEX_ROUTES = ['/review', '/mock', '/session', '/settings', '/architecture', '/verify'];
 
 function withSlash(url: string) {
   return url.endsWith('/') ? url : `${url}/`;

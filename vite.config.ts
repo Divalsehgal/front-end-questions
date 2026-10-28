@@ -51,6 +51,7 @@ export default defineConfig({
         'src/ui/**',
         'src/questions/**',
         'src/pages/**',
+        'src/architecture/**',
       ],
       exclude: [
         '**/*.test.{ts,tsx}',

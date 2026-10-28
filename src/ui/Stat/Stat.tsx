@@ -3,14 +3,14 @@ import type { ReactNode } from 'react';
 
 export function Stat({ icon, value, label }: Readonly<{ icon: ReactNode; value: ReactNode; label: string }>) {
   return (
-    <Card className="flex items-center gap-4 p-4">
-      <span aria-hidden className="grid size-10 shrink-0 place-items-center rounded-lg bg-brand-soft text-brand-strong">
-        {icon}
-      </span>
-      <div>
-        <p className="text-xl font-semibold">{value}</p>
-        <p className="text-xs text-text-muted">{label}</p>
-      </div>
+    <Card className="p-4">
+      <p className="flex items-center justify-between text-xs text-text-muted">
+        {label}
+        <span aria-hidden className="text-secondary-strong">
+          {icon}
+        </span>
+      </p>
+      <p className="mt-2 font-mono text-2xl font-medium tracking-tight tabular-nums">{value}</p>
     </Card>
   );
 }

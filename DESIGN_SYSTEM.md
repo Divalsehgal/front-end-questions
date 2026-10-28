@@ -6,48 +6,51 @@ dark mode without extra work, and meet **WCAG 2.2 AA**. Styling is Tailwind v4; 
 
 ## Palette
 
-Three brand colours drive everything:
+Three colours on slate neutrals, each with one job. Status colours (success / error / warn) only ever mean state.
 
-| Brand | Hex       | Role                                                                    |
-| ----- | --------- | ----------------------------------------------------------------------- |
-| Cream | `#f9ebe0` | Light canvas; text colour in dark mode                                  |
-| Teal  | `#208aae` | Focus ring, selected borders, progress fill, icons (**not** small text) |
-| Navy  | `#0d2149` | Light-mode text and primary buttons; dark-mode surface                  |
+| Colour | Light     | Dark      | Job                                                                      |
+| ------ | --------- | --------- | ------------------------------------------------------------------------ |
+| Ink    | `#0f172a` | `#e6e9f2` | Text and surfaces (slate)                                                |
+| Violet | `#6e56cf` | `#a18cff` | Brand: primary buttons, links, active nav, selection, focus ring         |
+| Cyan   | `#0891b2` | `#22d3ee` | Secondary: progress fills (violet→cyan gradient), stat icons, highlights |
 
-Teal is only 3.4:1 on cream and 3.9:1 on the light surface, so it passes the 3:1 bar for non-text UI but fails 4.5:1
-for body text. Brand-coloured text uses **`--brand-strong`**: a darker teal in light mode, a lighter one in dark mode.
+Violet and cyan pass 3:1 for non-text UI; coloured text uses the **`-strong`** variants (`--brand-strong`,
+`--secondary-strong`). Numbers, counts, badges and section labels use the system monospace font; everything else is
+Inter. A faint grid sits behind the top of the canvas (`body::before`, colour `--grid`) and fades out.
 
 ### Tokens and measured contrast
 
 Ratios are WCAG 2.x relative-luminance contrast, measured by `npm run check:contrast` (the same check runs in CI as
 `src/test/contrast.test.ts`). Text pairs need ≥ 4.5:1, non-text UI pairs ≥ 3:1.
 
-| Token             | Light     | Dark      | Checked against (lowest ratio light / dark)          |
-| ----------------- | --------- | --------- | ---------------------------------------------------- |
-| `--canvas`        | `#f9ebe0` | `#071530` | app background                                       |
-| `--surface`       | `#fffcf9` | `#0d2149` | cards, sidebar                                       |
-| `--surface-muted` | `#f3e2d4` | `#172e5c` | hover rows, inline code, tracks                      |
-| `--code-bg`       | `#fff6ee` | `#0a1a3d` | code blocks, answer box                              |
-| `--border`        | `#e6d3c3` | `#263f70` | decorative dividers only (no contrast requirement)   |
-| `--border-strong` | `#7d7f92` | `#7189b4` | input / control boundary: 3.38 / 4.46 (UI)           |
-| `--text`          | `#0d2149` | `#f9ebe0` | every surface and soft tone: 12.50 / 10.10           |
-| `--text-muted`    | `#475169` | `#c1c6d4` | canvas, surfaces, code, brand-soft: 6.28 / 6.90      |
-| `--brand`         | `#208aae` | `#3fb3d9` | canvas, surface, surface-muted: 3.13 / 5.48 (UI)     |
-| `--brand-strong`  | `#13617d` | `#7acfea` | canvas, surfaces, brand-soft: 5.49 / 6.70            |
-| `--brand-soft`    | `#ddeff5` | `#103a5c` | selected / active backgrounds                        |
-| `--focus`         | `#208aae` | `#5cc4e4` | canvas, surfaces, code, brand-soft: 3.13 / 5.88 (UI) |
-| `--primary`       | `#0d2149` | `#7acfea` | primary button background                            |
-| `--primary-hover` | `#1b3366` | `#a1ddf0` | primary button hover                                 |
-| `--on-primary`    | `#fffcf9` | `#0d2149` | on primary / hover: 12.00 / 8.97                     |
-| `--on-status`     | `#fff`    | `#071530` | on success / error fills: 7.00 / 9.12                |
-| `--success`       | `#1a6638` | `#74d79c` | success-soft, surface, canvas, code: 5.98 / 7.09     |
-| `--error`         | `#a3261e` | `#ff9e94` | error-soft, surface, canvas, code: 6.01 / 7.46       |
-| `--warn`          | `#7f4500` | `#f2c06b` | warn-soft, surface, canvas, code: 6.42 / 7.92        |
-| `--*-soft`        | see css   | see css   | tinted backgrounds for the tone above                |
-| `--syntax-*`      | 8 tokens  | 8 tokens  | Prism token colours on `--code-bg`: 5.49 / 7.38      |
+| Token                | Light     | Dark      | Checked against (lowest ratio light / dark)          |
+| -------------------- | --------- | --------- | ---------------------------------------------------- |
+| `--canvas`           | `#f8fafc` | `#0b1020` | app background                                       |
+| `--surface`          | `#fff`    | `#11172a` | cards, sidebar                                       |
+| `--surface-muted`    | `#f1f5f9` | `#1a2238` | hover rows, inline code, tracks                      |
+| `--code-bg`          | `#f6f8fb` | `#0d1324` | code blocks, answer box                              |
+| `--border`           | `#e2e8f0` | `#232c45` | decorative dividers only (no contrast requirement)   |
+| `--border-strong`    | `#7d8899` | `#5f6b8b` | input / control boundary: 3.37 / 3.36 (UI)           |
+| `--text`             | `#0f172a` | `#e6e9f2` | every surface and soft tone: 15.56 / 12.40           |
+| `--text-muted`       | `#526075` | `#9aa4bd` | canvas, surfaces, code, soft tones: 5.56 / 6.29      |
+| `--brand`            | `#6e56cf` | `#a18cff` | canvas, surface, surface-muted: 4.92 / 5.80 (UI)     |
+| `--brand-strong`     | `#5a3fc0` | `#bcaeff` | canvas, surfaces, brand-soft: 6.29 / 7.95            |
+| `--brand-soft`       | `#f1edff` | `#231d47` | selected / active backgrounds                        |
+| `--secondary`        | `#0891b2` | `#22d3ee` | canvas, surface, surface-muted: 3.36 / 8.74 (UI)     |
+| `--secondary-strong` | `#0e7490` | `#67e8f9` | canvas, surfaces, secondary-soft: 4.89 / 10.38       |
+| `--secondary-soft`   | `#e6f8fc` | `#0a2a35` | highlight backgrounds                                |
+| `--focus`            | `#6e56cf` | `#a18cff` | canvas, surfaces, code, brand-soft: 4.70 / 5.76 (UI) |
+| `--primary`          | `#6e56cf` | `#a18cff` | primary button background                            |
+| `--primary-hover`    | `#5a3fc0` | `#b8a8ff` | primary button hover                                 |
+| `--on-primary`       | `#fff`    | `#0b1020` | on primary / hover: 5.39 / 6.95                      |
+| `--on-status`        | `#fff`    | `#0b1020` | on success / error fills: 5.41 / 6.84                |
+| `--success`          | `#157a3c` | `#4ade80` | success-soft, surface, canvas, code: 5.04 / 9.43     |
+| `--error`            | `#c0262d` | `#f87171` | error-soft, surface, canvas, code: 5.36 / 6.39       |
+| `--warn`             | `#93510a` | `#fbbf24` | warn-soft, surface, canvas, code: 5.77 / 10.05       |
+| `--*-soft`           | see css   | see css   | tinted backgrounds for the tone above                |
+| `--syntax-*`         | 8 tokens  | 8 tokens  | Prism token colours on `--code-bg`: 4.67 / 5.78      |
 
-Headline pairs: navy on cream **13.52:1**, text on surface **15.44:1** (light) / **13.52:1** (dark), primary button
-**15.44:1** (light) / **8.97:1** (dark).
+Headline pairs: text on surface **17.85:1** (light) / **14.67:1** (dark).
 
 ### Tailwind classes
 
@@ -152,7 +155,7 @@ Explanations (`why`, flashcard backs, prompts) render through `Prose`, so they c
 ## Accessibility checklist
 
 - [ ] Text pairs ≥ 4.5:1, non-text UI (focus, state borders, control boundaries) ≥ 3:1: `npm run check:contrast`.
-- [ ] Every interactive element shows the global teal `:focus-visible` ring (2px, 2px offset); never remove outlines.
+- [ ] Every interactive element shows the global violet `:focus-visible` ring (2px, 2px offset); never remove outlines.
 - [ ] Landmarks: one `banner`, a labelled `navigation`, one `main`; the "Skip to content" link is the first tab stop.
 - [ ] One `h1` per page; sections use `h2`/`h3` in order.
 - [ ] Icon-only buttons have `aria-label` (use `IconButton`); decorative icons have `aria-hidden`.

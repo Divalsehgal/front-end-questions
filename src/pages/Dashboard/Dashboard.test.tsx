@@ -1,6 +1,7 @@
 import { act, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { ALL, hrefOf, subjectHref, SUBJECTS } from '../../content/registry';
+import { updateProfile } from '../../state/profile';
 import { record, resetProgress } from '../../state/progress';
 import { location, renderWithRouter } from '../../test/render';
 import { weakTopics } from './weakTopics';
@@ -10,6 +11,17 @@ beforeEach(() => resetProgress());
 afterEach(() => resetProgress());
 
 describe('Dashboard', () => {
+  it('greets by name once one is set', () => {
+    updateProfile({ name: ' Ada ' });
+    const { unmount } = renderWithRouter(<Dashboard />);
+    expect(screen.getByRole('heading', { level: 1, name: "Let's get started, Ada" })).toBeInTheDocument();
+    unmount();
+    act(() => record(ALL[0].key, true));
+    renderWithRouter(<Dashboard />);
+    expect(screen.getByRole('heading', { level: 1, name: 'Keep the streak going, Ada' })).toBeInTheDocument();
+    updateProfile({ name: '' });
+  });
+
   it('greets a new user and starts at the first question', async () => {
     const { user } = renderWithRouter(<Dashboard />);
     expect(screen.getByRole('heading', { level: 1, name: 'Frontend interview grind' })).toBeInTheDocument();

@@ -85,7 +85,14 @@ const HOME: PageMeta = {
   jsonLd: homeJsonLd(),
 };
 
-const NOINDEX_TITLES: Record<string, string> = { review: 'Review', mock: 'Mock round', session: 'Session summary', verify: 'Verify content' };
+const NOINDEX_TITLES: Record<string, string> = {
+  review: 'Review',
+  mock: 'Mock round',
+  session: 'Session summary',
+  settings: 'Settings',
+  architecture: 'Architecture',
+  verify: 'Verify content',
+};
 
 /** Everything <head> needs for a router path (without the deploy base). Unknown paths get the home meta, noindexed. */
 export function pageMeta(pathname: string): PageMeta {

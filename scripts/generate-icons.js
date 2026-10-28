@@ -4,9 +4,9 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { deflateSync } from 'node:zlib';
 
-const NAVY = [0x0d, 0x21, 0x49];
-const CREAM = [0xf9, 0xeb, 0xe0];
-const TEAL = [0x20, 0x8a, 0xae];
+const INK = [0x0b, 0x10, 0x20];
+const PAPER = [0xf8, 0xfa, 0xfc];
+const ACCENT = [0xa1, 0x8c, 0xff];
 const OUT = new URL('../public/', import.meta.url);
 
 // The lightning bolt from the app header (lucide "zap", simplified), on a 24-unit grid.
@@ -136,28 +136,28 @@ const textWidth = (str, scale) => (str.length * 6 - 1) * scale;
 
 // --- Assets -------------------------------------------------------------------------------
 function appIcon(size) {
-  const img = canvas(size, size, NAVY);
-  bolt(img, size * 0.18, size * 0.18, size * 0.64, TEAL);
+  const img = canvas(size, size, INK);
+  bolt(img, size * 0.18, size * 0.18, size * 0.64, ACCENT);
   return png(img);
 }
 
 function ogImage() {
-  const img = canvas(1200, 630, CREAM);
-  fill(img, [0, 0, 1200, 630], NAVY, roundRect(40, 40, 1160, 590, 36));
-  fill(img, [96, 112, 232, 248], TEAL, roundRect(96, 112, 232, 248, 28));
-  bolt(img, 116, 132, 96, NAVY);
-  text(img, 'FE GRIND', 272, 128, 15, CREAM);
+  const img = canvas(1200, 630, PAPER);
+  fill(img, [0, 0, 1200, 630], INK, roundRect(40, 40, 1160, 590, 36));
+  fill(img, [96, 112, 232, 248], ACCENT, roundRect(96, 112, 232, 248, 28));
+  bolt(img, 116, 132, 96, INK);
+  text(img, 'FE GRIND', 272, 128, 15, PAPER);
   const lines = ['FREE FRONTEND INTERVIEW', 'QUESTIONS, QUIZZES', 'AND CODING DRILLS'];
-  lines.forEach((l, i) => text(img, l, 96, 312 + i * 64, 7, CREAM));
-  fill(img, [96, 516, 1104, 524], TEAL, () => true);
+  lines.forEach((l, i) => text(img, l, 96, 312 + i * 64, 7, PAPER));
+  fill(img, [96, 516, 1104, 524], ACCENT, () => true);
   const tagline = 'JS · TS · REACT · NEXT · CSS · DSA';
-  text(img, tagline, 1104 - textWidth(tagline, 4), 538, 4, CREAM);
+  text(img, tagline, 1104 - textWidth(tagline, 4), 538, 4, PAPER);
   return png(img);
 }
 
 const iconUnit = (n) => (n * 0.64 + 4.32).toFixed(2);
 const boltPath = BOLT.map(([x, y], i) => `${i ? 'L' : 'M'}${iconUnit(x)} ${iconUnit(y)}`).join('');
-const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="#0d2149"/><path d="${boltPath}Z" fill="#208aae"/></svg>\n`;
+const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="#0b1020"/><path d="${boltPath}Z" fill="#a18cff"/></svg>\n`;
 
 mkdirSync(OUT, { recursive: true });
 writeFileSync(new URL('favicon.svg', OUT), svgIcon);

@@ -1,10 +1,17 @@
 import { ArrowRight, Flame, RotateCcw, Target, Timer } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { ArchitectureWidget } from '../../architecture/ArchitectureWidget';
 import { ALL, hrefOf, SUBJECTS } from '../../content/registry';
+import { useProfile } from '../../state/profile';
 import { isDue, useProgress } from '../../state/progress';
 import { buttonClass, Card, inline, Page, PageHeader, SectionTitle, Stat } from '../../ui';
 import { SubjectCard } from './SubjectCard';
 import { weakTopics } from './weakTopics';
+
+function greeting(started: boolean, name: string) {
+  if (started) return name ? `Keep the streak going, ${name}` : 'Keep the streak going';
+  return name ? `Let's get started, ${name}` : 'Frontend interview grind';
+}
 
 export function Dashboard() {
   const progress = useProgress();
@@ -14,11 +21,12 @@ export function Dashboard() {
   const due = ALL.filter((e) => isDue(progress[e.key])).length;
   const nextUp = ALL.find((e) => !progress[e.key]) ?? ALL.find((e) => progress[e.key]?.status === 'wrong');
   const weak = weakTopics(progress);
+  const name = useProfile().name.trim();
 
   return (
     <Page>
       <PageHeader
-        title={attempted.length ? 'Keep the streak going' : 'Frontend interview grind'}
+        title={greeting(attempted.length > 0, name)}
         description="Output questions are marked by the real JS engine, coding drills by test suites, and anything you miss comes back in Review."
       />
       <p className="-mt-4 mb-8 max-w-3xl text-sm leading-6 text-text-muted">
@@ -74,6 +82,9 @@ export function Dashboard() {
           </Card>
         </>
       )}
+
+      <SectionTitle>Under the hood</SectionTitle>
+      <ArchitectureWidget />
     </Page>
   );
 }

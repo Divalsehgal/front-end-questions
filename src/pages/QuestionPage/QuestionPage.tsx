@@ -9,7 +9,6 @@ import { endSession, recordInSession, useSession } from '../../state/session';
 import { Badge, inline, Page, StatusDot } from '../../ui';
 import { QuestionLoading } from './QuestionLoading';
 import { QuestionNav } from './QuestionNav';
-import { RelatedQuestions } from './RelatedQuestions';
 
 export function QuestionPage() {
   const { subject, id } = useParams<{ subject: string; id: string }>();
@@ -72,25 +71,19 @@ export function QuestionPage() {
         }}
       />
 
-      <header className="mb-5 flex items-start gap-3">
-        <span className="mt-2.5">
-          <StatusDot attempt={progress[key]} />
-        </span>
-        <div className="min-w-0">
-          <p className="mb-1 flex items-center gap-2">
-            <Badge tone="brand">
-              <KindIcon size={12} aria-hidden /> {kind.label}
-            </Badge>
-            <span className="font-mono text-xs text-text-muted">{entry.q.id}</span>
-          </p>
-          <h1 ref={headingRef} tabIndex={-1} className="text-2xl font-semibold tracking-tight">
-            {inline(entry.q.title)}
-          </h1>
-        </div>
+      <header className="mb-5">
+        <p className="mb-1.5 flex items-center gap-3">
+          <Badge tone="brand">
+            <KindIcon size={12} aria-hidden /> {kind.label}
+          </Badge>
+          <StatusDot attempt={progress[key]} withLabel />
+        </p>
+        <h1 ref={headingRef} tabIndex={-1} className="text-2xl font-semibold tracking-tight">
+          {inline(entry.q.title)}
+        </h1>
       </header>
 
       {full ? <QuestionView key={key} q={full.q} subject={entry.subject.slug} onResult={onResult} /> : <QuestionLoading />}
-      {!inSession && <RelatedQuestions entry={entry} />}
     </Page>
   );
 }

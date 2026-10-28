@@ -54,7 +54,7 @@ describe('robots.txt', () => {
     const base = new URL(SITE_URL).pathname;
     const txt = robotsTxt();
     expect(txt).toMatch(/^User-agent: \*\nAllow: \//);
-    for (const r of ['review', 'mock', 'session', 'verify']) expect(txt).toContain(`Disallow: ${base}${r}\n`);
+    for (const r of ['review', 'mock', 'session', 'settings', 'architecture', 'verify']) expect(txt).toContain(`Disallow: ${base}${r}\n`);
     expect(txt).toContain(`Sitemap: ${SITE_URL}sitemap.xml`);
   });
 });

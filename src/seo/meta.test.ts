@@ -66,7 +66,7 @@ describe('pageMeta', () => {
   });
 
   it('noindexes progress-only routes and unknown paths, without a canonical', () => {
-    for (const path of ['/review', '/mock', '/session/', '/verify']) {
+    for (const path of ['/review', '/mock', '/session/', '/settings', '/architecture', '/verify']) {
       const m = pageMeta(path);
       expect(m.noindex).toBe(true);
       expect(m.canonical).toBeNull();

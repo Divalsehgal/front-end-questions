@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { App } from './App';
 import { legacyRedirectTarget } from './legacyRedirect';
 import { preloadRoute } from './preload';
+import { hydrateStorage } from './state/sync';
 import { applyTheme } from './state/theme';
 import './index.css';
 
@@ -17,6 +18,8 @@ else mount();
 
 function mount() {
   applyTheme();
+  // Merge the durable IndexedDB copy (and a synced file) into the localStorage mirror loaded at import.
+  hydrateStorage().catch((err: unknown) => console.error(err));
   const root = document.getElementById('root');
   if (!root) throw new Error('index.html is missing <div id="root">');
   const app = (

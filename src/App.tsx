@@ -14,6 +14,8 @@ const PAGES = {
   review: lazyComponent(() => import('./pages/Review').then((m) => m.Review)),
   mock: lazyComponent(() => import('./pages/MockSetup').then((m) => m.MockSetup)),
   session: lazyComponent(() => import('./pages/SessionSummary').then((m) => m.SessionSummary)),
+  settings: lazyComponent(() => import('./pages/Settings').then((m) => m.Settings)),
+  architecture: lazyComponent(() => import('./pages/Architecture').then((m) => m.Architecture)),
 };
 
 const ROUTES: { path?: string; index?: true; page: keyof typeof PAGES }[] = [
@@ -23,6 +25,8 @@ const ROUTES: { path?: string; index?: true; page: keyof typeof PAGES }[] = [
   { path: 'review', page: 'review' },
   { path: 'mock', page: 'mock' },
   { path: 'session', page: 'session' },
+  { path: 'settings', page: 'settings' },
+  { path: 'architecture', page: 'architecture' },
 ];
 
 /** Which page a router path (without the deploy base) renders. */
@@ -44,6 +48,8 @@ const PAGE_DIRS: Record<keyof typeof PAGES, string> = {
   review: 'Review',
   mock: 'MockSetup',
   session: 'SessionSummary',
+  settings: 'Settings',
+  architecture: 'Architecture',
 };
 
 export const preloadAllPages = () => Promise.all(Object.values(PAGES).map((p) => p.preload()));

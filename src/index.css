@@ -2,78 +2,89 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /*
- * Semantic tokens built from the brand palette: cream #f9ebe0, teal #208aae, navy #0d2149.
- * Components only use these, so dark mode is one override block. Every text/background pair
- * is checked against WCAG 2.2 AA by scripts/check-contrast.js (npm run check:contrast).
- * Teal itself is only ~3.4:1 on cream: use it for focus, borders, fills and icons, and
- * --brand-strong for any brand-coloured text.
+ * Three-colour scheme on slate neutrals:
+ *   ink     slate #0f172a / #e6e9f2  text, surfaces
+ *   violet  #6e56cf / #a18cff        brand: primary buttons, links, selection, focus
+ *   cyan    #0891b2 / #22d3ee        secondary: progress, stats, highlights
+ * Status colours (success / error / warn) only ever mean state. Components use these tokens,
+ * so dark mode is one override block. Every pair the UI renders is checked against WCAG 2.2 AA
+ * by scripts/check-contrast.js (npm run check:contrast). --brand and --secondary are for
+ * focus, borders, fills and icons; use the -strong variants for coloured text.
  */
 :root {
-  --canvas: #f9ebe0;
-  --surface: #fffcf9;
-  --surface-muted: #f3e2d4;
-  --code-bg: #fff6ee;
-  --border: #e6d3c3;
-  --border-strong: #7d7f92;
-  --text: #0d2149;
-  --text-muted: #475169;
-  --brand: #208aae;
-  --brand-strong: #13617d;
-  --brand-soft: #ddeff5;
-  --focus: #208aae;
-  --primary: #0d2149;
-  --primary-hover: #1b3366;
-  --on-primary: #fffcf9;
+  --canvas: #f8fafc;
+  --surface: #fff;
+  --surface-muted: #f1f5f9;
+  --code-bg: #f6f8fb;
+  --border: #e2e8f0;
+  --border-strong: #7d8899;
+  --text: #0f172a;
+  --text-muted: #526075;
+  --brand: #6e56cf;
+  --brand-strong: #5a3fc0;
+  --brand-soft: #f1edff;
+  --secondary: #0891b2;
+  --secondary-strong: #0e7490;
+  --secondary-soft: #e6f8fc;
+  --focus: #6e56cf;
+  --primary: #6e56cf;
+  --primary-hover: #5a3fc0;
+  --on-primary: #fff;
   --on-status: #fff;
-  --success: #1a6638;
-  --success-soft: #e2f1e6;
-  --error: #a3261e;
-  --error-soft: #fbe3df;
-  --warn: #7f4500;
-  --warn-soft: #f8ead2;
-  --syntax-plain: #0d2149;
-  --syntax-comment: #5f6478;
-  --syntax-keyword: #7b2d8b;
-  --syntax-string: #1a6638;
-  --syntax-number: #8f4300;
-  --syntax-function: #13617d;
-  --syntax-tag: #a3261e;
-  --syntax-punctuation: #475169;
+  --success: #157a3c;
+  --success-soft: #edfaf2;
+  --error: #c0262d;
+  --error-soft: #fef1f1;
+  --warn: #93510a;
+  --warn-soft: #fff8e8;
+  --syntax-plain: #0f172a;
+  --syntax-comment: #64708a;
+  --syntax-keyword: #6a3fd1;
+  --syntax-string: #157a3c;
+  --syntax-number: #a14d06;
+  --syntax-function: #0e7490;
+  --syntax-tag: #be1a45;
+  --syntax-punctuation: #526075;
+  --grid: #eceff5;
 
   color-scheme: light;
 }
 
 .dark {
-  --canvas: #071530;
-  --surface: #0d2149;
-  --surface-muted: #172e5c;
-  --code-bg: #0a1a3d;
-  --border: #263f70;
-  --border-strong: #7189b4;
-  --text: #f9ebe0;
-  --text-muted: #c1c6d4;
-  --brand: #3fb3d9;
-  --brand-strong: #7acfea;
-  --brand-soft: #103a5c;
-  --focus: #5cc4e4;
-  --primary: #7acfea;
-  --primary-hover: #a1ddf0;
-  --on-primary: #0d2149;
-  --on-status: #071530;
-  --success: #74d79c;
-  --success-soft: #0f3b2e;
-  --error: #ff9e94;
-  --error-soft: #45182a;
-  --warn: #f2c06b;
-  --warn-soft: #3d2d12;
-  --syntax-plain: #f9ebe0;
-  --syntax-comment: #a2aac2;
-  --syntax-keyword: #d9a6f2;
-  --syntax-string: #9ee0b0;
-  --syntax-number: #f5bd7a;
-  --syntax-function: #7acfea;
-  --syntax-tag: #ff9e94;
-  --syntax-punctuation: #c9cedb;
+  --canvas: #0b1020;
+  --surface: #11172a;
+  --surface-muted: #1a2238;
+  --code-bg: #0d1324;
+  --border: #232c45;
+  --border-strong: #5f6b8b;
+  --text: #e6e9f2;
+  --text-muted: #9aa4bd;
+  --brand: #a18cff;
+  --brand-strong: #bcaeff;
+  --brand-soft: #231d47;
+  --secondary: #22d3ee;
+  --secondary-strong: #67e8f9;
+  --secondary-soft: #0a2a35;
+  --focus: #a18cff;
+  --primary: #a18cff;
+  --primary-hover: #b8a8ff;
+  --on-primary: #0b1020;
+  --on-status: #0b1020;
+  --success: #4ade80;
+  --success-soft: #0b2416;
+  --error: #f87171;
+  --error-soft: #2a1113;
+  --warn: #fbbf24;
+  --warn-soft: #261c07;
+  --syntax-plain: #e6e9f2;
+  --syntax-comment: #8590aa;
+  --syntax-keyword: #c4a5ff;
+  --syntax-string: #86efac;
+  --syntax-number: #fdba74;
+  --syntax-function: #67e8f9;
+  --syntax-tag: #fda4af;
+  --syntax-punctuation: #9aa4bd;
+  --grid: #141a2d;
 
   color-scheme: dark;
 }
@@ -117,6 +128,9 @@
   --color-brand: var(--brand);
   --color-brand-strong: var(--brand-strong);
   --color-brand-soft: var(--brand-soft);
+  --color-secondary: var(--secondary);
+  --color-secondary-strong: var(--secondary-strong);
+  --color-secondary-soft: var(--secondary-soft);
   --color-focus: var(--focus);
   --color-primary: var(--primary);
   --color-primary-hover: var(--primary-hover);
@@ -141,6 +155,24 @@ body {
   color: var(--text);
   background: var(--canvas);
   -webkit-font-smoothing: antialiased;
+}
+
+/* A faint engineering grid behind the top of the page, fading out; surfaces cover it. */
+body::before {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: -1;
+  height: 28rem;
+  pointer-events: none;
+  content: '';
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 2rem 2rem;
+  mask-image: radial-gradient(ellipse 70% 100% at 50% 0%, #000 0%, transparent 75%);
+}
+
+::selection {
+  color: var(--text);
+  background: var(--brand-soft);
 }
 
 /* One visible focus indicator for every interactive element (WCAG 2.4.7 / 2.4.11). */

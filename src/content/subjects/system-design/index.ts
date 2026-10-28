@@ -1,4 +1,6 @@
 import { codeFiles } from '../../files';
+import { servingCaching } from './serving-caching';
+import { splittingDeploys } from './splitting-deploys';
 import type { Subject } from '../../types';
 
 const code = codeFiles('system-design', import.meta.glob<string>('./files/*', { query: '?raw', import: 'default', eager: true }));
@@ -130,6 +132,8 @@ React 19's \`useOptimistic\` and React Query's \`onMutate\`/\`onError\` encode t
         },
       ],
     },
+    servingCaching,
+    splittingDeploys,
     {
       slug: 'case-studies',
       title: 'Classic prompts',

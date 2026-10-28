@@ -30,6 +30,10 @@ jobs:
 
       - run: npm ci
 
+      # src/generated/architecture.json is derived from the code: fail if a change forgot to regenerate it.
+      - name: Architecture diagram is up to date
+        run: npm run architecture:check
+
       - name: Type-check (app and tests)
         run: npm run typecheck
 

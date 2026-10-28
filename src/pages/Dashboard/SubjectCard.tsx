@@ -10,10 +10,10 @@ export function SubjectCard({ subject, progress }: Readonly<{ subject: SubjectMe
   const done = items.filter((e) => progress[e.key]?.status === 'correct').length;
   const kinds = KIND_ORDER.filter((k) => items.some((e) => e.q.kind === k));
   return (
-    <Link to={subjectHref(subject.slug)} className="group rounded-xl">
+    <Link to={subjectHref(subject.slug)} className="group rounded-lg">
       <Card interactive className="flex h-full flex-col p-5">
         <div className="mb-4 flex items-start justify-between">
-          <span aria-hidden className="grid size-10 place-items-center rounded-lg bg-brand-soft text-brand-strong">
+          <span aria-hidden className="grid size-9 place-items-center rounded-md border border-line bg-surface-muted text-brand-strong">
             <SubjectIcon name={subject.icon} size={18} />
           </span>
           <span className="flex gap-1 text-text-muted" role="img" aria-label={`Question types: ${kinds.map((k) => KIND_META[k].label).join(', ')}`}>
@@ -25,7 +25,7 @@ export function SubjectCard({ subject, progress }: Readonly<{ subject: SubjectMe
         </div>
         <h3 className="font-semibold">{subject.title}</h3>
         <p className="mt-1 mb-5 flex-1 text-sm leading-6 text-text-muted">{inline(subject.blurb)}</p>
-        <div className="mb-2 flex justify-between text-xs text-text-muted">
+        <div className="mb-2 flex justify-between font-mono text-[11px] text-text-muted tabular-nums">
           <span>{items.length} questions</span>
           <span>{done} solved</span>
         </div>

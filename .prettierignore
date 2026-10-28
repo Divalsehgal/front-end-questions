@@ -3,3 +3,6 @@ src/content/subjects/*/files/
 
 # Root scratch file for quick experiments, not part of the app.
 index.js
+
+# Written by scripts/generate-architecture.mjs (stable JSON.stringify output; CI checks it is current).
+src/generated/

@@ -45,7 +45,7 @@ export function QuizOption({
   return (
     <label
       className={cn(
-        'flex w-full cursor-pointer items-start gap-3 rounded-xl border p-4 text-left text-[15px] leading-6 transition-colors',
+        'flex w-full cursor-pointer items-start gap-3 rounded-lg border p-4 text-left text-[15px] leading-6 transition-colors',
         'has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-(--focus)',
         STYLES[state],
         disabled && 'cursor-default',

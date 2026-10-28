@@ -17,7 +17,7 @@ export function Callout({
 }>) {
   const t = TONES[tone];
   return (
-    <div role={role} className={cn('rounded-xl border p-4', t.border, t.bg)}>
+    <div role={role} className={cn('rounded-lg border p-4', t.border, t.bg)}>
       {title && (
         <p className={cn('mb-1 flex items-center gap-2 text-sm font-semibold', t.text)}>
           {icon}

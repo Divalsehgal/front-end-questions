@@ -60,7 +60,7 @@ for (const path of paths) {
 }
 
 // 404.html: an empty, noindexed shell the client router
-// fills in, so /review, /mock and /session (and stale links) still work.
+// fills in, so /review, /mock, /session, /settings and /architecture (and stale links) still work.
 write('404.html', page(renderHead(pageMeta('/404')), ''));
 write('.nojekyll', '');
 // Build metadata only: not part of the site.

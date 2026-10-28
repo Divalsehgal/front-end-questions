@@ -63,12 +63,11 @@ describe('server render', () => {
     if (ui.q.kind === 'ui') expect(textOf(page(ui).html)).toContain(opening(ui.q.requirements[0]));
   });
 
-  it('links to related questions, the subject and the breadcrumb trail with real hrefs', () => {
+  it('links to the subject through the breadcrumb trail with real hrefs', () => {
     const e = first('quiz');
     const { html } = page(e);
     expect(html).toContain(`href="${import.meta.env.BASE_URL}${subjectHref(e.subject.slug).slice(1)}"`);
     expect(html).toMatch(/aria-label="Breadcrumb"/);
-    expect(html.match(/href="[^"]*\/q\//g)!.length).toBeGreaterThan(2);
   });
 
   it('renders subject pages with every question as a link, and the home page intro', () => {

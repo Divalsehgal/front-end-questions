@@ -133,6 +133,29 @@ describe('reset / export / import', () => {
     expect(() => importProgress('[]')).toThrow(/Not a progress export/);
     expect(exportProgress()).toBe(before);
   });
+
+  it('merges a backup in, keeping the newer answer per question, and counts what it held', async () => {
+    const { record, importProgress, exportProgress } = await load();
+    vi.setSystemTime(10);
+    record('js:a', true);
+    record('js:b', true);
+    const old = { status: 'wrong', attempts: 1, firstTry: false, box: 0, due: 0 };
+    const n = importProgress(JSON.stringify({ 'js:a': { ...old, updated: 5 }, 'js:b': { ...old, updated: 20 }, 'js:c': { ...old, updated: 1 } }));
+    expect(n).toBe(3);
+    const p = JSON.parse(exportProgress());
+    expect(p['js:a'].status).toBe('correct');
+    expect(p['js:b'].status).toBe('wrong');
+    expect(p['js:c']).toBeDefined();
+  });
+});
+
+describe('mergeProgress', () => {
+  it('takes the most recently updated attempt and keeps keys from both sides', async () => {
+    const { mergeProgress } = await load();
+    const at = (updated: number) => ({ status: 'correct' as const, attempts: 1, firstTry: true, box: 1, due: 0, updated });
+    expect(mergeProgress({ a: at(1), b: at(5) }, { b: at(3), c: at(2) })).toEqual({ a: at(1), b: at(5), c: at(2) });
+    expect(mergeProgress({ a: at(1) }, { a: at(4) }).a.updated).toBe(4);
+  });
 });
 
 describe('useProgress', () => {

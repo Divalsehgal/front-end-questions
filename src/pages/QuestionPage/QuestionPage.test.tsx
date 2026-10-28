@@ -1,11 +1,10 @@
-import { act, screen, within } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ALL, hrefOf, subjectHref } from '../../content/registry';
 import { preloadAllViews } from '../../questions/registry';
 import { resetProgress } from '../../state/progress';
 import { endSession, startSession } from '../../state/session';
 import { location, renderWithRouter, storedProgress, storedSession } from '../../test/render';
-import { neighbours, relatedTo } from './RelatedQuestions';
 import { QuestionPage } from '.';
 
 // Views are lazy chunks; main.tsx preloads the current one before hydrating.
@@ -40,7 +39,7 @@ describe('QuestionPage', () => {
     expect(h1.closest('header')).toHaveTextContent('Flashcard');
     const crumbs = screen.getByRole('navigation', { name: 'Breadcrumb' });
     expect(crumbs).toHaveTextContent(card.subject.title);
-    expect(screen.getByText('Not attempted')).toHaveClass('sr-only');
+    expect(screen.getByText('Not attempted')).not.toHaveClass('sr-only');
   });
 
   it('records the first answer to progress', async () => {
@@ -48,7 +47,7 @@ describe('QuestionPage', () => {
     await user.click(screen.getByRole('button', { name: 'Reveal answer' }));
     await user.click(screen.getByRole('button', { name: 'I knew it' }));
     expect(storedProgress()[card.key]?.status).toBe('correct');
-    expect(screen.getByText('Solved')).toHaveClass('sr-only');
+    expect(screen.getByText('Solved')).not.toHaveClass('sr-only');
   });
 
   it('walks the subject with previous / next', async () => {
@@ -96,32 +95,10 @@ describe('QuestionPage', () => {
     expect(screen.queryByRole('timer')).not.toBeInTheDocument();
   });
 
-  it('links to previous / next, related questions in the topic and the subject with real hrefs', async () => {
-    const { user } = page();
-    const more = screen.getByRole('navigation', { name: `More ${card.subject.title} questions` });
-    const { prev, next } = neighbours(card);
-    if (prev) expect(within(more).getByRole('link', { name: new RegExp(`Previous`) })).toHaveAttribute('href', hrefOf(prev.key));
-    if (next) expect(within(more).getByRole('link', { name: new RegExp(`Next`) })).toHaveAttribute('href', hrefOf(next.key));
-    const related = relatedTo(card);
-    expect(within(more).queryAllByRole('listitem')).toHaveLength(related.length);
-    await user.click(within(more).getByRole('link', { name: `All ${card.subject.title} interview questions` }));
-    expect(location()).toBe(subjectHref(card.subject.slug));
-  });
-
-  it('picks neighbours in subject order and related questions from the same topic', () => {
-    const subject = ALL.filter((e) => e.subject === ALL[0].subject);
-    expect(neighbours(subject[0])).toEqual({ prev: undefined, next: subject[1] });
-    expect(neighbours(subject.at(-1)!).next).toBeUndefined();
-    const topic = ALL.filter((e) => e.topic === ALL[1].topic);
-    const related = relatedTo(ALL[1], 3);
-    expect(related.length).toBeLessThanOrEqual(3);
-    for (const r of related) expect(topic).toContain(r);
-    expect(related).not.toContain(ALL[1]);
-  });
-
-  it('hides related links during a session', () => {
-    act(() => startSession('review', [card.key]));
+  it('keeps the page to the question: no question id and no list of other questions', () => {
     page();
+    expect(screen.queryByText(card.q.id)).not.toBeInTheDocument();
     expect(screen.queryByRole('navigation', { name: /More .* questions/ })).not.toBeInTheDocument();
+    expect(screen.getByText('Not attempted')).toBeVisible();
   });
 });

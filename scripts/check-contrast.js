@@ -12,7 +12,7 @@ export const TEXT = 4.5;
 export const UI = 3;
 
 const SURFACES = ['canvas', 'surface', 'surface-muted', 'code-bg'];
-const SOFTS = ['brand-soft', 'success-soft', 'error-soft', 'warn-soft'];
+const SOFTS = ['brand-soft', 'secondary-soft', 'success-soft', 'error-soft', 'warn-soft'];
 const SYNTAX = ['syntax-plain', 'syntax-comment', 'syntax-keyword', 'syntax-string', 'syntax-number', 'syntax-function', 'syntax-tag', 'syntax-punctuation'];
 
 /** [foreground, background, minimum ratio, what it is] */
@@ -20,6 +20,7 @@ export const PAIRS = [
   ...[...SURFACES, ...SOFTS].map((bg) => ['text', bg, TEXT, 'body text']),
   ...[...SURFACES, 'brand-soft'].map((bg) => ['text-muted', bg, TEXT, 'secondary text']),
   ...['canvas', 'surface', 'surface-muted', 'brand-soft'].map((bg) => ['brand-strong', bg, TEXT, 'links, active nav, brand text']),
+  ...['canvas', 'surface', 'surface-muted', 'secondary-soft'].map((bg) => ['secondary-strong', bg, TEXT, 'secondary text, stat icons']),
   ['on-primary', 'primary', TEXT, 'primary button'],
   ['on-primary', 'primary-hover', TEXT, 'primary button (hover)'],
   ...['success', 'error', 'warn'].flatMap((tone) => [`${tone}-soft`, 'surface', 'canvas', 'code-bg'].map((bg) => [tone, bg, TEXT, `${tone} text`])),
@@ -29,6 +30,7 @@ export const PAIRS = [
   // Non-text UI (1.4.11)
   ...['canvas', 'surface', 'surface-muted', 'brand-soft', 'code-bg'].map((bg) => ['focus', bg, UI, 'focus ring']),
   ...['canvas', 'surface', 'surface-muted'].map((bg) => ['brand', bg, UI, 'selected border, progress fill, icons']),
+  ...['canvas', 'surface', 'surface-muted'].map((bg) => ['secondary', bg, UI, 'progress fill, highlights']),
   ...['canvas', 'surface', 'code-bg'].map((bg) => ['border-strong', bg, UI, 'input / control boundary']),
   ...['success', 'error'].map((fg) => [fg, 'surface', UI, 'verdict border']),
 ];

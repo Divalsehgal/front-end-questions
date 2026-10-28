@@ -14,8 +14,8 @@ export function AnswerDisclosure({ onOpen, children, label = DISCLOSURE_LABEL }:
     if (el.open && !onOpen()) el.open = false;
   };
   return (
-    <details onToggle={onToggle} className="group rounded-xl border border-line bg-surface">
-      <summary className="flex min-h-11 cursor-pointer items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium text-text-muted hover:text-text-main">
+    <details onToggle={onToggle} className="group rounded-lg border border-line bg-surface">
+      <summary className="flex min-h-11 cursor-pointer items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-text-muted hover:text-text-main">
         <Eye size={16} aria-hidden /> {label}
       </summary>
       <div className="space-y-3 border-t border-line px-4 py-4">{children}</div>

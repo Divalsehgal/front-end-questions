@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { ALL, subjectHref, SUBJECTS } from '../../content/registry';
+import { updateProfile } from '../../state/profile';
 import { record, resetProgress } from '../../state/progress';
 import { Layout, MAIN_ID } from '.';
 
@@ -31,6 +32,14 @@ describe('Layout', () => {
     const main = screen.getByRole('main');
     expect(main).toHaveAttribute('id', MAIN_ID);
     expect(within(main).getByRole('heading', { name: 'Page body' })).toBeInTheDocument();
+  });
+
+  it('links to settings from the header and shows the welcome card on a first visit', () => {
+    updateProfile({ welcomed: false });
+    renderLayout();
+    expect(within(screen.getByRole('banner')).getByRole('link', { name: 'Settings and backups' })).toHaveAttribute('href', '/settings');
+    expect(screen.getByRole('region', { name: 'Welcome to FE Grind' })).toBeInTheDocument();
+    updateProfile({ welcomed: true });
   });
 
   it('offers a skip link as the first tab stop that moves focus to main without changing the route', async () => {

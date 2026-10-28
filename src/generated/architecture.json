@@ -1,0 +1,307 @@
+{
+  "edges": [
+    {
+      "animated": true,
+      "id": "vercel->spa",
+      "label": "serves HTML and JS chunks",
+      "source": "vercel",
+      "target": "spa"
+    },
+    {
+      "id": "spa->monaco",
+      "label": "lazy-loads for code questions",
+      "source": "spa",
+      "target": "monaco"
+    },
+    {
+      "id": "monaco->cdn",
+      "label": "fetches Monaco on first use",
+      "source": "monaco",
+      "target": "cdn"
+    },
+    {
+      "animated": true,
+      "curvature": 0.5,
+      "id": "spa->sandbox",
+      "label": "posts learner code",
+      "source": "spa",
+      "target": "sandbox"
+    },
+    {
+      "curvature": -0.5,
+      "id": "sandbox->spa",
+      "label": "returns logs and test results",
+      "source": "sandbox",
+      "target": "spa"
+    },
+    {
+      "animated": true,
+      "id": "spa->content",
+      "label": "loads one subject chunk per page",
+      "source": "spa",
+      "target": "content"
+    },
+    {
+      "curvature": 0.5,
+      "id": "spa->localStorage",
+      "label": "writes progress, profile, theme",
+      "source": "spa",
+      "target": "localStorage"
+    },
+    {
+      "curvature": -0.5,
+      "id": "localStorage->spa",
+      "label": "hydrates before first paint",
+      "source": "localStorage",
+      "target": "spa"
+    },
+    {
+      "curvature": 0.5,
+      "id": "spa->indexedDb",
+      "label": "saves progress",
+      "source": "spa",
+      "target": "indexedDb"
+    },
+    {
+      "curvature": -0.5,
+      "id": "indexedDb->spa",
+      "label": "restores progress",
+      "source": "indexedDb",
+      "target": "spa"
+    },
+    {
+      "id": "spa->fileSync",
+      "label": "writes progress file",
+      "source": "spa",
+      "target": "fileSync"
+    },
+    {
+      "id": "fileSync->indexedDb",
+      "label": "stores file handle",
+      "source": "fileSync",
+      "target": "indexedDb"
+    },
+    {
+      "id": "prerender->content",
+      "label": "renders every question",
+      "source": "prerender",
+      "target": "content"
+    },
+    {
+      "id": "prerender->vercel",
+      "label": "static pages in dist/",
+      "source": "prerender",
+      "target": "vercel"
+    },
+    {
+      "id": "sitemap->vercel",
+      "label": "sitemap.xml and robots.txt",
+      "source": "sitemap",
+      "target": "vercel"
+    },
+    {
+      "id": "ci->prerender",
+      "label": "runs the production build",
+      "source": "ci",
+      "target": "prerender"
+    },
+    {
+      "id": "ci->sonar",
+      "label": "uploads coverage (lcov)",
+      "source": "ci",
+      "target": "sonar"
+    },
+    {
+      "id": "gsc->vercel",
+      "label": "crawls pages and sitemap",
+      "source": "gsc",
+      "target": "vercel"
+    }
+  ],
+  "nodes": [
+    {
+      "data": {
+        "description": "React 19.0.0 app routed by react-router-dom 7.5.0 across 8 routes (/, /s/:subject, /q/:subject/:id, /review, /mock, /session, /settings, /architecture), configured by VITE_SITE_URL; every page is its own lazily loaded chunk.",
+        "label": "React SPA"
+      },
+      "id": "spa",
+      "position": {
+        "x": -130,
+        "y": 0
+      },
+      "tier": "client",
+      "type": "frontend"
+    },
+    {
+      "data": {
+        "description": "@monaco-editor/react 4.7.0 code editor, loaded on demand for coding questions.",
+        "label": "Monaco editor"
+      },
+      "id": "monaco",
+      "position": {
+        "x": 130,
+        "y": 0
+      },
+      "tier": "client",
+      "type": "frontend"
+    },
+    {
+      "data": {
+        "description": "A fresh module Web Worker per run (src/runtime/sandbox.worker.ts) compiles learner code with sucrase 3.35.0 and runs it off the main thread, so infinite loops can be killed.",
+        "label": "Sandbox Web Worker"
+      },
+      "id": "sandbox",
+      "position": {
+        "x": -910,
+        "y": 200
+      },
+      "tier": "compute",
+      "type": "backend"
+    },
+    {
+      "data": {
+        "description": "At build time scripts/prerender.js renders every public route through the SSR bundle of src/entry-server.tsx into static HTML in dist/.",
+        "label": "Static prerender"
+      },
+      "id": "prerender",
+      "position": {
+        "x": -650,
+        "y": 200
+      },
+      "tier": "compute",
+      "type": "backend"
+    },
+    {
+      "data": {
+        "description": "scripts/generate-sitemap.js writes sitemap.xml, per-subject sitemaps and robots.txt from the registry.",
+        "label": "Sitemap generator"
+      },
+      "id": "sitemap",
+      "position": {
+        "x": -390,
+        "y": 200
+      },
+      "tier": "compute",
+      "type": "backend"
+    },
+    {
+      "data": {
+        "description": "Serves the static dist/ build (framework: vite) with 1 redirect(s), 2 header rule(s) and rewrites /:route(review|mock|session|settings|architecture)/ → /404.html.",
+        "label": "Vercel"
+      },
+      "id": "vercel",
+      "position": {
+        "x": -130,
+        "y": 200
+      },
+      "tier": "compute",
+      "type": "external"
+    },
+    {
+      "data": {
+        "description": "cdn.jsdelivr.net hosts monaco-editor@0.55.1, which @monaco-editor/loader downloads the first time an editor opens.",
+        "label": "jsDelivr CDN"
+      },
+      "id": "cdn",
+      "position": {
+        "x": 130,
+        "y": 200
+      },
+      "tier": "compute",
+      "type": "external"
+    },
+    {
+      "data": {
+        "description": "ci.yml (\"CI\", jobs: verify) runs 12 steps on push, pull request, workflow dispatch.",
+        "label": "GitHub Actions"
+      },
+      "id": "ci",
+      "position": {
+        "x": 390,
+        "y": 200
+      },
+      "tier": "compute",
+      "type": "external"
+    },
+    {
+      "data": {
+        "description": "Static analysis and coverage for Divalsehgal_front-end-questions (organization divalsehgal), configured in sonar-project.properties.",
+        "label": "SonarCloud"
+      },
+      "id": "sonar",
+      "position": {
+        "x": 650,
+        "y": 200
+      },
+      "tier": "compute",
+      "type": "external"
+    },
+    {
+      "data": {
+        "description": "Ownership verified by public/googlefc320b3211f3fb87.html; crawls the prerendered pages and the sitemap.",
+        "label": "Google Search Console"
+      },
+      "id": "gsc",
+      "position": {
+        "x": 910,
+        "y": 200
+      },
+      "tier": "compute",
+      "type": "external"
+    },
+    {
+      "data": {
+        "description": "Synchronous copy read before first paint, under the keys grind:profile, grind:progress:v2, grind:session, grind:sidebar, grind:split:code, grind:theme.",
+        "label": "localStorage"
+      },
+      "id": "localStorage",
+      "position": {
+        "x": -390,
+        "y": 400
+      },
+      "tier": "data",
+      "type": "data"
+    },
+    {
+      "data": {
+        "description": "Durable copy of progress in the \"fe-grind\" database, object store \"kv\"; also keeps the synced file's handle.",
+        "label": "IndexedDB"
+      },
+      "id": "indexedDb",
+      "position": {
+        "x": -130,
+        "y": 400
+      },
+      "tier": "data",
+      "type": "data"
+    },
+    {
+      "data": {
+        "description": "Optional File System Access sync of progress to fe-grind-progress.json on disk, which survives clearing browser data.",
+        "label": "File sync"
+      },
+      "id": "fileSync",
+      "position": {
+        "x": 130,
+        "y": 400
+      },
+      "tier": "data",
+      "type": "data"
+    },
+    {
+      "data": {
+        "description": "13 subjects in src/content/subjects (css, dsa, html, javascript, machine-coding, nextjs, nodejs, patterns, react, security, system-design, testing, typescript), each a lazily loaded chunk, indexed by the virtual:content-manifest Vite plugin.",
+        "label": "Content bank"
+      },
+      "id": "content",
+      "position": {
+        "x": 390,
+        "y": 400
+      },
+      "tier": "data",
+      "type": "data"
+    }
+  ],
+  "subtitle": "14 parts and 18 connections, generated from the code by scripts/generate-architecture.mjs.",
+  "title": "FE Grind architecture"
+}

@@ -48,7 +48,7 @@ export function OrderRow({
       onDragOver={onDragOver}
       onDragEnd={onDragEnd}
       className={cn(
-        'flex items-center gap-3 rounded-xl border p-3 text-[15px] leading-6 transition-opacity',
+        'flex items-center gap-3 rounded-lg border p-3 text-[15px] leading-6 transition-opacity',
         STYLES[state],
         dragging && 'opacity-50',
         !locked && 'cursor-grab',

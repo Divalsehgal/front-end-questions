@@ -1,4 +1,6 @@
 import { useSyncExternalStore } from 'react';
+import { idbSet } from './storage/db';
+import { writeToFile } from './storage/fileSync';
 
 // Leitner-style spaced repetition: a correct answer moves the card up a box and
 // pushes it further out; a wrong answer sends it back to box 0, due right away.
@@ -17,7 +19,9 @@ export type Attempt = {
 
 type Progress = Record<string, Attempt>;
 
-const KEY = 'grind:progress:v2';
+// localStorage holds a synchronous mirror so the first paint after a reload already shows
+// progress; IndexedDB (same key) is the durable copy, and a synced file a third (see ./sync.ts).
+export const PROGRESS_KEY = 'grind:progress:v2';
 const listeners = new Set<() => void>();
 
 const isRecord = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null && !Array.isArray(v);
@@ -36,7 +40,7 @@ function sanitize(raw: unknown): Progress {
 
 function load(): Progress {
   try {
-    return sanitize(JSON.parse(localStorage.getItem(KEY) ?? '{}'));
+    return sanitize(JSON.parse(localStorage.getItem(PROGRESS_KEY) ?? '{}'));
   } catch {
     return {};
   }
@@ -45,12 +49,35 @@ function load(): Progress {
 let progress: Progress = load();
 
 function save() {
+  const json = JSON.stringify(progress);
   try {
-    localStorage.setItem(KEY, JSON.stringify(progress));
+    localStorage.setItem(PROGRESS_KEY, json);
   } catch {
-    // Storage unavailable (private mode): progress lives for this tab only.
+    // Storage unavailable (private mode): IndexedDB or the file may still take it.
   }
+  idbSet(PROGRESS_KEY, progress).catch(() => {
+    // No IndexedDB (private mode, old browser): the localStorage mirror is all there is.
+  });
+  writeToFile(json);
   listeners.forEach((l) => l());
+}
+
+/** Rewrites every copy (localStorage, IndexedDB, synced file) from what is in memory. */
+export const syncProgress = save;
+
+/** Combines two copies of progress, keeping the most recently updated attempt for each question. */
+export function mergeProgress(a: Progress, b: Progress): Progress {
+  const out = { ...a };
+  for (const [key, attempt] of Object.entries(b)) {
+    if (!out[key] || attempt.updated > out[key].updated) out[key] = attempt;
+  }
+  return out;
+}
+
+/** Merges another copy (IndexedDB, a synced file, a backup) into the current progress and saves everywhere. */
+export function adoptProgress(raw: unknown) {
+  progress = mergeProgress(progress, sanitize(raw));
+  save();
 }
 
 export function record(key: string, correct: boolean) {
@@ -82,12 +109,17 @@ export function exportProgress() {
   return JSON.stringify(progress, null, 2);
 }
 
-/** Throws on anything that isn't a progress export (invalid JSON, an array, null…). */
+/**
+ * Merges a backup into the current progress (newest attempt per question wins), so restoring an
+ * old backup never loses newer answers. Throws on anything that isn't a progress export
+ * (invalid JSON, an array, null…). Returns how many questions the backup held.
+ */
 export function importProgress(json: string) {
   const parsed: unknown = JSON.parse(json);
   if (!isRecord(parsed)) throw new Error('Not a progress export: expected a JSON object');
-  progress = sanitize(parsed);
-  save();
+  const incoming = sanitize(parsed);
+  adoptProgress(incoming);
+  return Object.keys(incoming).length;
 }
 
 const subscribe = (l: () => void) => {

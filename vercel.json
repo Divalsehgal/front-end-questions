@@ -12,7 +12,7 @@
       "permanent": true
     }
   ],
-  "rewrites": [{ "source": "/:route(review|mock|session)/", "destination": "/404.html" }],
+  "rewrites": [{ "source": "/:route(review|mock|session|settings|architecture)/", "destination": "/404.html" }],
   "headers": [
     {
       "source": "/assets/(.*)",

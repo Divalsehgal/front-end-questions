@@ -21,7 +21,7 @@ export function PageHeader({ title, description, actions }: Readonly<{ title: Re
 
 export function SectionTitle({ children, icon, id }: Readonly<{ children: ReactNode; icon?: ReactNode; id?: string }>) {
   return (
-    <h2 id={id} className="mt-10 mb-3 flex items-center gap-2 text-xs font-semibold tracking-wider text-text-muted uppercase">
+    <h2 id={id} className="mt-10 mb-3 flex items-center gap-2 font-mono text-[11px] font-medium tracking-widest text-text-muted uppercase">
       {icon && <span aria-hidden>{icon}</span>}
       {children}
     </h2>
