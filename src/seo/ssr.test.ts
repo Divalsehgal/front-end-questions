@@ -11,9 +11,9 @@ const DECODE: Record<string, string> = { '&amp;': '&', '&lt;': '<', '&gt;': '>',
 /** Visible text of server HTML: tags and React's text separators dropped, entities decoded, whitespace collapsed. */
 const textOf = (html: string) =>
   html
-    .replace(/<[^>]+>/g, ' ')
-    .replace(/&(amp|lt|gt|quot|#x27|#39);/g, (m) => DECODE[m])
-    .replace(/\s+/g, ' ');
+    .replaceAll(/<[^>]+>/g, ' ')
+    .replaceAll(/&(amp|lt|gt|quot|#x27|#39);/g, (m) => DECODE[m])
+    .replaceAll(/\s+/g, ' ');
 /** The opening of a markdown-lite field as plain text, cut before any code fence or table. */
 const opening = (md: string) =>
   stripMarkdown(md.split(/```|\n\|/)[0].split('\n')[0])

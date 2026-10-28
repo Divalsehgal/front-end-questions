@@ -89,9 +89,9 @@ function formatPlainObject(value: object, inner: Inner): string {
 /** Lenient comparison for typed answers: ignores spaces, quote style and Chrome's "(2)" array-length prefix. */
 export function normalizeLine(line: string): string {
   return line
-    .replace(/\(\d+\)\s*(?=\[)/g, '')
-    .replace(/["'`]/g, '')
-    .replace(/\s+/g, '');
+    .replaceAll(/\(\d+\)\s*(?=\[)/g, '')
+    .replaceAll(/["'`]/g, '')
+    .replaceAll(/\s+/g, '');
 }
 
 /** "Uncaught ReferenceError: …" also accepts "ReferenceError" or "Uncaught ReferenceError". */

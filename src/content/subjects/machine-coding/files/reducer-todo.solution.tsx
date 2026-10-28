@@ -193,8 +193,8 @@ export default function ReducerTodo() {
           <h3 className="font-semibold">When to use which</h3>
           <p>
             <strong>useReducer</strong> when several actions update the same state, when the next state depends on the
-            previous one in non-trivial ways, or when you want the update logic in one pure, testable function. Its
-            <code> dispatch</code> is stable, which makes memoised children easy.
+            previous one in non-trivial ways, or when you want the update logic in one pure, testable function. Its{' '}
+            <code>dispatch</code> is stable, which makes memoised children easy.
           </p>
           <p>
             <strong>useState</strong> for simple, independent values (a toggle, an input) where a reducer would only add

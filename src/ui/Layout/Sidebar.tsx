@@ -54,7 +54,7 @@ export function Sidebar() {
           <span aria-hidden className="grid size-7 place-items-center rounded-lg bg-primary text-on-primary">
             <Zap size={16} />
           </span>
-          FE Grind
+          <span>FE Grind</span>
         </NavLink>
         <ThemeToggle />
       </div>

@@ -117,7 +117,8 @@ export function questionJsonLd(e: FullEntry) {
 /** JSON for a <script type="application/ld+json">: "<" is escaped so "</script>" (or "<!--") in content can't end the tag. */
 export const serializeJsonLd = (data: unknown) =>
   JSON.stringify(data)
-    .replace(/</g, '\\u003c')
-    .replace(/>/g, '\\u003e')
-    .replace(/&/g, '\\u0026')
-    .replace(/[\u2028\u2029]/g, (c) => `\\u${c.charCodeAt(0).toString(16)}`);
+    .replaceAll('<', '\\u003c')
+    .replaceAll('>', '\\u003e')
+    .replaceAll('&', '\\u0026')
+    .replaceAll('\u2028', '\\u2028')
+    .replaceAll('\u2029', '\\u2029');

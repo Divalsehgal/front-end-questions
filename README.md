@@ -77,7 +77,7 @@ All content is typed data. Add an object to a topic's `questions` array in `src/
 - **code**: `{ kind: 'code', id, title, prompt, ...code('<id>') }`, with files `files/<id>.starter.ts`, `<id>.tests.ts` (globals: `test`, `assert`, `fn`, `clock`; import from `./solution`), and optionally `<id>.solution.ts` and `<id>.types.ts` (every `// @ts-expect-error` line must error). Omit `.tests.ts` to make a pure type challenge.
 - **ui**: `{ kind: 'ui', id, title, framework: 'react' | 'vanilla', prompt, requirements, ...ui('<id>') }`, with `files/<id>.starter.tsx|html` and optionally `<id>.solution.tsx|html`. React previews include Tailwind v4 and load any npm import from esm.sh.
 
-Then run `npm test`, which checks every question in Node, or open **`/jspractice/verify`** in dev to run the same checks in the browser. The browser version also renders every UI reference solution in a hidden preview and fails on runtime errors.
+Then run `npm test`, which checks every question in Node, or open **`/verify`** in dev to run the same checks in the browser. The browser version also renders every UI reference solution in a hidden preview and fails on runtime errors.
 
 ## CI and SonarCloud
 
@@ -87,23 +87,28 @@ The Sonar step needs a one-time setup. Import the repo at sonarcloud.io, turn of
 
 ## Deploying
 
-`.github/workflows/ci.yml` verifies every push and pull request; on `main`, its `deploy` job publishes the exact `dist/` that passed to the `gh-pages` branch. A failing check deploys nothing. The one-time manual setup (GitHub Pages, SonarCloud, Search Console, custom domain) is in [docs/LAUNCH_CHECKLIST.md](docs/LAUNCH_CHECKLIST.md).
+The site is hosted on **Vercel** (`https://front-end-questions-lilac.vercel.app/`) through its Git integration: every
+push to `main` deploys to production and every pull request gets a preview URL. `vercel.json` sets the build
+(`npm run build` → `dist/`), trailing-slash URLs that match the prerendered folders, rewrites for the client-only
+routes `/review/`, `/mock/` and `/session/`, year-long caching for hashed assets, and basic security headers.
+GitHub Actions (`ci.yml`) only verifies; protect `main` with its `verify` check so failing code never reaches
+production. The one-time manual setup is in [docs/LAUNCH_CHECKLIST.md](docs/LAUNCH_CHECKLIST.md).
 
 ## SEO and publishing
 
 Every page with content is a real URL with its own static HTML, so search engines can index each question.
 
-- **`SITE_URL`** is the only place the public address lives. It defaults to `https://divalsehgal.github.io/jspractice/`.
-  Override it at build time, for example `SITE_URL=https://fegrind.dev/ npm run build`, or set the `SITE_URL` repository
-  variable, which CI passes to the build. Vite's `base`, canonical URLs, Open Graph tags, the sitemap and `robots.txt` all derive from
-  it, so a custom domain is a one-line change. With a custom domain, also add a `public/CNAME` file.
+- **`SITE_URL`** is the only place the public address lives. It defaults to `https://front-end-questions-lilac.vercel.app/`.
+  Override it at build time, for example `SITE_URL=https://fegrind.dev/ npm run build`, or set `SITE_URL` as a Vercel
+  environment variable. Vite's `base`, canonical URLs, Open Graph tags, the sitemap and `robots.txt` all derive from
+  it, so a custom domain is a one-line change.
 - **`npm run build`** builds the client, builds `src/entry-server.tsx` for Node (`dist-ssr/`), then:
   - `scripts/prerender.js` writes `dist/<route>/index.html` for `/`, every `/s/<subject>/` and every
     `/q/<subject>/<id>/`. Each page has full HTML that the client then hydrates, plus its own `<title>`, description,
     canonical URL, Open Graph and Twitter tags and JSON-LD (`src/seo/`). Answers and explanations are in a collapsed
     "Show answer & explanation" disclosure, so they can be indexed without spoiling the question. Opening it before
-    you answer counts as a reveal. The script also writes `404.html`, the SPA fallback that GitHub Pages serves for
-    `/review`, `/mock` and `/session` (all `noindex`), and `.nojekyll`.
+    you answer counts as a reveal. The script also writes `404.html`: an empty, `noindex` app shell that Vercel serves
+    for unknown URLs and that `vercel.json` rewrites `/review/`, `/mock/` and `/session/` to.
   - `scripts/generate-sitemap.js` writes `dist/sitemap.xml`, a sitemap index with one sitemap per subject under
     `dist/sitemaps/`, and `dist/robots.txt`. `<lastmod>` is the last git commit that touched the subject's folder.
 - **Adding a question needs no SEO work.** Its page, meta tags, structured data and sitemap entry all come from the
@@ -111,17 +116,8 @@ Every page with content is a real URL with its own static HTML, so search engine
 - The favicon, app icons and the 1200×630 Open Graph image in `public/` come from `scripts/generate-icons.js`
   (`npm run icons`).
 
-After the first deploy, the owner needs to do these steps by hand (the full list is in
-[docs/LAUNCH_CHECKLIST.md](docs/LAUNCH_CHECKLIST.md)). For step 1, put the verification code in the
-`GOOGLE_SITE_VERIFICATION` repository variable instead of editing `index.html`:
-
-1. Open [Google Search Console](https://search.google.com/search-console) and add a **URL-prefix** property for the
-   site URL. Verify it with the HTML-tag method: put the `<meta name="google-site-verification">` tag in
-   `index.html`'s `<head>` and redeploy. A domain property also works if you own a custom domain.
-2. Under **Sitemaps**, submit `sitemap.xml` (the full URL is `https://divalsehgal.github.io/jspractice/sitemap.xml`).
-3. Use **URL inspection** on the home page and a few question pages, then click **Request indexing**. Bing Webmaster
-   Tools can import the property from Search Console.
-
-Crawlers only read `robots.txt` at a domain root. On a `github.io/<repo>/` sub-path it is ignored, so the sitemap
-must be submitted in Search Console. It starts to apply once the site has a custom domain or moves to a
-`<user>.github.io` repository.
+After the first deploy, the owner needs to verify the site in Google Search Console, submit
+`https://front-end-questions-lilac.vercel.app/sitemap.xml` and request indexing for a few pages. Put the Search
+Console verification code in the `GOOGLE_SITE_VERIFICATION` Vercel environment variable; the build injects the
+`<meta name="google-site-verification">` tag into every page. The full list is in
+[docs/LAUNCH_CHECKLIST.md](docs/LAUNCH_CHECKLIST.md).

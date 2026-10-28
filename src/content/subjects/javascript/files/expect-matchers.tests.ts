@@ -11,7 +11,7 @@ const throwsWith = (f: () => unknown, msg: string) => {
 };
 
 test('toBe uses Object.is', () => {
-  assert.equal(expect(NaN).toBe(NaN), true);
+  assert.equal(expect(Number.NaN).toBe(Number.NaN), true);
   throwsWith(() => expect(0).toBe(-0), 'Not Equal');
   assert.equal(expect(5).toBe(5), true);
   throwsWith(() => expect(5).toBe('5'), 'Not Equal');

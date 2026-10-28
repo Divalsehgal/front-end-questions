@@ -46,7 +46,7 @@ export default function TypeWriterEffect() {
         <h2 className="text-2xl font-bold text-text-main">Typewriter</h2>
         <div className="flex items-center gap-3">
           <label className="flex items-center gap-2 text-sm text-text-muted">
-            Speed
+            <span>Speed</span>
             <input
               type="range"
               min={10}

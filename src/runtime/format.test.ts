@@ -12,7 +12,7 @@ describe('format: primitives', () => {
   it('formats numbers like a console, including -0 and NaN', () => {
     expect(format(-0)).toBe('-0');
     expect(format(0)).toBe('0');
-    expect(format(NaN)).toBe('NaN');
+    expect(format(Number.NaN)).toBe('NaN');
     expect(format(Infinity)).toBe('Infinity');
     expect(format(-Infinity)).toBe('-Infinity');
     expect(format(1.5)).toBe('1.5');
@@ -71,6 +71,8 @@ describe('format: objects', () => {
     const bare = Object.create(null);
     bare.k = 1;
     expect(format(bare)).toBe('[Object: null prototype] {k: 1}');
+    // A boxed Number (an object) is exactly what this case formats.
+    // eslint-disable-next-line unicorn/new-for-builtins
     expect(format(new Number(1))).toBe('Number {}');
   });
 
@@ -111,7 +113,7 @@ describe('format: objects', () => {
   });
 
   it('prints an invalid Date instead of throwing', () => {
-    expect(format(new Date(NaN))).toBe('Invalid Date');
+    expect(format(new Date(Number.NaN))).toBe('Invalid Date');
     expect(format({ d: new Date('nope') })).toBe('{d: Invalid Date}');
   });
 });

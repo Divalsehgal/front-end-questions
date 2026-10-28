@@ -37,6 +37,8 @@ function ModalDialog({ children, title, open, onClose }: ModalDialogProps) {
 
   return createPortal(
     <div
+      // The backdrop is a mouse convenience; keyboard users close with Escape or the Close button.
+      role="presentation"
       className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
       onMouseDown={(e) => {
         // Only a press that starts on the backdrop itself closes the dialog.

@@ -1,6 +1,8 @@
 // Node-side equivalent of src/runtime/sandbox.worker.ts for CI. Each drill runs in a fresh
 // worker thread (like the browser's per-run Web Worker), so a drill that disables Promise.all,
 // patches Array.prototype, or leaves promises rejecting unobserved can't affect anything else.
+// Security: test-only code (never bundled into the app). It evaluates the repository's own question
+// fixtures in CI, in a worker thread or a fresh node:vm context with a timeout; no external input.
 import vm from 'node:vm';
 import { Worker } from 'node:worker_threads';
 import { transform } from 'sucrase';

@@ -4,7 +4,7 @@ test('same reference and primitives', () => {
   const o = { a: 1 };
   assert.equal(shallowEqual(o, o), true);
   assert.equal(shallowEqual(1, 1), true);
-  assert.equal(shallowEqual(NaN, NaN), true);
+  assert.equal(shallowEqual(Number.NaN, Number.NaN), true);
   assert.equal(shallowEqual(1, 2), false);
 });
 

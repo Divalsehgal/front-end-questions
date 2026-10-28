@@ -3,7 +3,7 @@ import { deepEqual } from './solution';
 test('primitives (NaN equals NaN)', () => {
   assert.equal(deepEqual(1, 1), true);
   assert.equal(deepEqual('1', 1), false);
-  assert.equal(deepEqual(NaN, NaN), true);
+  assert.equal(deepEqual(Number.NaN, Number.NaN), true);
   assert.equal(deepEqual(null, undefined), false);
   assert.equal(deepEqual(null, {}), false);
 });

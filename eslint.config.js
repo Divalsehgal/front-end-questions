@@ -1,10 +1,12 @@
 // @ts-check
 import js from '@eslint/js';
+import vitest from '@vitest/eslint-plugin';
 import prettier from 'eslint-config-prettier';
 import importX from 'eslint-plugin-import-x';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
+import unicorn from 'eslint-plugin-unicorn';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
@@ -30,7 +32,7 @@ export default tseslint.config(
       sourceType: 'module',
       globals: { ...globals.browser },
     },
-    plugins: { 'import-x': importX },
+    plugins: { 'import-x': importX, unicorn },
     settings: {
       'import-x/resolver': { typescript: true, node: true },
     },
@@ -46,6 +48,14 @@ export default tseslint.config(
       'prefer-const': 'error',
       'no-var': 'error',
       'no-console': ['warn', { allow: ['error', 'warn'] }],
+      'require-await': 'error',
+
+      // Modern built-ins (mirrors SonarCloud's code-smell rules).
+      'unicorn/prefer-number-properties': 'error',
+      'unicorn/prefer-string-replace-all': 'error',
+      'unicorn/prefer-code-point': 'error',
+      'unicorn/no-new-array': 'error',
+      'unicorn/new-for-builtins': 'error',
 
       // Imports
       'import-x/no-duplicates': 'error',
@@ -81,6 +91,7 @@ export default tseslint.config(
       'react/self-closing-comp': 'error',
       'react/jsx-no-useless-fragment': 'error',
       'react/jsx-key': ['error', { checkFragmentShorthand: true }],
+      'react/jsx-child-element-spacing': 'error',
     },
   },
   reactHooks.configs.flat['recommended-latest'],
@@ -89,12 +100,16 @@ export default tseslint.config(
   {
     files: ['src/**/*.test.{ts,tsx}', 'src/test/**'],
     languageOptions: { globals: { ...globals.node } },
+    plugins: { vitest },
     rules: {
+      'vitest/expect-expect': 'error',
       'max-lines-per-function': 'off',
       '@typescript-eslint/no-non-null-assertion': 'off',
       // Empty functions/classes are common fixtures for formatter and harness tests.
       '@typescript-eslint/no-empty-function': 'off',
       '@typescript-eslint/no-extraneous-class': 'off',
+      // Mocks of async APIs are written `async` on purpose, so a throw becomes a rejection.
+      'require-await': 'off',
     },
   },
 

@@ -9,7 +9,7 @@ const isBullet = (line: string) => /^\s*[-*] /.test(line);
 const cells = (line: string) =>
   line
     .trim()
-    .replace(/^\||\|$/g, '')
+    .replaceAll(/^\||\|$/g, '')
     .split('|')
     .map((c) => c.trim());
 
