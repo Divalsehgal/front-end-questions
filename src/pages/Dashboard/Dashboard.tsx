@@ -19,13 +19,12 @@ export function Dashboard() {
     <Page>
       <PageHeader
         title={attempted.length ? 'Keep the streak going' : 'Frontend interview grind'}
-        description="Answer before you read. Output questions are marked by the real JS engine, coding drills by test suites, and anything you miss comes back in Review."
+        description="Output questions are marked by the real JS engine, coding drills by test suites, and anything you miss comes back in Review."
       />
       <p className="-mt-4 mb-8 max-w-3xl text-sm leading-6 text-text-muted">
-        FE Grind is free frontend interview practice with no login: {ALL.length} interview questions with answers and explanations across JavaScript,
-        TypeScript, React, Next.js, HTML and accessibility, CSS, data structures and algorithms, design patterns, frontend system design, web security, testing
-        and Node.js. Practise with multiple-choice quizzes, guess-the-output puzzles, coding drills checked by real tests, flashcards and machine coding rounds
-        with a live preview. Progress stays in your browser.
+        FE Grind is free frontend interview practice with no login required. Explore questions across JavaScript, TypeScript, React, Next.js, CSS,
+        accessibility, DSA, system design, security, testing, and Node.js. Practise with quizzes, coding challenges, flashcards, and machine coding rounds. Your
+        progress stays in your browser.{' '}
       </p>
 
       <div className="grid gap-3 sm:grid-cols-3">
