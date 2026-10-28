@@ -1,6 +1,6 @@
 // Public identity of the site. SITE_URL comes from vite.config.ts (env SITE_URL at build time),
 // so canonical URLs, the sitemap and Open Graph tags all follow a domain change automatically.
-const FALLBACK = 'https://divalsehgal.github.io/jspractice/';
+const FALLBACK = 'https://front-end-questions-lilac.vercel.app/';
 
 /** Absolute site root, always ending in "/". */
 export const SITE_URL = withSlash((import.meta.env.VITE_SITE_URL as string | undefined) ?? FALLBACK);
@@ -24,7 +24,7 @@ export function normalizePath(path: string) {
   return clean === '/' ? '/' : `${clean}/`;
 }
 
-/** Absolute URL for a router path, e.g. "/s/react" -> "https://…/jspractice/s/react/". */
+/** Absolute URL for a router path, e.g. "/s/react" -> "https://…/s/react/". */
 export const absoluteUrl = (path: string) => SITE_URL + normalizePath(path).slice(1);
 
 export const isNoindex = (path: string) => NOINDEX_ROUTES.some((r) => normalizePath(path) === `${r}/`);

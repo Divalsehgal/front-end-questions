@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // Build-time static rendering: writes dist/<route>/index.html with full HTML and per-page <head>
 // for every route that has content (home, each subject, each question), plus the SPA fallback
-// 404.html and .nojekyll for GitHub Pages. Runs after `vite build` (client) and
+// 404.html (the app shell vercel.json rewrites client-only routes to) and .nojekyll. Runs after `vite build` (client) and
 // `vite build --ssr src/entry-server.tsx --outDir dist-ssr` (see "build" in package.json).
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
@@ -59,7 +59,7 @@ for (const path of paths) {
   write(path === '/' ? 'index.html' : join(path, 'index.html'), out);
 }
 
-// GitHub Pages serves 404.html for any unknown path: an empty, noindexed shell the client router
+// 404.html: an empty, noindexed shell the client router
 // fills in, so /review, /mock and /session (and stale links) still work.
 write('404.html', page(renderHead(pageMeta('/404')), ''));
 write('.nojekyll', '');

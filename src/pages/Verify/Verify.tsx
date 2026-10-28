@@ -1,4 +1,4 @@
-// Dev-only content health check (open /jspractice/verify while running `npm run dev`).
+// Dev-only content health check (open /verify while running `npm run dev`).
 // Runs the same machinery the app uses, so a green run means every question works.
 import { Check, Loader2, Play, X } from 'lucide-react';
 import { useState } from 'react';

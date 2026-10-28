@@ -1,6 +1,7 @@
 name: CI
 
-# One pipeline: every push and PR is verified; pushes to main then deploy the exact build that passed.
+# Verifies every push and PR. Deploys are handled by Vercel's Git integration (production from main,
+# a preview URL for every PR); protect main with this `verify` check so only passing code reaches production.
 on:
   push:
     branches: [main]
@@ -14,11 +15,6 @@ concurrency:
 jobs:
   verify:
     runs-on: ubuntu-latest
-    env:
-      # Repository variable (Settings → Secrets and variables → Actions → Variables). Empty falls back to the
-      # default in vite.config.ts. Set it when you move to a custom domain.
-      SITE_URL: ${{ vars.SITE_URL }}
-      GOOGLE_SITE_VERIFICATION: ${{ vars.GOOGLE_SITE_VERIFICATION }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -55,40 +51,9 @@ jobs:
       - name: Build and prerender
         run: npm run build
 
-      - name: Upload site
-        if: github.event_name != 'pull_request'
-        uses: actions/upload-artifact@v4
-        with:
-          name: site
-          path: dist
-          retention-days: 7
-
       - name: SonarCloud scan
         # Skipped for forks and Dependabot, which don't get repository secrets.
         if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
         uses: SonarSource/sonarqube-scan-action@v5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-  deploy:
-    needs: verify
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    concurrency:
-      group: deploy-pages
-      cancel-in-progress: false
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: site
-          path: dist
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
-          publish_branch: gh-pages
-          force_orphan: true # keep gh-pages to a single commit instead of growing forever
