@@ -70,6 +70,29 @@ describe('checkTypes', () => {
     expect(issue).toMatchObject({ inTypeTests: true, line: 3, source: 'fn("x");', shouldFail: 'rejects strings' });
   });
 
+  it('takes the reason after the last @ts-expect-error on the line, and the whole line without one', async () => {
+    const directive = "Unused '@ts-expect-error' directive.";
+    const f = fakeMonaco(
+      [],
+      [
+        { start: at(3), messageText: directive },
+        { start: at(5), messageText: directive },
+        { start: at(7), messageText: directive },
+      ],
+    );
+    const tests = ['/* @ts-expect-error */ // @ts-expect-error\t  why', 'a;', '// @ts-expect-error', 'b;', 'no directive here', 'c;'].join('\n');
+    const issues = await checkTypes(f.monaco, 'id', 'code', tests);
+    expect(issues.map((i) => i.shouldFail)).toEqual(['why', '', 'no directive here']);
+  });
+
+  it('extracts the reason in linear time on a long line', async () => {
+    const f = fakeMonaco([], [{ start: at(3), messageText: "Unused '@ts-expect-error' directive." }]);
+    const start = performance.now();
+    const [issue] = await checkTypes(f.monaco, 'id', 'code', 'x'.repeat(50_000));
+    expect(performance.now() - start).toBeLessThan(50);
+    expect(issue.shouldFail).toBe('x'.repeat(50_000));
+  });
+
   it('disposes the model even when the TS worker fails', async () => {
     const f = fakeMonaco([], []);
     f.worker.getSyntacticDiagnostics.mockRejectedValueOnce(new Error('worker died'));

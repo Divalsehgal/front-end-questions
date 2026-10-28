@@ -31,6 +31,19 @@ describe('rewriteImports', () => {
     expect(out).toContain("import('https://esm.sh/clsx@2.1.1?external=react,react-dom')");
     expect(out).toContain("'https://x.dev/u.js'");
   });
+
+  it('accepts any spacing around dynamic import parens and keeps it', () => {
+    expect(rewriteImports("import  (  'clsx')")).toBe("import  (  'https://esm.sh/clsx@2.1.1?external=react,react-dom')");
+    expect(rewriteImports('import"dayjs"')).toBe('import"https://esm.sh/dayjs@1.11.13?external=react,react-dom"');
+    expect(rewriteImports('from \'x"')).toBe('from \'x"');
+  });
+
+  it('runs in linear time on long whitespace after import', () => {
+    const input = `import${' '.repeat(50_000)}(${' '.repeat(50_000)}x`;
+    const start = performance.now();
+    expect(rewriteImports(input)).toBe(input);
+    expect(performance.now() - start).toBeLessThan(50);
+  });
 });
 
 describe('preview documents', () => {

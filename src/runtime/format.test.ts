@@ -101,7 +101,7 @@ describe('format: objects', () => {
 
   it('formats dates, regexps, errors and promises', () => {
     expect(format(new Date(0))).toBe('1970-01-01T00:00:00.000Z');
-    expect(format(/a+b/gi)).toBe('/a+b/gi');
+    expect(format(/^a+b/gi)).toBe('/^a+b/gi');
     expect(format(new Error('boom'))).toBe('Error: boom');
     expect(format(new TypeError('bad'))).toBe('TypeError: bad');
     class MyErr extends Error {

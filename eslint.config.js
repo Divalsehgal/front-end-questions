@@ -6,6 +6,7 @@ import importX from 'eslint-plugin-import-x';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
+import regexp from 'eslint-plugin-regexp';
 import unicorn from 'eslint-plugin-unicorn';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
@@ -32,7 +33,7 @@ export default tseslint.config(
       sourceType: 'module',
       globals: { ...globals.browser },
     },
-    plugins: { 'import-x': importX, unicorn },
+    plugins: { 'import-x': importX, unicorn, regexp },
     settings: {
       'import-x/resolver': { typescript: true, node: true },
     },
@@ -57,6 +58,10 @@ export default tseslint.config(
       'unicorn/no-new-array': 'error',
       'unicorn/new-for-builtins': 'error',
 
+      // Regexes that backtrack super-linearly on hostile input (mirrors SonarCloud S5852).
+      'regexp/no-super-linear-backtracking': 'error',
+      'regexp/no-super-linear-move': 'error',
+
       // Imports
       'import-x/no-duplicates': 'error',
       'import-x/first': 'error',
@@ -76,6 +81,14 @@ export default tseslint.config(
       complexity: ['warn', 15],
       'max-depth': ['warn', 4],
     },
+  },
+
+  // Promises must be awaited, handled or explicitly ignored with `void` (mirrors SonarCloud S6544).
+  // The only type-aware rule, so only it pays for the TypeScript program.
+  {
+    files: ['src/**/*.{ts,tsx}'],
+    languageOptions: { parserOptions: { project: ['./tsconfig.json', './tsconfig.test.json'], tsconfigRootDir: import.meta.dirname } },
+    rules: { '@typescript-eslint/no-floating-promises': 'error' },
   },
 
   // React + accessibility (WCAG) for components.

@@ -65,7 +65,7 @@ export function SessionSummary() {
           <Button
             onClick={() => {
               startSession('review', missed);
-              navigate(hrefOf(missed[0]));
+              void navigate(hrefOf(missed[0]));
             }}
           >
             <RotateCcw size={16} aria-hidden /> Retry the {missed.length} I missed
@@ -77,7 +77,7 @@ export function SessionSummary() {
             const to = session.kind === 'mock' ? '/mock' : '/';
             setLeavingTo(to);
             endSession();
-            navigate(to);
+            void navigate(to);
           }}
         >
           {session.kind === 'mock' ? 'New round' : 'Back to dashboard'}

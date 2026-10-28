@@ -21,6 +21,31 @@ describe('design token contrast (WCAG 2.2 AA)', () => {
     expect(failures.map((f) => `${f.theme}: --${f.fg} on --${f.bg} = ${f.ratio}:1 (needs ${f.min})`)).toEqual([]);
   });
 
+  it('reads only `--name: #hex;` declarations, like the original token regex', () => {
+    const sample = [
+      ':root {',
+      '  --a: #fff;',
+      '  --B-c :  #A1B2C3 ;',
+      '  /* note */ --d: #123;',
+      '  x--e--f: #0000;',
+      '  --g: #12;',
+      '  --h: red;',
+      '  ---: #fff;',
+      '  --: #fff;',
+      '  --i: #abc: #def;',
+      '  --j: #abcdef',
+      '}',
+      '.dark { --a: #000; }',
+    ].join('\n');
+    expect(parseTokens(sample)).toEqual({ light: { a: '#fff', 'B-c': '#A1B2C3', d: '#123', 'e--f': '#0000', '-': '#fff' }, dark: { a: '#000' } });
+  });
+
+  it('parses a block of dashes in linear time', () => {
+    const start = performance.now();
+    expect(parseTokens(`:root {${'-'.repeat(50_000)}}\n.dark {${'-'.repeat(50_000)}: ;}`)).toEqual({ light: {}, dark: {} });
+    expect(performance.now() - start).toBeLessThan(50);
+  });
+
   it('flags a failing pair', () => {
     const bad = css.replace(/--text-muted: #[0-9a-f]+;/, '--text-muted: #bbbbbb;');
     expect(checkContrast(bad).some((r) => !r.ok && r.fg === 'text-muted')).toBe(true);

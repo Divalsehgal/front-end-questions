@@ -45,9 +45,9 @@ export function QuestionPage() {
   };
 
   const goNext = () => {
-    if (next) navigate(hrefOf(next));
-    else if (inSession) navigate('/session');
-    else navigate(subjectHref(entry.subject.slug));
+    if (next) void navigate(hrefOf(next));
+    else if (inSession) void navigate('/session');
+    else void navigate(subjectHref(entry.subject.slug));
   };
 
   return (
@@ -58,11 +58,13 @@ export function QuestionPage() {
         position={{ index, total: order.length }}
         hasPrev={!!prev}
         nextLabel={next ? 'Next' : inSession ? 'Finish' : 'Done'}
-        onPrev={() => prev && navigate(hrefOf(prev))}
+        onPrev={() => {
+          if (prev) void navigate(hrefOf(prev));
+        }}
         onNext={goNext}
         onQuit={() => {
           endSession();
-          navigate(subjectHref(entry.subject.slug));
+          void navigate(subjectHref(entry.subject.slug));
         }}
       />
 

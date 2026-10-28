@@ -21,7 +21,7 @@ const PINNED: Record<string, string> = {
 
 /** Rewrites bare imports (other than React) to esm.sh, sharing our single React instance. */
 export function rewriteImports(code: string) {
-  return code.replaceAll(/(\bfrom\s*|\bimport\s*\(?\s*)(['"])([^'"./][^'"]*)\2/g, (match, lead: string, q: string, spec: string) => {
+  return code.replaceAll(/(\bfrom\s*|\bimport\s*(?:\(\s*)?)(['"])([^'"./][^'"]*)\2/g, (match, lead: string, q: string, spec: string) => {
     if (/^(react|react-dom)(\/|$)/.test(spec) || spec.startsWith('http')) return match;
     const name = spec.startsWith('@') ? spec.split('/').slice(0, 2).join('/') : spec.split('/')[0];
     const sub = spec.slice(name.length);

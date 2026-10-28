@@ -20,8 +20,17 @@ function withSlash(url: string) {
 
 /** Router path (no base) with exactly one trailing slash: "/q/js/x" -> "/q/js/x/". "/" stays "/". */
 export function normalizePath(path: string) {
-  const clean = `/${path.split(/[?#]/)[0].replaceAll(/^\/+|\/+$/g, '')}`;
+  const clean = `/${trimSlashes(path.split(/[?#]/)[0])}`;
   return clean === '/' ? '/' : `${clean}/`;
+}
+
+/** Drops leading and trailing "/" (a loop, not /^\/+|\/+$/g, which is quadratic on long runs of "/"). */
+function trimSlashes(s: string) {
+  let start = 0;
+  let end = s.length;
+  while (start < end && s[start] === '/') start++;
+  while (end > start && s[end - 1] === '/') end--;
+  return s.slice(start, end);
 }
 
 /** Absolute URL for a router path, e.g. "/s/react" -> "https://…/s/react/". */

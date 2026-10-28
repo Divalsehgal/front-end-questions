@@ -34,7 +34,7 @@ export function MockSetup() {
       'mock',
       picked.map((e) => e.key),
     );
-    navigate(hrefOf(picked[0].key));
+    void navigate(hrefOf(picked[0].key));
   };
 
   return (

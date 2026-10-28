@@ -18,7 +18,7 @@ export function Review() {
       'review',
       due.map((e) => e.key),
     );
-    navigate(hrefOf(due[0].key));
+    void navigate(hrefOf(due[0].key));
   };
 
   return (

@@ -38,9 +38,29 @@ export function parseTokens(css) {
   const block = (selector) => {
     const m = css.match(new RegExp(`(?:^|\\n)${selector.replace('.', '\\.')}\\s*\\{([^}]*)\\}`));
     if (!m) throw new Error(`No ${selector} block in index.css`);
-    return Object.fromEntries([...m[1].matchAll(/--([\w-]+)\s*:\s*(#[0-9a-f]{3,8})\s*;/gi)].map(([, k, v]) => [k, v]));
+    return Object.fromEntries(m[1].split(';').slice(0, -1).map(hexToken).filter(Boolean));
   };
   return { light: block(':root'), dark: block('.dark') };
+}
+
+const NAME_CHAR = /[\w-]/;
+const HEX = /^#[0-9a-f]{3,8}$/i;
+
+/**
+ * `--name: #hex` (one `;`-terminated chunk, `;` removed) to [name, hex], else undefined. Same as
+ * matching /--([\w-]+)\s*:\s*(#[0-9a-f]{3,8})\s*;/ but in linear time: that regex backtracks
+ * quadratically on long runs of `-`.
+ */
+function hexToken(chunk) {
+  const colon = chunk.lastIndexOf(':');
+  const value = chunk.slice(colon + 1).trim();
+  if (colon === -1 || !HEX.test(value)) return undefined;
+  const head = chunk.slice(0, colon).trimEnd();
+  let start = head.length;
+  while (start > 0 && NAME_CHAR.test(head[start - 1])) start--;
+  const word = head.slice(start);
+  const dashes = word.indexOf('--');
+  return dashes !== -1 && dashes + 2 < word.length ? [word.slice(dashes + 2), value] : undefined;
 }
 
 function channel(hex, i) {
