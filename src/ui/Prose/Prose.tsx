@@ -1,27 +1,27 @@
 import { CodeBlock } from '../CodeBlock';
-import { cn } from '../lib';
+import { cn, withStableKeys } from '../lib';
 import { inline } from './inline';
 import { parseBlocks, type Block } from './parse';
 
-function Table({ head, rows }: { head: string[]; rows: string[][] }) {
+function Table({ head, rows }: Readonly<{ head: string[]; rows: string[][] }>) {
   return (
     <div className="overflow-x-auto rounded-lg border border-line">
       <table className="w-full text-sm">
         <thead className="bg-surface-muted text-left">
           <tr>
-            {head.map((c, k) => (
-              <th key={k} scope="col" className="px-3 py-2 font-semibold">
-                {inline(c)}
+            {withStableKeys(head).map(({ item, key }) => (
+              <th key={key} scope="col" className="px-3 py-2 font-semibold">
+                {inline(item)}
               </th>
             ))}
           </tr>
         </thead>
         <tbody>
-          {rows.map((r, k) => (
-            <tr key={k} className="border-t border-line">
-              {r.map((c, m) => (
-                <td key={m} className="px-3 py-2 align-top">
-                  {inline(c)}
+          {withStableKeys(rows, (r) => r.join('|')).map(({ item: row, key }) => (
+            <tr key={key} className="border-t border-line">
+              {withStableKeys(row).map((cell) => (
+                <td key={cell.key} className="px-3 py-2 align-top">
+                  {inline(cell.item)}
                 </td>
               ))}
             </tr>
@@ -32,7 +32,7 @@ function Table({ head, rows }: { head: string[]; rows: string[][] }) {
   );
 }
 
-function BlockView({ block }: { block: Block }) {
+function BlockView({ block }: Readonly<{ block: Block }>) {
   switch (block.type) {
     case 'code':
       return <CodeBlock code={block.code} lang={block.lang} />;
@@ -41,8 +41,8 @@ function BlockView({ block }: { block: Block }) {
     case 'list':
       return (
         <ul className="list-disc space-y-1 pl-5 marker:text-text-muted">
-          {block.items.map((item, k) => (
-            <li key={k}>{inline(item)}</li>
+          {withStableKeys(block.items).map(({ item, key }) => (
+            <li key={key}>{inline(item)}</li>
           ))}
         </ul>
       );
@@ -51,12 +51,14 @@ function BlockView({ block }: { block: Block }) {
   }
 }
 
+const blockKey = (block: Block) => JSON.stringify(block);
+
 /** Markdown-lite for prompts, answers and explanations: paragraphs, "- " bullets, tables, `code`, **bold**, ``` fences. */
-export function Prose({ text, className }: { text: string; className?: string }) {
+export function Prose({ text, className }: Readonly<{ text: string; className?: string }>) {
   return (
     <div className={cn('space-y-3 text-[15px] leading-7 text-text-main', className)}>
-      {parseBlocks(text).map((block, i) => (
-        <BlockView key={i} block={block} />
+      {withStableKeys(parseBlocks(text), blockKey).map(({ item, key }) => (
+        <BlockView key={key} block={item} />
       ))}
     </div>
   );

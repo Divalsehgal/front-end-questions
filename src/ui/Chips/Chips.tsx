@@ -56,7 +56,8 @@ export function ToggleChips<T extends string>({
   labelledBy,
 }: Labelled & { selected: readonly T[]; onChange: (v: T[]) => void; options: { value: T; label: ReactNode }[] }) {
   return (
-    <div role="group" aria-label={label} aria-labelledby={labelledBy} className="flex flex-wrap gap-2">
+    <fieldset aria-labelledby={labelledBy} className="flex min-w-0 flex-wrap gap-2">
+      {label && <legend className="sr-only">{label}</legend>}
       {options.map((o) => {
         const on = selected.includes(o.value);
         return (
@@ -71,6 +72,6 @@ export function ToggleChips<T extends string>({
           </button>
         );
       })}
-    </div>
+    </fieldset>
   );
 }

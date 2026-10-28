@@ -3,7 +3,7 @@ import { useMemo, useState } from 'react';
 import { Button, inline, useHydrated } from '../../ui';
 import { confirmReveal, shuffle, useFirstVerdict, type ViewProps } from '../shared';
 import { OrderAnswer, OrderResult } from './OrderAnswer';
-import { OrderRow } from './OrderRow';
+import { OrderRow, type RowState } from './OrderRow';
 import type { OrderQuestion } from '../../content/types';
 
 export function initialOrder(items: string[]) {
@@ -15,11 +15,16 @@ export function initialOrder(items: string[]) {
   return [...items].reverse();
 }
 
-export function OrderView({ q, onResult }: ViewProps<OrderQuestion>) {
+function rowState(checked: boolean, right: boolean): RowState {
+  if (!checked) return 'idle';
+  return right ? 'right' : 'wrong';
+}
+
+export function OrderView({ q, onResult }: Readonly<ViewProps<OrderQuestion>>) {
   // Random start in the browser; prerendered HTML (and hydration) uses the reversed order so markup matches.
   const hydrated = useHydrated();
   const start = useMemo(() => (hydrated ? initialOrder(q.items) : [...q.items].reverse()), [q, hydrated]);
-  const [moved, setOrder] = useState<string[] | null>(null);
+  const [moved, setMoved] = useState<string[] | null>(null);
   const order = moved ?? start;
   const [dragging, setDragging] = useState<number | null>(null);
   const [checked, setChecked] = useState(false);
@@ -29,7 +34,7 @@ export function OrderView({ q, onResult }: ViewProps<OrderQuestion>) {
 
   const move = (from: number, to: number) => {
     if (checked || to < 0 || to >= order.length || from === to) return;
-    setOrder((cur) => {
+    setMoved((cur) => {
       const next = [...(cur ?? start)];
       const [item] = next.splice(from, 1);
       next.splice(to, 0, item);
@@ -62,7 +67,7 @@ export function OrderView({ q, onResult }: ViewProps<OrderQuestion>) {
             item={item}
             index={i}
             count={order.length}
-            state={!checked ? 'idle' : item === q.items[i] ? 'right' : 'wrong'}
+            state={rowState(checked, item === q.items[i])}
             locked={checked}
             dragging={dragging === i}
             onMove={(to) => move(i, to)}

@@ -47,8 +47,9 @@ async function runPredict(source: string, lang: 'js' | 'ts' = 'js') {
   let code = source;
   try {
     if (lang === 'ts') code = transform(source, { transforms: ['typescript'], disableESTransforms: true }).code;
-    // A plain call with no receiver: top-level `this` is undefined, like an ES module.
-    new Function(`"use strict";\n${code}`).call(undefined);
+    // A plain call of a strict-mode function: top-level `this` is undefined, like an ES module.
+    // Sonar S1523 is suppressed: runs the learner's own snippet by design (see the Security note above).
+    new Function(`"use strict";\n${code}`)(); // NOSONAR
   } catch (e) {
     lines.push(errorLine(e));
   }
@@ -64,7 +65,8 @@ async function runCode(solution: string, tests: string) {
 
   const solutionExports: Record<string, unknown> = {};
   try {
-    new Function('exports', 'require', 'module', toCommonJs(solution))(solutionExports, () => ({}), { exports: solutionExports });
+    // Sonar S1523 is suppressed: loads the learner's own solution by design (see the Security note above).
+    new Function('exports', 'require', 'module', toCommonJs(solution))(solutionExports, () => ({}), { exports: solutionExports }); // NOSONAR
   } catch (e) {
     reply({ kind: 'code', results: [], logs, fatal: `Your code failed to load: ${errorLine(e).replace(/^Uncaught /, '')}` });
     return;
@@ -85,7 +87,8 @@ async function runCode(solution: string, tests: string) {
 
   try {
     const results = await runTests(({ test }) => {
-      new Function('exports', 'require', 'module', 'test', 'assert', 'fn', 'clock', testsJs)({}, require, { exports: {} }, test, assert, fn, clock);
+      // Sonar S1523 is suppressed: runs the question's own test file by design (see the Security note above).
+      new Function('exports', 'require', 'module', 'test', 'assert', 'fn', 'clock', testsJs)({}, require, { exports: {} }, test, assert, fn, clock); // NOSONAR
     }, clock);
     reply({ kind: 'code', results, logs });
   } catch (e) {

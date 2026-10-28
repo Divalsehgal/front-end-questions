@@ -1,36 +1,39 @@
 import { Check, Play, X } from 'lucide-react';
 import { linesMatch, normalizeLine } from '../../runtime/format';
-import { Card, cn, ResultHeader } from '../../ui';
+import { Card, cn, ResultHeader, withStableKeys } from '../../ui';
 
 export type Result = { real: string[]; mine: string[]; correct: boolean; gaveUp: boolean };
 
 // Underlines the words in your line that don't appear at the same position in the real line.
-export function TokenDiff({ line, against }: { line: string; against: string }) {
+export function TokenDiff({ line, against }: Readonly<{ line: string; against: string }>) {
   const theirs = against.split(/\s+/).map(normalizeLine);
   return (
     <>
-      {line.split(/(\s+)/).map((tok, i) =>
-        /^\s+$/.test(tok) ? (
-          tok
-        ) : normalizeLine(tok) === theirs[i / 2] ? (
-          <span key={i}>{tok}</span>
-        ) : (
-          <mark key={i} className="rounded bg-error-soft text-error underline decoration-wavy">
+      {withStableKeys(line.split(/(\s+)/)).map(({ item: tok, key }, i) => {
+        if (/^\s+$/.test(tok)) return tok;
+        if (normalizeLine(tok) === theirs[i / 2]) return <span key={key}>{tok}</span>;
+        return (
+          <mark key={key} className="rounded bg-error-soft text-error underline decoration-wavy">
             {tok}
           </mark>
-        ),
-      )}
+        );
+      })}
     </>
   );
 }
 
-function RealLine({ real }: { real?: string }) {
+function RealLine({ real }: Readonly<{ real?: string }>) {
   if (real === undefined) return <span className="text-text-muted italic">(nothing more is logged)</span>;
   if (real === '') return <span className="text-text-muted italic">(empty line)</span>;
   return real;
 }
 
-function Line({ index, mine, real, gaveUp }: { index: number; mine?: string; real?: string; gaveUp: boolean }) {
+function YourLine({ mine, real, ok }: Readonly<{ mine?: string; real?: string; ok: boolean }>) {
+  if (mine === undefined) return <span className="italic">(missing)</span>;
+  return ok ? mine : <TokenDiff line={mine} against={real ?? ''} />;
+}
+
+function Line({ index, mine, real, gaveUp }: Readonly<{ index: number; mine?: string; real?: string; gaveUp: boolean }>) {
   const ok = mine !== undefined && real !== undefined && linesMatch(mine, real);
   return (
     <li className="flex gap-3 border-t border-line px-4 py-2.5">
@@ -40,7 +43,7 @@ function Line({ index, mine, real, gaveUp }: { index: number; mine?: string; rea
           <div className="flex gap-3">
             <span className="w-10 shrink-0 font-sans text-xs leading-5 text-text-muted">You</span>
             <span className={cn('break-all whitespace-pre-wrap', ok ? 'text-success' : 'text-error')}>
-              {mine === undefined ? <span className="italic">(missing)</span> : ok ? mine : <TokenDiff line={mine} against={real ?? ''} />}
+              <YourLine mine={mine} real={real} ok={ok} />
               <span className="sr-only">{ok ? ' (matches)' : ' (differs)'}</span>
             </span>
           </div>
@@ -60,16 +63,22 @@ function Line({ index, mine, real, gaveUp }: { index: number; mine?: string; rea
   );
 }
 
-export function OutputResult({ result }: { result: Result }) {
+function headline(result: Result) {
+  if (result.correct) return 'Correct!';
+  return result.gaveUp ? 'Here is the real output' : 'Not quite. Compare line by line';
+}
+
+export function OutputResult({ result }: Readonly<{ result: Result }>) {
   const count = Math.max(result.real.length, result.gaveUp ? 0 : result.mine.length);
+  const rows = Array.from({ length: count }, (_, i) => ({ mine: result.mine[i], real: result.real[i] }));
   return (
     <Card className="overflow-hidden">
       <ResultHeader ok={result.correct} icon={result.correct ? <Check size={16} aria-hidden /> : <X size={16} aria-hidden />}>
-        {result.correct ? 'Correct!' : result.gaveUp ? 'Here is the real output' : 'Not quite. Compare line by line'}
+        {headline(result)}
       </ResultHeader>
       <ol className="font-mono text-sm" aria-label="Output, line by line">
-        {Array.from({ length: count }, (_, i) => (
-          <Line key={i} index={i} mine={result.mine[i]} real={result.real[i]} gaveUp={result.gaveUp} />
+        {withStableKeys(rows, (r) => JSON.stringify([r.mine, r.real])).map(({ item, key }, i) => (
+          <Line key={key} index={i} mine={item.mine} real={item.real} gaveUp={result.gaveUp} />
         ))}
       </ol>
     </Card>

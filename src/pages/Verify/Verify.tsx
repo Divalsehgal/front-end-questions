@@ -20,13 +20,14 @@ export async function runPool<E extends { key: string }>(
   const worker = async () => {
     for (let e = queue.shift(); e; e = queue.shift()) {
       const entry = e;
-      onResult(await check(entry).catch((err) => ({ key: entry.key, ok: false, detail: String(err) })));
+      // Each worker runs its share one at a time on purpose (that is the concurrency limit). Sonar S9382 suppressed.
+      onResult(await check(entry).catch((err) => ({ key: entry.key, ok: false, detail: String(err) }))); // NOSONAR
     }
   };
   await Promise.all(Array.from({ length: concurrency }, worker));
 }
 
-function ResultRow({ entry, result }: { entry: Entry; result: CheckResult }) {
+function ResultRow({ entry, result }: Readonly<{ entry: Entry; result: CheckResult }>) {
   const Icon = KIND_META[entry.q.kind].icon;
   return (
     <li className="flex items-start gap-3 px-5 py-3 text-sm">
@@ -46,7 +47,7 @@ function ResultRow({ entry, result }: { entry: Entry; result: CheckResult }) {
   );
 }
 
-export default function Verify({ check = verify }: { check?: (e: FullEntry) => Promise<CheckResult> }) {
+export default function Verify({ check = verify }: Readonly<{ check?: (e: FullEntry) => Promise<CheckResult> }>) {
   const [results, setResults] = useState<Record<string, CheckResult>>({});
   const [running, setRunning] = useState(false);
   const [filter, setFilter] = useState<'all' | 'failing'>('failing');
@@ -90,10 +91,10 @@ export default function Verify({ check = verify }: { check?: (e: FullEntry) => P
         />
       </div>
       <div className="mb-4 flex items-center gap-4 text-sm" data-testid="verify-summary">
-        <span role="status">
+        <output>
           {done.length} / {scope.length} checked · <span className="text-success">{done.length - failing.length} ok</span> ·{' '}
           <span className="text-error">{failing.length} failing</span>
-        </span>
+        </output>
         <Chips
           label="Show"
           value={filter}

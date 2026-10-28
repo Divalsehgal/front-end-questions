@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 /** Renders a machine-coding answer in a sandboxed iframe, debounced while typing. */
-export function LivePreview({ framework, code, title }: { framework: 'react' | 'vanilla'; code: string; title: string }) {
+export function LivePreview({ framework, code, title }: Readonly<{ framework: 'react' | 'vanilla'; code: string; title: string }>) {
   const [doc, setDoc] = useState('');
   const [error, setError] = useState<string | null>(null);
 

@@ -39,7 +39,7 @@ export { KIND_ORDER };
 export const preloadView = (kind: Kind) => VIEWS[kind].preload();
 export const preloadAllViews = () => Promise.all(KIND_ORDER.map(preloadView));
 
-export function QuestionView({ q, subject, onResult }: { q: Question; subject: string; onResult: (correct: boolean) => void }) {
+export function QuestionView({ q, subject, onResult }: Readonly<{ q: Question; subject: string; onResult: (correct: boolean) => void }>) {
   // KINDS[q.kind].View accepts exactly q's type, but TS can't correlate the union member with the lookup.
   const View = KINDS[q.kind].View as ComponentType<ViewProps<Question>>;
   return <View q={q} subject={subject} onResult={onResult} />;

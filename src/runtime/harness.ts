@@ -21,7 +21,7 @@ function deepEqual(a: unknown, b: unknown, seen = new Map<object, object>()): bo
     const bm = b as Map<unknown, unknown>;
     return a.size === bm.size && [...a].every(([k, v]) => bm.has(k) && deepEqual(v, bm.get(k), seen));
   }
-  if (a instanceof RegExp) return String(a) === String(b);
+  if (a instanceof RegExp) return a.toString() === (b as RegExp).toString();
   if (a instanceof Set) return setsEqual(a, b as Set<unknown>, seen);
   const ka = Reflect.ownKeys(a);
   const kb = Reflect.ownKeys(b);
@@ -44,15 +44,21 @@ function setsEqual(a: Set<unknown>, b: Set<unknown>, seen: Map<object, object>):
   });
 }
 
+/** "expected X, got Y", prefixed with the caller's own message when there is one. */
+function mismatch(actual: unknown, expected: unknown, message?: string) {
+  const detail = `expected ${show(expected)}, got ${show(actual)}`;
+  return new AssertionError(message ? `${message}: ${detail}` : detail);
+}
+
 export const assert = {
   equal(actual: unknown, expected: unknown, message?: string) {
-    if (!Object.is(actual, expected)) throw new AssertionError(`${message ? `${message}: ` : ''}expected ${show(expected)}, got ${show(actual)}`);
+    if (!Object.is(actual, expected)) throw mismatch(actual, expected, message);
   },
   notEqual(actual: unknown, expected: unknown, message?: string) {
     if (Object.is(actual, expected)) throw new AssertionError(message ?? `expected a value other than ${show(expected)}`);
   },
   deepEqual(actual: unknown, expected: unknown, message?: string) {
-    if (!deepEqual(actual, expected)) throw new AssertionError(`${message ? `${message}: ` : ''}expected ${show(expected)}, got ${show(actual)}`);
+    if (!deepEqual(actual, expected)) throw mismatch(actual, expected, message);
   },
   ok(value: unknown, message?: string) {
     if (!value) throw new AssertionError(message ?? `expected a truthy value, got ${show(value)}`);
@@ -62,7 +68,7 @@ export const assert = {
       throw new AssertionError(`expected a Promise, got ${show(promise)}`);
     }
     try {
-      await promise;
+      await (promise as PromiseLike<unknown>);
     } catch (e) {
       const msg = e instanceof Error ? e.message : String(e);
       if (pattern && !pattern.test(msg)) throw new AssertionError(`rejected with "${msg}", expected it to match ${pattern}`);
@@ -106,7 +112,7 @@ export function createClock() {
   let nextId = 1;
   let installed = false;
 
-  const schedule = (fn: Timer['fn'], ms = 0, args: unknown[], every?: number) => {
+  const schedule = (fn: Timer['fn'], args: unknown[], ms = 0, every?: number) => {
     const id = nextId++;
     timers.set(id, { at: now + Math.max(0, ms), fn, args, every });
     return id;
@@ -119,8 +125,8 @@ export function createClock() {
       installed = true;
       now = real.now();
       Object.assign(globalThis, {
-        setTimeout: (f: Timer['fn'], ms?: number, ...args: unknown[]) => schedule(f, ms, args),
-        setInterval: (f: Timer['fn'], ms?: number, ...args: unknown[]) => schedule(f, ms, args, Math.max(1, ms ?? 0)),
+        setTimeout: (f: Timer['fn'], ms?: number, ...args: unknown[]) => schedule(f, args, ms),
+        setInterval: (f: Timer['fn'], ms?: number, ...args: unknown[]) => schedule(f, args, ms, Math.max(1, ms ?? 0)),
         clearTimeout: (id: number) => timers.delete(id),
         clearInterval: (id: number) => timers.delete(id),
       });
@@ -157,6 +163,12 @@ export function createClock() {
   };
 }
 
+/** An assertion failure reads as just its message; anything else keeps its error name. */
+const describeError = (e: unknown) => {
+  if (!(e instanceof Error)) return String(e);
+  return e.name === 'AssertionError' ? e.message : `${e.name}: ${e.message}`;
+};
+
 // Captured at load time: drills may disable Promise.race/all to stop learners using them.
 const race = Promise.race.bind(Promise);
 
@@ -173,16 +185,16 @@ export async function runTests(
     const start = performance.now();
     let timer: ReturnType<typeof setTimeout> | undefined;
     try {
-      await race([
-        Promise.resolve().then(t.body),
-        new Promise((_, reject) => {
-          timer = clock.real.setTimeout(() => reject(new Error(`timed out after ${perTestTimeoutMs}ms`)), perTestTimeoutMs);
-        }),
-      ]);
+      // Tests run one at a time on purpose: they share the fake clock and global state, and each
+      // one's timing and timeout are its own. Sonar S9382 (await in loop) is suppressed for that.
+      const run = Promise.resolve().then(t.body);
+      const timeout = new Promise((_, reject) => {
+        timer = clock.real.setTimeout(() => reject(new Error(`timed out after ${perTestTimeoutMs}ms`)), perTestTimeoutMs);
+      });
+      await race([run, timeout]); // NOSONAR
       results.push({ name: t.name, ok: true, ms: performance.now() - start });
     } catch (e) {
-      const error = e instanceof Error ? `${e.name === 'AssertionError' ? '' : `${e.name}: `}${e.message}` : String(e);
-      results.push({ name: t.name, ok: false, error, ms: performance.now() - start });
+      results.push({ name: t.name, ok: false, error: describeError(e), ms: performance.now() - start });
     } finally {
       // Otherwise every passing test leaves a live timer behind for perTestTimeoutMs.
       clock.real.clearTimeout(timer);

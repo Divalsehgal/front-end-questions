@@ -5,7 +5,7 @@ import { getEntry, hrefOf } from '../../content/registry';
 import { endSession, startSession, useSession } from '../../state/session';
 import { Button, Card, inline, List, Page, PageHeader, useNow } from '../../ui';
 
-function ResultIcon({ result }: { result?: boolean }) {
+function ResultIcon({ result }: Readonly<{ result?: boolean }>) {
   if (result === true) return <Check size={16} role="img" aria-label="Correct" className="shrink-0 text-success" />;
   if (result === false) return <X size={16} role="img" aria-label="Missed" className="shrink-0 text-error" />;
   return <Minus size={16} role="img" aria-label="Not answered" className="shrink-0 text-text-muted" />;

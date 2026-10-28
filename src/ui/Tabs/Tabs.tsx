@@ -17,7 +17,7 @@ export function Tabs<T extends string>({
   onChange,
   tabs,
   trailing,
-}: {
+}: Readonly<{
   /** Shared with the matching TabPanel. */
   id: string;
   /** Accessible name for the tab list. */
@@ -26,7 +26,7 @@ export function Tabs<T extends string>({
   onChange: (v: T) => void;
   tabs: TabItem<T>[];
   trailing?: ReactNode;
-}) {
+}>) {
   const current = Math.max(
     0,
     tabs.findIndex((t) => t.value === value),
@@ -70,7 +70,7 @@ export function Tabs<T extends string>({
   );
 }
 
-export function TabPanel({ id, value, className, children }: { id: string; value: string; className?: string; children: ReactNode }) {
+export function TabPanel({ id, value, className, children }: Readonly<{ id: string; value: string; className?: string; children: ReactNode }>) {
   return (
     <div role="tabpanel" id={panelId(id)} aria-labelledby={tabId(id, value)} className={className}>
       {children}

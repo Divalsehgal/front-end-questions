@@ -12,7 +12,7 @@ const PREVIEW_NOTE = {
   vanilla: 'Preview: your HTML document as-is. localStorage and IndexedDB reset when the preview reloads.',
 };
 
-export function UiView({ q, subject, onResult }: ViewProps<UiQuestion>) {
+export function UiView({ q, subject, onResult }: Readonly<ViewProps<UiQuestion>>) {
   const tabsId = useId();
   const { code, setCode, reset } = useDraft(`${subject}:${q.id}`, q.starter);
   const [left, setLeft] = useState<'problem' | 'solution'>('problem');

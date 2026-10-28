@@ -9,7 +9,7 @@ import { allLinesMatch, toLines } from './lines';
 import { OutputResult, type Result } from './OutputResult';
 import type { OutputQuestion } from '../../content/types';
 
-export function OutputView({ q, onResult }: ViewProps<OutputQuestion>) {
+export function OutputView({ q, onResult }: Readonly<ViewProps<OutputQuestion>>) {
   const [answer, setAnswer] = useState('');
   const [result, setResult] = useState<Result | null>(null);
   const [lineCount, setLineCount] = useState<number | null>(null);

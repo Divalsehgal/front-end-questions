@@ -39,7 +39,7 @@ describe('MockSetup', () => {
     await user.click(screen.getByRole('checkbox', { name: 'Finish with one coding drill' }));
     await user.click(screen.getByRole('button', { name: 'Start round' }));
     const keys = storedSession()!.keys;
-    expect(ALL.find((e) => e.key === keys[keys.length - 1])?.q.kind).toBe('code');
+    expect(ALL.find((e) => e.key === keys.at(-1))?.q.kind).toBe('code');
     expect(keys.every((k) => k.startsWith(`${js.slug}:`))).toBe(true);
   });
 

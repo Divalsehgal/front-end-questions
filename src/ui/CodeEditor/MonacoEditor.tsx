@@ -2,6 +2,6 @@
 import Editor, { type EditorProps } from '@monaco-editor/react';
 import { configureMonaco } from './monacoSetup';
 
-export default function MonacoEditor(props: EditorProps) {
+export default function MonacoEditor(props: Readonly<EditorProps>) {
   return <Editor beforeMount={configureMonaco} {...props} />;
 }

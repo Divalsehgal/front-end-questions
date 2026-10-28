@@ -20,7 +20,8 @@ const getMonaco = () =>
     return m;
   }));
 
-const describeIssues = (issues: TypeIssue[]) => `types: ${issues.map((i) => `${i.source} → ${i.shouldFail ?? i.message}`).join(' | ')}`;
+const describeIssue = (i: TypeIssue) => `${i.source} → ${i.shouldFail ?? i.message}`;
+const describeIssues = (issues: TypeIssue[]) => `types: ${issues.map(describeIssue).join(' | ')}`;
 
 async function checkTypeChallenge(q: CodeQuestion, typeTests: string): Promise<Verdict> {
   // Type challenge: the starter must fail the type tests, the solution must pass them.
@@ -40,7 +41,8 @@ export async function checkCode(q: CodeQuestion): Promise<Verdict> {
   if (sol.fatal) return fail(`solution: ${sol.fatal}`);
   if (!sol.results.length) return fail('no tests registered');
   const bad = sol.results.filter((r) => !r.ok);
-  if (bad.length) return fail(`solution fails: ${bad.map((b) => `${b.name} → ${b.error}`).join(' | ')}`);
+  const describeFailure = (b: (typeof bad)[number]) => `${b.name} → ${b.error}`;
+  if (bad.length) return fail(`solution fails: ${bad.map(describeFailure).join(' | ')}`);
   if (q.typeTests) {
     const issues = await checkTypes(await getMonaco(), `verify-${q.id}`, q.solution, q.typeTests);
     if (issues.length) return fail(describeIssues(issues));
@@ -103,9 +105,13 @@ async function checkOutput(code: string, lang?: 'js' | 'ts'): Promise<Verdict> {
   return pass(lines.join(' ⏎ '));
 }
 
+function checkSandboxed(q: Question): Promise<Verdict> {
+  if (q.kind === 'output') return checkOutput(q.code, q.lang);
+  if (q.kind === 'code') return checkCode(q);
+  return checkUi(q as UiQuestion);
+}
+
 export async function verify(e: FullEntry): Promise<CheckResult> {
-  const q = e.q;
-  const verdict =
-    checkStatic(q) ?? (q.kind === 'output' ? await checkOutput(q.code, q.lang) : q.kind === 'code' ? await checkCode(q) : await checkUi(q as UiQuestion));
+  const verdict = checkStatic(e.q) ?? (await checkSandboxed(e.q));
   return { key: e.key, ...verdict };
 }

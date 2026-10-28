@@ -3,11 +3,11 @@ import type { ReactNode } from 'react';
 
 const WIDTHS = { narrow: 'max-w-3xl', default: 'max-w-5xl', wide: 'max-w-7xl' } as const;
 
-export function Page({ children, width = 'default' }: { children: ReactNode; width?: keyof typeof WIDTHS }) {
+export function Page({ children, width = 'default' }: Readonly<{ children: ReactNode; width?: keyof typeof WIDTHS }>) {
   return <div className={cn('mx-auto px-4 py-8 sm:px-8', WIDTHS[width])}>{children}</div>;
 }
 
-export function PageHeader({ title, description, actions }: { title: ReactNode; description?: ReactNode; actions?: ReactNode }) {
+export function PageHeader({ title, description, actions }: Readonly<{ title: ReactNode; description?: ReactNode; actions?: ReactNode }>) {
   return (
     <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
       <div className="min-w-0">
@@ -19,7 +19,7 @@ export function PageHeader({ title, description, actions }: { title: ReactNode; 
   );
 }
 
-export function SectionTitle({ children, icon, id }: { children: ReactNode; icon?: ReactNode; id?: string }) {
+export function SectionTitle({ children, icon, id }: Readonly<{ children: ReactNode; icon?: ReactNode; id?: string }>) {
   return (
     <h2 id={id} className="mt-10 mb-3 flex items-center gap-2 text-xs font-semibold tracking-wider text-text-muted uppercase">
       {icon && <span aria-hidden>{icon}</span>}

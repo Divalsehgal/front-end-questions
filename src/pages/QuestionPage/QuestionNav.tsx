@@ -4,7 +4,7 @@ import { subjectHref, type Entry } from '../../content/registry';
 import { buttonClass, IconButton, inline, useNow } from '../../ui';
 import type { Session } from '../../state/session';
 
-function Elapsed({ since }: { since: number }) {
+function Elapsed({ since }: Readonly<{ since: number }>) {
   const now = useNow(1000);
   const s = Math.max(0, Math.floor((now - since) / 1000));
   return (
@@ -24,7 +24,7 @@ export function QuestionNav({
   onPrev,
   onNext,
   onQuit,
-}: {
+}: Readonly<{
   entry: Entry;
   session: Session | null;
   position: { index: number; total: number };
@@ -33,7 +33,7 @@ export function QuestionNav({
   onPrev: () => void;
   onNext: () => void;
   onQuit: () => void;
-}) {
+}>) {
   const topicIndex = entry.topic.questions.findIndex((q) => q.id === entry.q.id);
   return (
     <div className="mb-5 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-text-muted">

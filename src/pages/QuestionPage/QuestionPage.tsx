@@ -44,6 +44,10 @@ export function QuestionPage() {
     recordInSession(key, correct);
   };
 
+  let nextLabel = 'Done';
+  if (next) nextLabel = 'Next';
+  else if (inSession) nextLabel = 'Finish';
+
   const goNext = () => {
     if (next) void navigate(hrefOf(next));
     else if (inSession) void navigate('/session');
@@ -57,7 +61,7 @@ export function QuestionPage() {
         session={inSession}
         position={{ index, total: order.length }}
         hasPrev={!!prev}
-        nextLabel={next ? 'Next' : inSession ? 'Finish' : 'Done'}
+        nextLabel={nextLabel}
         onPrev={() => {
           if (prev) void navigate(hrefOf(prev));
         }}

@@ -1,6 +1,6 @@
 import { act, renderHook } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cn, rovingIndex, TONES, useNow } from '.';
+import { cn, rovingIndex, TONES, useNow, withStableKeys } from '.';
 import type { KeyboardEvent } from 'react';
 
 const key = (k: string) => ({ key: k, preventDefault: vi.fn() }) as unknown as KeyboardEvent;
@@ -9,6 +9,16 @@ describe('cn', () => {
   it('joins truthy classes and drops falsy ones', () => {
     expect(cn('a', false, null, undefined, 0, '', 'b')).toBe('a b');
     expect(cn()).toBe('');
+  });
+});
+
+describe('withStableKeys', () => {
+  it('keys items by content and suffixes repeats so every key is unique', () => {
+    expect(withStableKeys(['a', 'b', 'a', '', '', 'a#1']).map((x) => x.key)).toEqual(['a', 'b', 'a#1', '', '#1', 'a#1#1']);
+    expect(withStableKeys([{ id: 'x' }, { id: 'x' }], (o) => o.id)).toEqual([
+      { item: { id: 'x' }, key: 'x' },
+      { item: { id: 'x' }, key: 'x#1' },
+    ]);
   });
 });
 

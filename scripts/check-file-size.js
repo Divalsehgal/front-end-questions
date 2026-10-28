@@ -6,13 +6,15 @@ import { execFileSync } from 'node:child_process';
 const MAX_LINES = 250;
 const FIXTURE = /^src\/content\/subjects\/[^/]+\/files\//;
 
-const staged = execFileSync('git', ['diff', '--cached', '--name-only', '--diff-filter=ACMR'], { encoding: 'utf8' })
+// Sonar S4036 (PATH lookup) is suppressed on the git calls: a local pre-commit hook in the developer's own trusted
+// environment, run with a fixed argv and no shell.
+const staged = execFileSync('git', ['diff', '--cached', '--name-only', '--diff-filter=ACMR'], { encoding: 'utf8' }) // NOSONAR
   .split('\n')
   .filter((f) => f.startsWith('src/') && !FIXTURE.test(f));
 
 const tooLong = staged
   .map((file) => {
-    const blob = execFileSync('git', ['show', `:${file}`], { encoding: 'utf8', maxBuffer: 32 * 1024 * 1024 });
+    const blob = execFileSync('git', ['show', `:${file}`], { encoding: 'utf8', maxBuffer: 32 * 1024 * 1024 }); // NOSONAR
     return { file, lines: blob.split('\n').length - (blob.endsWith('\n') ? 1 : 0) };
   })
   .filter(({ lines }) => lines > MAX_LINES);

@@ -31,7 +31,7 @@ describe('renderHead', () => {
     expect(html).toContain('<meta property="og:url" content="https://example.com/a/" data-seo>');
     expect(html).toContain(`<meta property="og:image" content="${SITE_URL}og-image.png" data-seo>`);
     expect(html).toContain('<meta name="twitter:card" content="summary_large_image" data-seo>');
-    expect(html).toContain('<script type="application/ld+json" data-seo>{"@type":"Thing","name":"\\u003c/script\\u003e"}</script>');
+    expect(html).toContain(String.raw`<script type="application/ld+json" data-seo>{"@type":"Thing","name":"\u003c/script\u003e"}</script>`);
     expect(html).not.toContain('robots');
   });
 

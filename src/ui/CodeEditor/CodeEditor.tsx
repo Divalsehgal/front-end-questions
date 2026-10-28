@@ -18,7 +18,7 @@ export function CodeEditor({
   readOnly,
   label = 'Code editor',
   className = 'h-[70vh] min-h-96',
-}: {
+}: Readonly<{
   /** Determines the language: .ts / .tsx / .html */
   path: string;
   value: string;
@@ -30,7 +30,7 @@ export function CodeEditor({
   /** Accessible name of the editor's text area. */
   label?: string;
   className?: string;
-}) {
+}>) {
   const theme = useTheme();
   // Monaco loads from a CDN in the browser only; prerendered pages show the loading state until hydrated.
   const hydrated = useHydrated();
@@ -45,9 +45,9 @@ export function CodeEditor({
   };
   const language = path.endsWith('.html') ? 'html' : 'typescript';
   const loading = (
-    <span role="status" className="flex items-center gap-2 text-sm text-text-muted">
+    <output className="flex items-center gap-2 text-sm text-text-muted">
       <Loader2 aria-hidden className="animate-spin" /> Loading editor…
-    </span>
+    </output>
   );
   if (!hydrated) return <div className={className}>{loading}</div>;
 

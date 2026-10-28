@@ -7,7 +7,12 @@ const STATES = {
   wrong: { cls: 'bg-error', label: 'Needs review' },
 } as const;
 
-export function StatusDot({ attempt }: { attempt?: Attempt }) {
+export function StatusDot({ attempt }: Readonly<{ attempt?: Attempt }>) {
   const s = STATES[attempt?.status ?? 'none'];
-  return <span role="img" className={cn('inline-block size-2.5 shrink-0 rounded-full', s.cls)} title={s.label} aria-label={s.label} />;
+  // The dot is decoration with a tooltip; its meaning is real (visually hidden) text, so it reads inside links too.
+  return (
+    <span className={cn('inline-block size-2.5 shrink-0 rounded-full', s.cls)} title={s.label}>
+      <span className="sr-only">{s.label}</span>
+    </span>
+  );
 }

@@ -2,6 +2,11 @@ import { Check, Eye, Lightbulb } from 'lucide-react';
 import { useId } from 'react';
 import { Button, Card, Kbd, MOD } from '../../ui';
 
+const hintLabel = (lineCount: number | null) => {
+  if (lineCount === null) return 'Hint';
+  return `It logs ${lineCount} line${lineCount === 1 ? '' : 's'}`;
+};
+
 export function AnswerForm({
   answer,
   onAnswer,
@@ -10,7 +15,7 @@ export function AnswerForm({
   onHint,
   lineCount,
   busy,
-}: {
+}: Readonly<{
   answer: string;
   onAnswer: (v: string) => void;
   onCheck: () => void;
@@ -18,7 +23,7 @@ export function AnswerForm({
   onHint: () => void;
   lineCount: number | null;
   busy: boolean;
-}) {
+}>) {
   const id = useId();
   return (
     <Card className="p-4">
@@ -50,7 +55,7 @@ export function AnswerForm({
         </span>
         <div className="ml-auto flex gap-2">
           <Button variant="ghost" onClick={onHint} disabled={lineCount !== null}>
-            <Lightbulb size={16} aria-hidden /> {lineCount === null ? 'Hint' : `It logs ${lineCount} line${lineCount === 1 ? '' : 's'}`}
+            <Lightbulb size={16} aria-hidden /> {hintLabel(lineCount)}
           </Button>
           <Button variant="ghost" onClick={onGiveUp} disabled={busy}>
             <Eye size={16} aria-hidden /> Show answer

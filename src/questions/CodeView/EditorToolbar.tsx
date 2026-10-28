@@ -10,7 +10,7 @@ export function EditorToolbar({
   onCheckTypes,
   onReveal,
   onReset,
-}: {
+}: Readonly<{
   running: boolean;
   typeOnly: boolean;
   hasTypeTests: boolean;
@@ -19,8 +19,9 @@ export function EditorToolbar({
   onCheckTypes: () => void;
   onReveal: () => void;
   onReset: () => void;
-}) {
-  const RunIcon = running ? Loader2 : typeOnly ? ShieldCheck : Play;
+}>) {
+  let RunIcon = typeOnly ? ShieldCheck : Play;
+  if (running) RunIcon = Loader2;
   return (
     <div className="flex flex-wrap items-center gap-2 border-b border-line px-3 py-2">
       <Button onClick={onRun} disabled={running} aria-busy={running}>

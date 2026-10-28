@@ -67,6 +67,13 @@ describe('isTyping / useShortcuts', () => {
     expect(isTyping({ target: el } as unknown as KeyboardEvent)).toBe(true);
     expect(isTyping({ target: document.body } as unknown as KeyboardEvent)).toBe(false);
   });
+
+  it('lets shortcuts through from inputs that take no text (a focused quiz option)', () => {
+    const input = (type: string) => Object.assign(document.createElement('input'), { type });
+    expect(isTyping({ target: input('text') } as unknown as KeyboardEvent)).toBe(true);
+    expect(isTyping({ target: input('radio') } as unknown as KeyboardEvent)).toBe(false);
+    expect(isTyping({ target: input('checkbox') } as unknown as KeyboardEvent)).toBe(false);
+  });
 });
 
 function Probe({ handler }: { handler: (e: KeyboardEvent) => void }) {

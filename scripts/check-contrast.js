@@ -36,7 +36,8 @@ export const PAIRS = [
 /** Pulls `--name: #hex;` declarations out of the `:root { }` and `.dark { }` blocks. */
 export function parseTokens(css) {
   const block = (selector) => {
-    const m = css.match(new RegExp(`(?:^|\\n)${selector.replace('.', '\\.')}\\s*\\{([^}]*)\\}`));
+    const escaped = selector.replace('.', String.raw`\.`);
+    const m = css.match(new RegExp(String.raw`(?:^|\n)${escaped}\s*\{([^}]*)\}`));
     if (!m) throw new Error(`No ${selector} block in index.css`);
     return Object.fromEntries(m[1].split(';').slice(0, -1).map(hexToken).filter(Boolean));
   };
@@ -99,9 +100,9 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
   const failures = results.filter((r) => !r.ok);
   const verbose = process.argv.includes('--verbose');
   for (const r of verbose ? results : failures) {
-    console.warn(
-      `${r.ok ? 'ok  ' : 'FAIL'} ${r.theme.padEnd(5)} ${`--${r.fg}`.padEnd(20)} on ${`--${r.bg}`.padEnd(16)} ${r.ratio.toFixed(2).padStart(5)}:1 (min ${r.min}) ${r.use}`,
-    );
+    const fg = `--${r.fg}`.padEnd(20);
+    const bg = `--${r.bg}`.padEnd(16);
+    console.warn(`${r.ok ? 'ok  ' : 'FAIL'} ${r.theme.padEnd(5)} ${fg} on ${bg} ${r.ratio.toFixed(2).padStart(5)}:1 (min ${r.min}) ${r.use}`);
   }
   if (failures.length) {
     console.error(`\n${failures.length} of ${results.length} colour pairs are below WCAG 2.2 AA.`);

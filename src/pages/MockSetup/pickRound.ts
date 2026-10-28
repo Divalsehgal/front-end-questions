@@ -12,7 +12,12 @@ export function pickRound(
   codeDrills: Entry[] = [],
   random: () => number = Math.random,
 ): Entry[] {
-  const weight = (key: string) => (progress[key]?.status === 'wrong' ? 0 : !progress[key] ? 1 : 2) + random();
+  // Wrong answers first, then unseen questions, then the rest; random() breaks ties.
+  const rank = (key: string) => {
+    if (!progress[key]) return 1;
+    return progress[key].status === 'wrong' ? 0 : 2;
+  };
+  const weight = (key: string) => rank(key) + random();
   const weights = new Map(pool.map((e) => [e.key, weight(e.key)]));
   const picked = [...pool]
     .sort((a, b) => (weights.get(a.key) ?? 0) - (weights.get(b.key) ?? 0))

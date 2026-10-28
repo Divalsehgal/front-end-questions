@@ -71,7 +71,8 @@ export async function runSnippet(code: string, lang: 'js' | 'ts' = 'js'): Promis
   ctx.console = { log: (...args: unknown[]) => lines.push(formatArgs(args)) };
   const source = lang === 'ts' ? transform(code, { transforms: ['typescript'], disableESTransforms: true }).code : code;
   try {
-    vm.runInContext(`(function () {"use strict";\n${source}\n})`, ctx).call(undefined);
+    // A plain call of a strict-mode function, as in the worker: top-level `this` is undefined.
+    vm.runInContext(`(function () {"use strict";\n${source}\n})`, ctx)();
   } catch (e) {
     lines.push(`Uncaught ${(e as Error).name}`);
   }

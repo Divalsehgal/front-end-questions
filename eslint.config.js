@@ -57,6 +57,9 @@ export default tseslint.config(
       'unicorn/prefer-code-point': 'error',
       'unicorn/no-new-array': 'error',
       'unicorn/new-for-builtins': 'error',
+      'unicorn/prefer-at': 'error',
+      'unicorn/prefer-string-raw': 'error',
+      'no-nested-ternary': 'error', // SonarCloud S3358
 
       // Regexes that backtrack super-linearly on hostile input (mirrors SonarCloud S5852).
       'regexp/no-super-linear-backtracking': 'error',
@@ -105,6 +108,8 @@ export default tseslint.config(
       'react/jsx-no-useless-fragment': 'error',
       'react/jsx-key': ['error', { checkFragmentShorthand: true }],
       'react/jsx-child-element-spacing': 'error',
+      // Mirror SonarCloud S6479: keys come from content, not list position.
+      'react/no-array-index-key': 'error',
     },
   },
   reactHooks.configs.flat['recommended-latest'],
@@ -116,6 +121,7 @@ export default tseslint.config(
     plugins: { vitest },
     rules: {
       'vitest/expect-expect': 'error',
+      'vitest/prefer-to-have-length': 'error', // SonarCloud S5906
       'max-lines-per-function': 'off',
       '@typescript-eslint/no-non-null-assertion': 'off',
       // Empty functions/classes are common fixtures for formatter and harness tests.

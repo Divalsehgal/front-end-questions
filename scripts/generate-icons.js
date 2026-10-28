@@ -155,7 +155,9 @@ function ogImage() {
   return png(img);
 }
 
-const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="#0d2149"/><path d="${BOLT.map(([x, y], i) => `${i ? 'L' : 'M'}${(x * 0.64 + 4.32).toFixed(2)} ${(y * 0.64 + 4.32).toFixed(2)}`).join('')}Z" fill="#208aae"/></svg>\n`;
+const iconUnit = (n) => (n * 0.64 + 4.32).toFixed(2);
+const boltPath = BOLT.map(([x, y], i) => `${i ? 'L' : 'M'}${iconUnit(x)} ${iconUnit(y)}`).join('');
+const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="#0d2149"/><path d="${boltPath}Z" fill="#208aae"/></svg>\n`;
 
 mkdirSync(OUT, { recursive: true });
 writeFileSync(new URL('favicon.svg', OUT), svgIcon);

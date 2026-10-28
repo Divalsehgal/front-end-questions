@@ -5,7 +5,7 @@ import { Card, inline, ProgressBar, SubjectIcon } from '../../ui';
 import type { SubjectMeta } from '../../content/types';
 import type { Attempt } from '../../state/progress';
 
-export function SubjectCard({ subject, progress }: { subject: SubjectMeta; progress: Record<string, Attempt> }) {
+export function SubjectCard({ subject, progress }: Readonly<{ subject: SubjectMeta; progress: Record<string, Attempt> }>) {
   const items = ALL.filter((e) => e.subject.slug === subject.slug);
   const done = items.filter((e) => progress[e.key]?.status === 'correct').length;
   const kinds = KIND_ORDER.filter((k) => items.some((e) => e.q.kind === k));

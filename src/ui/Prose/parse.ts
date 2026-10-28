@@ -27,7 +27,7 @@ function textBlocks(chunk: string): Block[] {
       // A block can mix a lead-in sentence with bullets: split it into runs.
       const out: Block[] = [];
       for (const line of lines) {
-        const last = out[out.length - 1];
+        const last = out.at(-1);
         if (isBullet(line)) {
           const item = line.replace(/^\s*[-*] /, '');
           if (last?.type === 'list') last.items.push(item);

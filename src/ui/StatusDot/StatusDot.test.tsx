@@ -12,7 +12,7 @@ describe('StatusDot', () => {
     [attempt('wrong'), 'Needs review', 'bg-error'],
   ])('labels %o as "%s"', (a, label, cls) => {
     render(<StatusDot attempt={a} />);
-    const dot = screen.getByRole('img', { name: label });
+    const dot = screen.getByText(label).parentElement;
     expect(dot).toHaveAttribute('title', label);
     expect(dot).toHaveClass(cls);
   });

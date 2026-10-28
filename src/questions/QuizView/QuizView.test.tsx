@@ -30,19 +30,21 @@ const setup = (q: QuizQuestion) => {
 };
 
 describe('QuizView', () => {
-  it('renders the prompt, code and a labelled radio group', () => {
+  it('renders the prompt, code and a group of radios named by the prompt', () => {
     setup(single);
     expect(screen.getByText('wins').tagName).toBe('STRONG');
     expect(document.querySelector('pre')).toHaveTextContent('#a .b {}');
-    expect(screen.getByRole('radiogroup', { name: /Which selector/ })).toBeInTheDocument();
+    const group = screen.getByRole('group', { name: /Which selector/ });
+    expect(group.tagName).toBe('FIELDSET');
     expect(screen.getAllByRole('radio')).toHaveLength(3);
+    expect(screen.getAllByRole('radio').every((r) => r.getAttribute('name') === 'q1-answer')).toBe(true);
     expect(screen.getByRole('button', { name: 'Submit' })).toBeDisabled();
   });
 
   it('marks a correct answer and renders the explanation through Prose', async () => {
     const { onResult, user } = setup(single);
     await user.click(screen.getByRole('radio', { name: '#nav a' }));
-    expect(screen.getByRole('radio', { name: '#nav a' })).toHaveAttribute('aria-checked', 'true');
+    expect(screen.getByRole('radio', { name: '#nav a' })).toBeChecked();
     await user.click(screen.getByRole('button', { name: 'Submit' }));
     expect(onResult).toHaveBeenCalledWith(true);
     const status = screen.getByRole('status');
@@ -61,6 +63,8 @@ describe('QuizView', () => {
     expect(screen.getByRole('radio', { name: /\.a\.b\.c.*incorrect/ })).toBeInTheDocument();
     // Locked after submitting: clicking again changes nothing and reports nothing.
     await user.click(screen.getByRole('radio', { name: /#nav a/ }));
+    expect(screen.getByRole('radio', { name: /#nav a/ })).not.toBeChecked();
+    expect(screen.getByRole('radio', { name: /\.a\.b\.c/ })).toBeChecked();
     expect(onResult).toHaveBeenCalledTimes(1);
   });
 
@@ -69,13 +73,22 @@ describe('QuizView', () => {
     await user.keyboard('{Enter}');
     expect(onResult).not.toHaveBeenCalled();
     await user.keyboard('3');
-    expect(screen.getByRole('radio', { name: 'div p' })).toHaveAttribute('aria-checked', 'true');
+    expect(screen.getByRole('radio', { name: 'div p' })).toBeChecked();
     await user.keyboard('1');
-    expect(screen.getByRole('radio', { name: 'div p' })).toHaveAttribute('aria-checked', 'false');
+    expect(screen.getByRole('radio', { name: 'div p' })).not.toBeChecked();
     await user.keyboard('9{Enter}');
     expect(onResult).toHaveBeenCalledWith(true);
     await user.keyboard('2{Enter}');
     expect(onResult).toHaveBeenCalledTimes(1);
+  });
+
+  it('keeps 1–n and Enter working while an option has focus', async () => {
+    const { onResult, user } = setup(single);
+    await user.click(screen.getByRole('radio', { name: '.a.b.c' }));
+    expect(screen.getByRole('radio', { name: '.a.b.c' })).toHaveFocus();
+    await user.keyboard('1{Enter}');
+    expect(screen.getByRole('radio', { name: /#nav a/ })).toBeChecked();
+    expect(onResult).toHaveBeenCalledWith(true);
   });
 
   it('handles select-all-that-apply questions', async () => {
@@ -86,7 +99,7 @@ describe('QuizView', () => {
     await user.keyboard('2');
     await user.keyboard('2');
     await user.keyboard('3');
-    expect(screen.getAllByRole('checkbox').map((c) => c.getAttribute('aria-checked'))).toEqual(['true', 'false', 'true']);
+    expect(screen.getAllByRole('checkbox').map((c) => (c as HTMLInputElement).checked)).toEqual([true, false, true]);
     await user.click(screen.getByRole('button', { name: 'Submit' }));
     expect(onResult).toHaveBeenCalledWith(true);
   });

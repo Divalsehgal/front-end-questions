@@ -18,7 +18,7 @@ export function Workspace({
   canReveal,
   onReveal,
   onReset,
-}: {
+}: Readonly<{
   q: UiQuestion;
   subject: string;
   code: string;
@@ -29,7 +29,7 @@ export function Workspace({
   canReveal: boolean;
   onReveal: () => void;
   onReset: () => void;
-}) {
+}>) {
   const tabsId = useId();
   const ext = q.framework === 'react' ? 'tsx' : 'html';
   return (

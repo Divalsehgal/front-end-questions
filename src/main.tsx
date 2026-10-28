@@ -2,15 +2,17 @@ import { StrictMode } from 'react';
 import { createRoot, hydrateRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import { App } from './App';
+import { legacyRedirectTarget } from './legacyRedirect';
 import { preloadRoute } from './preload';
 import { applyTheme } from './state/theme';
 import './index.css';
 
 const base = import.meta.env.BASE_URL;
 
-// Links from the HashRouter days (…/#/q/react/x) load the real, prerendered page instead.
-const legacy = /^#\/(.+)$/.exec(location.hash);
-if (legacy) location.replace(base + legacy[1]);
+// Links from the HashRouter days (…/#/q/react/x) load the real, prerendered page instead
+// (same-origin, safe app paths only: see legacyRedirect.ts).
+const legacy = legacyRedirectTarget(location.hash, location.origin, base);
+if (legacy) location.replace(legacy);
 else mount();
 
 function mount() {

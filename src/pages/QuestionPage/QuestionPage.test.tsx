@@ -40,7 +40,7 @@ describe('QuestionPage', () => {
     expect(h1.closest('header')).toHaveTextContent('Flashcard');
     const crumbs = screen.getByRole('navigation', { name: 'Breadcrumb' });
     expect(crumbs).toHaveTextContent(card.subject.title);
-    expect(screen.getByRole('img', { name: 'Not attempted' })).toBeInTheDocument();
+    expect(screen.getByText('Not attempted')).toHaveClass('sr-only');
   });
 
   it('records the first answer to progress', async () => {
@@ -48,7 +48,7 @@ describe('QuestionPage', () => {
     await user.click(screen.getByRole('button', { name: 'Reveal answer' }));
     await user.click(screen.getByRole('button', { name: 'I knew it' }));
     expect(storedProgress()[card.key]?.status).toBe('correct');
-    expect(screen.getByRole('img', { name: 'Solved' })).toBeInTheDocument();
+    expect(screen.getByText('Solved')).toHaveClass('sr-only');
   });
 
   it('walks the subject with previous / next', async () => {
@@ -111,7 +111,7 @@ describe('QuestionPage', () => {
   it('picks neighbours in subject order and related questions from the same topic', () => {
     const subject = ALL.filter((e) => e.subject === ALL[0].subject);
     expect(neighbours(subject[0])).toEqual({ prev: undefined, next: subject[1] });
-    expect(neighbours(subject[subject.length - 1]).next).toBeUndefined();
+    expect(neighbours(subject.at(-1)!).next).toBeUndefined();
     const topic = ALL.filter((e) => e.topic === ALL[1].topic);
     const related = relatedTo(ALL[1], 3);
     expect(related.length).toBeLessThanOrEqual(3);

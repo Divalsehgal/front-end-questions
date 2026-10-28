@@ -56,7 +56,9 @@ function save() {
 export function record(key: string, correct: boolean) {
   const prev = progress[key];
   const now = Date.now();
-  const box = correct ? Math.min((prev?.box ?? 0) + (prev ? 1 : 2), INTERVAL_DAYS.length - 1) : 0;
+  // A right answer moves up one box (two on a first-time right answer); a wrong one goes back to box 0.
+  const step = prev ? 1 : 2;
+  const box = correct ? Math.min((prev?.box ?? 0) + step, INTERVAL_DAYS.length - 1) : 0;
   progress = {
     ...progress,
     [key]: {

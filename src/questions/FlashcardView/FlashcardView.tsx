@@ -5,7 +5,7 @@ import { CodeBlock, Prose } from '../../ui/code';
 import { AnswerDisclosure, useFirstVerdict, useShortcuts, type ViewProps } from '../shared';
 import type { FlashcardQuestion } from '../../content/types';
 
-export function FlashcardView({ q, onResult }: ViewProps<FlashcardQuestion>) {
+export function FlashcardView({ q, onResult }: Readonly<ViewProps<FlashcardQuestion>>) {
   const [revealed, setRevealed] = useState(false);
   const [rated, setRated] = useState<boolean | null>(null);
   const verdict = useFirstVerdict(onResult);

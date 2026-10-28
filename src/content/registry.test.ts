@@ -47,11 +47,11 @@ describe('lookups', () => {
   it('lists a subject’s entries, optionally filtered by kind', () => {
     const slug = first.subject.slug;
     const all = entriesOf(slug);
-    expect(all.length).toBe(first.subject.topics.reduce((n, t) => n + t.questions.length, 0));
+    expect(all).toHaveLength(first.subject.topics.reduce((n, t) => n + t.questions.length, 0));
     expect(all.every((e) => e.subject.slug === slug)).toBe(true);
     const quizzes = entriesOf(slug, 'quiz');
     expect(quizzes.every((e) => e.q.kind === 'quiz')).toBe(true);
-    expect(quizzes.length).toBe(all.filter((e) => e.q.kind === 'quiz').length);
+    expect(quizzes).toHaveLength(all.filter((e) => e.q.kind === 'quiz').length);
     expect(entriesOf('nope')).toEqual([]);
   });
 

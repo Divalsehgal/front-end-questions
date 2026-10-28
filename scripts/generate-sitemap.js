@@ -13,7 +13,9 @@ const { buildSitemaps, robotsTxt, SITE_URL, SITEMAP_INDEX } = await import(pathT
 
 function lastCommitDate(slug) {
   try {
-    const date = execFileSync('git', ['log', '-1', '--format=%cs', '--', `src/content/subjects/${slug}`], { cwd: root, encoding: 'utf8' }).trim();
+    // Sonar S4036 (PATH lookup) is suppressed below: a build script in the developer's or CI's trusted environment,
+    // run with a fixed argv and no shell.
+    const date = execFileSync('git', ['log', '-1', '--format=%cs', '--', `src/content/subjects/${slug}`], { cwd: root, encoding: 'utf8' }).trim(); // NOSONAR
     return /^\d{4}-\d{2}-\d{2}$/.test(date) ? date : undefined;
   } catch {
     return undefined; // no git (e.g. a tarball build)

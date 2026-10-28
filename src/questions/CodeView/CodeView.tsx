@@ -17,7 +17,7 @@ const drillTabs = (typeOnly: boolean, withSolution: boolean): TabItem<Tab>[] => 
   ...(withSolution ? [{ value: 'solution' as const, label: 'Solution', icon: <KeyRound size={14} /> }] : []),
 ];
 
-export function CodeView({ q, subject, onResult }: ViewProps<CodeQuestion>) {
+export function CodeView({ q, subject, onResult }: Readonly<ViewProps<CodeQuestion>>) {
   const tabsId = useId();
   const { code, setCode, reset } = useDraft(`${subject}:${q.id}`, q.starter);
   const [tab, setTab] = useState<Tab>('problem');

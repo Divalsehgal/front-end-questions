@@ -2,13 +2,18 @@ import { Check, KeyRound, X } from 'lucide-react';
 import { Button, Card, ResultHeader } from '../../ui';
 import { allPassed, type RunState } from './useCodeRun';
 
-export function TestResults({ run, onCompare }: { run: NonNullable<RunState>; onCompare?: () => void }) {
+function summary(run: NonNullable<RunState>, passed: number, ok: boolean) {
+  if (run.fatal) return 'Could not run';
+  return ok ? `All ${passed} tests passed` : `${passed} / ${run.results.length} tests passed`;
+}
+
+export function TestResults({ run, onCompare }: Readonly<{ run: NonNullable<RunState>; onCompare?: () => void }>) {
   const passed = run.results.filter((r) => r.ok).length;
   const ok = allPassed(run);
   return (
     <Card className="overflow-hidden">
       <ResultHeader ok={ok} icon={ok ? <Check size={16} aria-hidden /> : <X size={16} aria-hidden />}>
-        {run.fatal ? 'Could not run' : ok ? `All ${passed} tests passed` : `${passed} / ${run.results.length} tests passed`}
+        {summary(run, passed, ok)}
       </ResultHeader>
       {run.fatal && <pre className="px-4 py-3 font-mono text-sm whitespace-pre-wrap text-error">{run.fatal}</pre>}
       <ul aria-label="Test results">

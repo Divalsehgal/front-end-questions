@@ -143,15 +143,26 @@ describe('renderPreview', () => {
   it('resolves null on ready and the message on error, removing the frame', async () => {
     const pending = renderPreview('vanilla', '<p>x</p>');
     const frame = await vi.waitFor(() => document.querySelector('iframe')!);
-    window.dispatchEvent(new MessageEvent('message', { source: frame.contentWindow, data: { source: 'other', type: 'ready' } }));
-    window.dispatchEvent(new MessageEvent('message', { source: frame.contentWindow, data: { source: 'fe-grind-preview', type: 'ready' } }));
+    window.dispatchEvent(new MessageEvent('message', { source: frame.contentWindow, origin: 'null', data: { source: 'other', type: 'ready' } }));
+    window.dispatchEvent(new MessageEvent('message', { source: frame.contentWindow, origin: 'null', data: { source: 'fe-grind-preview', type: 'ready' } }));
     expect(await pending).toBeNull();
     expect(document.querySelector('iframe')).toBeNull();
 
     const failing = renderPreview('vanilla', '<p>x</p>');
     const frame2 = await vi.waitFor(() => document.querySelector('iframe')!);
-    window.dispatchEvent(new MessageEvent('message', { source: frame2.contentWindow, data: { source: 'fe-grind-preview', type: 'error', message: 'boom' } }));
+    const error = { source: 'fe-grind-preview', type: 'error', message: 'boom' };
+    window.dispatchEvent(new MessageEvent('message', { source: frame2.contentWindow, origin: 'null', data: error }));
     expect(await failing).toBe('boom');
+  });
+
+  it('ignores messages from another window or a real origin', async () => {
+    const pending = renderPreview('vanilla', '<p>x</p>', 50);
+    const frame = await vi.waitFor(() => document.querySelector('iframe')!);
+    const ready = { source: 'fe-grind-preview', type: 'ready' };
+    window.dispatchEvent(new MessageEvent('message', { source: window, origin: 'null', data: ready }));
+    window.dispatchEvent(new MessageEvent('message', { source: frame.contentWindow, origin: 'https://evil.example', data: ready }));
+    window.dispatchEvent(new MessageEvent('message', { source: frame.contentWindow, data: ready }));
+    expect(await pending).toMatch(/did not report ready/);
   });
 
   it('times out', async () => {

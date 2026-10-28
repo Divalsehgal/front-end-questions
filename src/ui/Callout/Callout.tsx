@@ -8,13 +8,13 @@ export function Callout({
   icon,
   role,
   children,
-}: {
+}: Readonly<{
   tone?: Tone;
   title?: ReactNode;
   icon?: ReactNode;
   role?: 'status' | 'alert' | 'note';
   children: ReactNode;
-}) {
+}>) {
   const t = TONES[tone];
   return (
     <div role={role} className={cn('rounded-xl border p-4', t.border, t.bg)}>

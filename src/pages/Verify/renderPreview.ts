@@ -15,7 +15,9 @@ export async function renderPreview(framework: 'react' | 'vanilla', code: string
       resolve(result);
     };
     const onMessage = (e: MessageEvent) => {
-      if (e.source !== frame.contentWindow || e.data?.source !== 'fe-grind-preview') return;
+      // Only our own frame may report. It is sandboxed without allow-same-origin, so its messages
+      // always carry the opaque origin 'null'; anything else did not come from the preview.
+      if (e.source !== frame.contentWindow || e.origin !== 'null' || e.data?.source !== 'fe-grind-preview') return;
       if (e.data.type === 'error') done(e.data.message);
       if (e.data.type === 'ready') done(null);
     };

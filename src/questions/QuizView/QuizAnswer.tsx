@@ -27,7 +27,7 @@ export function resultTitle(isRight: boolean, revealed: boolean, multi: boolean)
 }
 
 /** The correct option(s) and explanation, in the page but collapsed until revealed. */
-export function QuizAnswer({ q, correct, onOpen }: { q: QuizQuestion; correct: Set<number>; onOpen: () => boolean }) {
+export function QuizAnswer({ q, correct, onOpen }: Readonly<{ q: QuizQuestion; correct: Set<number>; onOpen: () => boolean }>) {
   return (
     <AnswerDisclosure onOpen={onOpen}>
       <p className="font-medium">{correct.size > 1 ? 'Correct answers:' : 'Correct answer:'}</p>
@@ -38,7 +38,7 @@ export function QuizAnswer({ q, correct, onOpen }: { q: QuizQuestion; correct: S
 }
 
 /** The verdict plus the explanation, announced when it appears. */
-export function QuizResult({ why, isRight, title }: { why: string; isRight: boolean; title: string }) {
+export function QuizResult({ why, isRight, title }: Readonly<{ why: string; isRight: boolean; title: string }>) {
   return (
     <Callout role="status" tone={isRight ? 'success' : 'error'} title={title} icon={isRight ? <Check size={16} aria-hidden /> : <X size={16} aria-hidden />}>
       <div className="flex gap-2">

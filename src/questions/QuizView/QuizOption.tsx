@@ -1,5 +1,6 @@
 import { Check, X } from 'lucide-react';
 import { cn, inline } from '../../ui';
+import type { ReactNode } from 'react';
 
 export type OptionState = 'idle' | 'picked' | 'right' | 'wrong';
 
@@ -10,9 +11,20 @@ const STYLES: Record<OptionState, string> = {
   wrong: 'border-error bg-error-soft',
 };
 
+const MARKS: Partial<Record<OptionState, ReactNode>> = {
+  right: <Check size={14} className="text-success" />,
+  wrong: <X size={14} className="text-error" />,
+};
+
 const VERDICT_LABEL: Partial<Record<OptionState, string>> = { right: 'correct answer', wrong: 'your answer, incorrect' };
 
+/**
+ * One answer: a native radio (single answer) or checkbox (select all that apply), visually hidden
+ * inside a card-styled label. Once the question is locked the input stays focusable (aria-disabled,
+ * not disabled) so the verdicts can still be read, but changes are ignored.
+ */
 export function QuizOption({
+  name,
   index,
   text,
   state,
@@ -20,7 +32,8 @@ export function QuizOption({
   multi,
   disabled,
   onToggle,
-}: {
+}: Readonly<{
+  name: string;
   index: number;
   text: string;
   state: OptionState;
@@ -28,20 +41,26 @@ export function QuizOption({
   multi: boolean;
   disabled: boolean;
   onToggle: () => void;
-}) {
+}>) {
   return (
-    <button
-      type="button"
-      role={multi ? 'checkbox' : 'radio'}
-      aria-checked={checked}
-      aria-disabled={disabled}
-      onClick={disabled ? undefined : onToggle}
+    <label
       className={cn(
-        'flex w-full items-start gap-3 rounded-xl border p-4 text-left text-[15px] leading-6 transition-colors',
+        'flex w-full cursor-pointer items-start gap-3 rounded-xl border p-4 text-left text-[15px] leading-6 transition-colors',
+        'has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-(--focus)',
         STYLES[state],
         disabled && 'cursor-default',
       )}
     >
+      <input
+        type={multi ? 'checkbox' : 'radio'}
+        name={name}
+        checked={checked}
+        aria-disabled={disabled}
+        onChange={() => {
+          if (!disabled) onToggle();
+        }}
+        className="sr-only"
+      />
       <span
         aria-hidden
         className={cn(
@@ -49,12 +68,12 @@ export function QuizOption({
           multi ? 'rounded-md' : 'rounded-full',
         )}
       >
-        {state === 'right' ? <Check size={14} className="text-success" /> : state === 'wrong' ? <X size={14} className="text-error" /> : index + 1}
+        {MARKS[state] ?? index + 1}
       </span>
       <span>
         {inline(text)}
         {VERDICT_LABEL[state] && <span className="sr-only"> ({VERDICT_LABEL[state]})</span>}
       </span>
-    </button>
+    </label>
   );
 }

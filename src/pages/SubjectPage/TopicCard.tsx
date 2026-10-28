@@ -10,12 +10,12 @@ export function TopicCard({
   topic,
   questions,
   progress,
-}: {
+}: Readonly<{
   subject: string;
   topic: TopicMeta;
   questions: QuestionMeta[];
   progress: Record<string, Attempt>;
-}) {
+}>) {
   const keys = questions.map((q) => keyOf(subject, q.id));
   const done = keys.filter((k) => progress[k]?.status === 'correct').length;
   return (

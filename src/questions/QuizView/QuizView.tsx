@@ -6,7 +6,13 @@ import { QuizAnswer, QuizResult, resultTitle, useQuizOptions } from './QuizAnswe
 import { QuizOption, type OptionState } from './QuizOption';
 import type { QuizQuestion } from '../../content/types';
 
-export function QuizView({ q, onResult }: ViewProps<QuizQuestion>) {
+function optionState(submitted: boolean, correct: boolean, chosen: boolean): OptionState {
+  if (!submitted) return chosen ? 'picked' : 'idle';
+  if (correct) return 'right';
+  return chosen ? 'wrong' : 'idle';
+}
+
+export function QuizView({ q, onResult }: Readonly<ViewProps<QuizQuestion>>) {
   const multi = Array.isArray(q.answer);
   const { correct, options } = useQuizOptions(q);
   const [picked, setPicked] = useState<Set<number>>(new Set());
@@ -51,31 +57,29 @@ export function QuizView({ q, onResult }: ViewProps<QuizQuestion>) {
     }
   });
 
-  const stateOf = (correct: boolean, chosen: boolean): OptionState =>
-    !submitted ? (chosen ? 'picked' : 'idle') : correct ? 'right' : chosen ? 'wrong' : 'idle';
-
   return (
     <div className="space-y-5">
-      <p id={`${q.id}-prompt`} className="text-lg leading-8 font-medium">
-        {inline(q.prompt)}
-      </p>
-      {q.code && <CodeBlock code={q.code} />}
-      {multi && !submitted && <p className="text-sm text-text-muted">Select all that apply.</p>}
-
-      <div className="space-y-2" role={multi ? 'group' : 'radiogroup'} aria-labelledby={`${q.id}-prompt`}>
-        {options.map((o, i) => (
-          <QuizOption
-            key={o.text}
-            index={i}
-            text={o.text}
-            multi={multi}
-            checked={picked.has(i)}
-            state={stateOf(o.correct, picked.has(i))}
-            disabled={submitted}
-            onToggle={() => toggle(i)}
-          />
-        ))}
-      </div>
+      {/* The prompt is the options' legend, so the group (radios or checkboxes) is named by the question. */}
+      <fieldset className="min-w-0 space-y-5">
+        <legend className="text-lg leading-8 font-medium">{inline(q.prompt)}</legend>
+        {q.code && <CodeBlock code={q.code} />}
+        {multi && !submitted && <p className="text-sm text-text-muted">Select all that apply.</p>}
+        <div className="space-y-2">
+          {options.map((o, i) => (
+            <QuizOption
+              key={o.text}
+              name={`${q.id}-answer`}
+              index={i}
+              text={o.text}
+              multi={multi}
+              checked={picked.has(i)}
+              state={optionState(submitted, o.correct, picked.has(i))}
+              disabled={submitted}
+              onToggle={() => toggle(i)}
+            />
+          ))}
+        </div>
+      </fieldset>
 
       {!submitted ? (
         <>

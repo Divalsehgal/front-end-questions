@@ -4,7 +4,7 @@ import { Prose } from '../../ui/code';
 import { AnswerDisclosure } from '../shared';
 import type { OrderQuestion } from '../../content/types';
 
-function CorrectOrder({ items }: { items: string[] }) {
+function CorrectOrder({ items }: Readonly<{ items: string[] }>) {
   return (
     <ol className="list-decimal space-y-1 pl-5">
       {items.map((x) => (
@@ -15,7 +15,7 @@ function CorrectOrder({ items }: { items: string[] }) {
 }
 
 /** The correct order and explanation, in the page but collapsed until revealed. */
-export function OrderAnswer({ q, onOpen }: { q: OrderQuestion; onOpen: () => boolean }) {
+export function OrderAnswer({ q, onOpen }: Readonly<{ q: OrderQuestion; onOpen: () => boolean }>) {
   return (
     <AnswerDisclosure onOpen={onOpen}>
       <p className="font-medium">Correct order:</p>
@@ -25,8 +25,13 @@ export function OrderAnswer({ q, onOpen }: { q: OrderQuestion; onOpen: () => boo
   );
 }
 
+function verdict(allRight: boolean, revealed: boolean) {
+  if (allRight) return 'Correct order';
+  return revealed ? 'Answer revealed' : 'Some steps are out of place';
+}
+
 /** After checking (or revealing): the correct order when it differs, then the verdict and explanation. */
-export function OrderResult({ q, allRight, revealed }: { q: OrderQuestion; allRight: boolean; revealed: boolean }) {
+export function OrderResult({ q, allRight, revealed }: Readonly<{ q: OrderQuestion; allRight: boolean; revealed: boolean }>) {
   return (
     <>
       {!allRight && (
@@ -34,12 +39,7 @@ export function OrderResult({ q, allRight, revealed }: { q: OrderQuestion; allRi
           <CorrectOrder items={q.items} />
         </Callout>
       )}
-      <Callout
-        role="status"
-        tone={allRight ? 'success' : 'error'}
-        title={allRight ? 'Correct order' : revealed ? 'Answer revealed' : 'Some steps are out of place'}
-        icon={<Lightbulb size={16} aria-hidden />}
-      >
+      <Callout role="status" tone={allRight ? 'success' : 'error'} title={verdict(allRight, revealed)} icon={<Lightbulb size={16} aria-hidden />}>
         <Prose text={q.why} />
       </Callout>
     </>

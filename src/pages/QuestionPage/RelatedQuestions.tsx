@@ -21,7 +21,7 @@ export function relatedTo(entry: Entry, limit = 5) {
 const linkClass = 'flex min-h-11 items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-surface-muted';
 
 /** Crawlable internal links: real <a href>s to neighbouring and related questions. */
-export function RelatedQuestions({ entry }: { entry: Entry }) {
+export function RelatedQuestions({ entry }: Readonly<{ entry: Entry }>) {
   const { prev, next } = neighbours(entry);
   const related = relatedTo(entry);
   return (

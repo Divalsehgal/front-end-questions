@@ -70,7 +70,10 @@ function formatContents(value: object, inner: Inner): string {
 
 const formatDate = (d: Date) => (Number.isNaN(d.getTime()) ? 'Invalid Date' : d.toISOString());
 
-const formatMap = (m: Map<unknown, unknown>, inner: Inner) => `Map(${m.size}) {${[...m].map(([k, v]) => `${inner(k)} => ${inner(v)}`).join(', ')}}`;
+function formatMap(m: Map<unknown, unknown>, inner: Inner) {
+  const entries = [...m].map(([k, v]) => `${inner(k)} => ${inner(v)}`);
+  return `Map(${m.size}) {${entries.join(', ')}}`;
+}
 
 function prefixOf(value: object): string {
   const proto = Object.getPrototypeOf(value);
@@ -97,7 +100,7 @@ export function normalizeLine(line: string): string {
 /** "Uncaught ReferenceError: …" also accepts "ReferenceError" or "Uncaught ReferenceError". */
 export function linesMatch(mine: string, real: string): boolean {
   if (normalizeLine(mine) === normalizeLine(real)) return true;
-  const thrown = real.match(/^Uncaught (?:\(in promise\) )?(\w+)/);
+  const thrown = /^Uncaught (?:\(in promise\) )?(\w+)/.exec(real);
   if (!thrown) return false;
   const name = normalizeLine(mine)
     .replace(/^Uncaught(\(inpromise\))?/i, '')

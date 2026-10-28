@@ -8,7 +8,7 @@ export const DISCLOSURE_LABEL = 'Show answer & explanation';
  * engines index it) but collapsed. Opening it is a reveal: `onOpen` decides whether that's allowed
  * (usually confirmReveal + a recorded miss) and returns false to snap it shut again.
  */
-export function AnswerDisclosure({ onOpen, children, label = DISCLOSURE_LABEL }: { onOpen: () => boolean; children: ReactNode; label?: string }) {
+export function AnswerDisclosure({ onOpen, children, label = DISCLOSURE_LABEL }: Readonly<{ onOpen: () => boolean; children: ReactNode; label?: string }>) {
   const onToggle = (e: SyntheticEvent<HTMLDetailsElement>) => {
     const el = e.currentTarget;
     if (el.open && !onOpen()) el.open = false;

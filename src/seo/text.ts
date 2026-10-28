@@ -2,10 +2,11 @@
 // Every pattern here runs in linear time on hostile input (no two quantifiers can match the same
 // characters); src/seo/text.test.ts pins that with long adversarial strings.
 
-// Line-start rules: `[^\S\n\r\u2028\u2029]*` is `\s*` minus line terminators, so the leading
-// indentation can't run into the next line (with /m, `^\s*` rescans every following blank line).
-const TABLE_RULE = /^[^\S\n\r\u2028\u2029]*(?:\|\s*)?:?-{2,}.*/gm;
-const LIST_MARKER = /^[^\S\n\r\u2028\u2029]*(?:[-*+]|\d+\.)\s+/gm;
+// Line-start rules: the leading class is every `\s` character except the line terminators
+// (\n \r \u2028 \u2029), so the leading indentation can't run into the next line (with /m, `^\s*`
+// rescans every following blank line).
+const TABLE_RULE = /^[\t\v\f \u00a0\u1680\u2000-\u200a\u202f\u205f\u3000\ufeff]*(?:\|\s*)?:?-{2,}.*/gm;
+const LIST_MARKER = /^[\t\v\f \u00a0\u1680\u2000-\u200a\u202f\u205f\u3000\ufeff]*(?:[-*+]|\d+\.)\s+/gm;
 
 /** Markdown-lite (the Prose dialect) to one line of plain text. Code fences are dropped, inline code keeps its text. */
 export function stripMarkdown(md: string) {
@@ -63,7 +64,7 @@ export function truncate(text: string, max: number) {
 
 /** First candidate that fits in `max`, else the last one truncated. */
 export function fitFirst(candidates: string[], max: number) {
-  return candidates.find((c) => c.length <= max) ?? truncate(candidates[candidates.length - 1], max);
+  return candidates.find((c) => c.length <= max) ?? truncate(candidates.at(-1) ?? '', max);
 }
 
 const ESCAPES: Record<string, string> = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };

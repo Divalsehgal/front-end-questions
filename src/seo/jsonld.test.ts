@@ -50,7 +50,7 @@ describe('BreadcrumbList and ItemList', () => {
 describe('question JSON-LD', () => {
   it('marks a single-answer quiz up as a Quiz with accepted and suggested answers matching the visible options', () => {
     const [crumbs, quiz] = questionJsonLd(single) as Ld[];
-    expect((crumbs.itemListElement as unknown[]).length).toBe(3);
+    expect(crumbs.itemListElement as unknown[]).toHaveLength(3);
     expect(quiz).toMatchObject({ '@type': 'Quiz', about: { '@type': 'Thing', name: single.subject.title }, isAccessibleForFree: true });
     expect(['Beginner', 'Intermediate', 'Advanced']).toContain(quiz.educationalLevel);
     const [part] = quiz.hasPart as Ld[];

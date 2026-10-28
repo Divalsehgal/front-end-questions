@@ -4,7 +4,7 @@ import { assert, fn } from './harness';
 describe('assert.equal / notEqual / ok', () => {
   it('equal uses Object.is and prefixes an optional message', () => {
     expect(() => assert.equal(Number.NaN, Number.NaN)).not.toThrow();
-    expect(() => assert.equal(0, -0)).toThrow(/expected -0, got 0/);
+    expect(() => assert.equal(-0, 0)).toThrow(/expected 0, got -0/);
     expect(() => assert.equal('a', 'b', 'label')).toThrow("label: expected 'b', got 'a'");
     expect(() => assert.equal({}, {})).toThrow(/expected \{\}, got \{\}/);
   });

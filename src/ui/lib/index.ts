@@ -5,3 +5,4 @@ export { useNow } from './useNow';
 export { focusItem, rovingIndex } from './rovingKeys';
 export { useHydrated } from './useHydrated';
 export { lazyComponent } from './lazyComponent';
+export { withStableKeys } from './stableKeys';

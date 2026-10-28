@@ -38,10 +38,10 @@ describe('SubjectPage', () => {
   it('filters by question kind with the radio chips', async () => {
     const { user } = page();
     const group = screen.getByRole('radiogroup', { name: 'Filter by question type' });
-    const kind = entries[entries.length - 1].q.kind;
+    const kind = entries.at(-1)!.q.kind;
     await user.click(within(group).getByRole('radio', { name: new RegExp(KINDS[kind].plural) }));
     const icons = screen.getAllByRole('img', { name: /.+/ }).filter((i) => Object.values(KINDS).some((k) => k.label === i.getAttribute('aria-label')));
-    expect(icons.length).toBe(entries.filter((e) => e.q.kind === kind).length);
+    expect(icons).toHaveLength(entries.filter((e) => e.q.kind === kind).length);
     expect(icons.every((i) => i.getAttribute('aria-label') === KINDS[kind].label)).toBe(true);
   });
 });
