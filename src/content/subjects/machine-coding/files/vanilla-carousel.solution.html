@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Carousel</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 24px;
+        color: #1f2937;
+      }
+      .carousel {
+        position: relative;
+        max-width: 640px;
+        margin: 0 auto;
+      }
+      .viewport {
+        overflow: hidden;
+        border-radius: 12px;
+      }
+      .track {
+        display: flex;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        transition: transform 400ms ease;
+      }
+      .slide {
+        flex: 0 0 auto;
+        aspect-ratio: 16 / 9;
+      }
+      .slide img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 40px;
+        height: 40px;
+        border: none;
+        border-radius: 50%;
+        background: rgb(255 255 255 / 0.85);
+        font-size: 20px;
+        cursor: pointer;
+      }
+      .nav:focus-visible,
+      .dot:focus-visible {
+        outline: 3px solid #2563eb;
+        outline-offset: 2px;
+      }
+      .prev {
+        left: 8px;
+      }
+      .next {
+        right: 8px;
+      }
+      .dots {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 12px;
+      }
+      .dot {
+        width: 12px;
+        height: 12px;
+        padding: 0;
+        border: 1px solid #6b7280;
+        border-radius: 50%;
+        background: transparent;
+        cursor: pointer;
+      }
+      .dot[aria-current='true'] {
+        background: #1f2937;
+      }
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        white-space: nowrap;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .track {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <section class="carousel" aria-roledescription="carousel" aria-label="Landscape photos">
+      <div class="viewport">
+        <ul class="track" id="track"></ul>
+      </div>
+      <button type="button" class="nav prev" id="prev" aria-label="Previous slide">&#8249;</button>
+      <button type="button" class="nav next" id="next" aria-label="Next slide">&#8250;</button>
+      <div class="dots" id="dots"></div>
+      <p id="live" class="sr-only" aria-live="polite"></p>
+    </section>
+
+    <script>
+      const slides = [
+        { src: 'https://picsum.photos/id/1015/800/450', alt: 'River winding through a valley' },
+        { src: 'https://picsum.photos/id/1018/800/450', alt: 'Mountain range under a clear sky' },
+        { src: 'https://picsum.photos/id/1039/800/450', alt: 'Waterfall in a green forest' },
+        { src: 'https://picsum.photos/id/1043/800/450', alt: 'Lake surrounded by trees' },
+      ];
+
+      const track = document.getElementById('track');
+      const dotsEl = document.getElementById('dots');
+      const viewport = track.parentElement;
+      const live = document.getElementById('live');
+      let index = 0;
+
+      slides.forEach((slide, i) => {
+        const li = document.createElement('li');
+        li.className = 'slide';
+        const img = document.createElement('img');
+        img.src = slide.src;
+        img.alt = slide.alt;
+        li.appendChild(img);
+        track.appendChild(li);
+
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'dot';
+        dot.dataset.index = String(i);
+        dot.setAttribute('aria-label', `Go to slide ${i + 1}`);
+        dotsEl.appendChild(dot);
+      });
+
+      function layout() {
+        // Each slide is exactly as wide as the viewport; recompute on resize.
+        const width = viewport.clientWidth;
+        for (const li of track.children) li.style.width = `${width}px`;
+        track.style.transform = `translateX(${-index * width}px)`;
+      }
+
+      function goTo(i) {
+        index = (i + slides.length) % slides.length; // wrap around both ways
+        layout();
+        [...dotsEl.children].forEach((dot, d) => {
+          dot.setAttribute('aria-current', d === index ? 'true' : 'false');
+        });
+        live.textContent = `Slide ${index + 1} of ${slides.length}`;
+      }
+
+      document.getElementById('prev').addEventListener('click', () => goTo(index - 1));
+      document.getElementById('next').addEventListener('click', () => goTo(index + 1));
+      dotsEl.addEventListener('click', (e) => {
+        const dot = e.target.closest('.dot');
+        if (dot) goTo(Number(dot.dataset.index));
+      });
+
+      window.addEventListener('resize', layout); // slide width depends on the viewport width
+
+      goTo(0);
+    </script>
+  </body>
+</html>

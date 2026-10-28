@@ -1,0 +1,106 @@
+import { uiFiles } from '../../files';
+import type { Topic } from '../../types';
+
+const ui = uiFiles('machine-coding', import.meta.glob<string>('./files/*', { query: '?raw', import: 'default', eager: true }));
+
+export const stateTopic: Topic = {
+  slug: 'state',
+  title: 'State architecture (React)',
+  questions: [
+    {
+      kind: 'ui',
+      id: 'feature-flags',
+      title: 'Feature flags with context',
+      difficulty: 'medium',
+      framework: 'react',
+      prompt: 'Build a feature-flag provider that components can read and toggle, simulating a 800ms load.',
+      requirements: [
+        'Flags live in a Context provider with a `useFeatureFlag(key)`-style hook',
+        "The provider value is memoised (`useMemo` + `useCallback`) so consumers don't re-render needlessly",
+        'Toggling a flag updates every consumer',
+        'Unknown flags default to off; a loading state shows until flags are "fetched"',
+        'A `<Feature flag="x">` wrapper renders children only when enabled',
+      ],
+      ...ui('feature-flags'),
+    },
+    {
+      kind: 'ui',
+      id: 'frequent-words',
+      title: 'Most frequent words',
+      difficulty: 'medium',
+      framework: 'react',
+      prompt: 'Analyse text and show the top N most frequent words, excluding banned words the user can add and remove.',
+      requirements: [
+        'Tokenise with a regex on lowercased text (`/[a-z0-9]+/g`)',
+        'Banned words go in a `Set` for O(1) lookups',
+        'Count with a `Map`; sort by count desc, then alphabetically for ties',
+        'Results recompute with `useMemo` when the text, banned list or N changes',
+        'Banned words can be added with Enter and removed',
+      ],
+      ...ui('frequent-words'),
+    },
+    {
+      kind: 'ui',
+      id: 'group-by-type',
+      title: 'Group values by type',
+      difficulty: 'easy',
+      framework: 'react',
+      prompt: 'Group a mixed array into buckets by type and render each bucket.',
+      requirements: [
+        'Uses `reduce` into an object keyed by type',
+        '`null` and arrays get their own groups (`typeof` says "object" for both)',
+        'Each group renders its values (objects/arrays shown as JSON)',
+        'Group order is stable',
+      ],
+      ...ui('group-by-type'),
+    },
+    {
+      kind: 'ui',
+      id: 'multi-stepper',
+      title: 'Multi-step checkout',
+      difficulty: 'medium',
+      framework: 'react',
+      prompt: 'A checkout stepper (Profile → Shipping → Billing → Delivery) with a progress indicator and next/back navigation.',
+      requirements: [
+        'Steps come from a config array; the current step is a number',
+        'Completed steps show a check; the active step is highlighted',
+        'Back is disabled on the first step; the last step shows "Complete purchase"',
+        'Progress line fills according to the current step',
+        'Bonus: persist the draft to localStorage',
+      ],
+      ...ui('multi-stepper'),
+    },
+    {
+      kind: 'ui',
+      id: 'reducer-todo',
+      title: 'Todo with useReducer (vs useState)',
+      difficulty: 'medium',
+      framework: 'react',
+      prompt: 'A todo list with statuses (Todo, Progress, Completed), implemented with `useReducer`. Compare it with a `useState` version.',
+      requirements: [
+        'A pure reducer handles `ADD`, `UPDATE` (status change) and `DELETE` with a discriminated-union action type',
+        'Enter adds a todo; empty input is ignored',
+        'Each item can change status and be deleted',
+        "Rows are memoised so editing one doesn't re-render all",
+        'Explain when useReducer beats useState',
+      ],
+      ...ui('reducer-todo'),
+    },
+    {
+      kind: 'ui',
+      id: 'transfer-list',
+      title: 'Transfer list',
+      difficulty: 'medium',
+      framework: 'react',
+      prompt: 'Two lists with checkboxes; move selected items (or all items) between them.',
+      requirements: [
+        'Selected ids are kept in state; toggling a checkbox adds or removes its id',
+        'Move selected → / ← and move all ⇒ / ⇐',
+        'Moving clears the selection; buttons are disabled when there is nothing to move',
+        'Item order is preserved',
+        'Each list shows its count',
+      ],
+      ...ui('transfer-list'),
+    },
+  ],
+};

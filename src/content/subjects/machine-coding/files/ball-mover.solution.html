@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Ball mover</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 24px;
+        color: #1f2937;
+      }
+      /* Extra height so the page can scroll and we can check the maths still works. */
+      .spacer {
+        height: 60vh;
+      }
+      #box {
+        position: relative;
+        width: min(400px, 100%);
+        height: 300px;
+        border: 2px solid #333;
+        border-radius: 8px;
+        background: #f8fafc;
+        cursor: crosshair;
+        overflow: hidden;
+      }
+      #ball {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: #4f46e5;
+        transform: translate(0, 0);
+        transition: transform 300ms ease-out;
+        pointer-events: none;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        #ball {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <p>Click anywhere inside the box to move the ball. Scroll down and try again.</p>
+    <div id="box">
+      <div id="ball"></div>
+    </div>
+    <p id="coords" aria-live="polite"></p>
+    <div class="spacer"></div>
+
+    <script>
+      const box = document.getElementById('box');
+      const ball = document.getElementById('ball');
+      const coords = document.getElementById('coords');
+
+      const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+      box.addEventListener('click', (event) => {
+        // getBoundingClientRect and clientX/clientY are both viewport-relative,
+        // so the subtraction is correct no matter how far the page is scrolled.
+        const rect = box.getBoundingClientRect();
+
+        // Remove the border width: the ball is positioned inside the padding box.
+        const x = event.clientX - rect.left - box.clientLeft;
+        const y = event.clientY - rect.top - box.clientTop;
+
+        const half = ball.offsetWidth / 2;
+
+        // Centre the ball on the click, then keep it fully inside the box.
+        const left = clamp(x - half, 0, box.clientWidth - ball.offsetWidth);
+        const top = clamp(y - half, 0, box.clientHeight - ball.offsetHeight);
+
+        ball.style.transform = `translate(${left}px, ${top}px)`;
+        coords.textContent = `Clicked at (${Math.round(x)}, ${Math.round(y)}) inside the box`;
+      });
+    </script>
+  </body>
+</html>

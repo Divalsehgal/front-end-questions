@@ -1,0 +1,5 @@
+# Code-question fixtures keep their author's formatting (they are shown verbatim in the app).
+src/content/subjects/*/files/
+
+# Root scratch file for quick experiments, not part of the app.
+index.js

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Progress bar queue</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 24px;
+        max-width: 480px;
+        color: #1f2937;
+      }
+      #add {
+        padding: 8px 16px;
+        font: inherit;
+        cursor: pointer;
+      }
+      #bars {
+        display: grid;
+        gap: 8px;
+        margin-top: 16px;
+      }
+      .track {
+        height: 16px;
+        border-radius: 8px;
+        background: #e5e7eb;
+        overflow: hidden;
+      }
+      .fill {
+        height: 100%;
+        width: 0%;
+        background: #16a34a;
+        /* Smooths the steps between interval ticks. */
+        transition: width 100ms linear;
+      }
+    </style>
+  </head>
+  <body>
+    <button type="button" id="add">Add</button>
+    <p id="status" aria-live="polite">Idle</p>
+    <div id="bars"></div>
+
+    <script>
+      const DURATION = 2000;
+      const TICK = 50;
+      const STEP = 100 / (DURATION / TICK);
+
+      const addButton = document.getElementById('add');
+      const barsEl = document.getElementById('bars');
+      const statusEl = document.getElementById('status');
+
+      const queue = []; // bars waiting to fill, oldest first
+      let current = null; // { track, fill, value }
+      let timer = null;
+      let count = 0;
+
+      function setValue(bar, value) {
+        bar.value = value;
+        bar.fill.style.width = `${value}%`;
+        bar.track.setAttribute('aria-valuenow', String(Math.round(value)));
+      }
+
+      function updateStatus() {
+        statusEl.textContent = current
+          ? `Filling, ${queue.length} waiting`
+          : 'Idle';
+      }
+
+      function startNext() {
+        current = queue.shift() || null;
+        if (!current) {
+          clearInterval(timer); // nothing left to fill
+          timer = null;
+          updateStatus();
+          return;
+        }
+        updateStatus();
+        if (timer === null) {
+          timer = setInterval(tick, TICK);
+        }
+      }
+
+      function tick() {
+        const next = Math.min(100, current.value + STEP);
+        setValue(current, next);
+        if (next >= 100) startNext();
+      }
+
+      addButton.addEventListener('click', () => {
+        count += 1;
+        const track = document.createElement('div');
+        track.className = 'track';
+        track.setAttribute('role', 'progressbar');
+        track.setAttribute('aria-label', `Bar ${count}`);
+        track.setAttribute('aria-valuemin', '0');
+        track.setAttribute('aria-valuemax', '100');
+        const fill = document.createElement('div');
+        fill.className = 'fill';
+        track.appendChild(fill);
+        barsEl.appendChild(track);
+
+        const bar = { track, fill, value: 0 };
+        setValue(bar, 0);
+        queue.push(bar);
+        if (!current) startNext();
+        else updateStatus();
+      });
+    </script>
+  </body>
+</html>

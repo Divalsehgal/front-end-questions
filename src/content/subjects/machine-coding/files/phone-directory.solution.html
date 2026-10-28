@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Phone directory</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 24px;
+        max-width: 720px;
+        color: #1f2937;
+      }
+      #form {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: flex-end;
+      }
+      .field {
+        display: grid;
+        gap: 4px;
+      }
+      input {
+        padding: 6px 8px;
+        font: inherit;
+        border: 1px solid #9ca3af;
+        border-radius: 6px;
+      }
+      button {
+        padding: 6px 14px;
+        font: inherit;
+        cursor: pointer;
+      }
+      #error {
+        min-height: 1.2em;
+        color: #b91c1c;
+      }
+      .search {
+        margin: 16px 0 8px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        padding: 8px;
+        border: 1px solid #d1d5db;
+        text-align: left;
+      }
+      thead {
+        background: #f3f4f6;
+      }
+      th button {
+        padding: 0;
+        border: none;
+        background: none;
+        font: inherit;
+        font-weight: 700;
+      }
+      tbody tr:nth-child(even) {
+        background: #f9fafb;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Phone Directory</h1>
+    <form id="form" novalidate>
+      <div class="field">
+        <label for="name">Name</label>
+        <input id="name" name="name" autocomplete="name" aria-describedby="error" />
+      </div>
+      <div class="field">
+        <label for="mobile">Mobile</label>
+        <input id="mobile" name="mobile" inputmode="numeric" autocomplete="tel" aria-describedby="error" />
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" aria-describedby="error" />
+      </div>
+      <button type="submit">Add contact</button>
+    </form>
+    <p id="error" role="alert"></p>
+
+    <div class="search">
+      <label for="search">Search by mobile</label>
+      <input id="search" type="search" inputmode="numeric" />
+    </div>
+
+    <table id="summaryTable">
+      <thead>
+        <tr>
+          <th id="name-header" aria-sort="none">
+            <button type="button" id="sort">Name <span id="sort-icon" aria-hidden="true"></span></button>
+          </th>
+          <th>Mobile</th>
+          <th>Email</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <p id="noResult" hidden>No results</p>
+
+    <script>
+      const form = document.getElementById('form');
+      const nameInput = document.getElementById('name');
+      const mobileInput = document.getElementById('mobile');
+      const emailInput = document.getElementById('email');
+      const errorEl = document.getElementById('error');
+      const rowsEl = document.getElementById('rows');
+      const searchEl = document.getElementById('search');
+      const noResult = document.getElementById('noResult');
+      const nameHeader = document.getElementById('name-header');
+      const sortIcon = document.getElementById('sort-icon');
+
+      const contacts = [];
+      let sortDir = 'none'; // 'none' | 'ascending' | 'descending'
+
+      function validate({ name, mobile, email }) {
+        if (!/^[A-Za-z]+(?: [A-Za-z]+)*$/.test(name)) return 'Name can only contain letters and spaces.';
+        if (!/^\d{10}$/.test(mobile)) return 'Mobile must be exactly 10 digits.';
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) return 'Enter a valid email address.';
+        return '';
+      }
+
+      function render() {
+        const query = searchEl.value.trim();
+        let list = contacts.filter((c) => c.mobile.includes(query));
+        if (sortDir !== 'none') {
+          const factor = sortDir === 'ascending' ? 1 : -1;
+          list = [...list].sort((a, b) => factor * a.name.localeCompare(b.name));
+        }
+
+        rowsEl.replaceChildren(
+          ...list.map((contact) => {
+            const tr = document.createElement('tr');
+            for (const key of ['name', 'mobile', 'email']) {
+              const td = document.createElement('td');
+              td.textContent = contact[key]; // textContent: user input is never parsed as HTML
+              tr.appendChild(td);
+            }
+            return tr;
+          }),
+        );
+        noResult.hidden = list.length > 0 || contacts.length === 0;
+      }
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const contact = {
+          name: nameInput.value.trim(),
+          mobile: mobileInput.value.trim(),
+          email: emailInput.value.trim(),
+        };
+        const message = validate(contact);
+        errorEl.textContent = message;
+        if (message) return;
+
+        contacts.push(contact);
+        form.reset();
+        nameInput.focus();
+        render();
+      });
+
+      searchEl.addEventListener('input', render);
+
+      document.getElementById('sort').addEventListener('click', () => {
+        sortDir = sortDir === 'ascending' ? 'descending' : 'ascending';
+        nameHeader.setAttribute('aria-sort', sortDir);
+        sortIcon.textContent = sortDir === 'ascending' ? '▲' : '▼';
+        render();
+      });
+
+      render();
+    </script>
+  </body>
+</html>

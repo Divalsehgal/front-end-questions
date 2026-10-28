@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      [role='tablist'] { display: flex; gap: 4px; border-bottom: 1px solid #ddd; }
+      [role='tab'] { border: 0; background: none; padding: 8px 14px; cursor: pointer; border-bottom: 2px solid transparent; font: inherit; }
+      [role='tab'][aria-selected='true'] { border-color: #4f46e5; color: #4f46e5; font-weight: 600; }
+      [role='tab']:focus-visible { outline: 2px solid #4f46e5; }
+      [role='tabpanel'] { padding: 16px 4px; }
+    </style>
+  </head>
+  <body>
+    <div role="tablist" aria-label="Account settings">
+      <button role="tab" id="t1" aria-selected="true" aria-controls="p1" tabindex="0">Profile</button>
+      <button role="tab" id="t2" aria-selected="false" aria-controls="p2" tabindex="-1">Security</button>
+      <button role="tab" id="t3" aria-selected="false" aria-controls="p3" tabindex="-1">Billing</button>
+    </div>
+    <div role="tabpanel" id="p1" aria-labelledby="t1" tabindex="0">Profile details.</div>
+    <div role="tabpanel" id="p2" aria-labelledby="t2" tabindex="0" hidden>Password and 2FA.</div>
+    <div role="tabpanel" id="p3" aria-labelledby="t3" tabindex="0" hidden>Invoices.</div>
+
+    <script>
+      const tabs = [...document.querySelectorAll('[role="tab"]')];
+
+      function select(tab) {
+        for (const t of tabs) {
+          const on = t === tab;
+          t.setAttribute('aria-selected', String(on));
+          t.tabIndex = on ? 0 : -1; // roving tabindex: only the active tab is in the Tab order
+          document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+        }
+        tab.focus();
+      }
+
+      document.querySelector('[role="tablist"]').addEventListener('click', (e) => {
+        const tab = e.target.closest('[role="tab"]');
+        if (tab) select(tab);
+      });
+
+      document.querySelector('[role="tablist"]').addEventListener('keydown', (e) => {
+        const i = tabs.indexOf(document.activeElement);
+        const next = { ArrowRight: i + 1, ArrowLeft: i - 1, Home: 0, End: tabs.length - 1 }[e.key];
+        if (next === undefined) return;
+        e.preventDefault();
+        select(tabs[(next + tabs.length) % tabs.length]);
+      });
+    </script>
+  </body>
+</html>

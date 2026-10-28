@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Form with live validation</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 24px;
+        max-width: 420px;
+        color: #1f2937;
+      }
+      .field {
+        display: grid;
+        gap: 4px;
+        margin-bottom: 14px;
+      }
+      label {
+        font-weight: 600;
+      }
+      input {
+        padding: 8px;
+        font: inherit;
+        border: 1px solid #9ca3af;
+        border-radius: 6px;
+      }
+      input[aria-invalid='true'] {
+        border-color: #dc2626;
+      }
+      .error {
+        min-height: 1.2em;
+        margin: 0;
+        font-size: 0.875rem;
+        color: #b91c1c;
+      }
+      button {
+        padding: 8px 16px;
+        font: inherit;
+        cursor: pointer;
+      }
+      #summary {
+        margin-top: 20px;
+        padding: 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+      }
+      #summary dt {
+        font-weight: 600;
+      }
+      #summary dd {
+        margin: 0 0 8px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Sign up</h1>
+    <form id="form" novalidate>
+      <div class="field">
+        <label for="name">Name</label>
+        <input id="name" name="name" autocomplete="name" aria-describedby="name-error" />
+        <p class="error" id="name-error"></p>
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" autocomplete="email" aria-describedby="email-error" />
+        <p class="error" id="email-error"></p>
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          name="password"
+          type="password"
+          autocomplete="new-password"
+          aria-describedby="password-error"
+        />
+        <p class="error" id="password-error"></p>
+      </div>
+      <button type="submit">Submit</button>
+    </form>
+
+    <section id="summary" hidden aria-live="polite">
+      <h2>Submitted</h2>
+      <dl id="summary-list"></dl>
+    </section>
+
+    <script>
+      const form = document.getElementById('form');
+      const summary = document.getElementById('summary');
+      const summaryList = document.getElementById('summary-list');
+
+      const validators = {
+        name: (v) => (v.trim().length >= 2 ? '' : 'Name must be at least 2 characters.'),
+        email: (v) => (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) ? '' : 'Enter a valid email address.'),
+        password: (v) => {
+          if (v.length < 8) return 'Password must be at least 8 characters.';
+          if (!/\d/.test(v)) return 'Password must contain a number.';
+          return '';
+        },
+      };
+
+      function validateField(input, show) {
+        const message = validators[input.name](input.value);
+        if (show) {
+          document.getElementById(`${input.name}-error`).textContent = message;
+          input.setAttribute('aria-invalid', message ? 'true' : 'false');
+        }
+        return message === '';
+      }
+
+      // Live validation: re-check a field every time it changes.
+      form.addEventListener('input', (e) => {
+        if (!(e.target.name in validators)) return;
+        validateField(e.target, true);
+      });
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const inputs = [...form.querySelectorAll('input')];
+        const results = inputs.map((input) => validateField(input, true));
+        const firstInvalid = inputs[results.indexOf(false)];
+        if (firstInvalid) {
+          firstInvalid.focus(); // blocked: stay on the form
+          return;
+        }
+
+        summaryList.replaceChildren();
+        const data = new FormData(form);
+        for (const [key, value] of data) {
+          const dt = document.createElement('dt');
+          dt.textContent = key[0].toUpperCase() + key.slice(1);
+          const dd = document.createElement('dd');
+          dd.textContent = key === 'password' ? '•'.repeat(String(value).length) : String(value);
+          summaryList.append(dt, dd);
+        }
+        summary.hidden = false;
+        form.reset();
+        inputs.forEach((input) => input.removeAttribute('aria-invalid'));
+      });
+    </script>
+  </body>
+</html>

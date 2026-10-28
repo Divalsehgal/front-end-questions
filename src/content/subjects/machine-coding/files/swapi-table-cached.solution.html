@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Star Wars characters (cached)</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 24px;
+        max-width: 640px;
+        color: #1f2937;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        padding: 8px;
+        border: 1px solid #d1d5db;
+        text-align: left;
+      }
+      thead {
+        background: #f3f4f6;
+      }
+      .pager {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+        margin-top: 12px;
+      }
+      button {
+        padding: 6px 14px;
+        font: inherit;
+        cursor: pointer;
+      }
+      button:disabled {
+        cursor: not-allowed;
+      }
+      #source {
+        font-size: 0.875rem;
+        color: #4b5563;
+      }
+      #source.cached {
+        color: #15803d;
+      }
+      #error {
+        color: #b91c1c;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Star Wars characters</h1>
+    <table id="table" aria-busy="false">
+      <thead>
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Height</th>
+          <th scope="col">Mass</th>
+          <th scope="col">Gender</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+    <p id="error" role="alert"></p>
+    <div class="pager">
+      <button type="button" id="prev" disabled>Previous</button>
+      <button type="button" id="next" disabled>Next</button>
+      <span id="source" aria-live="polite"></span>
+    </div>
+
+    <details>
+      <summary>localStorage as a cache: trade-offs</summary>
+      <ul>
+        <li>Size: roughly 5 MB per origin, strings only, so data must be serialised and old entries pruned.</li>
+        <li>Sync: reads and writes block the main thread; large JSON parses can cause jank.</li>
+        <li>Staleness: data can be out of date, so entries carry a timestamp and expire after a TTL.</li>
+        <li>Sharing: other tabs see the same data but are not notified unless they listen for the storage event.</li>
+        <li>Availability: storage can be disabled or full, so every access is wrapped in try/catch and the in-memory Map still works.</li>
+      </ul>
+    </details>
+
+    <script>
+      const START_URL = 'https://swapi.dev/api/people/';
+      const COLUMNS = ['name', 'height', 'mass', 'gender'];
+      const CACHE_TTL = 5 * 60 * 1000; // five minutes
+
+      // Returns the cached data for a url, or null if there is none or it is too old.
+      function readCache(url) {
+        const cached = localStorage.getItem(url);
+        if (!cached) return null;
+        const { timestamp, data } = JSON.parse(cached);
+        if (Date.now() - timestamp > CACHE_TTL) return null; // expired
+        return data;
+      }
+
+      function writeCache(url, data) {
+        localStorage.setItem(url, JSON.stringify({ timestamp: Date.now(), data }));
+      }
+
+      const table = document.getElementById('table');
+      const rowsEl = document.getElementById('rows');
+      const errorEl = document.getElementById('error');
+      const sourceEl = document.getElementById('source');
+      const prevBtn = document.getElementById('prev');
+      const nextBtn = document.getElementById('next');
+
+      let nextUrl = null;
+      let prevUrl = null;
+
+      function messageRow(text) {
+        const tr = document.createElement('tr');
+        const td = document.createElement('td');
+        td.colSpan = COLUMNS.length;
+        td.textContent = text;
+        tr.appendChild(td);
+        rowsEl.replaceChildren(tr);
+      }
+
+      function render(data, fromCache) {
+        rowsEl.replaceChildren(
+          ...data.results.map((person) => {
+            const tr = document.createElement('tr');
+            for (const key of COLUMNS) {
+              const td = document.createElement('td');
+              td.textContent = person[key];
+              tr.appendChild(td);
+            }
+            return tr;
+          }),
+        );
+        nextUrl = data.next;
+        prevUrl = data.previous;
+        sourceEl.textContent = fromCache ? 'From cache' : 'From network';
+        sourceEl.classList.toggle('cached', fromCache);
+      }
+
+      function updateButtons() {
+        prevBtn.disabled = !prevUrl;
+        nextBtn.disabled = !nextUrl;
+      }
+
+      async function load(url) {
+        errorEl.textContent = '';
+
+        const cached = readCache(url);
+        if (cached) {
+          render(cached, true); // no network request
+          updateButtons();
+          return;
+        }
+
+        prevBtn.disabled = true;
+        nextBtn.disabled = true;
+        table.setAttribute('aria-busy', 'true');
+        sourceEl.textContent = '';
+        messageRow('Loading...');
+
+        try {
+          const response = await fetch(url);
+          if (!response.ok) throw new Error(`Request failed with status ${response.status}`);
+          const data = await response.json();
+          writeCache(url, data);
+          render(data, false);
+        } catch (err) {
+          messageRow('No data');
+          errorEl.textContent = `Could not load characters. ${err.message}`;
+        } finally {
+          table.setAttribute('aria-busy', 'false');
+          updateButtons();
+        }
+      }
+
+      prevBtn.addEventListener('click', () => prevUrl && load(prevUrl));
+      nextBtn.addEventListener('click', () => nextUrl && load(nextUrl));
+
+      load(START_URL);
+    </script>
+  </body>
+</html>

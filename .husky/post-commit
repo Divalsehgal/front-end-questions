@@ -1,0 +1,11 @@
+# Informational only: never fails the commit.
+{
+  hash=$(git rev-parse --short HEAD)
+  stat=$(git show --shortstat --format= HEAD | sed 's/^ *//')
+  echo "[post-commit] $hash: ${stat:-no file changes}"
+  files=$(git show --name-only --format= HEAD)
+  if echo "$files" | grep -q '^src/' && ! echo "$files" | grep -qE '\.test\.[jt]sx?$'; then
+    echo "[post-commit] warning: commit touches src/ but no *.test.* file"
+  fi
+} || true
+exit 0

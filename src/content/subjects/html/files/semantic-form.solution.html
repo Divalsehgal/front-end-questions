@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      form { display: grid; gap: 14px; max-width: 22rem; }
+      label { display: grid; gap: 4px; font-weight: 500; }
+      input:not([type='radio']) { font: inherit; padding: 8px; border: 1px solid #bbb; border-radius: 6px; }
+      input:user-invalid { border-color: #c4312b; }
+      .hint { color: #666; font-size: 0.85rem; font-weight: 400; }
+      .error { color: #c4312b; font-size: 0.85rem; }
+      fieldset { border: 1px solid #ddd; border-radius: 6px; }
+      fieldset label { display: inline-flex; gap: 6px; margin-right: 12px; font-weight: 400; }
+      button { font: inherit; padding: 10px; border-radius: 6px; border: 0; background: #4f46e5; color: white; cursor: pointer; }
+    </style>
+  </head>
+  <body>
+    <form id="signup" novalidate>
+      <label for="email">Email</label>
+      <input id="email" type="email" name="email" required autocomplete="email" aria-describedby="email-error" />
+      <span id="email-error" class="error" aria-live="polite"></span>
+
+      <label for="pwd">Password</label>
+      <input id="pwd" type="password" name="password" required minlength="8" autocomplete="new-password" aria-describedby="pwd-hint pwd-error" />
+      <span id="pwd-hint" class="hint">At least 8 characters.</span>
+      <span id="pwd-error" class="error" aria-live="polite"></span>
+
+      <fieldset>
+        <legend>Account type</legend>
+        <label><input type="radio" name="type" value="personal" required /> Personal</label>
+        <label><input type="radio" name="type" value="business" /> Business</label>
+      </fieldset>
+
+      <button type="submit">Register</button>
+      <p id="result" role="status"></p>
+    </form>
+
+    <script>
+      const form = document.getElementById('signup');
+      const pwd = document.getElementById('pwd');
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email');
+        document.getElementById('email-error').textContent = email.validity.valid ? '' : 'Enter a valid email address.';
+        document.getElementById('pwd-error').textContent = pwd.validity.valid ? '' : 'Password must be at least 8 characters.';
+        for (const el of form.elements) if (el.willValidate) el.setAttribute('aria-invalid', String(!el.validity.valid));
+        // Not form.querySelector(':invalid'): that also matches the <fieldset>, which can't take focus.
+        const firstInvalid = [...form.elements].find((el) => el.willValidate && !el.validity.valid);
+        if (firstInvalid) {
+          firstInvalid.focus();
+          return;
+        }
+        document.getElementById('result').textContent = 'Registered!';
+      });
+    </script>
+  </body>
+</html>

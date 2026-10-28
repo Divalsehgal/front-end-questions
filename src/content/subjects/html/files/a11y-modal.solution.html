@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      dialog { border: 0; border-radius: 12px; padding: 0; max-width: 24rem; box-shadow: 0 20px 50px rgb(0 0 0 / 0.25); }
+      dialog::backdrop { background: rgb(0 0 0 / 0.45); }
+      .actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
+      button { font: inherit; padding: 8px 14px; border-radius: 6px; border: 1px solid #ccc; background: white; cursor: pointer; }
+      .danger { background: #c4312b; color: white; border-color: #c4312b; }
+    </style>
+  </head>
+  <body>
+    <button id="open" aria-haspopup="dialog">Delete account</button>
+    <p id="status" role="status"></p>
+
+    <!-- Native <dialog> + showModal() gives focus trapping, Esc to close,
+         an inert background and a ::backdrop natively. -->
+    <dialog id="confirm" aria-labelledby="title" aria-describedby="desc">
+      <!-- Padding lives on this wrapper, so a click on the <dialog> element itself is always the backdrop. -->
+      <div style="padding: 24px">
+        <h2 id="title">Delete account?</h2>
+        <p id="desc">This action cannot be undone.</p>
+        <form method="dialog" class="actions">
+          <button value="cancel" autofocus>Cancel</button>
+          <button value="delete" class="danger">Yes, delete</button>
+        </form>
+      </div>
+    </dialog>
+
+    <script>
+      const dialog = document.getElementById('confirm');
+      const opener = document.getElementById('open');
+
+      opener.addEventListener('click', () => {
+        dialog.returnValue = ''; // otherwise Esc after a previous "delete" would report "delete" again
+        dialog.showModal();
+      });
+
+      // Fires for both buttons (form method="dialog") and for Esc.
+      dialog.addEventListener('close', () => {
+        document.getElementById('status').textContent = dialog.returnValue === 'delete' ? 'Account deleted.' : 'Cancelled.';
+        opener.focus(); // return focus to what opened it
+      });
+
+      // Click on the backdrop closes it too.
+      dialog.addEventListener('click', (e) => {
+        if (e.target === dialog) dialog.close('cancel');
+      });
+    </script>
+  </body>
+</html>
