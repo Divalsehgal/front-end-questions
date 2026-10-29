@@ -6,6 +6,9 @@ const FALLBACK = 'https://front-end-grind.vercel.app/';
 export const SITE_URL = withSlash((import.meta.env.VITE_SITE_URL as string | undefined) ?? FALLBACK);
 export const SITE_NAME = 'FE Grind';
 export const AUTHOR = 'Dival Sehgal';
+/** Public profiles of the author: lets search and answer engines tie the site to a real person. */
+export const AUTHOR_PROFILES = ['https://github.com/Divalsehgal'];
+export const REPO_URL = 'https://github.com/Divalsehgal/front-end-questions';
 export const THEME_COLOR = '#0b1020';
 export const OG_IMAGE = 'og-image.png';
 export const SITE_DESCRIPTION =

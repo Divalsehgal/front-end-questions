@@ -1,9 +1,11 @@
 import { fullEntry } from '../content/loader';
 import { getSubject, keyOf, type FullEntry } from '../content/registry';
-import { homeJsonLd, questionJsonLd, subjectJsonLd } from './jsonld';
+import { homeJsonLd, questionJsonLd, questionLead, subjectJsonLd } from './jsonld';
 import { absoluteUrl, isNoindex, normalizePath, SITE_DESCRIPTION, SITE_NAME } from './site';
 import { fitFirst, stripMarkdown, truncate } from './text';
 import type { SubjectMeta } from '../content/types';
+
+export { questionLead };
 
 export const TITLE_MAX = 60;
 export const DESCRIPTION_MAX = 155;
@@ -29,19 +31,6 @@ export function pageTitle(main: string, qualifiers: string[]) {
 }
 
 export const metaDescription = (...parts: string[]) => truncate(stripMarkdown(parts.filter(Boolean).join(' ')), DESCRIPTION_MAX);
-
-/** The visible text a question leads with (what a searcher would type). */
-export function questionLead(e: FullEntry) {
-  const q = e.q;
-  switch (q.kind) {
-    case 'flashcard':
-      return q.front;
-    case 'output':
-      return `What does this ${q.lang === 'ts' ? 'TypeScript' : 'JavaScript'} code log? ${q.why}`;
-    default:
-      return q.prompt;
-  }
-}
 
 /** The question's own words first; short ones get context so the snippet still says what the page is. */
 function questionDescription(e: FullEntry, subject: string) {

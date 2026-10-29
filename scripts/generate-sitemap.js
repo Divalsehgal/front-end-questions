@@ -1,5 +1,6 @@
 #!/usr/bin/env node
-// Writes dist/sitemap.xml (a sitemap index), dist/sitemaps/<subject>.xml and dist/robots.txt from
+// Writes dist/sitemap.xml (a sitemap index), dist/sitemaps/<subject>.xml, dist/robots.txt and the
+// llms.txt / llms-full.txt views for LLMs and answer engines from
 // the registry (via the SSR bundle), so every question is listed automatically. <lastmod> is the
 // last git commit touching the subject's folder, falling back to today's date.
 import { execFileSync } from 'node:child_process';
@@ -9,7 +10,9 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = join(root, 'dist');
-const { buildSitemaps, robotsTxt, SITE_URL, SITEMAP_INDEX } = await import(pathToFileURL(join(root, 'dist-ssr/entry-server.js')).href);
+const { buildSitemaps, robotsTxt, SITE_URL, SITEMAP_INDEX, LLMS_TXT, LLMS_FULL_TXT, llmsTxt, llmsFullTxt } = await import(
+  pathToFileURL(join(root, 'dist-ssr/entry-server.js')).href
+);
 
 function lastCommitDate(slug) {
   try {
@@ -29,4 +32,8 @@ for (const [path, xml] of Object.entries(files)) {
   writeFileSync(join(dist, path), xml);
 }
 writeFileSync(join(dist, 'robots.txt'), robotsTxt());
+writeFileSync(join(dist, LLMS_TXT), llmsTxt());
+const full = llmsFullTxt();
+writeFileSync(join(dist, LLMS_FULL_TXT), full);
 console.warn(`Sitemap index ${SITE_URL}${SITEMAP_INDEX}: ${Object.keys(files).length - 1} sitemaps, ${urls.length} URLs`);
+console.warn(`${LLMS_TXT} + ${LLMS_FULL_TXT} (${Math.round(Buffer.byteLength(full) / 1024)} KB)`);

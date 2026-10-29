@@ -75,13 +75,32 @@ describe('question JSON-LD', () => {
     expect(part).toMatchObject({ eduQuestionType: 'Flashcard', acceptedAnswer: { '@type': 'Answer' } });
   });
 
-  it('marks other kinds up as a LearningResource without answers', () => {
-    for (const kind of ['code', 'ui', 'output', 'order']) {
+  it('marks code, output and machine-coding questions up as a LearningResource with the question text', () => {
+    for (const kind of ['code', 'ui', 'output']) {
       const [, res] = questionJsonLd(find((e) => e.q.kind === kind)) as Ld[];
       expect(res['@type']).toBe('LearningResource');
       expect(res).not.toHaveProperty('hasPart');
       expect(res.learningResourceType).toEqual(expect.any(String));
+      expect(res.description).toEqual(expect.any(String));
+      expect(String(res.description)).not.toBe('');
     }
+  });
+
+  it('gives an ordering question its steps, in order, as the accepted answer', () => {
+    const e = find((x) => x.q.kind === 'order');
+    if (e.q.kind !== 'order') throw new Error('no order question');
+    const [, res] = questionJsonLd(e) as Ld[];
+    expect(res['@type']).toBe('Quiz');
+    const [part] = res.hasPart as Ld[];
+    expect(part.eduQuestionType).toBe('Ordering');
+    const text = (part.acceptedAnswer as Ld).text as string;
+    expect(text.startsWith(`Step 1: ${stripMarkdown(e.q.items[0])}`)).toBe(true);
+    expect(text).toContain(`Step ${e.q.items.length}: ${stripMarkdown(e.q.items.at(-1)!)}`);
+  });
+
+  it('names the author with public profiles', () => {
+    const [, res] = questionJsonLd(single) as Ld[];
+    expect(res.author).toMatchObject({ '@type': 'Person', sameAs: [expect.stringMatching(/^https:\/\//)] });
   });
 
   it('defaults the level to Intermediate when a question has no difficulty', () => {

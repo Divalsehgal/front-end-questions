@@ -1,12 +1,12 @@
 // schema.org JSON-LD builders. Every answer/explanation here is also in the page's HTML
 // (the "Show answer & explanation" disclosure), as Google requires for structured data.
 import { hrefOf, subjectHref, type FullEntry } from '../content/registry';
-import { AUTHOR, SITE_DESCRIPTION, SITE_NAME, SITE_URL, absoluteUrl } from './site';
+import { AUTHOR, AUTHOR_PROFILES, REPO_URL, SITE_DESCRIPTION, SITE_NAME, SITE_URL, absoluteUrl } from './site';
 import { stripMarkdown } from './text';
 import type { Difficulty, SubjectMeta } from '../content/types';
 
 const CONTEXT = 'https://schema.org';
-const author = { '@type': 'Person', name: AUTHOR };
+const author = { '@type': 'Person', name: AUTHOR, url: AUTHOR_PROFILES[0], sameAs: AUTHOR_PROFILES };
 const LEVEL: Record<Difficulty, string> = { easy: 'Beginner', medium: 'Intermediate', hard: 'Advanced' };
 
 const questionCount = (s: SubjectMeta) => s.topics.reduce((n, t) => n + t.questions.length, 0);
@@ -21,6 +21,9 @@ export function homeJsonLd() {
       description: SITE_DESCRIPTION,
       inLanguage: 'en',
       author,
+      publisher: author,
+      isAccessibleForFree: true,
+      sameAs: [REPO_URL],
     },
   ];
 }
@@ -55,6 +58,19 @@ export function subjectJsonLd(s: SubjectMeta) {
   ];
 }
 
+/** The visible text a question leads with (what a searcher would type). */
+export function questionLead(e: FullEntry) {
+  const q = e.q;
+  switch (q.kind) {
+    case 'flashcard':
+      return q.front;
+    case 'output':
+      return `What does this ${q.lang === 'ts' ? 'TypeScript' : 'JavaScript'} code log? ${q.why}`;
+    default:
+      return q.prompt;
+  }
+}
+
 const answer = (text: string, position?: number, explanation?: string) => ({
   '@type': 'Answer',
   text: stripMarkdown(text),
@@ -81,6 +97,17 @@ function questionPart(e: FullEntry) {
   if (q.kind === 'flashcard') {
     return { '@type': 'Question', eduQuestionType: 'Flashcard', name: stripMarkdown(q.title), text: stripMarkdown(q.front), acceptedAnswer: answer(q.back) };
   }
+  if (q.kind === 'order') {
+    // The correct order as a numbered list: the same steps and explanation the page reveals.
+    const steps = q.items.map((item, i) => `Step ${i + 1}: ${stripMarkdown(item)}`).join(' ');
+    return {
+      '@type': 'Question',
+      eduQuestionType: 'Ordering',
+      name: stripMarkdown(q.title),
+      text: stripMarkdown(q.prompt),
+      acceptedAnswer: answer(steps, undefined, q.why),
+    };
+  }
   return null;
 }
 
@@ -100,6 +127,7 @@ export function questionJsonLd(e: FullEntry) {
     '@context': CONTEXT,
     '@type': part ? 'Quiz' : 'LearningResource',
     name: stripMarkdown(e.q.title),
+    description: stripMarkdown(questionLead(e)),
     url,
     inLanguage: 'en',
     isAccessibleForFree: true,

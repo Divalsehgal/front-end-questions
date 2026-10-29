@@ -30,5 +30,6 @@ export function render(path: string) {
 export { pageMeta, renderHead };
 export { routeModules as preloadModules } from './preload';
 export { buildSitemaps, prerenderPaths, robotsTxt, SITEMAP_INDEX } from './seo/sitemap';
+export { LLMS_FULL_TXT, LLMS_TXT, llmsFullTxt, llmsTxt } from './seo/llms';
 export { SITE_URL } from './seo/site';
 export { SUBJECTS } from './content/registry';
