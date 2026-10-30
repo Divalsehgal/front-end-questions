@@ -18,7 +18,7 @@ export function CodeBlock({ code, lang = 'tsx' }: Readonly<{ code: string; lang?
               <div
                 key={key}
                 {...getLineProps({ line })}
-                className="table-row before:table-cell before:pr-4 before:text-right before:text-text-muted before:content-[counter(line)] before:[counter-increment:line]"
+                className="table-row before:table-cell before:pr-4 before:text-right before:text-text-muted before:content-[counter(line)_/_''] before:[counter-increment:line]"
               >
                 <span className="table-cell">
                   {withStableKeys(line, (t) => t.content).map(({ item: token, key: tokenKey }) => (

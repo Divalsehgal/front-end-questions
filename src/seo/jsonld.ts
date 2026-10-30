@@ -9,7 +9,7 @@ const CONTEXT = 'https://schema.org';
 const author = { '@type': 'Person', name: AUTHOR, url: AUTHOR_PROFILES[0], sameAs: AUTHOR_PROFILES };
 const LEVEL: Record<Difficulty, string> = { easy: 'Beginner', medium: 'Intermediate', hard: 'Advanced' };
 
-const questionCount = (s: SubjectMeta) => s.topics.reduce((n, t) => n + t.questions.length, 0);
+export const questionCount = (s: SubjectMeta) => s.topics.reduce((n, t) => n + t.questions.length, 0);
 
 export function homeJsonLd() {
   return [
@@ -58,6 +58,9 @@ export function subjectJsonLd(s: SubjectMeta) {
   ];
 }
 
+/** The question an output-kind page asks. */
+export const outputLead = (lang?: string) => `What does this ${lang === 'ts' ? 'TypeScript' : 'JavaScript'} code log?`;
+
 /** The visible text a question leads with (what a searcher would type). */
 export function questionLead(e: FullEntry) {
   const q = e.q;
@@ -65,7 +68,7 @@ export function questionLead(e: FullEntry) {
     case 'flashcard':
       return q.front;
     case 'output':
-      return `What does this ${q.lang === 'ts' ? 'TypeScript' : 'JavaScript'} code log? ${q.why}`;
+      return `${outputLead(q.lang)} ${q.why}`;
     default:
       return q.prompt;
   }

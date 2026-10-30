@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { BANK_ENTRIES as ALL } from '../content/bank';
 import { hrefOf, subjectHref } from '../content/registry';
-import { DESCRIPTION_MAX, metaDescription, pageMeta, pageTitle, questionLead, TITLE_MAX } from './meta';
+import { questionLead } from './jsonld';
+import { DESCRIPTION_MAX, metaDescription, pageMeta, pageTitle, TITLE_MAX } from './meta';
 import { absoluteUrl, SITE_URL } from './site';
 import { prerenderPaths } from './sitemap';
 

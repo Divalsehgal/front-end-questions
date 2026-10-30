@@ -3,7 +3,8 @@
 // question with its answer and explanation, the same text the prerendered pages show (answers sit in
 // their collapsed disclosures). Built at build time from the full bank (src/entry-server.tsx).
 import { fullEntry } from '../content/loader';
-import { ALL, hrefOf, SUBJECTS, subjectHref } from '../content/registry';
+import { ALL, hrefOf, keyOf, SUBJECTS, subjectHref } from '../content/registry';
+import { outputLead, questionCount } from './jsonld';
 import { AUTHOR, AUTHOR_PROFILES, SITE_DESCRIPTION, SITE_NAME, SITE_URL, absoluteUrl } from './site';
 import { SITEMAP_INDEX } from './sitemap';
 import type { FullEntry } from '../content/registry';
@@ -33,9 +34,8 @@ export function llmsTxt() {
     '',
   ];
   for (const s of SUBJECTS) {
-    const n = s.topics.reduce((sum, t) => sum + t.questions.length, 0);
     lines.push(`## ${s.title}`, '', s.blurb, '');
-    lines.push(`- [${s.title} interview questions](${absoluteUrl(subjectHref(s.slug))}): ${count(n, 'question')}`);
+    lines.push(`- [${s.title} interview questions](${absoluteUrl(subjectHref(s.slug))}): ${count(questionCount(s), 'question')}`);
     for (const t of s.topics) lines.push(`- ${t.title}: ${count(t.questions.length, 'question')}`);
     lines.push('');
   }
@@ -67,7 +67,7 @@ function questionBody(q: Question): string[] {
     case 'order':
       return [q.prompt, `**Correct order:**\n\n${q.items.map((item, i) => `${i + 1}. ${item}`).join('\n')}`, `**Why:** ${q.why}`];
     case 'output':
-      return [`What does this ${q.lang === 'ts' ? 'TypeScript' : 'JavaScript'} code log?`, fence(q.code, q.lang ?? 'js'), `**Explanation:** ${q.why}`];
+      return [outputLead(q.lang), fence(q.code, q.lang ?? 'js'), `**Explanation:** ${q.why}`];
     case 'code':
       return [q.prompt, ...(q.solution ? ['**Reference solution:**', fence(q.solution, 'ts')] : [])];
     case 'ui':
@@ -90,7 +90,7 @@ export function llmsFullTxt() {
     for (const t of s.topics) {
       parts.push(`## ${t.title}`);
       for (const q of t.questions) {
-        const e = fullEntry(`${s.slug}:${q.id}`);
+        const e = fullEntry(keyOf(s.slug, q.id));
         if (e) parts.push(questionSection(e));
       }
     }

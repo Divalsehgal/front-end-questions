@@ -5,8 +5,6 @@ import { absoluteUrl, isNoindex, normalizePath, SITE_DESCRIPTION, SITE_NAME } fr
 import { fitFirst, stripMarkdown, truncate } from './text';
 import type { SubjectMeta } from '../content/types';
 
-export { questionLead };
-
 export const TITLE_MAX = 60;
 export const DESCRIPTION_MAX = 155;
 
