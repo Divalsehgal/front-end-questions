@@ -10,7 +10,7 @@ import { weakTopics } from './weakTopics';
 
 function greeting(started: boolean, name: string) {
   if (started) return name ? `Keep the streak going, ${name}` : 'Keep the streak going';
-  return name ? `Let's get started, ${name}` : 'Frontend interview grind';
+  return name ? `Let's get started, ${name}` : 'Front End Grind: frontend interview practice';
 }
 
 export function Dashboard() {

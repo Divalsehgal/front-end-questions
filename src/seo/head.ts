@@ -1,7 +1,7 @@
 // One description of the <head> tags per page, rendered two ways: to a string for the
 // prerendered HTML, and onto `document.head` when the client navigates.
 import { serializeJsonLd } from './jsonld';
-import { OG_IMAGE, SITE_NAME, SITE_URL } from './site';
+import { OG_IMAGE, SITE_ALT_NAMES, SITE_NAME, SITE_URL } from './site';
 import { escapeHtml } from './text';
 import type { PageMeta } from './meta';
 
@@ -26,7 +26,7 @@ export function headTags(meta: PageMeta): Tag[] {
     m('property', 'og:image', image),
     m('property', 'og:image:width', '1200'),
     m('property', 'og:image:height', '630'),
-    m('property', 'og:image:alt', `${SITE_NAME}: frontend interview practice`),
+    m('property', 'og:image:alt', `${SITE_ALT_NAMES[0]} (${SITE_NAME}): frontend interview practice`),
     m('name', 'twitter:card', 'summary_large_image'),
     m('name', 'twitter:title', meta.title),
     m('name', 'twitter:description', meta.description),

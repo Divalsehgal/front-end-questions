@@ -1,0 +1,158 @@
+{
+  "summary": {
+    "health_score": 87,
+    "business_type": "Free education / developer learning site",
+    "top_findings": [
+      "Brand phrase 'Front End Grind' missing from live title, H1, og:site_name, JSON-LD",
+      "Few or no links from other sites",
+      "Shared vercel.app subdomain",
+      "37 pages under 200 words",
+      "3 duplicate meta descriptions"
+    ],
+    "quick_wins": [
+      "Deploy title + alternateName fix",
+      "Brand phrase in H1/og:site_name/manifest/llms.txt",
+      "Request indexing in Search Console",
+      "Link from GitHub, LinkedIn, dev.to with brand anchor",
+      "Make 3 duplicate descriptions unique"
+    ]
+  },
+  "categories": [
+    {
+      "name": "Technical SEO",
+      "score": 95,
+      "what_works": [
+        "578/578 URLs 200, self-canonical",
+        "robots + noindex on progress routes",
+        "real 404 with noindex",
+        "HSTS and security headers",
+        "prerendered HTML"
+      ],
+      "findings": [
+        {
+          "title": "Shared vercel.app host",
+          "severity": "Medium",
+          "description": "Brand authority lives on a host you don't own",
+          "recommendation": "Move to a custom domain with a 301"
+        }
+      ]
+    },
+    {
+      "name": "Content Quality",
+      "score": 75,
+      "what_works": ["Answers in HTML", "Named author linked to GitHub"],
+      "findings": [
+        {
+          "title": "Thin pages",
+          "severity": "Medium",
+          "description": "37 pages under 200 words (min 175)",
+          "recommendation": "Add an example or common mistake"
+        },
+        {
+          "title": "No About page",
+          "severity": "Medium",
+          "description": "E-E-A-T limited to author name",
+          "recommendation": "Add an indexable About page"
+        },
+        {
+          "title": "Duplicate descriptions",
+          "severity": "Low",
+          "description": "3 pairs in React hooks topics",
+          "recommendation": "Make them unique"
+        }
+      ]
+    },
+    {
+      "name": "On-Page SEO",
+      "score": 85,
+      "what_works": ["Titles <=60 chars, unique", "Descriptions 70-160", "One H1 per page"],
+      "findings": [
+        {
+          "title": "Brand phrase missing",
+          "severity": "High",
+          "description": "Live title/H1 say 'FE Grind' / 'Frontend interview grind', not 'Front End Grind'",
+          "recommendation": "Deploy title fix; add the phrase to the H1"
+        }
+      ]
+    },
+    {
+      "name": "Schema / Structured Data",
+      "score": 90,
+      "what_works": ["WebSite, BreadcrumbList, Quiz, LearningResource, ItemList"],
+      "findings": [
+        {
+          "title": "No alternateName",
+          "severity": "Medium",
+          "description": "Google shows site name 'Vercel'",
+          "recommendation": "Deploy alternateName fix"
+        },
+        {
+          "title": "No publisher logo",
+          "severity": "Low",
+          "description": "No Organization/logo entity",
+          "recommendation": "Add publisher ImageObject"
+        }
+      ]
+    },
+    {
+      "name": "Performance (CWV)",
+      "score": 93,
+      "what_works": ["LCP 2.1-2.3s, CLS 0, TBT 0ms (lab, mobile)"],
+      "findings": [
+        {
+          "title": "Unused JS",
+          "severity": "Low",
+          "description": "~35 KiB unused in main bundle",
+          "recommendation": "Code-split"
+        }
+      ]
+    },
+    {
+      "name": "AI Search Readiness",
+      "score": 90,
+      "what_works": ["llms.txt + llms-full.txt", "AI crawlers allowed", "Quotable answers"],
+      "findings": [
+        {
+          "title": "llms.txt brand",
+          "severity": "Low",
+          "description": "Heading is 'FE Grind' only",
+          "recommendation": "Add 'Front End Grind'"
+        }
+      ]
+    },
+    {
+      "name": "Images",
+      "score": 100,
+      "what_works": ["No body images; OG image 1200x630 with alt"],
+      "findings": []
+    }
+  ],
+  "action_plan": {
+    "phases": [
+      {
+        "name": "Phase 1: Critical Fixes",
+        "timeframe": "Week 1",
+        "items": ["Deploy brand title + alternateName", "Brand phrase in H1, og:site_name, manifest, llms.txt", "Request indexing in GSC"]
+      },
+      {
+        "name": "Phase 2: High-Impact Improvements",
+        "timeframe": "Weeks 2-3",
+        "items": ["Brand-anchored links from GitHub, LinkedIn, dev.to, Reddit", "Custom domain with 301"]
+      },
+      {
+        "name": "Phase 3: Content & Authority",
+        "timeframe": "Month 2",
+        "items": ["About page", "Lengthen 37 thin pages", "Unique duplicate descriptions"]
+      },
+      {
+        "name": "Phase 4: Monitoring & Iteration",
+        "timeframe": "Ongoing",
+        "items": ["Track 'grind' queries in GSC weekly", "Re-audit after domain move"]
+      }
+    ]
+  },
+  "artifacts": {
+    "findings_dir": "findings/",
+    "screenshots_dir": "screenshots/"
+  }
+}

@@ -1,7 +1,7 @@
 import { fullEntry } from '../content/loader';
 import { getSubject, keyOf, type FullEntry } from '../content/registry';
 import { homeJsonLd, questionJsonLd, questionLead, subjectJsonLd } from './jsonld';
-import { absoluteUrl, isNoindex, normalizePath, SITE_DESCRIPTION, SITE_NAME } from './site';
+import { absoluteUrl, isNoindex, normalizePath, SITE_ALT_NAMES, SITE_DESCRIPTION, SITE_NAME } from './site';
 import { fitFirst, stripMarkdown, truncate } from './text';
 import type { SubjectMeta } from '../content/types';
 
@@ -33,7 +33,7 @@ export const metaDescription = (...parts: string[]) => truncate(stripMarkdown(pa
 /** The question's own words first; short ones get context so the snippet still says what the page is. */
 function questionDescription(e: FullEntry, subject: string) {
   const lead = stripMarkdown(questionLead(e));
-  const context = `Free ${subject} interview question on ${stripMarkdown(e.topic.title)}, with answer and explanation.`;
+  const context = `${stripMarkdown(e.q.title)}: a free ${subject} interview question on ${stripMarkdown(e.topic.title)}, with answer and explanation.`;
   return metaDescription(lead, lead.length < 100 ? context : '');
 }
 
@@ -64,7 +64,7 @@ function subjectMeta(s: SubjectMeta, path: string): PageMeta {
 }
 
 const HOME: PageMeta = {
-  title: `${SITE_NAME} — Free frontend interview questions & practice`,
+  title: `${SITE_ALT_NAMES[0]} (${SITE_NAME}): free frontend interview practice`,
   description: truncate(SITE_DESCRIPTION, DESCRIPTION_MAX),
   canonical: absoluteUrl('/'),
   noindex: false,

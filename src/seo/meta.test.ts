@@ -44,12 +44,14 @@ describe('pageMeta', () => {
     const titles = new Set(metas.map(([, m]) => m.title));
     // Titles repeat only where two questions in one subject share a title.
     expect(titles.size).toBeGreaterThan(metas.length * 0.95);
+    expect(new Set(metas.map(([, m]) => m.description)).size).toBe(metas.length);
   });
 
   it('describes the home page as the site', () => {
     const home = pageMeta('/');
     expect(home.canonical).toBe(SITE_URL);
-    expect(home.title).toMatch(/^FE Grind/);
+    expect(home.title).toMatch(/^Front End Grind \(FE Grind\)/);
+    expect(home.title.length).toBeLessThanOrEqual(TITLE_MAX);
     expect(home.jsonLd[0]).toMatchObject({ '@type': 'WebSite' });
   });
 

@@ -10,7 +10,7 @@ describe('llms.txt', () => {
   const txt = llmsTxt();
 
   it('follows the llmstxt.org shape: H1 name, summary quote, H2 sections of links', () => {
-    expect(txt.startsWith('# FE Grind\n\n> ')).toBe(true);
+    expect(txt.startsWith('# FE Grind (Front End Grind)\n\n> ')).toBe(true);
     expect(txt).toContain('\n## Optional\n');
     expect(txt).toContain(`(${SITE_URL}llms-full.txt)`);
   });

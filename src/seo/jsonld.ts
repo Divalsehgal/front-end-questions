@@ -1,7 +1,7 @@
 // schema.org JSON-LD builders. Every answer/explanation here is also in the page's HTML
 // (the "Show answer & explanation" disclosure), as Google requires for structured data.
 import { hrefOf, subjectHref, type FullEntry } from '../content/registry';
-import { AUTHOR, AUTHOR_PROFILES, REPO_URL, SITE_DESCRIPTION, SITE_NAME, SITE_URL, absoluteUrl } from './site';
+import { AUTHOR, AUTHOR_PROFILES, REPO_URL, SITE_ALT_NAMES, SITE_DESCRIPTION, SITE_NAME, SITE_URL, absoluteUrl } from './site';
 import { stripMarkdown } from './text';
 import type { Difficulty, SubjectMeta } from '../content/types';
 
@@ -17,6 +17,7 @@ export function homeJsonLd() {
       '@context': CONTEXT,
       '@type': 'WebSite',
       name: SITE_NAME,
+      alternateName: SITE_ALT_NAMES,
       url: SITE_URL,
       description: SITE_DESCRIPTION,
       inLanguage: 'en',

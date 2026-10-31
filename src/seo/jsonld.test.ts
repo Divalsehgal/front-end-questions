@@ -15,7 +15,13 @@ const multi = find((e) => isQuiz(e) && Array.isArray(e.q.answer)) as Entry & { q
 describe('WebSite', () => {
   it('names the site and its author, without a SearchAction (there is no site search)', () => {
     const [site] = homeJsonLd() as Ld[];
-    expect(site).toMatchObject({ '@context': 'https://schema.org', '@type': 'WebSite', url: SITE_URL, author: { '@type': 'Person', name: 'Dival Sehgal' } });
+    expect(site).toMatchObject({
+      alternateName: expect.arrayContaining(['Front End Grind']),
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      url: SITE_URL,
+      author: { '@type': 'Person', name: 'Dival Sehgal' },
+    });
     expect(site).not.toHaveProperty('potentialAction');
   });
 });

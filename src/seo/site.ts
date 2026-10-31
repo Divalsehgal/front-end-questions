@@ -5,6 +5,8 @@ const FALLBACK = 'https://front-end-grind.vercel.app/';
 /** Absolute site root, always ending in "/". */
 export const SITE_URL = withSlash((import.meta.env.VITE_SITE_URL as string | undefined) ?? FALLBACK);
 export const SITE_NAME = 'FE Grind';
+/** What people actually type into search; schema.org alternateName and the home title carry it. */
+export const SITE_ALT_NAMES = ['Front End Grind', 'Frontend Grind'];
 export const AUTHOR = 'Dival Sehgal';
 /** Public profiles of the author: lets search and answer engines tie the site to a real person. */
 export const AUTHOR_PROFILES = ['https://github.com/Divalsehgal'];

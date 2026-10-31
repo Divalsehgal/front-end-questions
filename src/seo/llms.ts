@@ -5,7 +5,7 @@
 import { fullEntry } from '../content/loader';
 import { ALL, hrefOf, keyOf, SUBJECTS, subjectHref } from '../content/registry';
 import { outputLead, questionCount } from './jsonld';
-import { AUTHOR, AUTHOR_PROFILES, SITE_DESCRIPTION, SITE_NAME, SITE_URL, absoluteUrl } from './site';
+import { AUTHOR, AUTHOR_PROFILES, SITE_ALT_NAMES, SITE_DESCRIPTION, SITE_NAME, SITE_URL, absoluteUrl } from './site';
 import { SITEMAP_INDEX } from './sitemap';
 import type { FullEntry } from '../content/registry';
 import type { Question } from '../content/types';
@@ -25,7 +25,7 @@ const letter = (i: number) => String.fromCodePoint(65 + i);
 
 export function llmsTxt() {
   const lines = [
-    `# ${SITE_NAME}`,
+    `# ${SITE_NAME} (${SITE_ALT_NAMES[0]})`,
     '',
     `> ${SITE_DESCRIPTION}`,
     '',

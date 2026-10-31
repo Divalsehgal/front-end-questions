@@ -24,7 +24,7 @@ describe('Dashboard', () => {
 
   it('greets a new user and starts at the first question', async () => {
     const { user } = renderWithRouter(<Dashboard />);
-    expect(screen.getByRole('heading', { level: 1, name: 'Frontend interview grind' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: 'Front End Grind: frontend interview practice' })).toBeInTheDocument();
     expect(screen.getByText(`0 / ${ALL.length}`)).toBeInTheDocument();
     expect(screen.getByText('–')).toBeInTheDocument();
     expect(screen.queryByText('Weakest topics')).not.toBeInTheDocument();
