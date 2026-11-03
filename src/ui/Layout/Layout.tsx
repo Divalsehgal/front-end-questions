@@ -1,9 +1,10 @@
 import { PanelLeftOpen } from 'lucide-react';
-import { Suspense, useEffect } from 'react';
+import { Suspense, useCallback, useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import { setSidebarCollapsed, toggleSidebar, useSidebar } from '../../state/sidebar';
 import { cn, MOD } from '../lib';
 import { Welcome } from '../Welcome';
+import { SearchDialog, useSearchShortcut } from './Search';
 import { Sidebar } from './Sidebar';
 import type { MouseEvent } from 'react';
 
@@ -34,7 +35,10 @@ function useSidebarShortcut() {
 
 export function Layout() {
   const { collapsed } = useSidebar();
+  const [searching, setSearching] = useState(false);
+  const openSearch = useCallback(() => setSearching(true), []);
   useSidebarShortcut();
+  useSearchShortcut(openSearch);
   return (
     <div className="flex min-h-full flex-col md:flex-row">
       <a
@@ -44,7 +48,7 @@ export function Layout() {
       >
         Skip to content
       </a>
-      <Sidebar />
+      <Sidebar onSearch={openSearch} />
       {collapsed && (
         <button
           type="button"
@@ -64,6 +68,7 @@ export function Layout() {
         </Suspense>
       </main>
       <Welcome />
+      {searching && <SearchDialog onClose={() => setSearching(false)} />}
     </div>
   );
 }

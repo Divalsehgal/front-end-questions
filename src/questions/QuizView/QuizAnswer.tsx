@@ -26,13 +26,20 @@ export function resultTitle(isRight: boolean, revealed: boolean, multi: boolean)
   return multi ? 'Not quite: the green ones are right' : 'Not this one';
 }
 
+/** A one-paragraph explanation as "- " bullets, one per sentence or "; " clause; authored blocks (newlines, fences) stay as written. */
+export function asBullets(why: string) {
+  if (why.includes('\n')) return why;
+  const parts = why.split(/(?<=[.!?])\s+(?=[A-Z*`(])|;\s+/).filter(Boolean);
+  return parts.length > 1 ? parts.map((p) => `- ${p}`).join('\n') : why;
+}
+
 /** The correct option(s) and explanation, in the page but collapsed until revealed. */
 export function QuizAnswer({ q, correct, onOpen }: Readonly<{ q: QuizQuestion; correct: Set<number>; onOpen: () => boolean }>) {
   return (
     <AnswerDisclosure onOpen={onOpen}>
       <p className="font-medium">{correct.size > 1 ? 'Correct answers:' : 'Correct answer:'}</p>
       <ul className="list-disc space-y-1 pl-5">{q.options.flatMap((o, i) => (correct.has(i) ? [<li key={o}>{inline(o)}</li>] : []))}</ul>
-      <Prose text={q.why} />
+      <Prose text={asBullets(q.why)} />
     </AnswerDisclosure>
   );
 }
@@ -43,7 +50,7 @@ export function QuizResult({ why, isRight, title }: Readonly<{ why: string; isRi
     <Callout role="status" tone={isRight ? 'success' : 'error'} title={title} icon={isRight ? <Check size={16} aria-hidden /> : <X size={16} aria-hidden />}>
       <div className="flex gap-2">
         <Lightbulb size={16} aria-hidden className="mt-1.5 shrink-0 text-brand-strong" />
-        <Prose text={why} className="min-w-0 flex-1" />
+        <Prose text={asBullets(why)} className="min-w-0 flex-1" />
       </div>
     </Callout>
   );

@@ -1,10 +1,11 @@
-import { LayoutDashboard, Moon, PanelLeftClose, RotateCcw, Settings, Sun, Timer, Zap } from 'lucide-react';
+import { LayoutDashboard, Moon, Search, PanelLeftClose, RotateCcw, Settings, Sun, Timer, Zap } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 import { ALL, subjectHref, SUBJECTS } from '../../content/registry';
 import { isDue, useProgress } from '../../state/progress';
 import { setSidebarCollapsed, useSidebar } from '../../state/sidebar';
 import { toggleTheme, useTheme } from '../../state/theme';
 import { SubjectIcon } from '../icons';
+import { Kbd } from '../Kbd';
 import { cn, MOD } from '../lib';
 import { SidebarResizer } from './SidebarResizer';
 import type { CSSProperties } from 'react';
@@ -47,7 +48,7 @@ function SubjectLinks() {
   });
 }
 
-export function Sidebar() {
+export function Sidebar({ onSearch }: Readonly<{ onSearch: () => void }>) {
   const progress = useProgress();
   const { width, collapsed } = useSidebar();
   const due = ALL.filter((e) => isDue(progress[e.key])).length;
@@ -90,6 +91,12 @@ export function Sidebar() {
       </div>
 
       <nav aria-label="Main" className="flex gap-1 overflow-x-auto px-3 pb-3 [scrollbar-width:none] md:flex-col md:overflow-y-auto">
+        <button type="button" onClick={onSearch} aria-keyshortcuts="Meta+K Control+K" className={navClass({ isActive: false })}>
+          <Search size={16} aria-hidden /> <span className="whitespace-nowrap">Search</span>
+          <span className="ml-auto hidden md:inline">
+            <Kbd>{MOD}+K</Kbd>
+          </span>
+        </button>
         <NavLink to="/" end className={navClass}>
           <LayoutDashboard size={16} aria-hidden /> <span className="whitespace-nowrap">Dashboard</span>
         </NavLink>

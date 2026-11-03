@@ -2,6 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { DISCLOSURE_LABEL, REVEAL_CONFIRM } from '../shared';
+import { asBullets } from './QuizAnswer';
 import { QuizView } from '.';
 import type { QuizQuestion } from '../../content/types';
 
@@ -133,5 +134,13 @@ describe('QuizView', () => {
   it('lists every correct answer for select-all questions', () => {
     setup(multi);
     expect(screen.getByText(DISCLOSURE_LABEL).closest('details')).toHaveTextContent(/Correct answers:\s*useMemouseRef/);
+  });
+});
+
+describe('asBullets', () => {
+  it('splits a one-paragraph explanation into bullets and leaves authored blocks alone', () => {
+    expect(asBullets('A fits; b too, e.g. c. **Not D:** no.')).toBe('- A fits\n- b too, e.g. c.\n- **Not D:** no.');
+    expect(asBullets('One sentence.')).toBe('One sentence.');
+    expect(asBullets('Lead:\n- x\n- y')).toBe('Lead:\n- x\n- y');
   });
 });

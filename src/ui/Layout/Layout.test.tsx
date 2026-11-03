@@ -1,18 +1,23 @@
 import { act, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
-import { ALL, subjectHref, SUBJECTS } from '../../content/registry';
+import { ALL, hrefOf, subjectHref, SUBJECTS } from '../../content/registry';
 import { updateProfile } from '../../state/profile';
 import { record, resetProgress } from '../../state/progress';
+import { searchQuestions } from './Search';
 import { Layout, MAIN_ID } from '.';
+
+function Page() {
+  return <h1>Page body {useLocation().pathname}</h1>;
+}
 
 function renderLayout(route = '/') {
   return render(
     <MemoryRouter initialEntries={[route]}>
       <Routes>
         <Route element={<Layout />}>
-          <Route path="*" element={<h1>Page body</h1>} />
+          <Route path="*" element={<Page />} />
         </Route>
       </Routes>
     </MemoryRouter>,
@@ -31,7 +36,7 @@ describe('Layout', () => {
     expect(within(nav).getAllByRole('link')).toHaveLength(3 + SUBJECTS.length);
     const main = screen.getByRole('main');
     expect(main).toHaveAttribute('id', MAIN_ID);
-    expect(within(main).getByRole('heading', { name: 'Page body' })).toBeInTheDocument();
+    expect(within(main).getByRole('heading', { name: /Page body/ })).toBeInTheDocument();
   });
 
   it('links to settings from the header and shows the welcome card on a first visit', () => {
@@ -71,5 +76,46 @@ describe('Layout', () => {
     expect(document.documentElement.classList.contains('dark')).toBe(!before);
     expect(screen.getByRole('button', { name: `Switch to ${before ? 'dark' : 'light'} mode` })).toBeInTheDocument();
     await userEvent.click(screen.getByRole('button', { name: /Switch to/ }));
+  });
+
+  it('opens search with Cmd/Ctrl+K and goes to the chosen question', async () => {
+    const user = userEvent.setup();
+    renderLayout();
+    const target = ALL[0];
+    await user.keyboard('{Control>}k{/Control}');
+    const box = screen.getByRole('combobox', { name: 'Search questions' });
+    expect(box).toHaveFocus();
+    await user.type(box, target.q.title);
+    expect(screen.getAllByRole('option')[0]).toHaveTextContent(target.q.title);
+    await user.keyboard('{Enter}');
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: `Page body ${hrefOf(target.key)}` })).toBeInTheDocument();
+  });
+
+  it('opens search from the sidebar and closes on Escape', async () => {
+    const user = userEvent.setup();
+    renderLayout();
+    await user.click(screen.getByRole('button', { name: /Search/ }));
+    expect(screen.getByRole('dialog', { name: 'Search questions' })).toBeInTheDocument();
+    await user.keyboard('{Escape}');
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+});
+
+describe('searchQuestions', () => {
+  it('needs every word, ranks title hits first and ignores an empty query', () => {
+    expect(searchQuestions('  ')).toEqual([]);
+    const words = ALL[0].q.title.split(' ').slice(0, 2).join(' ').toUpperCase();
+    const hits = searchQuestions(words);
+    expect(hits.length).toBeGreaterThan(0);
+    expect(
+      hits.every((e) =>
+        words
+          .toLowerCase()
+          .split(' ')
+          .every((w) => `${e.q.title} ${e.topic.title} ${e.subject.title}`.toLowerCase().includes(w)),
+      ),
+    ).toBe(true);
+    expect(searchQuestions('zzzz-no-such-question')).toEqual([]);
   });
 });
