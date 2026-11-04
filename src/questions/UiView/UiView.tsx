@@ -1,6 +1,6 @@
-import { BookOpen, KeyRound } from 'lucide-react';
+import { BookOpen, KeyRound, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 import { useId, useState } from 'react';
-import { Badge, Callout, DifficultyBadge, TabPanel, Tabs } from '../../ui';
+import { Badge, Callout, cn, DifficultyBadge, IconButton, TabPanel, Tabs } from '../../ui';
 import { Prose } from '../../ui/code';
 import { confirmReveal, SolutionDisclosure, useDraft, useFirstVerdict, type ViewProps } from '../shared';
 import { Requirements } from './Requirements';
@@ -17,6 +17,7 @@ export function UiView({ q, subject, onResult }: Readonly<ViewProps<UiQuestion>>
   const { code, setCode, reset } = useDraft(`${subject}:${q.id}`, q.starter);
   const [left, setLeft] = useState<'problem' | 'solution'>('problem');
   const [pane, setPane] = useState<Pane>('code');
+  const [briefOpen, setBriefOpen] = useState(true);
   const [done, setDone] = useState<Set<number>>(new Set());
   const [submitted, setSubmitted] = useState(false);
   const [revealed, setRevealed] = useState(false);
@@ -35,14 +36,16 @@ export function UiView({ q, subject, onResult }: Readonly<ViewProps<UiQuestion>>
     if (!confirmReveal(submitted)) return false;
     if (!submitted) verdict(false);
     setRevealed(true);
+    setBriefOpen(true);
     setLeft('solution');
     setPane('reference');
     return true;
   };
 
   return (
-    <div className="grid gap-5 xl:grid-cols-5">
-      <div className="min-w-0 space-y-4 xl:col-span-2">
+    <div className={cn('grid gap-5', briefOpen && 'xl:grid-cols-3')}>
+      {/* Hidden, not unmounted, so ticked requirements survive a toggle. */}
+      <div hidden={!briefOpen} className="min-w-0 space-y-4">
         <Tabs
           id={tabsId}
           label="Brief"
@@ -76,7 +79,7 @@ export function UiView({ q, subject, onResult }: Readonly<ViewProps<UiQuestion>>
         </TabPanel>
       </div>
 
-      <div className="min-w-0 xl:sticky xl:top-4 xl:col-span-3 xl:self-start">
+      <div className={cn('min-w-0 xl:sticky xl:top-4 xl:self-start', briefOpen && 'xl:col-span-2')}>
         <Workspace
           q={q}
           subject={subject}
@@ -88,8 +91,18 @@ export function UiView({ q, subject, onResult }: Readonly<ViewProps<UiQuestion>>
           canReveal={!!q.solution && !unlocked}
           onReveal={revealSolution}
           onReset={() => reset('Discard your code and start from the starter?')}
+          leading={<BriefToggle open={briefOpen} onToggle={() => setBriefOpen((o) => !o)} />}
         />
       </div>
     </div>
+  );
+}
+
+/** Collapses the problem column so the workspace gets the full width. */
+function BriefToggle({ open, onToggle }: Readonly<{ open: boolean; onToggle: () => void }>) {
+  return (
+    <IconButton label={open ? 'Hide problem' : 'Show problem'} onClick={onToggle} className="border-0 p-1.5">
+      {open ? <PanelLeftClose size={16} aria-hidden /> : <PanelLeftOpen size={16} aria-hidden />}
+    </IconButton>
   );
 }

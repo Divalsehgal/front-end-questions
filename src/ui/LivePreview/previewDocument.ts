@@ -1,3 +1,5 @@
+import { protectLoops } from './loopProtect';
+
 // Renders a machine-coding answer in a sandboxed iframe. React answers are a single
 // TSX module whose default export is the component; vanilla answers are an HTML document.
 const REACT_VERSION = '19.0.0';
@@ -83,7 +85,7 @@ const BASE_CSS = `
 // Shows uncaught errors inside the preview instead of a blank frame. The iframe is sandboxed
 // without allow-same-origin (so previews can't touch the app's own storage), which makes
 // localStorage/sessionStorage throw; swap in per-preview in-memory versions instead.
-const ERROR_HOOK = `
+const ERROR_HOOK = String.raw`
   for (const name of ['localStorage', 'sessionStorage']) {
     try { window[name].getItem('probe'); } catch {
       const m = new Map();
@@ -96,7 +98,32 @@ const ERROR_HOOK = `
   }
   // Errors and readiness are also posted to the parent, so the dev-only /verify page can check previews.
   const report = (type, message) => parent.postMessage({ source: 'fe-grind-preview', type, message }, '*');
-  const show = (msg) => { const el = document.getElementById('__error'); if (el) { el.textContent = msg; el.style.display = 'block'; } report('error', String(msg)); };
+  // Mirror console calls to the parent's console bar, still logging to devtools as normal.
+  const fmt = (a) => { if (typeof a === 'string') return a; if (a instanceof Error) return a.stack || String(a); try { return JSON.stringify(a) ?? String(a); } catch { return String(a); } };
+  for (const level of ['log', 'info', 'warn', 'error', 'debug']) {
+    const orig = console[level].bind(console);
+    console[level] = (...args) => { orig(...args); report('console', { level, text: args.map(fmt).join(' ') }); };
+  }
+  console.clear = () => report('console-clear');
+  // Common runaway errors get a hint on what usually causes them.
+  const HINTS = [
+    [/Maximum call stack size exceeded|too much recursion/i, 'Stack overflow: a function keeps calling itself. Check the recursion has a base case that is always reached.'],
+    [/Too many re-renders|Maximum update depth exceeded/i, 'Render loop: state is set during render, or a useEffect sets state its own dependencies change on.'],
+  ];
+  const hint = (msg) => { const h = HINTS.find(([re]) => re.test(msg)); return h ? msg + '\n' + h[1] : msg; };
+  const show = (raw) => { const msg = hint(String(raw)); const el = document.getElementById('__error'); if (el) { el.textContent = msg; el.style.display = 'block'; } report('error', msg); };
+  // Loop guard (see loopProtect.ts): the first guarded iteration in a task starts a clock that the
+  // next macrotask clears, so only loops that run for a second without yielding get broken.
+  let lpStart = 0, lpBroke = false;
+  window.__lp = () => {
+    const now = Date.now();
+    if (!lpStart) { lpStart = now; setTimeout(() => { lpStart = 0; lpBroke = false; }); return false; }
+    if (now - lpStart < 1000) return false;
+    if (!lpBroke) { lpBroke = true; show('Stopped a loop that ran for over 1s without finishing (likely infinite). Check its exit condition.'); }
+    return true;
+  };
+  // Heap size (Chromium only) lets the parent stop a preview whose memory keeps growing.
+  if (performance.memory) setInterval(() => report('memory', performance.memory.usedJSHeapSize), 2000);
   // React previews report readiness after rendering; plain HTML ones after load.
   if (!document.documentElement.hasAttribute('data-react')) window.addEventListener('load', () => setTimeout(() => report('ready'), 1500));
   window.addEventListener('error', (e) => show(e.message));
@@ -117,7 +144,7 @@ export async function reactDocument(source: string) {
     jsxRuntime: 'automatic',
     production: true,
   }).code;
-  const withImports = rewriteImports(compiled);
+  const withImports = protectLoops(rewriteImports(compiled));
   return `<!doctype html><html data-react><head><meta charset="utf-8">
 <script type="importmap">${JSON.stringify(IMPORT_MAP)}</script>
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.1.4"></script>
@@ -137,8 +164,17 @@ export async function reactDocument(source: string) {
 </script></body></html>`;
 }
 
+// Inline scripts only: external ones (src=) and data blocks (importmap, JSON, templates) stay as they are.
+const protectScripts = (html: string) =>
+  html.replaceAll(/(<script\b([^>]*)>)([\s\S]*?)(<\/script>)/gi, (m, open: string, attrs: string, body: string, close: string) => {
+    const type = /\btype\s*=\s*["']?([^"'\s>]+)/i.exec(attrs)?.[1].toLowerCase();
+    const isJs = !type || type === 'module' || type.includes('javascript');
+    return isJs && !/\bsrc\s*=/i.test(attrs) ? open + protectLoops(body) + close : m;
+  });
+
 export function vanillaDocument(source: string) {
   // Inject the error hook first so mistakes in the user's script are visible.
   const hook = `<style>${BASE_CSS}</style><pre id="__error"></pre><script>${ERROR_HOOK}</script>`;
-  return /<head[^>]*>/i.test(source) ? source.replace(/<head[^>]*>/i, (m) => m + hook) : hook + source;
+  const safe = protectScripts(source);
+  return /<head[^>]*>/i.test(safe) ? safe.replace(/<head[^>]*>/i, (m) => m + hook) : hook + safe;
 }

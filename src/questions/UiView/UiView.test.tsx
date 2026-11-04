@@ -102,4 +102,13 @@ describe('UiView', () => {
     expect(onResult).toHaveBeenCalledWith(false);
     expect(screen.queryByText('Show reference solution')).not.toBeInTheDocument();
   });
+
+  it('hides and shows the problem column, keeping ticked requirements', async () => {
+    const { user } = setup();
+    await user.click(screen.getByRole('checkbox', { name: 'Increments on click' }));
+    await user.click(screen.getByRole('button', { name: 'Hide problem' }));
+    expect(screen.queryByRole('checkbox')).not.toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Show problem' }));
+    expect(screen.getByRole('checkbox', { name: 'Increments on click' })).toBeChecked();
+  });
 });

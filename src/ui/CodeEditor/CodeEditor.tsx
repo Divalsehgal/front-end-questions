@@ -71,6 +71,8 @@ export function CodeEditor({
             scrollBeyondLastLine: false,
             tabSize: 2,
             automaticLayout: true,
+            // Hovers and suggestions render as fixed overlays so a clipping parent can't cut them off.
+            fixedOverflowWidgets: true,
             padding: { top: 12 },
           }}
         />

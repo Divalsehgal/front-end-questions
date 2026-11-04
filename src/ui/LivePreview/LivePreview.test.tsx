@@ -1,4 +1,4 @@
-import { act, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { reactDocument, rewriteImports, vanillaDocument } from './previewDocument';
 import { LivePreview } from '.';
@@ -54,6 +54,7 @@ describe('preview documents', () => {
     expect(doc).toContain('/*compiled*/export default');
     expect(doc).not.toContain('fake-indexeddb');
     expect(await reactDocument('indexedDB.open("x")')).toContain('fake-indexeddb');
+    expect(await reactDocument('while (true) {}')).toContain('while (true) {if (__lp()) break;}');
   });
 
   it('injects the error hook into the head of a vanilla document, or before it if there is none', () => {
@@ -61,6 +62,17 @@ describe('preview documents', () => {
     expect(withHead.indexOf('id="__error"')).toBeGreaterThan(withHead.indexOf('<head>'));
     expect(withHead.indexOf('id="__error"')).toBeLessThan(withHead.indexOf('<title>'));
     expect(vanillaDocument('<p>hi</p>').endsWith('<p>hi</p>')).toBe(true);
+  });
+
+  it('injects a hook that is valid JavaScript', () => {
+    const hook = /<script>([\s\S]*?)<\/script>/.exec(vanillaDocument('<p>x</p>'))![1];
+    expect(() => new Function(hook)).not.toThrow();
+  });
+
+  it('guards loops in inline scripts only', () => {
+    const doc = vanillaDocument('<script>for(;;){}</script><script type="application/json">{"for":1}</script><script src="a.js">while(1){}</script>');
+    expect(doc).toContain('<script>for(;;){if (__lp()) break;}</script>');
+    expect(doc).toContain('<script src="a.js">while(1){}</script>');
   });
 });
 
@@ -81,5 +93,49 @@ describe('LivePreview', () => {
     render(<LivePreview framework="react" code="SYNTAX ERROR" title="Broken" />);
     await act(() => vi.advanceTimersByTimeAsync(500));
     expect(screen.getByRole('alert')).toHaveTextContent('Unexpected token');
+  });
+
+  it('shows console messages from its own frame and clears them', async () => {
+    render(<LivePreview framework="vanilla" code="<p>x</p>" title="Logs" />);
+    const frame = screen.getByTitle('Logs') as HTMLIFrameElement;
+    const post = (source: MessageEventSource | null, data: unknown) => {
+      act(() => {
+        window.dispatchEvent(new MessageEvent('message', { source, data }));
+      });
+    };
+    post(frame.contentWindow, { source: 'fe-grind-preview', type: 'console', message: { level: 'log', text: 'hello' } });
+    post(frame.contentWindow, { source: 'fe-grind-preview', type: 'error', message: 'boom' });
+    post(window, { source: 'fe-grind-preview', type: 'console', message: { level: 'log', text: 'spoofed' } });
+    fireEvent.click(screen.getByRole('button', { name: /Console \(2\)/ }));
+    const list = screen.getByRole('list', { name: 'Logs console' });
+    expect(list).toHaveTextContent('hello');
+    expect(list).toHaveTextContent('boom');
+    expect(list).not.toHaveTextContent('spoofed');
+    fireEvent.click(screen.getByRole('button', { name: 'Clear' }));
+    expect(list).toHaveTextContent('No logs yet.');
+    post(frame.contentWindow, { source: 'fe-grind-preview', type: 'console', message: { level: 'log', text: 'again' } });
+    fireEvent.click(screen.getByRole('button', { name: 'Reload preview' }));
+    expect(list).toHaveTextContent('No logs yet.');
+    expect(screen.getByTitle('Logs')).not.toBe(frame); // iframe remounted
+  });
+
+  it('unloads a preview whose memory keeps growing, until reloaded', () => {
+    render(<LivePreview framework="vanilla" code="<p>x</p>" title="Leaky" />);
+    const frame = screen.getByTitle('Leaky') as HTMLIFrameElement;
+    const heap = (bytes: number) => {
+      act(() => {
+        window.dispatchEvent(
+          new MessageEvent('message', { source: frame.contentWindow, data: { source: 'fe-grind-preview', type: 'memory', message: bytes } }),
+        );
+      });
+    };
+    heap(50e6);
+    heap(200e6);
+    expect(screen.getByTitle('Leaky')).toBeInTheDocument();
+    heap(400e6);
+    expect(screen.queryByTitle('Leaky')).not.toBeInTheDocument();
+    expect(screen.getByRole('alert')).toHaveTextContent('memory grew by');
+    fireEvent.click(screen.getByRole('button', { name: 'Reload preview' }));
+    expect(screen.getByTitle('Leaky')).toBeInTheDocument();
   });
 });

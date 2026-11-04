@@ -251,7 +251,7 @@
     },
     {
       "data": {
-        "description": "Synchronous copy read before first paint, under the keys grind:profile, grind:progress:v2, grind:session, grind:sidebar, grind:split:code, grind:theme.",
+        "description": "Synchronous copy read before first paint, under the keys grind:profile, grind:progress:v2, grind:session, grind:sidebar, grind:split:code, grind:theme, xl:col-span-2, xl:grid-cols-3.",
         "label": "localStorage"
       },
       "id": "localStorage",
