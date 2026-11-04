@@ -1,5 +1,6 @@
-import { act, screen } from '@testing-library/react';
+import { act, screen, within } from '@testing-library/react';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
+import { BANK_ENTRIES } from '../../content/bank';
 import { ALL, hrefOf, subjectHref } from '../../content/registry';
 import { preloadAllViews } from '../../questions/registry';
 import { resetProgress } from '../../state/progress';
@@ -53,9 +54,10 @@ describe('QuestionPage', () => {
   it('walks the subject with previous / next', async () => {
     const { user } = page();
     const next = siblings[index + 1];
-    const prevButton = screen.getByRole('button', { name: 'Previous question' });
-    expect(prevButton).toHaveProperty('disabled', index === 0);
-    await user.click(screen.getByRole('button', { name: next ? 'Next' : 'Done' }));
+    const prev = siblings[index - 1];
+    if (prev) expect(screen.getByRole('link', { name: 'Previous question' })).toHaveAttribute('href', hrefOf(prev.key));
+    else expect(screen.getByRole('button', { name: 'Previous question' })).toBeDisabled();
+    await user.click(screen.getByRole('link', { name: next ? 'Next' : 'Done' }));
     expect(location()).toBe(next ? hrefOf(next.key) : subjectHref(card.subject.slug));
   });
 
@@ -68,17 +70,17 @@ describe('QuestionPage', () => {
     expect(screen.getByRole('timer', { name: 'Elapsed time' })).toHaveTextContent('0:00');
     await act(() => vi.advanceTimersByTimeAsync(65_000));
     expect(screen.getByRole('timer')).toHaveTextContent('1:05');
-    await first.user.click(screen.getByRole('button', { name: 'Next' }));
+    await first.user.click(screen.getByRole('link', { name: 'Next' }));
     expect(location()).toBe(hrefOf(b.key));
     first.unmount();
 
     const second = page(b.key);
-    await second.user.click(screen.getByRole('button', { name: 'Previous question' }));
+    await second.user.click(screen.getByRole('link', { name: 'Previous question' }));
     expect(location()).toBe(hrefOf(a.key));
     second.unmount();
 
     const last = page(b.key);
-    await last.user.click(screen.getByRole('button', { name: 'Finish' }));
+    await last.user.click(screen.getByRole('link', { name: 'Finish' }));
     expect(location()).toBe('/session');
     last.unmount();
 
@@ -95,10 +97,30 @@ describe('QuestionPage', () => {
     expect(screen.queryByRole('timer')).not.toBeInTheDocument();
   });
 
-  it('keeps the page to the question: no question id and no list of other questions', () => {
+  it('hides the question id and links to related questions in the topic', () => {
     page();
     expect(screen.queryByText(card.q.id)).not.toBeInTheDocument();
-    expect(screen.queryByRole('navigation', { name: /More .* questions/ })).not.toBeInTheDocument();
-    expect(screen.getByText('Not attempted')).toBeVisible();
+    const related = screen.getByRole('navigation', { name: /Related questions/ });
+    const sameTopic = ALL.filter((e) => e.topic.slug === card.topic.slug && e.subject.slug === card.subject.slug && e.key !== card.key);
+    const links = within(related).getAllByRole('link');
+    expect(links).toHaveLength(Math.min(5, sameTopic.length) + 1);
+    expect(links.at(-1)).toHaveAttribute('href', subjectHref(card.subject.slug));
+  });
+
+  it('shows a collapsed deep dive only for questions that have an explanation', () => {
+    const withText = BANK_ENTRIES.find((e) => e.q.explanation)!;
+    const without = page(BANK_ENTRIES.find((e) => !e.q.explanation)!.key);
+    expect(screen.queryByText('Deep dive (read after you answer)')).not.toBeInTheDocument();
+    without.unmount();
+    page(withText.key);
+    const summary = screen.getByText('Deep dive (read after you answer)');
+    expect(summary.closest('details')).not.toHaveAttribute('open');
+    expect(summary.closest('details')).toHaveTextContent(withText.q.explanation!.split(' ').slice(0, 3).join(' '));
+  });
+
+  it('shows no related questions during a session', () => {
+    act(() => startSession('review', [card.key]));
+    page();
+    expect(screen.queryByRole('navigation', { name: /Related questions/ })).not.toBeInTheDocument();
   });
 });

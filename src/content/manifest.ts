@@ -2,15 +2,23 @@
 // generated from the real question bank at build/dev time (vite-plugins/content-manifest.ts serves
 // it as `virtual:content-manifest`), so it can never drift from the content. Full subjects load
 // on demand, one chunk each (./loader).
+import type { QuestionDates } from './dates';
 import type { Subject, SubjectMeta } from './types';
 
-export function toManifest(subjects: Subject[]): SubjectMeta[] {
+/** `dates` (by "subject:id", from git: ./dates) adds published / modified to the questions it knows. */
+export function toManifest(subjects: Subject[], dates: Record<string, QuestionDates> = {}): SubjectMeta[] {
   return subjects.map(({ topics, ...subject }) => ({
     ...subject,
     topics: topics.map(({ slug, title, questions }) => ({
       slug,
       title,
-      questions: questions.map(({ id, title, kind, difficulty }) => ({ id, title, kind, ...(difficulty && { difficulty }) })),
+      questions: questions.map(({ id, title, kind, difficulty }) => ({
+        id,
+        title,
+        kind,
+        ...(difficulty && { difficulty }),
+        ...dates[`${subject.slug}:${id}`],
+      })),
     })),
   }));
 }

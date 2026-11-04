@@ -20,7 +20,7 @@ export function TopicCard({
   const done = keys.filter((k) => progress[k]?.status === 'correct').length;
   return (
     <Card className="overflow-hidden">
-      <div className="flex items-center gap-4 px-5 pt-4 pb-3">
+      <div id={`topic-${topic.slug}`} className="flex scroll-mt-4 items-center gap-4 px-5 pt-4 pb-3">
         <h2 className="font-semibold">{inline(topic.title)}</h2>
         <span className="ml-auto shrink-0 text-sm text-text-muted">
           {done} / {keys.length}

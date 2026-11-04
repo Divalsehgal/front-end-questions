@@ -9,6 +9,11 @@ type Base = {
   id: string;
   title: string;
   difficulty?: Difficulty;
+  /**
+   * Optional deep dive (markdown, ~150–300 words): the concept behind the question, an example and
+   * common mistakes. Shown collapsed under the question (src/pages/QuestionPage), so it may give the answer away.
+   */
+  explanation?: string;
 };
 
 /** Multiple choice. `answer` is an index, or several indexes for "select all that apply". */
@@ -87,6 +92,10 @@ export type Subject = {
 
 // The light shape every page ships (src/content/manifest.ts): enough for lists, counts, links and
 // progress, without question bodies. A full Subject is assignable to SubjectMeta.
-export type QuestionMeta = Pick<Question, 'id' | 'title' | 'kind' | 'difficulty'>;
+export type QuestionMeta = Pick<Question, 'id' | 'title' | 'kind' | 'difficulty'> & {
+  /** YYYY-MM-DD from git history (src/content/dates.ts); absent when the build has no full history. */
+  published?: string;
+  modified?: string;
+};
 export type TopicMeta = { slug: string; title: string; questions: QuestionMeta[] };
 export type SubjectMeta = Omit<Subject, 'topics'> & { topics: TopicMeta[] };

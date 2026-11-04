@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { BANK_ENTRIES as ALL } from '../content/bank';
-import { getSubject, type FullEntry as Entry } from '../content/registry';
+import { getEntry, getSubject, type FullEntry as Entry } from '../content/registry';
 import { breadcrumbs, homeJsonLd, questionJsonLd, serializeJsonLd, subjectJsonLd } from './jsonld';
 import { SITE_URL } from './site';
 import { stripMarkdown } from './text';
@@ -102,6 +102,16 @@ describe('question JSON-LD', () => {
     const text = (part.acceptedAnswer as Ld).text as string;
     expect(text.startsWith(`Step 1: ${stripMarkdown(e.q.items[0])}`)).toBe(true);
     expect(text).toContain(`Step ${e.q.items.length}: ${stripMarkdown(e.q.items.at(-1)!)}`);
+  });
+
+  it('dates every question from git history (the manifest), modified never before published', () => {
+    for (const e of ALL) {
+      const { published, modified } = getEntry(e.key)!.q;
+      const [, res] = questionJsonLd(e) as Ld[];
+      expect(res.datePublished).toBe(published);
+      expect(res.dateModified).toBe(modified);
+      if (published) expect(published <= modified!).toBe(true);
+    }
   });
 
   it('names the author with public profiles', () => {

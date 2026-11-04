@@ -77,6 +77,33 @@ Without the generic, TS infers \`null\` and you can never set real data. For com
       kind: 'flashcard',
       id: 'rts-f2',
       title: 'Typed reducers',
+      explanation: `A reducer receives every action your component can dispatch, so its type has to describe all of them at once. The tool for that is a **discriminated union**: several object types that share one literal field (usually \`type\`), so TypeScript can tell them apart.
+
+\`\`\`ts
+type Action =
+  | { type: 'add'; todo: Todo }
+  | { type: 'toggle'; id: number }
+  | { type: 'clear' };
+
+function reducer(state: Todo[], action: Action): Todo[] {
+  switch (action.type) {
+    case 'add':
+      return [...state, action.todo]; // action.todo exists here
+    case 'toggle':
+      return state.map((t) => (t.id === action.id ? { ...t, done: !t.done } : t));
+    case 'clear':
+      return [];
+  }
+}
+\`\`\`
+
+Inside each \`case\`, TypeScript **narrows** \`action\` to the one member with that \`type\`, so reading \`action.id\` in the \`add\` case is an error. \`useReducer(reducer, [])\` infers the state and the \`dispatch\` type from the reducer, so a call like \`dispatch({ type: 'toggle' })\` without an \`id\` won't compile.
+
+Common mistakes:
+
+- Typing actions as \`{ type: string; payload?: any }\`: narrowing is impossible and every payload is \`any\`.
+- Forgetting an exhaustiveness check. A \`default\` branch that passes \`action\` to a function taking \`never\` turns a newly added, unhandled action into a compile error.
+- Building action objects in variables without \`as const\`, which widens \`'add'\` to \`string\`.`,
       front: 'How do you make `useReducer` actions type-safe?',
       back: `Model actions as a **discriminated union** on \`type\`:
 

@@ -4,11 +4,23 @@ import { useFullEntry } from '../../content/loader';
 import { ALL, getEntry, hrefOf, keyOf, subjectHref } from '../../content/registry';
 import { KIND_META } from '../../questions/kinds';
 import { QuestionView } from '../../questions/registry';
+import { AnswerDisclosure } from '../../questions/shared';
 import { record, useProgress } from '../../state/progress';
 import { endSession, recordInSession, useSession } from '../../state/session';
 import { Badge, inline, Page, StatusDot } from '../../ui';
+import { Prose } from '../../ui/code';
 import { QuestionLoading } from './QuestionLoading';
 import { QuestionNav } from './QuestionNav';
+import { RelatedQuestions } from './RelatedQuestions';
+
+const DEEP_DIVE_LABEL = 'Deep dive (read after you answer)';
+
+/** Where "Next" goes: the next question, the session summary, or back to the subject. */
+function nextStep(next: string | undefined, inSession: boolean, subject: string) {
+  if (next) return { label: 'Next', href: hrefOf(next) };
+  if (inSession) return { label: 'Finish', href: '/session' };
+  return { label: 'Done', href: subjectHref(subject) };
+}
 
 export function QuestionPage() {
   const { subject, id } = useParams<{ subject: string; id: string }>();
@@ -43,15 +55,7 @@ export function QuestionPage() {
     recordInSession(key, correct);
   };
 
-  let nextLabel = 'Done';
-  if (next) nextLabel = 'Next';
-  else if (inSession) nextLabel = 'Finish';
-
-  const goNext = () => {
-    if (next) void navigate(hrefOf(next));
-    else if (inSession) void navigate('/session');
-    else void navigate(subjectHref(entry.subject.slug));
-  };
+  const step = nextStep(next, !!inSession, entry.subject.slug);
 
   return (
     <Page width="wide">
@@ -59,12 +63,9 @@ export function QuestionPage() {
         entry={entry}
         session={inSession}
         position={{ index, total: order.length }}
-        hasPrev={!!prev}
-        nextLabel={nextLabel}
-        onPrev={() => {
-          if (prev) void navigate(hrefOf(prev));
-        }}
-        onNext={goNext}
+        prevHref={prev && hrefOf(prev)}
+        nextHref={step.href}
+        nextLabel={step.label}
         onQuit={() => {
           endSession();
           void navigate(subjectHref(entry.subject.slug));
@@ -84,6 +85,15 @@ export function QuestionPage() {
       </header>
 
       {full ? <QuestionView key={key} q={full.q} subject={entry.subject.slug} onResult={onResult} /> : <QuestionLoading />}
+      {full?.q.explanation && (
+        <div className="mt-6">
+          {/* Not a reveal: opening it records nothing, the label just asks people to answer first. */}
+          <AnswerDisclosure label={DEEP_DIVE_LABEL} onOpen={() => true}>
+            <Prose text={full.q.explanation} />
+          </AnswerDisclosure>
+        </div>
+      )}
+      {!inSession && <RelatedQuestions entry={entry} />}
     </Page>
   );
 }

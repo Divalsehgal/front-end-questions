@@ -1,6 +1,7 @@
 // schema.org JSON-LD builders. Every answer/explanation here is also in the page's HTML
 // (the "Show answer & explanation" disclosure), as Google requires for structured data.
-import { hrefOf, subjectHref, type FullEntry } from '../content/registry';
+import { getEntry, hrefOf, subjectHref, type FullEntry } from '../content/registry';
+import { subjectFaq } from './faq';
 import { AUTHOR, AUTHOR_PROFILES, REPO_URL, SITE_ALT_NAMES, SITE_DESCRIPTION, SITE_NAME, SITE_URL, absoluteUrl } from './site';
 import { stripMarkdown } from './text';
 import type { Difficulty, SubjectMeta } from '../content/types';
@@ -56,20 +57,25 @@ export function subjectJsonLd(s: SubjectMeta) {
         url: absoluteUrl(hrefOf(`${s.slug}:${q.id}`)),
       })),
     },
+    {
+      '@context': CONTEXT,
+      '@type': 'FAQPage',
+      mainEntity: subjectFaq(s).map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+    },
   ];
 }
 
 /** The question an output-kind page asks. */
 export const outputLead = (lang?: string) => `What does this ${lang === 'ts' ? 'TypeScript' : 'JavaScript'} code log?`;
 
-/** The visible text a question leads with (what a searcher would type). */
+/** The visible text a question leads with (what a searcher would type). Never the answer or explanation. */
 export function questionLead(e: FullEntry) {
   const q = e.q;
   switch (q.kind) {
     case 'flashcard':
       return q.front;
     case 'output':
-      return `${outputLead(q.lang)} ${q.why}`;
+      return `${outputLead(q.lang)} ${q.title}`;
     default:
       return q.prompt;
   }
@@ -127,6 +133,8 @@ const RESOURCE_TYPE = {
 export function questionJsonLd(e: FullEntry) {
   const url = absoluteUrl(hrefOf(e.key));
   const part = questionPart(e);
+  // Dates live in the manifest (from git at build time), not in the full question.
+  const { published, modified } = getEntry(e.key)?.q ?? {};
   const resource = {
     '@context': CONTEXT,
     '@type': part ? 'Quiz' : 'LearningResource',
@@ -140,6 +148,8 @@ export function questionJsonLd(e: FullEntry) {
     about: { '@type': 'Thing', name: e.subject.title },
     keywords: [e.subject.title, stripMarkdown(e.topic.title), 'frontend interview question'].join(', '),
     author,
+    ...(published && { datePublished: published }),
+    ...(modified && { dateModified: modified }),
     isPartOf: { '@type': 'WebSite', name: SITE_NAME, url: SITE_URL },
     ...(part && { hasPart: [part] }),
   };

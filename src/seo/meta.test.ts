@@ -5,6 +5,7 @@ import { questionLead } from './jsonld';
 import { DESCRIPTION_MAX, metaDescription, pageMeta, pageTitle, TITLE_MAX } from './meta';
 import { absoluteUrl, SITE_URL } from './site';
 import { prerenderPaths } from './sitemap';
+import { stripMarkdown } from './text';
 
 const MARKDOWN = /`|\*\*|```/;
 
@@ -89,6 +90,13 @@ describe('questionLead', () => {
     expect(lead('flashcard')).toBe((ALL.find((e) => e.q.kind === 'flashcard')!.q as { front: string }).front);
     expect(lead('output')).toMatch(/^What does this (JavaScript|TypeScript) code log\?/);
     expect(lead('quiz')).toBe((ALL.find((e) => e.q.kind === 'quiz')!.q as { prompt: string }).prompt);
+  });
+
+  it('never gives away the answer: output questions lead with their title, not the explanation', () => {
+    const out = ALL.find((e) => e.q.kind === 'output')!;
+    if (out.q.kind !== 'output') throw new Error('no output question');
+    expect(questionLead(out)).toBe(`What does this ${out.q.lang === 'ts' ? 'TypeScript' : 'JavaScript'} code log? ${out.q.title}`);
+    expect(pageMeta(hrefOf(out.key)).description).not.toContain(stripMarkdown(out.q.why).slice(0, 40));
   });
 
   it('names TypeScript for ts output snippets', () => {

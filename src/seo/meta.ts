@@ -1,5 +1,6 @@
 import { fullEntry } from '../content/loader';
 import { getSubject, keyOf, type FullEntry } from '../content/registry';
+import { shortSubject } from './faq';
 import { homeJsonLd, questionJsonLd, questionLead, subjectJsonLd } from './jsonld';
 import { absoluteUrl, isNoindex, normalizePath, SITE_ALT_NAMES, SITE_DESCRIPTION, SITE_NAME } from './site';
 import { fitFirst, stripMarkdown, truncate } from './text';
@@ -30,14 +31,18 @@ export function pageTitle(main: string, qualifiers: string[]) {
 
 export const metaDescription = (...parts: string[]) => truncate(stripMarkdown(parts.filter(Boolean).join(' ')), DESCRIPTION_MAX);
 
-/** The question's own words first; short ones get context so the snippet still says what the page is. */
+/**
+ * The question's own words first (never its answer: the snippet should make people want to try it);
+ * short ones get context so the snippet still says what the page is.
+ */
 function questionDescription(e: FullEntry, subject: string) {
-  const lead = stripMarkdown(questionLead(e));
-  const context = `${stripMarkdown(e.q.title)}: a free ${subject} interview question on ${stripMarkdown(e.topic.title)}, with answer and explanation.`;
+  const plain = stripMarkdown(questionLead(e));
+  const lead = /[.?!:]$/.test(plain) ? plain : `${plain}.`;
+  const title = stripMarkdown(e.q.title);
+  const named = lead.includes(title) ? 'A' : `${title}: a`;
+  const context = `${named} free ${subject} interview question on ${stripMarkdown(e.topic.title)}. Try it, then check the answer and explanation.`;
   return metaDescription(lead, lead.length < 100 ? context : '');
 }
-
-const shortSubject = (s: SubjectMeta) => s.title.split(/[,:&(]/)[0].trim();
 
 function questionMeta(e: FullEntry, path: string): PageMeta {
   const subject = shortSubject(e.subject);

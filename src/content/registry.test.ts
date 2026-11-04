@@ -56,13 +56,16 @@ describe('lookups', () => {
   });
 
   it('the manifest is the full question bank minus question bodies, in the same order', () => {
-    expect(SUBJECTS).toEqual(toManifest(BANK));
+    // Plus git dates (src/content/dates.ts), which only the build can read.
+    const dates = Object.fromEntries(ALL.flatMap((e) => (e.q.published ? [[e.key, { published: e.q.published, modified: e.q.modified! }]] : [])));
+    expect(SUBJECTS).toEqual(toManifest(BANK, dates));
     expect(ALL.map((e) => e.key)).toEqual(BANK_ENTRIES.map((e) => e.key));
     expect(ALL[0].q).toEqual({
       id: BANK_ENTRIES[0].q.id,
       title: BANK_ENTRIES[0].q.title,
       kind: BANK_ENTRIES[0].q.kind,
       difficulty: BANK_ENTRIES[0].q.difficulty,
+      ...dates[ALL[0].key],
     });
     expect(ALL.find((e) => e.q.kind === 'quiz')?.q).not.toHaveProperty('prompt');
   });

@@ -2,6 +2,7 @@ import { act, screen, within } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { ALL, hrefOf, subjectHref, SUBJECTS } from '../../content/registry';
 import { KINDS } from '../../questions/registry';
+import { subjectFaq, subjectJsonLd } from '../../seo';
 import { record, resetProgress } from '../../state/progress';
 import { location, renderWithRouter } from '../../test/render';
 import { SubjectPage } from '.';
@@ -23,9 +24,25 @@ describe('SubjectPage', () => {
     const { user } = page();
     expect(screen.getByRole('heading', { level: 1, name: subject.title })).toBeInTheDocument();
     expect(screen.getByText(`0 of ${entries.length} solved`)).toBeInTheDocument();
-    expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(subject.topics.length);
+    // One per topic card, plus "Topics" and the FAQ.
+    expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(subject.topics.length + 2);
     await user.click(screen.getByRole('link', { name: 'Start' }));
     expect(location()).toBe(hrefOf(entries[0].key));
+  });
+
+  it('links each topic from the breakdown and shows the FAQ that its FAQPage JSON-LD repeats', () => {
+    page();
+    const topics = screen.getByRole('region', { name: 'Topics' });
+    expect(within(topics).getAllByRole('link')).toHaveLength(subject.topics.length);
+    expect(within(topics).getAllByRole('link')[0]).toHaveAttribute('href', `#topic-${subject.topics[0].slug}`);
+    expect(document.getElementById(`topic-${subject.topics[0].slug}`)).toBeInTheDocument();
+    const faq = screen.getByRole('region', { name: /FAQ/ });
+    for (const f of subjectFaq(subject)) {
+      expect(within(faq).getByText(f.q)).toBeInTheDocument();
+      expect(within(faq).getByText(f.a)).toBeInTheDocument();
+    }
+    const ld = subjectJsonLd(subject).find((d) => (d as { '@type': string })['@type'] === 'FAQPage') as { mainEntity: { name: string }[] };
+    expect(ld.mainEntity.map((m) => m.name)).toEqual(subjectFaq(subject).map((f) => f.q));
   });
 
   it('continues after the solved questions', async () => {

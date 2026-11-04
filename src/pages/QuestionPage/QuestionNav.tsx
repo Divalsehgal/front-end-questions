@@ -1,7 +1,7 @@
 import { ArrowLeft, ArrowRight, ChevronRight, Timer } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { subjectHref, type Entry } from '../../content/registry';
-import { buttonClass, IconButton, inline, useNow } from '../../ui';
+import { buttonClass, ICON_BUTTON_CLASS, IconButton, inline, useNow } from '../../ui';
 import type { Session } from '../../state/session';
 
 function Elapsed({ since }: Readonly<{ since: number }>) {
@@ -19,19 +19,18 @@ export function QuestionNav({
   entry,
   session,
   position,
-  hasPrev,
+  prevHref,
+  nextHref,
   nextLabel,
-  onPrev,
-  onNext,
   onQuit,
 }: Readonly<{
   entry: Entry;
   session: Session | null;
   position: { index: number; total: number };
-  hasPrev: boolean;
+  /** Real links (not buttons) so crawlers can follow the subject's order. */
+  prevHref?: string;
+  nextHref: string;
   nextLabel: string;
-  onPrev: () => void;
-  onNext: () => void;
   onQuit: () => void;
 }>) {
   const topicIndex = entry.topic.questions.findIndex((q) => q.id === entry.q.id);
@@ -79,12 +78,18 @@ export function QuestionNav({
         </nav>
       )}
       <div className="ml-auto flex items-center gap-2">
-        <IconButton label="Previous question" onClick={onPrev} disabled={!hasPrev}>
-          <ArrowLeft size={16} aria-hidden />
-        </IconButton>
-        <button type="button" onClick={onNext} className={buttonClass('primary', 'md', 'px-3')}>
+        {prevHref ? (
+          <Link to={prevHref} aria-label="Previous question" title="Previous question" className={ICON_BUTTON_CLASS}>
+            <ArrowLeft size={16} aria-hidden />
+          </Link>
+        ) : (
+          <IconButton label="Previous question" disabled>
+            <ArrowLeft size={16} aria-hidden />
+          </IconButton>
+        )}
+        <Link to={nextHref} className={buttonClass('primary', 'md', 'px-3')}>
           {nextLabel} <ArrowRight size={16} aria-hidden />
-        </button>
+        </Link>
       </div>
     </div>
   );

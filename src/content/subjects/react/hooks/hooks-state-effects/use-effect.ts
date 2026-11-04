@@ -5,6 +5,23 @@ export const useEffectQuestions: Question[] = [
     kind: 'quiz',
     id: 'h-9',
     title: 'effect with no dependency array',
+    explanation: `\`useEffect\` lets a component sync with something outside React (a subscription, a timer, the document title) **after** React has committed a render to the screen. The dependency array decides which commits trigger it, and there are three shapes to know:
+
+- **No array**: the effect runs after every commit, the first one and every re-render.
+- **\`[]\`**: it runs after the first commit only, and its cleanup runs on unmount.
+- **\`[a, b]\`**: it runs after the first commit and again whenever \`a\` or \`b\` changed since the last render (compared with \`Object.is\`).
+
+Each render has its own props, state and effect function. An effect "sees" the values from the render it belongs to, which is why you can reason about it one render at a time: list the renders that happen, then ask which of them run the effect.
+
+Before an effect runs again, React calls the cleanup returned by the previous run. With no array, that means cleanup → effect on every update.
+
+Common mistakes:
+
+- Leaving out the array by accident and refetching data on every render.
+- Setting state inside an array-less effect, which renders, which runs the effect again: an infinite loop.
+- Being surprised by double logs in development. React's StrictMode mounts, unmounts and remounts components on purpose to surface missing cleanups; production runs effects once.
+
+If an effect only computes something from props or state, you probably don't need an effect at all: compute it during render.`,
     prompt: 'On mount and after one click, what logs?',
     code: `function App() {
   const [count, setCount] = useState(0);

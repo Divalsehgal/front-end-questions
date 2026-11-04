@@ -43,6 +43,28 @@ So: sync → all microtasks → (render) → next timer. A chain of microtasks t
     kind: 'flashcard',
     id: 'el-f2',
     title: 'Promise states',
+    explanation: `A promise is a placeholder for a result that isn't ready yet. Its whole lifecycle is a small state machine, and almost every promise puzzle comes down to two rules: it settles **at most once**, and its callbacks always run **asynchronously**.
+
+\`\`\`js
+const p = new Promise((resolve, reject) => {
+  resolve('first');
+  reject(new Error('ignored'));
+  resolve('also ignored');
+});
+p.then(console.log); // "first"
+\`\`\`
+
+Only the first call to \`resolve\` or \`reject\` counts; the rest are silently dropped, which is why the executor above never throws. A \`throw\` inside the executor is the same as calling \`reject\`, but only if nothing has settled the promise yet.
+
+Resolving is not the same as fulfilling. \`resolve(otherPromise)\` "locks in" the outer promise to follow the other one, so it can still end up rejected. The same goes for any **thenable** (an object with a \`then\` method).
+
+Common mistakes:
+
+- Expecting \`.then\` on an already-fulfilled promise to run synchronously. It is queued as a microtask, after the current script.
+- Treating "resolved" and "fulfilled" as synonyms.
+- Forgetting that an unhandled rejection still settles the promise: it just has no handler yet.
+
+These rules are what you implement when you write \`Promise.all\`, \`Promise.race\` or a promise polyfill, so it pays to know them exactly.`,
     front: 'What are the states of a promise, and can a settled promise change?',
     back: `**pending** → either **fulfilled** (with a value) or **rejected** (with a reason). Fulfilled/rejected are both "settled", and settling happens **once**: later \`resolve\`/\`reject\` calls are ignored.
 

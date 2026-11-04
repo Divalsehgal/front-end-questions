@@ -8,6 +8,20 @@ export const closuresQuestions: Question[] = [
     kind: 'output',
     id: 'cl-1',
     title: 'var vs let in a loop with timers',
+    explanation: `A closure is a function plus the variables it could see where it was created. It keeps a live reference to those **bindings**, not a copy of their values, so what it logs depends on how many bindings exist and what they hold when it finally runs.
+
+\`setTimeout\` callbacks run later, after the loop has finished and the call stack is empty. So the real question is: how many \`i\` bindings did the loop create?
+
+- \`var\` is function-scoped. The loop has a single \`i\` that every callback shares, and the loop leaves it at the value that failed the condition.
+- \`let\` in a \`for\` header is special: the spec creates a **new binding per iteration** and copies the current value into it, so each callback closes over its own \`j\`.
+
+Common mistakes:
+
+- Thinking the timer delay matters. Even \`setTimeout(fn, 0)\` waits for the loop to end.
+- Thinking a closure "captures the value". It captures the variable; that is why later writes are visible.
+- Fixing it with \`const\` in a classic \`for\` loop: \`i++\` would then throw.
+
+Without \`let\`, give each callback its own binding: wrap the body in an IIFE that takes \`i\` as a parameter, use \`.bind(null, i)\`, or pass \`i\` as an extra \`setTimeout\` argument. In an interview, say "one binding vs one per iteration" and you have explained the whole puzzle.`,
     code: `for (var i = 0; i < 3; i++) {
   setTimeout(() => console.log('var', i));
 }
