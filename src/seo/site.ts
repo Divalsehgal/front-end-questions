@@ -11,7 +11,6 @@ export const AUTHOR = 'Dival Sehgal';
 /** Public profiles of the author: lets search and answer engines tie the site to a real person. */
 export const AUTHOR_PROFILES = ['https://github.com/Divalsehgal'];
 export const REPO_URL = 'https://github.com/Divalsehgal/front-end-questions';
-export const THEME_COLOR = '#0b1020';
 export const OG_IMAGE = 'og-image.png';
 export const SITE_DESCRIPTION =
   'Free frontend interview practice: JavaScript, TypeScript, React, Next.js, HTML, CSS, DSA, system design and more. Quizzes, output prediction, coding drills and machine coding. No login.';
