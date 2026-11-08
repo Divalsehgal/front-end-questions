@@ -111,4 +111,14 @@ describe('UiView', () => {
     await user.click(screen.getByRole('button', { name: 'Show problem' }));
     expect(screen.getByRole('checkbox', { name: 'Increments on click' })).toBeChecked();
   });
+
+  it('with auto-run off, the preview only updates when run', async () => {
+    const { user } = setup({ ...q, framework: 'vanilla', starter: '<p>hi</p>' });
+    await user.click(screen.getByRole('switch', { name: 'Auto-run' }));
+    const editor = screen.getByRole('textbox', { name: 'Your code for Counter' });
+    await user.type(editor, '!');
+    expect(screen.getByTitle('Counter preview')).toHaveAttribute('data-code', '<p>hi</p>');
+    await user.click(screen.getByRole('button', { name: 'Run' }));
+    expect(screen.getByTitle('Counter preview')).toHaveAttribute('data-code', '<p>hi</p>!');
+  });
 });

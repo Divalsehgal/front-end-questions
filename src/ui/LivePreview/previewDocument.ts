@@ -125,7 +125,8 @@ const ERROR_HOOK = String.raw`
   // Heap size (Chromium only) lets the parent stop a preview whose memory keeps growing.
   if (performance.memory) setInterval(() => report('memory', performance.memory.usedJSHeapSize), 2000);
   // React previews report readiness after rendering; plain HTML ones after load.
-  if (!document.documentElement.hasAttribute('data-react')) window.addEventListener('load', () => setTimeout(() => report('ready'), 1500));
+  // 'rendered' (first paint is done) lets the parent swap this frame in without a blank flash.
+  if (!document.documentElement.hasAttribute('data-react')) window.addEventListener('load', () => { report('rendered'); setTimeout(() => report('ready'), 1500); });
   window.addEventListener('error', (e) => show(e.message));
   window.addEventListener('unhandledrejection', (e) => show(String(e.reason?.message ?? e.reason)));
 `;
@@ -160,6 +161,9 @@ export async function reactDocument(source: string) {
   const { jsx } = await import('react/jsx-runtime');
   if (typeof mod.default !== 'function') throw new Error('Export your component as the default export: export default function App() { ... }');
   createRoot(document.getElementById('root')).render(jsx(mod.default, {}));
+  // A beat after the commit, so the Tailwind runtime has styled the new DOM. Not requestAnimationFrame:
+  // Chrome doesn't run it in the invisible frame a new run loads in.
+  setTimeout(() => report('rendered'), 80);
   setTimeout(() => report('ready'), 1500);
 </script></body></html>`;
 }

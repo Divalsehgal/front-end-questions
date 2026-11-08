@@ -116,7 +116,33 @@ describe('LivePreview', () => {
     post(frame.contentWindow, { source: 'fe-grind-preview', type: 'console', message: { level: 'log', text: 'again' } });
     fireEvent.click(screen.getByRole('button', { name: 'Reload preview' }));
     expect(list).toHaveTextContent('No logs yet.');
-    expect(screen.getByTitle('Logs')).not.toBe(frame); // iframe remounted
+  });
+
+  it('loads a new run behind the current one and swaps it in once rendered, with no blank flash', async () => {
+    const { rerender } = render(<LivePreview framework="vanilla" code="<p>a</p>" title="Swap" />);
+    await act(() => vi.advanceTimersByTimeAsync(500));
+    expect(screen.getByTitle('Swap').getAttribute('srcdoc')).toContain('<p>a</p>');
+
+    rerender(<LivePreview framework="vanilla" code="<p>b</p>" title="Swap" />);
+    await act(() => vi.advanceTimersByTimeAsync(500));
+    const next = screen.getByTitle('Swap (updating)') as HTMLIFrameElement;
+    expect(next.getAttribute('srcdoc')).toContain('<p>b</p>');
+    expect(screen.getByTitle('Swap').getAttribute('srcdoc')).toContain('<p>a</p>'); // old run stays up meanwhile
+    act(() => {
+      window.dispatchEvent(new MessageEvent('message', { source: next.contentWindow, data: { source: 'fe-grind-preview', type: 'rendered' } }));
+    });
+    expect(screen.queryByTitle('Swap (updating)')).not.toBeInTheDocument();
+    expect(screen.getByTitle('Swap').getAttribute('srcdoc')).toContain('<p>b</p>');
+
+    // An identical build doesn't rerun; a frame that never reports is swapped in after a timeout.
+    rerender(<LivePreview framework="vanilla" code="<p>b</p> " title="Swap" />);
+    await act(() => vi.advanceTimersByTimeAsync(500));
+    expect(screen.getByTitle('Swap (updating)')).toBeInTheDocument();
+    await act(() => vi.advanceTimersByTimeAsync(4000));
+    expect(screen.queryByTitle('Swap (updating)')).not.toBeInTheDocument();
+    rerender(<LivePreview framework="vanilla" code="<p>b</p> " title="Swap" />);
+    await act(() => vi.advanceTimersByTimeAsync(500));
+    expect(screen.queryByTitle('Swap (updating)')).not.toBeInTheDocument();
   });
 
   it('unloads a preview whose memory keeps growing, until reloaded', () => {
