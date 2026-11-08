@@ -37,6 +37,16 @@ describe('FileTree', () => {
     expect(onCreate).toHaveBeenCalledWith('components/Card.tsx');
   });
 
+  it('resizes the files panel from its edge', () => {
+    setup();
+    const nav = screen.getByRole('navigation', { name: 'Files' });
+    const handle = screen.getByRole('separator', { name: 'Resize files panel' });
+    fireEvent.keyDown(handle, { key: 'ArrowRight' });
+    expect(nav).toHaveStyle({ width: '192px' });
+    for (let i = 0; i < 10; i++) fireEvent.keyDown(handle, { key: 'ArrowLeft' });
+    expect(nav).toHaveStyle({ width: '120px' }); // never narrower than its minimum
+  });
+
   it('deletes files after confirming, but never the entry', () => {
     const { onDelete } = setup();
     expect(screen.queryByRole('button', { name: 'Delete App.tsx' })).not.toBeInTheDocument();

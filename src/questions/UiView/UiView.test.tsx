@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { UiView } from '.';
@@ -120,5 +120,23 @@ describe('UiView', () => {
     expect(screen.getByTitle('Counter preview')).toHaveAttribute('data-code', '<p>hi</p>');
     await user.click(screen.getByRole('button', { name: 'Run' }));
     expect(screen.getByTitle('Counter preview')).toHaveAttribute('data-code', '<p>hi</p>!');
+  });
+});
+
+describe('UiView side by side', () => {
+  it('lets the editor / preview split be dragged, and only while both are shown', async () => {
+    vi.stubGlobal('matchMedia', (query: string) => ({ matches: true, media: query, addEventListener: vi.fn(), removeEventListener: vi.fn() }));
+    try {
+      const { user } = setup();
+      const handle = screen.getByRole('separator', { name: 'Resize editor and preview' });
+      fireEvent.keyDown(handle, { key: 'ArrowRight' }); // jsdom has no layout: measured 0, clamped to the 320px minimum
+      expect(handle.parentElement).toHaveStyle({ width: '320px' });
+      fireEvent.keyDown(handle, { key: 'ArrowRight' });
+      expect(handle.parentElement).toHaveStyle({ width: '336px' });
+      await user.click(screen.getByRole('button', { name: 'Hide preview' }));
+      expect(screen.queryByRole('separator', { name: 'Resize editor and preview' })).not.toBeInTheDocument();
+    } finally {
+      vi.unstubAllGlobals();
+    }
   });
 });

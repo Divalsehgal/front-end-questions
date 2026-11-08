@@ -1,6 +1,6 @@
 import { Code2, Eye, KeyRound, MonitorPlay, PanelRightClose, PanelRightOpen, Play, RotateCcw } from 'lucide-react';
 import { useId, useState, useSyncExternalStore, type ReactNode } from 'react';
-import { Button, Card, cn, IconButton, TabPanel, Tabs, type TabItem } from '../../ui';
+import { Button, Card, cn, IconButton, PaneResizer, TabPanel, Tabs, type TabItem } from '../../ui';
 import { CodeEditor, LivePreview } from '../../ui/code';
 import { ProjectEditor } from './ProjectEditor';
 import type { UiQuestion } from '../../content/types';
@@ -103,19 +103,48 @@ export function Workspace({
       </div>
       <TabPanel id={tabsId} value={view}>
         {/* Panes stay mounted (just hidden) so switching tabs doesn't rebuild the editor or preview. */}
-        <div hidden={view === 'reference'} className={cn('h-[75vh] min-h-96', sideBySide && 'grid grid-cols-2')}>
-          <div hidden={!split && view !== 'code'} className="h-full min-h-0">
-            <AnswerEditor q={q} subject={subject} code={code} onCode={onCode} onRun={runNow} />
-          </div>
-          <div hidden={split ? !previewOpen : view !== 'preview'} className={cn('h-full min-h-0', sideBySide && 'border-l border-line')}>
-            <LivePreview framework={q.framework} code={previewCode} title={`${q.title} preview`} />
-          </div>
+        <div hidden={view === 'reference'} className="h-[75vh] min-h-96">
+          <SplitPanes
+            sideBySide={sideBySide}
+            codeHidden={!split && view !== 'code'}
+            previewHidden={split ? !previewOpen : view !== 'preview'}
+            code={<AnswerEditor q={q} subject={subject} code={code} onCode={onCode} onRun={runNow} />}
+            preview={<LivePreview framework={q.framework} code={previewCode} title={`${q.title} preview`} />}
+          />
         </div>
         {showReference && q.solution && (
           <ReferencePane q={q} solution={q.solution} path={`file:///ui-ref-${subject}-${q.id}.${ext}`} hidden={view !== 'reference'} />
         )}
       </TabPanel>
     </Card>
+  );
+}
+
+/** Editor and preview. Side by side, the editor's right edge drags to share the width between them. */
+function SplitPanes({
+  sideBySide,
+  codeHidden,
+  previewHidden,
+  code,
+  preview,
+}: Readonly<{ sideBySide: boolean; codeHidden: boolean; previewHidden: boolean; code: ReactNode; preview: ReactNode }>) {
+  const [codeWidth, setCodeWidth] = useState<number | null>(null); // null: half each, until dragged
+  return (
+    <div className={cn('h-full', sideBySide && 'flex')}>
+      <div
+        hidden={codeHidden}
+        style={sideBySide && codeWidth ? { width: codeWidth } : undefined}
+        className={cn('relative h-full min-h-0', sideBySide && 'shrink-0', sideBySide && !codeWidth && 'w-1/2')}
+      >
+        {code}
+        {sideBySide && (
+          <PaneResizer edge="right" size={codeWidth ?? undefined} min={320} reserve={280} label="Resize editor and preview" onResize={setCodeWidth} />
+        )}
+      </div>
+      <div hidden={previewHidden} className={cn('h-full min-h-0 min-w-0', sideBySide && 'flex-1 border-l border-line')}>
+        {preview}
+      </div>
+    </div>
   );
 }
 

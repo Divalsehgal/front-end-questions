@@ -1,6 +1,7 @@
 import { ChevronDown, ChevronUp, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '../lib';
+import { PaneResizer } from '../PaneResizer';
 
 export type Log = { id: number; level: string; text: string };
 const LEVEL_CLASS: Record<string, string> = { error: 'text-error', warn: 'text-warn' };
@@ -12,7 +13,7 @@ export function ConsoleBar({ logs, label, onClear }: Readonly<{ logs: Log[]; lab
   const errors = logs.filter((l) => l.level === 'error').length;
   return (
     <div className="relative border-t border-line font-mono text-xs">
-      {consoleOpen && <ResizeHandle height={height} onResize={setHeight} />}
+      {consoleOpen && <PaneResizer edge="top" size={height} min={48} reserve={120} label="Resize console" onResize={setHeight} />}
       <div className="flex items-center gap-2 px-3 py-1">
         <button
           type="button"
@@ -49,57 +50,5 @@ export function ConsoleBar({ logs, label, onClear }: Readonly<{ logs: Log[]; lab
         </ol>
       )}
     </div>
-  );
-}
-
-const MIN_CONSOLE = 48;
-const KEY_STEP: Record<string, number> = { ArrowUp: 16, ArrowDown: -16 };
-
-/** Drag (or arrow keys) to resize the console, like a sandbox's panel splitter. */
-function ResizeHandle({ height, onResize }: Readonly<{ height: number; onResize: (h: number) => void }>) {
-  const clamp = (h: number, el: HTMLElement) => {
-    // Leave room for the preview bar, the console header and a sliver of preview.
-    const box = el.parentElement?.parentElement?.clientHeight ?? 0;
-    const max = box > 0 ? box - 120 : Infinity;
-    onResize(Math.round(Math.max(MIN_CONSOLE, Math.min(h, max))));
-  };
-  return (
-    // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions -- window splitter (ARIA APG)
-    <div
-      role="separator"
-      aria-orientation="horizontal"
-      aria-label="Resize console"
-      aria-valuenow={height}
-      // A focusable separator is an interactive window splitter (ARIA APG), so it takes focus.
-      // eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex
-      tabIndex={0}
-      title="Drag to resize the console"
-      onPointerDown={(e) => {
-        if (e.button !== 0) return;
-        e.preventDefault();
-        const el = e.currentTarget;
-        const startY = e.clientY;
-        // Capture keeps the moves coming even while the pointer is over the preview iframe.
-        el.setPointerCapture(e.pointerId);
-        const move = (ev: PointerEvent) => clamp(height + startY - ev.clientY, el);
-        const up = () => {
-          document.body.classList.remove('select-none', 'cursor-row-resize');
-          el.removeEventListener('pointermove', move);
-          el.removeEventListener('pointerup', up);
-          el.removeEventListener('pointercancel', up);
-        };
-        document.body.classList.add('select-none', 'cursor-row-resize');
-        el.addEventListener('pointermove', move);
-        el.addEventListener('pointerup', up);
-        el.addEventListener('pointercancel', up);
-      }}
-      onKeyDown={(e) => {
-        const step = KEY_STEP[e.key];
-        if (!step) return;
-        e.preventDefault();
-        clamp(height + step, e.currentTarget);
-      }}
-      className="absolute inset-x-0 -top-1 z-30 h-2 cursor-row-resize touch-none hover:bg-brand focus-visible:bg-brand focus-visible:outline-none"
-    />
   );
 }

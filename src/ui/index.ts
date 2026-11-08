@@ -9,6 +9,7 @@ export * from './Chips';
 export * from './EmptyState';
 export * from './Field';
 export * from './IconButton';
+export * from './PaneResizer';
 export * from './icons';
 export * from './Kbd';
 export * from './Layout';

@@ -1,6 +1,6 @@
 import { FileCode2, FilePlus, Folder, Plus, Trash2 } from 'lucide-react';
 import { useId, useState } from 'react';
-import { cn, IconButton } from '../../ui';
+import { cn, IconButton, PaneResizer } from '../../ui';
 import { ENTRY, fileNameError, normalizePath, treeRows } from '../../ui/code';
 
 const ROW = 'flex items-center gap-1.5 py-0.5 pr-1';
@@ -15,8 +15,10 @@ export function FileTree({
   onDelete,
 }: Readonly<{ files: string[]; active: string; onOpen: (path: string) => void; onCreate: (path: string) => void; onDelete: (path: string) => void }>) {
   const [draft, setDraft] = useState<string | null>(null);
+  const [width, setWidth] = useState(176);
   return (
-    <nav aria-label="Files" className="flex w-44 shrink-0 flex-col border-r border-line bg-surface-muted text-xs">
+    <nav aria-label="Files" style={{ width }} className="relative flex shrink-0 flex-col border-r border-line bg-surface-muted text-xs">
+      <PaneResizer edge="right" size={width} min={120} reserve={240} label="Resize files panel" onResize={setWidth} />
       <div className="flex items-center justify-between py-1 pr-1 pl-2 font-semibold tracking-wide text-text-muted uppercase">
         Files
         <IconButton label="New file" onClick={() => setDraft('')} className="border-0 bg-transparent p-1">
