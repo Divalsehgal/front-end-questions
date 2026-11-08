@@ -32,10 +32,36 @@ function readMessage(type: unknown, message: unknown, baseHeap: { current: numbe
 const LEVEL_CLASS: Record<string, string> = { error: 'text-error', warn: 'text-warn' };
 
 type Frame = { id: number; doc: string };
-type Frames = { shown: Frame; next: Frame | null };
+// Two fixed iframe slots; `active` is the one on screen, the other holds the next run while it loads.
+// Swapping only flips visibility: moving or re-keying a loaded iframe in the DOM would reload it.
+type Frames = { slots: [Frame | null, Frame | null]; active: 0 | 1 };
 // The buffered frame is swapped in when it reports it rendered or errored, or after this long regardless.
 const SWAP_TIMEOUT = 4000;
 const SANDBOX = 'allow-scripts allow-modals allow-forms allow-popups';
+const EMPTY: Frames = { slots: [{ id: 0, doc: '' }, null], active: 0 };
+
+async function buildDoc(framework: 'react' | 'vanilla', code: string) {
+  // Loaded on demand: it pulls in sucrase for the React transform.
+  const { reactDocument, vanillaDocument } = await import('./previewDocument');
+  return framework === 'react' ? reactDocument(code) : vanillaDocument(code);
+}
+
+function withRun(f: Frames, run: Frame): Frames {
+  const slots: Frames['slots'] = [...f.slots];
+  const shown = slots[f.active];
+  // Nothing on screen yet: load in place. Otherwise buffer in the other slot.
+  if (!shown?.doc) slots[f.active] = { id: shown?.id ?? run.id, doc: run.doc };
+  else slots[1 - f.active] = run;
+  return { slots, active: f.active };
+}
+
+function promoted(f: Frames, id?: number): Frames {
+  const next = f.slots[1 - f.active];
+  if (!next || (id !== undefined && next.id !== id)) return f;
+  const slots: Frames['slots'] = [...f.slots];
+  slots[f.active] = null;
+  return { slots, active: f.active === 0 ? 1 : 0 };
+}
 
 /**
  * Renders a machine-coding answer in a sandboxed iframe, with a console bar. Like online sandboxes,
@@ -43,14 +69,16 @@ const SANDBOX = 'allow-scripts allow-modals allow-forms allow-popups';
  * so editing never flashes a blank preview.
  */
 export function LivePreview({ framework, code, title }: Readonly<{ framework: 'react' | 'vanilla'; code: string; title: string }>) {
-  const [frames, setFrames] = useState<Frames>({ shown: { id: 0, doc: '' }, next: null });
+  const [frames, setFrames] = useState<Frames>(EMPTY);
   const [error, setError] = useState<string | null>(null);
   const [logs, setLogs] = useState<Log[]>([]);
   const [stopped, setStopped] = useState<string | null>(null);
-  const shownEl = useRef<HTMLIFrameElement>(null);
-  const nextEl = useRef<HTMLIFrameElement>(null);
-  const ids = useRef(0);
-  const nextLogId = useRef(0);
+  const slotEls = useRef<(HTMLIFrameElement | null)[]>([null, null]);
+  const active = useRef<0 | 1>(0);
+  useEffect(() => {
+    active.current = frames.active;
+  }, [frames.active]);
+  const ids = useRef(0); // unique ids for frames and log entries
   const lastDoc = useRef('');
   const baseHeap = useRef<number | null>(null);
 
@@ -60,18 +88,14 @@ export function LivePreview({ framework, code, title }: Readonly<{ framework: 'r
     setStopped(null);
     baseHeap.current = null;
     const id = ++ids.current;
-    // Nothing on screen yet: load in place. Otherwise buffer behind what is showing.
-    setFrames((f) => (f.shown.doc ? { shown: f.shown, next: { id, doc } } : { shown: { id: f.shown.id, doc }, next: null }));
+    setFrames((f) => withRun(f, { id, doc }));
   };
-  const promote = (id?: number) => setFrames((f) => (f.next && (id === undefined || f.next.id === id) ? { shown: f.next, next: null } : f));
 
   // Debounce so typing doesn't rebuild on every keystroke; an unchanged build is skipped entirely.
   useEffect(() => {
     const t = setTimeout(async () => {
       try {
-        // Loaded on demand: it pulls in sucrase for the React transform.
-        const { reactDocument, vanillaDocument } = await import('./previewDocument');
-        const doc = framework === 'react' ? await reactDocument(code) : vanillaDocument(code);
+        const doc = await buildDoc(framework, code);
         setError(null);
         if (doc !== lastDoc.current) run(doc);
       } catch (e) {
@@ -82,30 +106,30 @@ export function LivePreview({ framework, code, title }: Readonly<{ framework: 'r
     return () => clearTimeout(t);
   }, [code, framework]);
 
-  const pendingId = frames.next?.id;
+  const pendingId = frames.slots[1 - frames.active]?.id;
   useEffect(() => {
     if (pendingId === undefined) return;
-    const t = setTimeout(() => promote(pendingId), SWAP_TIMEOUT);
+    const t = setTimeout(() => setFrames((f) => promoted(f, pendingId)), SWAP_TIMEOUT);
     return () => clearTimeout(t);
   }, [pendingId]);
 
   useEffect(() => {
     const onMessage = (e: MessageEvent) => {
       if (e.data?.source !== 'fe-grind-preview' || !e.source) return;
-      const fromNext = !!nextEl.current && e.source === nextEl.current.contentWindow;
-      const fromShown = !!shownEl.current && e.source === shownEl.current.contentWindow;
+      const shown = slotEls.current[active.current];
+      const next = slotEls.current[1 - active.current];
+      const fromNext = !!next && e.source === next.contentWindow;
       // While a run is buffered, the outgoing frame no longer speaks for the console.
-      if (!fromNext && !(fromShown && !nextEl.current)) return;
-      if (fromNext && (e.data.type === 'rendered' || e.data.type === 'error')) promote();
+      if (!fromNext && !(shown && e.source === shown.contentWindow && !next)) return;
+      if (fromNext && (e.data.type === 'rendered' || e.data.type === 'error')) setFrames((f) => promoted(f));
       const { log, stop, clear } = readMessage(e.data.type, e.data.message, baseHeap);
       if (clear) setLogs([]);
       if (stop) {
         setStopped(stop);
-        // Unload both frames; the next run (or reload) starts from an empty slot.
-        setFrames({ shown: { id: ++ids.current, doc: '' }, next: null });
+        setFrames({ slots: [{ id: ++ids.current, doc: '' }, null], active: 0 }); // unload both frames
       }
       if (log) {
-        const entry = { id: nextLogId.current++, ...log };
+        const entry = { id: ++ids.current, ...log };
         setLogs((l) => [...l, entry].slice(-MAX_LOGS));
       }
     };
@@ -116,45 +140,46 @@ export function LivePreview({ framework, code, title }: Readonly<{ framework: 'r
   return (
     <div className="relative flex h-full min-h-0 flex-col bg-surface">
       {error && (
-        <pre role="alert" className="absolute inset-x-0 top-8 z-10 bg-error-soft px-4 py-3 font-mono text-xs whitespace-pre-wrap text-error">
+        <pre role="alert" className="absolute inset-x-0 top-8 z-20 bg-error-soft px-4 py-3 font-mono text-xs whitespace-pre-wrap text-error">
           {error}
         </pre>
       )}
-      <PreviewBar title={title} busy={!!frames.next} onReload={() => run(lastDoc.current)} />
+      <PreviewBar title={title} busy={pendingId !== undefined} onReload={() => run(lastDoc.current)} />
       {stopped ? (
         <p role="alert" className="flex-1 p-4 text-sm text-error">
           {stopped}
         </p>
       ) : (
-        <PreviewFrames frames={frames} title={title} shownEl={shownEl} nextEl={nextEl} />
+        <PreviewFrames frames={frames} title={title} slotEls={slotEls} />
       )}
       <ConsoleBar logs={logs} label={`${title} console`} onClear={() => setLogs([])} />
     </div>
   );
 }
 
-/** The frame on screen, plus the next run loading invisibly behind it. */
-function PreviewFrames({
-  frames,
-  title,
-  shownEl,
-  nextEl,
-}: Readonly<{ frames: Frames; title: string; shownEl: RefObject<HTMLIFrameElement | null>; nextEl: RefObject<HTMLIFrameElement | null> }>) {
+/** Both slots, always in the same DOM position: the active one on top, the other loading underneath it. */
+function PreviewFrames({ frames, title, slotEls }: Readonly<{ frames: Frames; title: string; slotEls: RefObject<(HTMLIFrameElement | null)[]> }>) {
   return (
     <div className="relative min-h-0 flex-1">
-      <iframe key={frames.shown.id} ref={shownEl} title={title} srcDoc={frames.shown.doc} sandbox={SANDBOX} className="absolute inset-0 size-full border-0" />
-      {frames.next && (
-        <iframe
-          key={frames.next.id}
-          ref={nextEl}
-          title={`${title} (updating)`}
-          aria-hidden
-          tabIndex={-1}
-          srcDoc={frames.next.doc}
-          sandbox={SANDBOX}
-          className="invisible absolute inset-0 size-full border-0"
-        />
-      )}
+      {frames.slots.map((frame, i) => {
+        if (!frame) return null;
+        const onScreen = i === frames.active;
+        return (
+          <iframe
+            key={frame.id}
+            ref={(el) => {
+              slotEls.current[i] = el;
+            }}
+            title={onScreen ? title : `${title} (updating)`}
+            aria-hidden={!onScreen}
+            tabIndex={onScreen ? undefined : -1}
+            srcDoc={frame.doc}
+            sandbox={SANDBOX}
+            // Underneath, not visibility:hidden: Chrome skips painting a frame that loads hidden.
+            className={cn('absolute inset-0 size-full border-0', onScreen ? 'z-10' : 'pointer-events-none z-0')}
+          />
+        );
+      })}
     </div>
   );
 }

@@ -105,6 +105,11 @@ const ERROR_HOOK = String.raw`
     console[level] = (...args) => { orig(...args); report('console', { level, text: args.map(fmt).join(' ') }); };
   }
   console.clear = () => report('console-clear');
+  // Dialogs are echoed to the console too, so they're visible where the browser suppresses them.
+  for (const name of ['alert', 'confirm', 'prompt']) {
+    const orig = window[name].bind(window);
+    window[name] = (...args) => { report('console', { level: 'info', text: name + ': ' + args.map(fmt).join(' ') }); return orig(...args); };
+  }
   // Common runaway errors get a hint on what usually causes them.
   const HINTS = [
     [/Maximum call stack size exceeded|too much recursion/i, 'Stack overflow: a function keeps calling itself. Check the recursion has a base case that is always reached.'],

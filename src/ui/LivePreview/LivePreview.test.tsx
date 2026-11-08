@@ -132,6 +132,7 @@ describe('LivePreview', () => {
       window.dispatchEvent(new MessageEvent('message', { source: next.contentWindow, data: { source: 'fe-grind-preview', type: 'rendered' } }));
     });
     expect(screen.queryByTitle('Swap (updating)')).not.toBeInTheDocument();
+    expect(screen.getByTitle('Swap')).toBe(next); // the same, already-loaded element: no reload on swap
     expect(screen.getByTitle('Swap').getAttribute('srcdoc')).toContain('<p>b</p>');
 
     // An identical build doesn't rerun; a frame that never reports is swapped in after a timeout.
