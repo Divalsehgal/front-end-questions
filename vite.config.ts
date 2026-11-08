@@ -77,7 +77,10 @@ export default defineConfig({
       output: {
         // The small shared building blocks (ui kit minus the code components, state, kind labels) as
         // one chunk instead of a dozen sub-kilobyte ones: fewer requests per page.
-        manualChunks: (id) => (/\/src\/(ui\/(?!CodeBlock|CodeEditor|LivePreview|Prose|code\.ts)|state\/|questions\/kinds)/.test(id) ? 'ui' : undefined),
+        // LivePreview/project.ts is shared by the UiView chunk and the lazy previewDocument chunk; left to
+        // Rollup it lands in UiView's chunk, which then loses its manifest key and breaks the prerender.
+        manualChunks: (id) =>
+          /\/src\/(ui\/(?!CodeBlock|CodeEditor|LivePreview|Prose|code\.ts)|ui\/LivePreview\/project\.ts|state\/|questions\/kinds)/.test(id) ? 'ui' : undefined,
       },
     },
   },
