@@ -1,7 +1,8 @@
 import { protectLoops } from './loopProtect';
+import { ENTRY, parseProject, resolveImport, type Files } from './project';
 
-// Renders a machine-coding answer in a sandboxed iframe. React answers are a single
-// TSX module whose default export is the component; vanilla answers are an HTML document.
+// Renders a machine-coding answer in a sandboxed iframe. React answers are one or more .ts/.tsx
+// files (see project.ts) whose App.tsx default export is the component; vanilla answers are an HTML document.
 const REACT_VERSION = '19.0.0';
 const IMPORT_MAP = {
   imports: {
@@ -143,28 +144,49 @@ const INDEXED_DB_SHIM = `
   Object.defineProperty(window, 'IDBKeyRange', { configurable: true, value: fake.IDBKeyRange });
 `;
 
+/** Points relative imports at the project's own modules (`@file/<path>` in the import map). */
+function linkFiles(code: string, from: string, files: Files) {
+  return code.replaceAll(/(\bfrom\s*|\bimport\s*(?:\(\s*)?)(['"])(\.{1,2}\/[^'"]*)\2/g, (_m, lead: string, q: string, spec: string) => {
+    const target = resolveImport(from, spec, files);
+    if (!target) throw new Error(`${from}: cannot find '${spec}' (only .ts and .tsx files in the file tree can be imported)`);
+    return `${lead}${q}@file/${target}${q}`;
+  });
+}
+
 export async function reactDocument(source: string) {
   const { transform } = await import('sucrase');
-  const compiled = transform(source, {
-    transforms: ['typescript', 'jsx'],
-    jsxRuntime: 'automatic',
-    production: true,
-  }).code;
-  const withImports = protectLoops(rewriteImports(compiled));
+  const files = parseProject(source);
+  const multi = Object.keys(files).length > 1;
+  const modules: Record<string, string> = {};
+  for (const [path, code] of Object.entries(files)) {
+    try {
+      // .ts files can't hold JSX, and `<T>value` there is a type assertion.
+      const compiled = transform(code, {
+        transforms: path.endsWith('.tsx') ? ['typescript', 'jsx'] : ['typescript'],
+        jsxRuntime: 'automatic',
+        production: true,
+      }).code;
+      modules[`@file/${path}`] = protectLoops(linkFiles(rewriteImports(compiled), path, files));
+    } catch (e) {
+      throw multi && e instanceof Error && !e.message.startsWith(path) ? new Error(`${path}: ${e.message}`) : e;
+    }
+  }
+  // Each file is a data: module in the import map, so files can import each other (cycles included).
+  const imports: Record<string, string> = { ...IMPORT_MAP.imports };
+  for (const [name, code] of Object.entries(modules)) imports[name] = `data:text/javascript;charset=utf-8,${encodeURIComponent(code)}`;
+  const usesIndexedDb = Object.values(modules).some((code) => code.includes('indexedDB'));
   return `<!doctype html><html data-react><head><meta charset="utf-8">
-<script type="importmap">${JSON.stringify(IMPORT_MAP)}</script>
+<script type="importmap">${JSON.stringify({ imports })}</script>
 <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.1.4"></script>
 <style type="text/tailwindcss">${TAILWIND_THEME}</style>
 <style>${BASE_CSS}</style></head>
 <body><div id="root"><p style="color:#888;font:14px system-ui">Loading preview… (first run downloads React and packages)</p></div><pre id="__error"></pre>
 <script>${ERROR_HOOK}</script>
 <script type="module">
-  const source = ${JSON.stringify(withImports)};
-  const url = URL.createObjectURL(new Blob([source], { type: 'text/javascript' }));
-  ${/indexedDB/.test(source) ? INDEXED_DB_SHIM : ''}
-  const [{ createRoot }, mod] = await Promise.all([import('react-dom/client'), import(url)]);
+  ${usesIndexedDb ? INDEXED_DB_SHIM : ''}
+  const [{ createRoot }, mod] = await Promise.all([import('react-dom/client'), import(${JSON.stringify(`@file/${ENTRY}`)})]);
   const { jsx } = await import('react/jsx-runtime');
-  if (typeof mod.default !== 'function') throw new Error('Export your component as the default export: export default function App() { ... }');
+  if (typeof mod.default !== 'function') throw new Error('Export your component from App.tsx as the default export: export default function App() { ... }');
   createRoot(document.getElementById('root')).render(jsx(mod.default, {}));
   // A beat after the commit, so the Tailwind runtime has styled the new DOM. Not requestAnimationFrame:
   // Chrome doesn't run it in the invisible frame a new run loads in.

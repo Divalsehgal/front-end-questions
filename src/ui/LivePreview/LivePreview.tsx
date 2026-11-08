@@ -1,9 +1,9 @@
-import { ChevronDown, ChevronUp, Loader2, RefreshCw, Trash2 } from 'lucide-react';
+import { Loader2, RefreshCw } from 'lucide-react';
 import { useEffect, useRef, useState, type RefObject } from 'react';
 import { IconButton } from '../IconButton';
 import { cn } from '../lib';
+import { ConsoleBar, type Log } from './ConsoleBar';
 
-type Log = { id: number; level: string; text: string };
 // shortcut: keeps only the latest logs so a runaway loop can't freeze the page; raise if users need more history.
 const MAX_LOGS = 500;
 // A preview whose heap grows this much past its first reading is almost certainly leaking
@@ -28,8 +28,6 @@ function readMessage(type: unknown, message: unknown, baseHeap: { current: numbe
   }
   return {};
 }
-
-const LEVEL_CLASS: Record<string, string> = { error: 'text-error', warn: 'text-warn' };
 
 type Frame = { id: number; doc: string };
 // Two fixed iframe slots; `active` is the one on screen, the other holds the next run while it loads.
@@ -193,51 +191,6 @@ function PreviewBar({ title, busy, onReload }: Readonly<{ title: string; busy: b
       <IconButton label="Reload preview" className="border-0 bg-transparent p-1" onClick={onReload}>
         <RefreshCw size={14} aria-hidden />
       </IconButton>
-    </div>
-  );
-}
-
-/** Collapsible log list under the preview, like a sandbox's console panel. */
-function ConsoleBar({ logs, label, onClear }: Readonly<{ logs: Log[]; label: string; onClear: () => void }>) {
-  const [consoleOpen, setConsoleOpen] = useState(false);
-  const errors = logs.filter((l) => l.level === 'error').length;
-  return (
-    <div className="border-t border-line font-mono text-xs">
-      <div className="flex items-center gap-2 px-3 py-1">
-        <button
-          type="button"
-          aria-expanded={consoleOpen}
-          onClick={() => setConsoleOpen((o) => !o)}
-          className="flex items-center gap-1 text-text-muted hover:text-text-main"
-        >
-          {consoleOpen ? <ChevronDown size={14} aria-hidden /> : <ChevronUp size={14} aria-hidden />}
-          Console ({logs.length})
-          {errors > 0 && (
-            <span className="text-error">
-              {' '}
-              · {errors} error{errors > 1 ? 's' : ''}
-            </span>
-          )}
-        </button>
-        <button
-          type="button"
-          onClick={onClear}
-          disabled={logs.length === 0}
-          className="ml-auto flex items-center gap-1 text-text-muted hover:text-text-main disabled:opacity-50"
-        >
-          <Trash2 size={14} aria-hidden /> Clear
-        </button>
-      </div>
-      {consoleOpen && (
-        <ol aria-label={label} className="max-h-40 overflow-auto border-t border-line">
-          {logs.length === 0 && <li className="px-3 py-1 text-text-muted">No logs yet.</li>}
-          {logs.map((l) => (
-            <li key={l.id} className={cn('border-b border-line/50 px-3 py-1 whitespace-pre-wrap', LEVEL_CLASS[l.level])}>
-              {l.text}
-            </li>
-          ))}
-        </ol>
-      )}
     </div>
   );
 }

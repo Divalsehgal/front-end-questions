@@ -39,7 +39,7 @@ describe('CodeEditor', () => {
 describe('configureMonaco', () => {
   beforeEach(() => resetMonacoConfig());
 
-  it('sets strict TS options and the React type shim once', () => {
+  it('sets strict TS options and loads React types once', async () => {
     const ts = fakeMonaco.languages.typescript.typescriptDefaults;
     ts.setCompilerOptions.mockClear();
     ts.addExtraLib.mockClear();
@@ -47,6 +47,9 @@ describe('configureMonaco', () => {
     configureMonaco(fakeMonaco as unknown as Monaco);
     expect(ts.setCompilerOptions).toHaveBeenCalledTimes(1);
     expect(ts.setCompilerOptions).toHaveBeenCalledWith(expect.objectContaining({ strict: true, noEmit: true }));
-    expect(ts.addExtraLib).toHaveBeenCalledWith(expect.stringContaining("declare module 'react'"), expect.stringContaining('@types/react'));
+    expect(ts.addExtraLib).toHaveBeenCalledWith("declare module '*';", expect.any(String));
+    await vi.waitFor(() =>
+      expect(ts.addExtraLib).toHaveBeenCalledWith(expect.stringContaining('ComponentProps'), 'file:///node_modules/@types/react/index.d.ts'),
+    );
   });
 });

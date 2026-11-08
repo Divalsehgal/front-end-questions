@@ -8,7 +8,8 @@ import { Workspace, type Pane } from './Workspace';
 import type { UiQuestion } from '../../content/types';
 
 const PREVIEW_NOTE = {
-  react: 'Preview: React 19 with Tailwind v4 (including tokens like bg-surface and text-text-muted); bare npm imports such as lucide-react load from esm.sh.',
+  react:
+    "Preview: React 19 with Tailwind v4 (including tokens like bg-surface and text-text-muted); bare npm imports such as lucide-react load from esm.sh. Add .ts / .tsx files in the file tree and import them relatively; App.tsx's default export is what renders.",
   vanilla: 'Preview: your HTML document as-is. localStorage and IndexedDB reset when the preview reloads.',
 };
 

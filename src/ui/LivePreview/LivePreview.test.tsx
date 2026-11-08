@@ -4,9 +4,9 @@ import { reactDocument, rewriteImports, vanillaDocument } from './previewDocumen
 import { LivePreview } from '.';
 
 vi.mock('sucrase', () => ({
-  transform: (code: string) => {
+  transform: (code: string, opts: { transforms: string[] }) => {
     if (code.includes('SYNTAX ERROR')) throw new Error('Unexpected token');
-    return { code: `/*compiled*/${code}` };
+    return { code: `/*compiled ${opts.transforms.join('+')}*/${code}` };
   },
 }));
 
@@ -46,15 +46,38 @@ describe('rewriteImports', () => {
   });
 });
 
+/** The project's modules from a React document's import map, decoded. */
+const modules = async (doc: string) => {
+  const { imports } = JSON.parse(/<script type="importmap">(.*?)<\/script>/.exec(doc)?.[1] ?? '{}') as { imports: Record<string, string> };
+  return Object.fromEntries(
+    Object.entries(imports)
+      .filter(([name]) => name.startsWith('@file/'))
+      .map(([name, url]) => [name, decodeURIComponent(url.slice(url.indexOf(',') + 1))]),
+  );
+};
+
 describe('preview documents', () => {
   it('builds a React document with an import map, Tailwind and the error hook', async () => {
     const doc = await reactDocument('export default function App() { return null }');
     expect(doc).toContain('<script type="importmap">');
     expect(doc).toContain('@tailwindcss/browser');
-    expect(doc).toContain('/*compiled*/export default');
+    expect((await modules(doc))['@file/App.tsx']).toContain('/*compiled typescript+jsx*/export default');
     expect(doc).not.toContain('fake-indexeddb');
     expect(await reactDocument('indexedDB.open("x")')).toContain('fake-indexeddb');
-    expect(await reactDocument('while (true) {}')).toContain('while (true) {if (__lp()) break;}');
+    expect((await modules(await reactDocument('while (true) {}')))['@file/App.tsx']).toContain('while (true) {if (__lp()) break;}');
+  });
+
+  it('bundles every project file and links relative imports between them', async () => {
+    const files = {
+      'App.tsx': "import { Button } from './components/Button';\nexport default function App() { return <Button /> }",
+      'components/Button.tsx': "import { label } from '../lib/text';\nexport const Button = () => <button>{label}</button>;",
+      'lib/text.ts': "export const id = <T>(x: T) => x;\nexport const label = id('Go');",
+    };
+    const mods = await modules(await reactDocument(JSON.stringify({ files })));
+    expect(mods['@file/App.tsx']).toContain("from '@file/components/Button.tsx'");
+    expect(mods['@file/components/Button.tsx']).toContain("from '@file/lib/text.ts'");
+    expect(mods['@file/lib/text.ts']).toMatch(/^\/\*compiled typescript\*\//); // .ts: `<T>` is a type parameter, not JSX
+    await expect(reactDocument(JSON.stringify({ files: { 'App.tsx': "import x from './nope'" } }))).rejects.toThrow("App.tsx: cannot find './nope'");
   });
 
   it('injects the error hook into the head of a vanilla document, or before it if there is none', () => {
@@ -111,6 +134,12 @@ describe('LivePreview', () => {
     expect(list).toHaveTextContent('hello');
     expect(list).toHaveTextContent('boom');
     expect(list).not.toHaveTextContent('spoofed');
+    const handle = screen.getByRole('separator', { name: 'Resize console' });
+    fireEvent.keyDown(handle, { key: 'ArrowUp' });
+    expect(list).toHaveStyle({ height: '176px' });
+    fireEvent.keyDown(handle, { key: 'ArrowDown' });
+    fireEvent.keyDown(handle, { key: 'ArrowDown' });
+    expect(list).toHaveStyle({ height: '144px' });
     fireEvent.click(screen.getByRole('button', { name: 'Clear' }));
     expect(list).toHaveTextContent('No logs yet.');
     post(frame.contentWindow, { source: 'fe-grind-preview', type: 'console', message: { level: 'log', text: 'again' } });

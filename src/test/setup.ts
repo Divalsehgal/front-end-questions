@@ -27,8 +27,27 @@ type EditorProps = {
   options?: { readOnly?: boolean; ariaLabel?: string };
 };
 
-/** Minimal fake of the monaco namespace: enough for configureMonaco and Cmd/Ctrl+Enter bindings. */
+type FakeModel = { uri: { toString: () => string }; getValue: () => string; setValue: (v: string) => void; dispose: () => void };
+const fakeModels = new Map<string, FakeModel>();
+
+/** Minimal fake of the monaco namespace: enough for configureMonaco, Cmd/Ctrl+Enter bindings and project models. */
 export const fakeMonaco = {
+  Uri: { parse: (s: string) => ({ toString: () => s }) },
+  editor: {
+    getModel: (uri: { toString: () => string }) => fakeModels.get(uri.toString()) ?? null,
+    getModels: () => [...fakeModels.values()],
+    createModel: (value: string, _lang: string, uri: { toString: () => string }) => {
+      let text = value;
+      const model: FakeModel = {
+        uri,
+        getValue: () => text,
+        setValue: (v) => (text = v),
+        dispose: () => fakeModels.delete(uri.toString()),
+      };
+      fakeModels.set(uri.toString(), model);
+      return model;
+    },
+  },
   KeyMod: { CtrlCmd: 2048 },
   KeyCode: { Enter: 3 },
   languages: {

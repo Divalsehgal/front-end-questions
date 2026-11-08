@@ -2,6 +2,7 @@ import { Code2, Eye, KeyRound, MonitorPlay, PanelRightClose, PanelRightOpen, Pla
 import { useId, useState, useSyncExternalStore, type ReactNode } from 'react';
 import { Button, Card, cn, IconButton, TabPanel, Tabs, type TabItem } from '../../ui';
 import { CodeEditor, LivePreview } from '../../ui/code';
+import { ProjectEditor } from './ProjectEditor';
 import type { UiQuestion } from '../../content/types';
 
 export type Pane = 'code' | 'preview' | 'reference';
@@ -104,14 +105,7 @@ export function Workspace({
         {/* Panes stay mounted (just hidden) so switching tabs doesn't rebuild the editor or preview. */}
         <div hidden={view === 'reference'} className={cn('h-[75vh] min-h-96', sideBySide && 'grid grid-cols-2')}>
           <div hidden={!split && view !== 'code'} className="h-full min-h-0">
-            <CodeEditor
-              path={`file:///ui-${subject}-${q.id}.${ext}`}
-              label={`Your code for ${q.title}`}
-              value={code}
-              onChange={onCode}
-              onRun={runNow}
-              className="h-full"
-            />
+            <AnswerEditor q={q} subject={subject} code={code} onCode={onCode} onRun={runNow} />
           </div>
           <div hidden={split ? !previewOpen : view !== 'preview'} className={cn('h-full min-h-0', sideBySide && 'border-l border-line')}>
             <LivePreview framework={q.framework} code={previewCode} title={`${q.title} preview`} />
@@ -163,4 +157,17 @@ function ReferencePane({ q, solution, path, hidden }: Readonly<{ q: UiQuestion; 
       </div>
     </div>
   );
+}
+
+/** React answers get a multi-file project; vanilla ones are a single HTML document. */
+function AnswerEditor({
+  q,
+  subject,
+  code,
+  onCode,
+  onRun,
+}: Readonly<{ q: UiQuestion; subject: string; code: string; onCode: (v: string) => void; onRun: () => void }>) {
+  const label = `Your code for ${q.title}`;
+  if (q.framework === 'react') return <ProjectEditor code={code} onCode={onCode} root={`file:///ui-${subject}-${q.id}`} label={label} onRun={onRun} />;
+  return <CodeEditor path={`file:///ui-${subject}-${q.id}.html`} label={label} value={code} onChange={onCode} onRun={onRun} className="h-full" />;
 }
