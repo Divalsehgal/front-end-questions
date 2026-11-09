@@ -32,23 +32,27 @@ function useSeen(ref: RefObject<HTMLElement | null>) {
 }
 
 /**
- * The architecture as stacked tiers, upgraded to the interactive canvas once it is in view on a wide
- * screen. The canvas chunk (React Flow) is only downloaded then; the prerender and phones never load it.
+ * Phones (and the prerender) get the stacked tiers. Wide screens get the interactive canvas once it is in
+ * view, with an empty canvas-sized box until then, so the tiers never flash before the diagram. The canvas
+ * chunk (React Flow) is only downloaded on wide screens.
  */
 export function ArchitectureView({ architecture }: Readonly<{ architecture: Architecture }>) {
   const ref = useRef<HTMLDivElement>(null);
   const wide = useSyncExternalStore(subscribeWide, isWide, () => false);
   const seen = useSeen(ref);
-  const tiers = <TierList architecture={architecture} />;
+  // Same size and frame as the canvas (ArchitectureDiagram), so nothing shifts when it arrives.
+  const placeholder = (
+    <div className="h-[560px] rounded-lg border border-line bg-surface" role="status" aria-label="Loading diagram" data-testid="architecture-placeholder" />
+  );
 
   return (
     <div ref={ref}>
-      {wide && seen ? (
-        <Suspense fallback={tiers}>
+      {!wide && <TierList architecture={architecture} />}
+      {wide && !seen && placeholder}
+      {wide && seen && (
+        <Suspense fallback={placeholder}>
           <ArchitectureDiagram architecture={architecture} />
         </Suspense>
-      ) : (
-        tiers
       )}
     </div>
   );

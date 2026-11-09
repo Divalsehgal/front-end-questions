@@ -57,7 +57,9 @@ describe('ArchitectureView', () => {
     const { unmount } = render(<ArchitectureView architecture={fixture} />);
     expect(observe).toHaveBeenCalled();
     act(() => intersect?.([{ isIntersecting: false }]));
-    expect(screen.getByTestId('architecture-tiers')).toBeInTheDocument();
+    // A canvas-sized placeholder, never the tiers: they would flash before the diagram.
+    expect(screen.getByTestId('architecture-placeholder')).toBeInTheDocument();
+    expect(screen.queryByTestId('architecture-tiers')).not.toBeInTheDocument();
     act(() => intersect?.([{ isIntersecting: true }]));
     expect(await screen.findByTestId('architecture-canvas')).toBeInTheDocument();
     expect(screen.queryByTestId('architecture-tiers')).not.toBeInTheDocument();
