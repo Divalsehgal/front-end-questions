@@ -42,10 +42,30 @@ describe('sitemaps', () => {
     for (const s of SUBJECTS) expect(parse(files[sitemapFile(s.slug)]).documentElement.tagName).toBe('urlset');
   });
 
-  it('uses the subject lastmod when known and the build date otherwise', () => {
-    expect(files[sitemapFile('react')]).toContain('<lastmod>2026-01-02</lastmod>');
-    expect(files[sitemapFile('javascript')]).toContain('<lastmod>2026-10-27</lastmod>');
-    expect(files[sitemapFile('pages')]).toContain(`<loc>${SITE_URL}</loc><lastmod>2026-10-27</lastmod>`);
+  const lastmods = (xml: string) =>
+    new Map([...parse(xml).getElementsByTagName('loc')].map((l) => [l.textContent!, l.nextElementSibling!.textContent!] as const));
+
+  it('dates each question by its own git modified date, then its subject, then the build date', () => {
+    const bySubject = new Map(SUBJECTS.map((s) => [s.slug, lastmods(files[sitemapFile(s.slug)])]));
+    for (const e of ALL) {
+      const expected = e.q.modified ?? lastmod(e.subject.slug) ?? '2026-10-27';
+      expect(bySubject.get(e.subject.slug)!.get(absoluteUrl(hrefOf(e.key)))).toBe(expected);
+    }
+    expect(lastmods(files[sitemapFile('react')]).get(absoluteUrl('/s/react/'))).toBe('2026-01-02');
+  });
+
+  it('dates the home page and each index entry by the newest URL they cover, never later', () => {
+    const all = Object.entries(files)
+      .filter(([path]) => path !== SITEMAP_INDEX)
+      .flatMap(([, xml]) => [...lastmods(xml).values()]);
+    const newest = all.reduce((a, b) => (b > a ? b : a));
+    expect(lastmods(files[sitemapFile('pages')]).get(SITE_URL)).toBe(newest);
+    const index = lastmods(files[SITEMAP_INDEX]);
+    for (const [path, xml] of Object.entries(files)) {
+      if (path === SITEMAP_INDEX) continue;
+      expect(index.get(SITE_URL + path)).toBe([...lastmods(xml).values()].reduce((a, b) => (b > a ? b : a)));
+    }
+    for (const d of all) expect(d).toMatch(/^\d{4}-\d{2}-\d{2}$/);
   });
 });
 

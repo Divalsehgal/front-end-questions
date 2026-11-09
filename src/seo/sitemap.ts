@@ -29,27 +29,33 @@ const urlset = (entries: { loc: string; lastmod: string }[]) =>
 
 /**
  * `lastmod(subject)` returns a W3C date (YYYY-MM-DD) for a subject's content, e.g. its last git
- * commit; `fallback` (the build date) is used for the home page and when it returns nothing.
+ * commit; `fallback` (the build date) is used only when nothing else is known. Each question URL
+ * gets its own git `modified` date, so one edit doesn't mark a whole subject as changed (Google
+ * ignores lastmod on sites where it proves unreliable). The home page and each sitemap in the
+ * index take the newest date they cover.
  */
 export function buildSitemaps(lastmod: (subject: string) => string | undefined, fallback: string): Sitemaps {
-  const groups = [
-    { name: 'pages', lastmod: fallback, paths: ['/'] },
-    ...SUBJECTS.map((s) => ({
-      name: s.slug,
-      lastmod: lastmod(s.slug) ?? fallback,
-      paths: [subjectHref(s.slug), ...ALL.filter((e) => e.subject.slug === s.slug).map((e) => hrefOf(e.key))],
-    })),
-  ];
+  const newest = (dates: string[]) => dates.reduce((a, b) => (b > a ? b : a), '');
+  const subjects = SUBJECTS.map((s) => {
+    const subjectDate = lastmod(s.slug);
+    const questions = ALL.filter((e) => e.subject.slug === s.slug).map((e) => ({ path: hrefOf(e.key), lastmod: e.q.modified ?? subjectDate ?? fallback }));
+    const own = subjectDate ?? (newest(questions.map((q) => q.lastmod)) || fallback);
+    return { name: s.slug, entries: [{ path: subjectHref(s.slug), lastmod: own }, ...questions] };
+  });
+  const home = newest(subjects.flatMap((g) => g.entries.map((e) => e.lastmod))) || fallback;
+  const groups = [{ name: 'pages', entries: [{ path: '/', lastmod: home }] }, ...subjects];
   const files: Record<string, string> = {};
-  for (const g of groups) files[sitemapFile(g.name)] = urlset(g.paths.map((p) => ({ loc: absoluteUrl(p), lastmod: g.lastmod })));
+  for (const g of groups) files[sitemapFile(g.name)] = urlset(g.entries.map((e) => ({ loc: absoluteUrl(e.path), lastmod: e.lastmod })));
   files[SITEMAP_INDEX] = [
     XML_HEAD,
     `<sitemapindex ${NS}>`,
-    ...groups.map((g) => `  <sitemap><loc>${escapeHtml(SITE_URL + sitemapFile(g.name))}</loc><lastmod>${g.lastmod}</lastmod></sitemap>`),
+    ...groups.map(
+      (g) => `  <sitemap><loc>${escapeHtml(SITE_URL + sitemapFile(g.name))}</loc><lastmod>${newest(g.entries.map((e) => e.lastmod))}</lastmod></sitemap>`,
+    ),
     '</sitemapindex>',
     '',
   ].join('\n');
-  return { files, urls: groups.flatMap((g) => g.paths.map(absoluteUrl)) };
+  return { files, urls: groups.flatMap((g) => g.entries.map((e) => absoluteUrl(e.path))) };
 }
 
 /** robots.txt: everything crawlable except the progress-only routes, plus the sitemap index. */
