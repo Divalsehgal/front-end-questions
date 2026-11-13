@@ -19,8 +19,14 @@ import tseslint from 'typescript-eslint';
  */
 const FIXTURES = ['src/content/subjects/**/files/**'];
 
+/**
+ * DSA practice: the exercise files are the learner's own workspace (run with node, edited in VS Code),
+ * and scripts/dsa-traces.mjs holds the reference solutions shown verbatim in the dry-run view.
+ */
+const DSA_PRACTICE = ['dsa-exercises/**', 'scripts/dsa-traces.mjs'];
+
 export default tseslint.config(
-  { ignores: ['.next/**', 'next-env.d.ts', 'coverage/**', 'node_modules/**', 'index.js', ...FIXTURES] },
+  { ignores: ['.next/**', 'next-env.d.ts', 'coverage/**', 'node_modules/**', 'index.js', ...FIXTURES, ...DSA_PRACTICE] },
 
   js.configs.recommended,
   ...tseslint.configs.strict,

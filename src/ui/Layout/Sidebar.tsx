@@ -1,5 +1,5 @@
 'use client';
-import { LayoutDashboard, Moon, Search, PanelLeftClose, RotateCcw, Settings, Sun, Timer, Zap } from 'lucide-react';
+import { LayoutDashboard, Moon, Network, Search, PanelLeftClose, RotateCcw, Settings, Sun, Timer, Zap } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { ALL, subjectHref, SUBJECTS } from '../../content/registry';
@@ -130,6 +130,9 @@ export function Sidebar({ onSearch }: Readonly<{ onSearch: () => void }>) {
         </NavLink>
         <NavLink to="/mock" className={navClass}>
           <Timer size={16} aria-hidden /> <span className="whitespace-nowrap">Mock round</span>
+        </NavLink>
+        <NavLink to="/dsa/" className={navClass}>
+          <Network size={16} aria-hidden /> <span className="whitespace-nowrap">DSA patterns</span>
         </NavLink>
 
         <p className="mt-5 mb-1 hidden px-3 font-mono text-[11px] font-medium tracking-widest text-text-muted uppercase md:block">Subjects</p>

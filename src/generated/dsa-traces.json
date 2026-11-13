@@ -1,0 +1,2851 @@
+[
+ {
+  "id": "01-two-sum",
+  "n": 1,
+  "title": "Two Sum",
+  "input": "nums = [2,7,11,15], target = 9",
+  "output": "[0, 1]",
+  "code": "function twoSum(nums, target) {\n  const seen = new Map();\n  for (let i = 0; i < nums.length; i++) {\n    const need = target - nums[i];\n    if (seen.has(need)) return [seen.get(need), i];\n    seen.set(nums[i], i);\n  }\n}\nreturn twoSum([2, 7, 11, 15], 9);",
+  "cols": [
+   "i",
+   "nums[i]",
+   "need",
+   "seen"
+  ],
+  "steps": [
+   {
+    "note": "7 not seen, store 2",
+    "vals": {
+     "i": "0",
+     "nums[i]": "2",
+     "need": "7",
+     "seen": "{}"
+    }
+   },
+   {
+    "note": "2 is in seen at 0, return",
+    "vals": {
+     "i": "1",
+     "nums[i]": "7",
+     "need": "2",
+     "seen": "{2: 0}"
+    }
+   }
+  ]
+ },
+ {
+  "id": "02-group-anagrams",
+  "n": 2,
+  "title": "Group Anagrams",
+  "input": "strs = [\"eat\",\"tea\",\"tan\",\"ate\",\"nat\",\"bat\"]",
+  "output": "[['eat', 'tea', 'ate'], ['tan', 'nat'], ['bat']]",
+  "code": "function groupAnagrams(strs) {\n  const groups = new Map();\n  for (const word of strs) {\n    const key = [...word].sort().join('');\n    if (!groups.has(key)) groups.set(key, []);\n    groups.get(key).push(word);\n  }\n  return [...groups.values()];\n}\nreturn groupAnagrams(['eat', 'tea', 'tan', 'ate', 'nat', 'bat']);",
+  "cols": [
+   "word",
+   "key",
+   "groups"
+  ],
+  "steps": [
+   {
+    "note": "'eat' sorts to 'aet'",
+    "vals": {
+     "word": "'eat'",
+     "key": "'aet'",
+     "groups": "{'aet': ['eat']}"
+    }
+   },
+   {
+    "note": "'tea' sorts to 'aet'",
+    "vals": {
+     "word": "'tea'",
+     "key": "'aet'",
+     "groups": "{'aet': ['eat', 'tea']}"
+    }
+   },
+   {
+    "note": "'tan' sorts to 'ant'",
+    "vals": {
+     "word": "'tan'",
+     "key": "'ant'",
+     "groups": "{'aet': ['eat', 'tea'], 'ant': ['tan']}"
+    }
+   },
+   {
+    "note": "'ate' sorts to 'aet'",
+    "vals": {
+     "word": "'ate'",
+     "key": "'aet'",
+     "groups": "{'aet': ['eat', 'tea', 'ate'], 'ant': ['tan']}"
+    }
+   },
+   {
+    "note": "'nat' sorts to 'ant'",
+    "vals": {
+     "word": "'nat'",
+     "key": "'ant'",
+     "groups": "{'aet': ['eat', 'tea', 'ate'], 'ant': ['tan', 'nat']}"
+    }
+   },
+   {
+    "note": "'bat' sorts to 'abt'",
+    "vals": {
+     "word": "'bat'",
+     "key": "'abt'",
+     "groups": "{'aet': ['eat', 'tea', 'ate'], 'ant': ['tan', 'nat'], 'abt': ['bat']}"
+    }
+   }
+  ]
+ },
+ {
+  "id": "03-longest-consecutive-sequence",
+  "n": 3,
+  "title": "Longest Consecutive Sequence",
+  "input": "nums = [100,4,200,1,3,2]",
+  "output": "4",
+  "code": "function longestConsecutive(nums) {\n  const set = new Set(nums);\n  let best = 0;\n  for (const n of set) {\n    if (set.has(n - 1)) {\n      continue;\n    }\n    let len = 1;\n    while (set.has(n + len)) len++;\n    best = Math.max(best, len);\n  }\n  return best;\n}\nreturn longestConsecutive([100, 4, 200, 1, 3, 2]);",
+  "cols": [
+   "n",
+   "len",
+   "best"
+  ],
+  "steps": [
+   {
+    "note": "start at 100, run length 1",
+    "vals": {
+     "n": "100",
+     "len": "1",
+     "best": "1"
+    }
+   },
+   {
+    "note": "3 exists, so 4 is not a start",
+    "vals": {
+     "n": "4",
+     "best": "1"
+    }
+   },
+   {
+    "note": "start at 200, run length 1",
+    "vals": {
+     "n": "200",
+     "len": "1",
+     "best": "1"
+    }
+   },
+   {
+    "note": "start at 1, run length 4",
+    "vals": {
+     "n": "1",
+     "len": "4",
+     "best": "4"
+    }
+   },
+   {
+    "note": "2 exists, so 3 is not a start",
+    "vals": {
+     "n": "3",
+     "best": "4"
+    }
+   },
+   {
+    "note": "1 exists, so 2 is not a start",
+    "vals": {
+     "n": "2",
+     "best": "4"
+    }
+   }
+  ]
+ },
+ {
+  "id": "04-3sum",
+  "n": 4,
+  "title": "3Sum",
+  "input": "nums = [-1,0,1,2,-1,-4]",
+  "output": "[[-1, -1, 2], [-1, 0, 1]]",
+  "code": "function threeSum(nums) {\n  nums.sort((a, b) => a - b);\n  const res = [];\n  for (let i = 0; i < nums.length - 2; i++) {\n    if (i > 0 && nums[i] === nums[i - 1]) {\n      continue;\n    }\n    let l = i + 1;\n    let r = nums.length - 1;\n    while (l < r) {\n      const sum = nums[i] + nums[l] + nums[r];\n      if (sum < 0) l++;\n      else if (sum > 0) r--;\n      else {\n        res.push([nums[i], nums[l], nums[r]]);\n        l++;\n        r--;\n        while (l < r && nums[l] === nums[l - 1]) l++;\n      }\n    }\n  }\n  return res;\n}\nreturn threeSum([-1, 0, 1, 2, -1, -4]);",
+  "cols": [
+   "nums",
+   "i",
+   "l",
+   "r",
+   "triple",
+   "sum",
+   "res"
+  ],
+  "steps": [
+   {
+    "note": "sorted",
+    "vals": {
+     "nums": "[-4, -1, -1, 0, 1, 2]"
+    }
+   },
+   {
+    "note": "too small, move l right",
+    "vals": {
+     "i": "0",
+     "l": "1",
+     "r": "5",
+     "triple": "[-4, -1, 2]",
+     "sum": "-3",
+     "res": "[]"
+    }
+   },
+   {
+    "note": "too small, move l right",
+    "vals": {
+     "i": "0",
+     "l": "2",
+     "r": "5",
+     "triple": "[-4, -1, 2]",
+     "sum": "-3",
+     "res": "[]"
+    }
+   },
+   {
+    "note": "too small, move l right",
+    "vals": {
+     "i": "0",
+     "l": "3",
+     "r": "5",
+     "triple": "[-4, 0, 2]",
+     "sum": "-2",
+     "res": "[]"
+    }
+   },
+   {
+    "note": "too small, move l right",
+    "vals": {
+     "i": "0",
+     "l": "4",
+     "r": "5",
+     "triple": "[-4, 1, 2]",
+     "sum": "-1",
+     "res": "[]"
+    }
+   },
+   {
+    "note": "sum is 0, record it",
+    "vals": {
+     "i": "1",
+     "l": "2",
+     "r": "5",
+     "triple": "[-1, -1, 2]",
+     "sum": "0",
+     "res": "[]"
+    }
+   },
+   {
+    "note": "sum is 0, record it",
+    "vals": {
+     "i": "1",
+     "l": "3",
+     "r": "4",
+     "triple": "[-1, 0, 1]",
+     "sum": "0",
+     "res": "[[-1, -1, 2]]"
+    }
+   },
+   {
+    "note": "skip duplicate -1",
+    "vals": {
+     "i": "2"
+    }
+   },
+   {
+    "note": "too big, move r left",
+    "vals": {
+     "i": "3",
+     "l": "4",
+     "r": "5",
+     "triple": "[0, 1, 2]",
+     "sum": "3",
+     "res": "[[-1, -1, 2], [-1, 0, 1]]"
+    }
+   }
+  ]
+ },
+ {
+  "id": "05-container-with-most-water",
+  "n": 5,
+  "title": "Container With Most Water",
+  "input": "height = [1,8,6,2,5,4,8,3,7]",
+  "output": "49",
+  "code": "function maxArea(height) {\n  let l = 0;\n  let r = height.length - 1;\n  let best = 0;\n  while (l < r) {\n    const area = Math.min(height[l], height[r]) * (r - l);\n    best = Math.max(best, area);\n    if (height[l] < height[r]) l++;\n    else r--;\n  }\n  return best;\n}\nreturn maxArea([1, 8, 6, 2, 5, 4, 8, 3, 7]);",
+  "cols": [
+   "l",
+   "r",
+   "h[l]",
+   "h[r]",
+   "area",
+   "best"
+  ],
+  "steps": [
+   {
+    "note": "left is shorter, l++",
+    "vals": {
+     "l": "0",
+     "r": "8",
+     "h[l]": "1",
+     "h[r]": "7",
+     "area": "8",
+     "best": "8"
+    }
+   },
+   {
+    "note": "right is shorter or equal, r--",
+    "vals": {
+     "l": "1",
+     "r": "8",
+     "h[l]": "8",
+     "h[r]": "7",
+     "area": "49",
+     "best": "49"
+    }
+   },
+   {
+    "note": "right is shorter or equal, r--",
+    "vals": {
+     "l": "1",
+     "r": "7",
+     "h[l]": "8",
+     "h[r]": "3",
+     "area": "18",
+     "best": "49"
+    }
+   },
+   {
+    "note": "right is shorter or equal, r--",
+    "vals": {
+     "l": "1",
+     "r": "6",
+     "h[l]": "8",
+     "h[r]": "8",
+     "area": "40",
+     "best": "49"
+    }
+   },
+   {
+    "note": "right is shorter or equal, r--",
+    "vals": {
+     "l": "1",
+     "r": "5",
+     "h[l]": "8",
+     "h[r]": "4",
+     "area": "16",
+     "best": "49"
+    }
+   },
+   {
+    "note": "right is shorter or equal, r--",
+    "vals": {
+     "l": "1",
+     "r": "4",
+     "h[l]": "8",
+     "h[r]": "5",
+     "area": "15",
+     "best": "49"
+    }
+   },
+   {
+    "note": "right is shorter or equal, r--",
+    "vals": {
+     "l": "1",
+     "r": "3",
+     "h[l]": "8",
+     "h[r]": "2",
+     "area": "4",
+     "best": "49"
+    }
+   },
+   {
+    "note": "right is shorter or equal, r--",
+    "vals": {
+     "l": "1",
+     "r": "2",
+     "h[l]": "8",
+     "h[r]": "6",
+     "area": "6",
+     "best": "49"
+    }
+   }
+  ]
+ },
+ {
+  "id": "06-longest-substring-without-repeating-characters",
+  "n": 6,
+  "title": "Longest Substring Without Repeating Characters",
+  "input": "s = \"abcabcbb\"",
+  "output": "3",
+  "code": "function lengthOfLongestSubstring(s) {\n  const last = new Map();\n  let l = 0;\n  let best = 0;\n  for (let r = 0; r < s.length; r++) {\n    const ch = s[r];\n    if (last.has(ch) && last.get(ch) >= l) l = last.get(ch) + 1;\n    last.set(ch, r);\n    best = Math.max(best, r - l + 1);\n  }\n  return best;\n}\nreturn lengthOfLongestSubstring('abcabcbb');",
+  "cols": [
+   "r",
+   "ch",
+   "l",
+   "window",
+   "last",
+   "best"
+  ],
+  "steps": [
+   {
+    "note": "add 'a'",
+    "vals": {
+     "r": "0",
+     "ch": "'a'",
+     "l": "0",
+     "window": "'a'",
+     "last": "{'a': 0}",
+     "best": "1"
+    }
+   },
+   {
+    "note": "add 'b'",
+    "vals": {
+     "r": "1",
+     "ch": "'b'",
+     "l": "0",
+     "window": "'ab'",
+     "last": "{'a': 0, 'b': 1}",
+     "best": "2"
+    }
+   },
+   {
+    "note": "add 'c'",
+    "vals": {
+     "r": "2",
+     "ch": "'c'",
+     "l": "0",
+     "window": "'abc'",
+     "last": "{'a': 0, 'b': 1, 'c': 2}",
+     "best": "3"
+    }
+   },
+   {
+    "note": "add 'a'",
+    "vals": {
+     "r": "3",
+     "ch": "'a'",
+     "l": "1",
+     "window": "'bca'",
+     "last": "{'a': 3, 'b': 1, 'c': 2}",
+     "best": "3"
+    }
+   },
+   {
+    "note": "add 'b'",
+    "vals": {
+     "r": "4",
+     "ch": "'b'",
+     "l": "2",
+     "window": "'cab'",
+     "last": "{'a': 3, 'b': 4, 'c': 2}",
+     "best": "3"
+    }
+   },
+   {
+    "note": "add 'c'",
+    "vals": {
+     "r": "5",
+     "ch": "'c'",
+     "l": "3",
+     "window": "'abc'",
+     "last": "{'a': 3, 'b': 4, 'c': 5}",
+     "best": "3"
+    }
+   },
+   {
+    "note": "add 'b'",
+    "vals": {
+     "r": "6",
+     "ch": "'b'",
+     "l": "5",
+     "window": "'cb'",
+     "last": "{'a': 3, 'b': 6, 'c': 5}",
+     "best": "3"
+    }
+   },
+   {
+    "note": "add 'b'",
+    "vals": {
+     "r": "7",
+     "ch": "'b'",
+     "l": "7",
+     "window": "'b'",
+     "last": "{'a': 3, 'b': 7, 'c': 5}",
+     "best": "3"
+    }
+   }
+  ]
+ },
+ {
+  "id": "07-permutation-in-string",
+  "n": 7,
+  "title": "Permutation in String",
+  "input": "s1 = \"ab\", s2 = \"eidbaooo\"",
+  "output": "true",
+  "code": "function checkInclusion(s1, s2) {\n  const need = {};\n  for (const c of s1) need[c] = (need[c] || 0) + 1;\n  const have = {};\n  let l = 0;\n  for (let r = 0; r < s2.length; r++) {\n    have[s2[r]] = (have[s2[r]] || 0) + 1;\n    if (r - l + 1 > s1.length) {\n      if (--have[s2[l]] === 0) delete have[s2[l]];\n      l++;\n    }\n    const match = Object.keys(need).every((c) => have[c] === need[c]) && Object.keys(have).length === Object.keys(need).length;\n    if (match) return true;\n  }\n  return false;\n}\nreturn checkInclusion('ab', 'eidbaooo');",
+  "cols": [
+   "r",
+   "window",
+   "have",
+   "need",
+   "match"
+  ],
+  "steps": [
+   {
+    "note": "no match, slide",
+    "vals": {
+     "r": "0",
+     "window": "'e'",
+     "have": "{e: 1}",
+     "need": "{a: 1, b: 1}",
+     "match": "false"
+    }
+   },
+   {
+    "note": "no match, slide",
+    "vals": {
+     "r": "1",
+     "window": "'ei'",
+     "have": "{e: 1, i: 1}",
+     "need": "{a: 1, b: 1}",
+     "match": "false"
+    }
+   },
+   {
+    "note": "no match, slide",
+    "vals": {
+     "r": "2",
+     "window": "'id'",
+     "have": "{i: 1, d: 1}",
+     "need": "{a: 1, b: 1}",
+     "match": "false"
+    }
+   },
+   {
+    "note": "no match, slide",
+    "vals": {
+     "r": "3",
+     "window": "'db'",
+     "have": "{d: 1, b: 1}",
+     "need": "{a: 1, b: 1}",
+     "match": "false"
+    }
+   },
+   {
+    "note": "counts match, return true",
+    "vals": {
+     "r": "4",
+     "window": "'ba'",
+     "have": "{b: 1, a: 1}",
+     "need": "{a: 1, b: 1}",
+     "match": "true"
+    }
+   }
+  ]
+ },
+ {
+  "id": "08-subarray-sum-equals-k",
+  "n": 8,
+  "title": "Subarray Sum Equals K",
+  "input": "nums = [1,1,1], k = 2",
+  "output": "2",
+  "code": "function subarraySum(nums, k) {\n  const seen = new Map([[0, 1]]);\n  let prefix = 0;\n  let count = 0;\n  for (const n of nums) {\n    prefix += n;\n    count += seen.get(prefix - k) || 0;\n    seen.set(prefix, (seen.get(prefix) || 0) + 1);\n  }\n  return count;\n}\nreturn subarraySum([1, 1, 1], 2);",
+  "cols": [
+   "n",
+   "prefix",
+   "prefix - k",
+   "count",
+   "seen"
+  ],
+  "steps": [
+   {
+    "note": "prefix 1, look up -1",
+    "vals": {
+     "n": "1",
+     "prefix": "1",
+     "prefix - k": "-1",
+     "count": "0",
+     "seen": "{0: 1, 1: 1}"
+    }
+   },
+   {
+    "note": "prefix 2, look up 0",
+    "vals": {
+     "n": "1",
+     "prefix": "2",
+     "prefix - k": "0",
+     "count": "1",
+     "seen": "{0: 1, 1: 1, 2: 1}"
+    }
+   },
+   {
+    "note": "prefix 3, look up 1",
+    "vals": {
+     "n": "1",
+     "prefix": "3",
+     "prefix - k": "1",
+     "count": "2",
+     "seen": "{0: 1, 1: 1, 2: 1, 3: 1}"
+    }
+   }
+  ]
+ },
+ {
+  "id": "09-product-of-array-except-self",
+  "n": 9,
+  "title": "Product of Array Except Self",
+  "input": "nums = [1,2,3,4]",
+  "output": "[24, 12, 8, 6]",
+  "code": "function productExceptSelf(nums) {\n  const out = new Array(nums.length).fill(1);\n  let prefix = 1;\n  for (let i = 0; i < nums.length; i++) {\n    out[i] = prefix;\n    prefix *= nums[i];\n  }\n  let suffix = 1;\n  for (let i = nums.length - 1; i >= 0; i--) {\n    out[i] *= suffix;\n    suffix *= nums[i];\n  }\n  return out;\n}\nreturn productExceptSelf([1, 2, 3, 4]);",
+  "cols": [
+   "i",
+   "prefix",
+   "out",
+   "suffix"
+  ],
+  "steps": [
+   {
+    "note": "left pass: out[i] = product of everything left",
+    "vals": {
+     "i": "0",
+     "prefix": "1",
+     "out": "[1, 1, 1, 1]"
+    }
+   },
+   {
+    "note": "left pass: out[i] = product of everything left",
+    "vals": {
+     "i": "1",
+     "prefix": "2",
+     "out": "[1, 1, 1, 1]"
+    }
+   },
+   {
+    "note": "left pass: out[i] = product of everything left",
+    "vals": {
+     "i": "2",
+     "prefix": "6",
+     "out": "[1, 1, 2, 1]"
+    }
+   },
+   {
+    "note": "left pass: out[i] = product of everything left",
+    "vals": {
+     "i": "3",
+     "prefix": "24",
+     "out": "[1, 1, 2, 6]"
+    }
+   },
+   {
+    "note": "right pass: multiply by product of everything right",
+    "vals": {
+     "i": "3",
+     "suffix": "4",
+     "out": "[1, 1, 2, 6]"
+    }
+   },
+   {
+    "note": "right pass: multiply by product of everything right",
+    "vals": {
+     "i": "2",
+     "suffix": "12",
+     "out": "[1, 1, 8, 6]"
+    }
+   },
+   {
+    "note": "right pass: multiply by product of everything right",
+    "vals": {
+     "i": "1",
+     "suffix": "24",
+     "out": "[1, 12, 8, 6]"
+    }
+   },
+   {
+    "note": "right pass: multiply by product of everything right",
+    "vals": {
+     "i": "0",
+     "suffix": "24",
+     "out": "[24, 12, 8, 6]"
+    }
+   }
+  ]
+ },
+ {
+  "id": "10-valid-parentheses",
+  "n": 10,
+  "title": "Valid Parentheses",
+  "input": "s = \"{[()]}\"",
+  "output": "true",
+  "code": "function isValid(s) {\n  const pairs = { ')': '(', ']': '[', '}': '{' };\n  const stack = [];\n  for (const ch of s) {\n    if (!pairs[ch]) {\n      stack.push(ch);\n    } else {\n      const top = stack.pop();\n      if (top !== pairs[ch]) return false;\n    }\n  }\n  return stack.length === 0;\n}\nreturn isValid('{[()]}');",
+  "cols": [
+   "ch",
+   "stack",
+   "top"
+  ],
+  "steps": [
+   {
+    "note": "open '{', push",
+    "vals": {
+     "ch": "'{'",
+     "stack": "['{']"
+    }
+   },
+   {
+    "note": "open '[', push",
+    "vals": {
+     "ch": "'['",
+     "stack": "['{', '[']"
+    }
+   },
+   {
+    "note": "open '(', push",
+    "vals": {
+     "ch": "'('",
+     "stack": "['{', '[', '(']"
+    }
+   },
+   {
+    "note": "close ')' matches '(', pop",
+    "vals": {
+     "ch": "')'",
+     "top": "'('",
+     "stack": "['{', '[']"
+    }
+   },
+   {
+    "note": "close ']' matches '[', pop",
+    "vals": {
+     "ch": "']'",
+     "top": "'['",
+     "stack": "['{']"
+    }
+   },
+   {
+    "note": "close '}' matches '{', pop",
+    "vals": {
+     "ch": "'}'",
+     "top": "'{'",
+     "stack": "[]"
+    }
+   }
+  ]
+ },
+ {
+  "id": "11-min-stack",
+  "n": 11,
+  "title": "Min Stack",
+  "input": "push -2, push 0, push -3, getMin, pop, top, getMin",
+  "output": "[null, null, null, -3, null, 0, -2]",
+  "code": "class MinStack {\n  constructor() {\n    this.stack = [];\n    this.mins = [];\n  }\n  push(val) {\n    this.stack.push(val);\n    this.mins.push(Math.min(val, this.mins.length ? this.mins.at(-1) : val));\n  }\n  pop() {\n    this.stack.pop();\n    this.mins.pop();\n  }\n  top() {\n    return this.stack.at(-1);\n  }\n  getMin() {\n    return this.mins.at(-1);\n  }\n}\nconst s = new MinStack();\nconst ops = [['push', -2], ['push', 0], ['push', -3], ['getMin'], ['pop'], ['top'], ['getMin']];\nconst results = [];\nfor (const [op, ...args] of ops) {\n  const result = s[op](...args) ?? null;\n  results.push(result);\n}\nreturn results;",
+  "cols": [
+   "stack",
+   "mins",
+   "result"
+  ],
+  "steps": [
+   {
+    "note": "push(-2)",
+    "vals": {
+     "stack": "[-2]",
+     "mins": "[-2]",
+     "result": "null"
+    }
+   },
+   {
+    "note": "push(0)",
+    "vals": {
+     "stack": "[-2, 0]",
+     "mins": "[-2, -2]",
+     "result": "null"
+    }
+   },
+   {
+    "note": "push(-3)",
+    "vals": {
+     "stack": "[-2, 0, -3]",
+     "mins": "[-2, -2, -3]",
+     "result": "null"
+    }
+   },
+   {
+    "note": "getMin()",
+    "vals": {
+     "stack": "[-2, 0, -3]",
+     "mins": "[-2, -2, -3]",
+     "result": "-3"
+    }
+   },
+   {
+    "note": "pop()",
+    "vals": {
+     "stack": "[-2, 0]",
+     "mins": "[-2, -2]",
+     "result": "null"
+    }
+   },
+   {
+    "note": "top()",
+    "vals": {
+     "stack": "[-2, 0]",
+     "mins": "[-2, -2]",
+     "result": "0"
+    }
+   },
+   {
+    "note": "getMin()",
+    "vals": {
+     "stack": "[-2, 0]",
+     "mins": "[-2, -2]",
+     "result": "-2"
+    }
+   }
+  ]
+ },
+ {
+  "id": "12-decode-string",
+  "n": 12,
+  "title": "Decode String",
+  "input": "s = \"3[a2[c]]\"",
+  "output": "'accaccacc'",
+  "code": "function decodeString(s) {\n  const counts = [];\n  const strs = [];\n  let cur = '';\n  let k = 0;\n  for (const ch of s) {\n    if (ch >= '0' && ch <= '9') k = k * 10 + Number(ch);\n    else if (ch === '[') {\n      counts.push(k);\n      strs.push(cur);\n      k = 0;\n      cur = '';\n    } else if (ch === ']') cur = strs.pop() + cur.repeat(counts.pop());\n    else cur += ch;\n  }\n  return cur;\n}\nreturn decodeString('3[a2[c]]');",
+  "cols": [
+   "ch",
+   "k",
+   "cur",
+   "counts",
+   "strs"
+  ],
+  "steps": [
+   {
+    "note": "digit, build k",
+    "vals": {
+     "ch": "'3'",
+     "k": "3",
+     "cur": "''",
+     "counts": "[]",
+     "strs": "[]"
+    }
+   },
+   {
+    "note": "'[' save k and cur, start fresh",
+    "vals": {
+     "ch": "'['",
+     "k": "0",
+     "cur": "''",
+     "counts": "[3]",
+     "strs": "['']"
+    }
+   },
+   {
+    "note": "letter, append",
+    "vals": {
+     "ch": "'a'",
+     "k": "0",
+     "cur": "'a'",
+     "counts": "[3]",
+     "strs": "['']"
+    }
+   },
+   {
+    "note": "digit, build k",
+    "vals": {
+     "ch": "'2'",
+     "k": "2",
+     "cur": "'a'",
+     "counts": "[3]",
+     "strs": "['']"
+    }
+   },
+   {
+    "note": "'[' save k and cur, start fresh",
+    "vals": {
+     "ch": "'['",
+     "k": "0",
+     "cur": "''",
+     "counts": "[3, 2]",
+     "strs": "['', 'a']"
+    }
+   },
+   {
+    "note": "letter, append",
+    "vals": {
+     "ch": "'c'",
+     "k": "0",
+     "cur": "'c'",
+     "counts": "[3, 2]",
+     "strs": "['', 'a']"
+    }
+   },
+   {
+    "note": "']' repeat cur, join with saved",
+    "vals": {
+     "ch": "']'",
+     "k": "0",
+     "cur": "'acc'",
+     "counts": "[3]",
+     "strs": "['']"
+    }
+   },
+   {
+    "note": "']' repeat cur, join with saved",
+    "vals": {
+     "ch": "']'",
+     "k": "0",
+     "cur": "'accaccacc'",
+     "counts": "[]",
+     "strs": "[]"
+    }
+   }
+  ]
+ },
+ {
+  "id": "13-longest-valid-parentheses",
+  "n": 13,
+  "title": "Longest Valid Parentheses",
+  "input": "s = \")()())\"",
+  "output": "4",
+  "code": "function longestValidParentheses(s) {\n  const stack = [-1];\n  let best = 0;\n  for (let i = 0; i < s.length; i++) {\n    if (s[i] === '(') {\n      stack.push(i);\n    } else {\n      stack.pop();\n      if (!stack.length) {\n        stack.push(i);\n      } else {\n        best = Math.max(best, i - stack.at(-1));\n      }\n    }\n  }\n  return best;\n}\nreturn longestValidParentheses(')()())');",
+  "cols": [
+   "i",
+   "ch",
+   "stack",
+   "best"
+  ],
+  "steps": [
+   {
+    "note": "')' with nothing to match, new base",
+    "vals": {
+     "i": "0",
+     "ch": "')'",
+     "stack": "[0]",
+     "best": "0"
+    }
+   },
+   {
+    "note": "'(' push index",
+    "vals": {
+     "i": "1",
+     "ch": "'('",
+     "stack": "[0, 1]",
+     "best": "0"
+    }
+   },
+   {
+    "note": "')' matched, length 2",
+    "vals": {
+     "i": "2",
+     "ch": "')'",
+     "stack": "[0]",
+     "best": "2"
+    }
+   },
+   {
+    "note": "'(' push index",
+    "vals": {
+     "i": "3",
+     "ch": "'('",
+     "stack": "[0, 3]",
+     "best": "2"
+    }
+   },
+   {
+    "note": "')' matched, length 4",
+    "vals": {
+     "i": "4",
+     "ch": "')'",
+     "stack": "[0]",
+     "best": "4"
+    }
+   },
+   {
+    "note": "')' with nothing to match, new base",
+    "vals": {
+     "i": "5",
+     "ch": "')'",
+     "stack": "[5]",
+     "best": "4"
+    }
+   }
+  ]
+ },
+ {
+  "id": "14-find-peak-element",
+  "n": 14,
+  "title": "Find Peak Element",
+  "input": "nums = [1,2,1,3,5,6,4]",
+  "output": "5",
+  "code": "function findPeakElement(nums) {\n  let lo = 0;\n  let hi = nums.length - 1;\n  while (lo < hi) {\n    const mid = Math.floor((lo + hi) / 2);\n    if (nums[mid] < nums[mid + 1]) lo = mid + 1;\n    else hi = mid;\n  }\n  return lo;\n}\nreturn findPeakElement([1, 2, 1, 3, 5, 6, 4]);",
+  "cols": [
+   "lo",
+   "hi",
+   "mid",
+   "nums[mid]",
+   "nums[mid+1]"
+  ],
+  "steps": [
+   {
+    "note": "going uphill, peak is right: lo = mid + 1",
+    "vals": {
+     "lo": "0",
+     "hi": "6",
+     "mid": "3",
+     "nums[mid]": "3",
+     "nums[mid+1]": "5"
+    }
+   },
+   {
+    "note": "going downhill, peak is here or left: hi = mid",
+    "vals": {
+     "lo": "4",
+     "hi": "6",
+     "mid": "5",
+     "nums[mid]": "6",
+     "nums[mid+1]": "4"
+    }
+   },
+   {
+    "note": "going uphill, peak is right: lo = mid + 1",
+    "vals": {
+     "lo": "4",
+     "hi": "5",
+     "mid": "4",
+     "nums[mid]": "5",
+     "nums[mid+1]": "6"
+    }
+   }
+  ]
+ },
+ {
+  "id": "15-search-in-rotated-sorted-array",
+  "n": 15,
+  "title": "Search in Rotated Sorted Array",
+  "input": "nums = [4,5,6,7,0,1,2], target = 0",
+  "output": "4",
+  "code": "function search(nums, target) {\n  let lo = 0;\n  let hi = nums.length - 1;\n  while (lo <= hi) {\n    const mid = Math.floor((lo + hi) / 2);\n    if (nums[mid] === target) {\n      return mid;\n    }\n    if (nums[lo] <= nums[mid]) {\n      const inLeft = nums[lo] <= target && target < nums[mid];\n      if (inLeft) hi = mid - 1;\n      else lo = mid + 1;\n    } else {\n      const inRight = nums[mid] < target && target <= nums[hi];\n      if (inRight) lo = mid + 1;\n      else hi = mid - 1;\n    }\n  }\n  return -1;\n}\nreturn search([4, 5, 6, 7, 0, 1, 2], 0);",
+  "cols": [
+   "lo",
+   "hi",
+   "mid",
+   "nums[mid]"
+  ],
+  "steps": [
+   {
+    "note": "left half sorted, target not in it",
+    "vals": {
+     "lo": "0",
+     "hi": "6",
+     "mid": "3",
+     "nums[mid]": "7"
+    }
+   },
+   {
+    "note": "left half sorted, target inside it",
+    "vals": {
+     "lo": "4",
+     "hi": "6",
+     "mid": "5",
+     "nums[mid]": "1"
+    }
+   },
+   {
+    "note": "found target",
+    "vals": {
+     "lo": "4",
+     "hi": "4",
+     "mid": "4",
+     "nums[mid]": "0"
+    }
+   }
+  ]
+ },
+ {
+  "id": "16-koko-eating-bananas",
+  "n": 16,
+  "title": "Koko Eating Bananas",
+  "input": "piles = [3,6,7,11], h = 8",
+  "output": "4",
+  "code": "function minEatingSpeed(piles, h) {\n  let lo = 1;\n  let hi = Math.max(...piles);\n  while (lo < hi) {\n    const k = Math.floor((lo + hi) / 2);\n    const hours = piles.reduce((sum, p) => sum + Math.ceil(p / k), 0);\n    if (hours <= h) hi = k;\n    else lo = k + 1;\n  }\n  return lo;\n}\nreturn minEatingSpeed([3, 6, 7, 11], 8);",
+  "cols": [
+   "lo",
+   "hi",
+   "k",
+   "hours"
+  ],
+  "steps": [
+   {
+    "note": "speed 6 fits (6h), try slower",
+    "vals": {
+     "lo": "1",
+     "hi": "11",
+     "k": "6",
+     "hours": "6"
+    }
+   },
+   {
+    "note": "speed 3 too slow (10h), go faster",
+    "vals": {
+     "lo": "1",
+     "hi": "6",
+     "k": "3",
+     "hours": "10"
+    }
+   },
+   {
+    "note": "speed 5 fits (8h), try slower",
+    "vals": {
+     "lo": "4",
+     "hi": "6",
+     "k": "5",
+     "hours": "8"
+    }
+   },
+   {
+    "note": "speed 4 fits (8h), try slower",
+    "vals": {
+     "lo": "4",
+     "hi": "5",
+     "k": "4",
+     "hours": "8"
+    }
+   }
+  ]
+ },
+ {
+  "id": "17-merge-intervals",
+  "n": 17,
+  "title": "Merge Intervals",
+  "input": "intervals = [[1,3],[2,6],[8,10],[15,18]]",
+  "output": "[[1, 6], [8, 10], [15, 18]]",
+  "code": "function merge(intervals) {\n  intervals.sort((a, b) => a[0] - b[0]);\n  const res = [intervals[0]];\n  for (const cur of intervals.slice(1)) {\n    const last = res.at(-1);\n    const overlaps = cur[0] <= last[1];\n    if (overlaps) last[1] = Math.max(last[1], cur[1]);\n    else res.push(cur);\n  }\n  return res;\n}\nreturn merge([[1, 3], [2, 6], [8, 10], [15, 18]]);",
+  "cols": [
+   "res",
+   "cur",
+   "last"
+  ],
+  "steps": [
+   {
+    "note": "start with the first interval",
+    "vals": {
+     "res": "[[1, 3]]"
+    }
+   },
+   {
+    "note": "overlaps last, extend it",
+    "vals": {
+     "cur": "[2, 6]",
+     "last": "[1, 6]",
+     "res": "[[1, 6]]"
+    }
+   },
+   {
+    "note": "no overlap, push",
+    "vals": {
+     "cur": "[8, 10]",
+     "last": "[1, 6]",
+     "res": "[[1, 6], [8, 10]]"
+    }
+   },
+   {
+    "note": "no overlap, push",
+    "vals": {
+     "cur": "[15, 18]",
+     "last": "[8, 10]",
+     "res": "[[1, 6], [8, 10], [15, 18]]"
+    }
+   }
+  ]
+ },
+ {
+  "id": "18-add-two-numbers",
+  "n": 18,
+  "title": "Add Two Numbers",
+  "input": "l1 = [2,4,3], l2 = [5,6,4]",
+  "output": "[7, 0, 8]",
+  "code": "function addTwoNumbers(l1, l2) {\n  const dummy = new ListNode();\n  let cur = dummy;\n  let carry = 0;\n  while (l1 || l2 || carry) {\n    const sum = (l1?.val ?? 0) + (l2?.val ?? 0) + carry;\n    carry = Math.floor(sum / 10);\n    cur.next = new ListNode(sum % 10);\n    cur = cur.next;\n    l1 = l1?.next;\n    l2 = l2?.next;\n  }\n  return dummy.next;\n}\nreturn listToArray(addTwoNumbers(arrayToList([2, 4, 3]), arrayToList([5, 6, 4])));",
+  "cols": [
+   "l1.val",
+   "l2.val",
+   "sum",
+   "carry",
+   "result"
+  ],
+  "steps": [
+   {
+    "note": "write 7, carry 0",
+    "vals": {
+     "l1.val": "2",
+     "l2.val": "5",
+     "sum": "7",
+     "carry": "0",
+     "result": "7"
+    }
+   },
+   {
+    "note": "write 0, carry 1",
+    "vals": {
+     "l1.val": "4",
+     "l2.val": "6",
+     "sum": "10",
+     "carry": "1",
+     "result": "7 -> 0"
+    }
+   },
+   {
+    "note": "write 8, carry 0",
+    "vals": {
+     "l1.val": "3",
+     "l2.val": "4",
+     "sum": "8",
+     "carry": "0",
+     "result": "7 -> 0 -> 8"
+    }
+   }
+  ]
+ },
+ {
+  "id": "19-lru-cache",
+  "n": 19,
+  "title": "LRU Cache",
+  "input": "capacity 2: put(1,1) put(2,2) get(1) put(3,3) get(2) put(4,4) get(1) get(3) get(4)",
+  "output": "[null, null, 1, null, -1, null, -1, 3, 4]",
+  "code": "class LRUCache {\n  constructor(capacity) {\n    this.capacity = capacity;\n    this.map = new Map(); // oldest key first\n  }\n  get(key) {\n    if (!this.map.has(key)) return -1;\n    const val = this.map.get(key);\n    this.map.delete(key);\n    this.map.set(key, val);\n    return val;\n  }\n  put(key, val) {\n    this.map.delete(key);\n    this.map.set(key, val);\n    if (this.map.size > this.capacity) this.map.delete(this.map.keys().next().value);\n  }\n}\nconst cache = new LRUCache(2);\nconst ops = [['put', 1, 1], ['put', 2, 2], ['get', 1], ['put', 3, 3], ['get', 2], ['put', 4, 4], ['get', 1], ['get', 3], ['get', 4]];\nconst results = [];\nfor (const [op, ...args] of ops) {\n  const result = cache[op](...args) ?? null;\n  results.push(result);\n}\nreturn results;",
+  "cols": [
+   "map (oldest first)",
+   "result"
+  ],
+  "steps": [
+   {
+    "note": "put(1, 1)",
+    "vals": {
+     "map (oldest first)": "{1: 1}",
+     "result": "null"
+    }
+   },
+   {
+    "note": "put(2, 2)",
+    "vals": {
+     "map (oldest first)": "{1: 1, 2: 2}",
+     "result": "null"
+    }
+   },
+   {
+    "note": "get(1)",
+    "vals": {
+     "map (oldest first)": "{2: 2, 1: 1}",
+     "result": "1"
+    }
+   },
+   {
+    "note": "put(3, 3)",
+    "vals": {
+     "map (oldest first)": "{1: 1, 3: 3}",
+     "result": "null"
+    }
+   },
+   {
+    "note": "get(2)",
+    "vals": {
+     "map (oldest first)": "{1: 1, 3: 3}",
+     "result": "-1"
+    }
+   },
+   {
+    "note": "put(4, 4)",
+    "vals": {
+     "map (oldest first)": "{3: 3, 4: 4}",
+     "result": "null"
+    }
+   },
+   {
+    "note": "get(1)",
+    "vals": {
+     "map (oldest first)": "{3: 3, 4: 4}",
+     "result": "-1"
+    }
+   },
+   {
+    "note": "get(3)",
+    "vals": {
+     "map (oldest first)": "{4: 4, 3: 3}",
+     "result": "3"
+    }
+   },
+   {
+    "note": "get(4)",
+    "vals": {
+     "map (oldest first)": "{3: 3, 4: 4}",
+     "result": "4"
+    }
+   }
+  ]
+ },
+ {
+  "id": "20-binary-tree-level-order-traversal",
+  "n": 20,
+  "title": "Binary Tree Level Order Traversal",
+  "input": "root = [3,9,20,null,null,15,7]",
+  "output": "[[3], [9, 20], [15, 7]]",
+  "code": "function levelOrder(root) {\n  const res = [];\n  const queue = root ? [root] : [];\n  while (queue.length) {\n    const size = queue.length;\n    const level = [];\n    for (let i = 0; i < size; i++) {\n      const node = queue.shift();\n      level.push(node.val);\n      if (node.left) queue.push(node.left);\n      if (node.right) queue.push(node.right);\n    }\n    res.push(level);\n  }\n  return res;\n}\nreturn levelOrder(arrayToTree([3, 9, 20, null, null, 15, 7]));",
+  "cols": [
+   "size",
+   "node",
+   "level",
+   "queue",
+   "res"
+  ],
+  "steps": [
+   {
+    "note": "visit 3, queue its children",
+    "vals": {
+     "size": "1",
+     "node": "(3)",
+     "level": "[3]",
+     "queue": "[(9), (20)]",
+     "res": "[]"
+    }
+   },
+   {
+    "note": "visit 9, queue its children",
+    "vals": {
+     "size": "2",
+     "node": "(9)",
+     "level": "[9]",
+     "queue": "[(20)]",
+     "res": "[[3]]"
+    }
+   },
+   {
+    "note": "visit 20, queue its children",
+    "vals": {
+     "size": "2",
+     "node": "(20)",
+     "level": "[9, 20]",
+     "queue": "[(15), (7)]",
+     "res": "[[3]]"
+    }
+   },
+   {
+    "note": "visit 15, queue its children",
+    "vals": {
+     "size": "2",
+     "node": "(15)",
+     "level": "[15]",
+     "queue": "[(7)]",
+     "res": "[[3], [9, 20]]"
+    }
+   },
+   {
+    "note": "visit 7, queue its children",
+    "vals": {
+     "size": "2",
+     "node": "(7)",
+     "level": "[15, 7]",
+     "queue": "[]",
+     "res": "[[3], [9, 20]]"
+    }
+   }
+  ]
+ },
+ {
+  "id": "21-lowest-common-ancestor-of-a-binary-tree",
+  "n": 21,
+  "title": "Lowest Common Ancestor of a Binary Tree",
+  "input": "root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 1",
+  "output": "3",
+  "code": "const root = arrayToTree([3, 5, 1, 6, 2, 0, 8, null, null, 7, 4]);\nconst p = findNode(root, 5);\nconst q = findNode(root, 1);\nfunction lca(node) {\n  if (!node || node === p || node === q) {\n    return node;\n  }\n  const left = lca(node.left);\n  const right = lca(node.right);\n  const result = left && right ? node : left || right;\n  return result;\n}\nreturn lca(root).val;",
+  "cols": [
+   "node",
+   "returns",
+   "left",
+   "right"
+  ],
+  "steps": [
+   {
+    "note": "hit 5, return it",
+    "vals": {
+     "node": "(5)",
+     "returns": "(5)"
+    }
+   },
+   {
+    "note": "hit 1, return it",
+    "vals": {
+     "node": "(1)",
+     "returns": "(1)"
+    }
+   },
+   {
+    "note": "both sides found, 3 is the answer",
+    "vals": {
+     "node": "(3)",
+     "left": "(5)",
+     "right": "(1)",
+     "returns": "(3)"
+    }
+   }
+  ]
+ },
+ {
+  "id": "22-construct-binary-tree-from-preorder-and-inorder-traversal",
+  "n": 22,
+  "title": "Construct Binary Tree from Preorder and Inorder Traversal",
+  "input": "preorder = [3,9,20,15,7], inorder = [9,3,15,20,7]",
+  "output": "[3, 9, 20, null, null, 15, 7]",
+  "code": "function buildTree(preorder, inorder) {\n  const index = new Map(inorder.map((v, i) => [v, i]));\n  let pi = 0;\n  function build(lo, hi) {\n    if (lo > hi) return null;\n    const val = preorder[pi++];\n    const mid = index.get(val);\n    const node = new TreeNode(val);\n    node.left = build(lo, mid - 1);\n    node.right = build(mid + 1, hi);\n    return node;\n  }\n  return build(0, inorder.length - 1);\n}\nreturn treeToArray(buildTree([3, 9, 20, 15, 7], [9, 3, 15, 20, 7]));",
+  "cols": [
+   "pi",
+   "val",
+   "mid",
+   "range",
+   "left",
+   "right"
+  ],
+  "steps": [
+   {
+    "note": "next preorder value 3 is the root",
+    "vals": {
+     "pi": "1",
+     "val": "3",
+     "mid": "1",
+     "range": "[9, 3, 15, 20, 7]",
+     "left": "[9]",
+     "right": "[15, 20, 7]"
+    }
+   },
+   {
+    "note": "next preorder value 9 is the root",
+    "vals": {
+     "pi": "2",
+     "val": "9",
+     "mid": "0",
+     "range": "[9]",
+     "left": "[]",
+     "right": "[]"
+    }
+   },
+   {
+    "note": "next preorder value 20 is the root",
+    "vals": {
+     "pi": "3",
+     "val": "20",
+     "mid": "3",
+     "range": "[15, 20, 7]",
+     "left": "[15]",
+     "right": "[7]"
+    }
+   },
+   {
+    "note": "next preorder value 15 is the root",
+    "vals": {
+     "pi": "4",
+     "val": "15",
+     "mid": "2",
+     "range": "[15]",
+     "left": "[]",
+     "right": "[]"
+    }
+   },
+   {
+    "note": "next preorder value 7 is the root",
+    "vals": {
+     "pi": "5",
+     "val": "7",
+     "mid": "4",
+     "range": "[7]",
+     "left": "[]",
+     "right": "[]"
+    }
+   }
+  ]
+ },
+ {
+  "id": "23-number-of-islands",
+  "n": 23,
+  "title": "Number of Islands",
+  "input": "grid = 11000 / 11000 / 00100 / 00011",
+  "output": "3",
+  "code": "function numIslands(grid) {\n  let count = 0;\n  function sink(r, c) {\n    if (r < 0 || c < 0 || r >= grid.length || c >= grid[0].length || grid[r][c] !== '1') return;\n    grid[r][c] = '0';\n    sink(r + 1, c);\n    sink(r - 1, c);\n    sink(r, c + 1);\n    sink(r, c - 1);\n  }\n  for (let r = 0; r < grid.length; r++) {\n    for (let c = 0; c < grid[0].length; c++) {\n      if (grid[r][c] === '1') {\n        count++;\n        sink(r, c);\n      }\n    }\n  }\n  return count;\n}\nconst grid = ['11000', '11000', '00100', '00011'].map((row) => [...row]);\nreturn numIslands(grid);",
+  "cols": [
+   "r",
+   "c",
+   "count",
+   "grid"
+  ],
+  "steps": [
+   {
+    "note": "land at (0,0): island 1, sink it",
+    "vals": {
+     "r": "0",
+     "c": "0",
+     "count": "1",
+     "grid": "'00000 / 00000 / 00100 / 00011'"
+    }
+   },
+   {
+    "note": "land at (2,2): island 2, sink it",
+    "vals": {
+     "r": "2",
+     "c": "2",
+     "count": "2",
+     "grid": "'00000 / 00000 / 00000 / 00011'"
+    }
+   },
+   {
+    "note": "land at (3,3): island 3, sink it",
+    "vals": {
+     "r": "3",
+     "c": "3",
+     "count": "3",
+     "grid": "'00000 / 00000 / 00000 / 00000'"
+    }
+   }
+  ]
+ },
+ {
+  "id": "24-top-k-frequent-elements",
+  "n": 24,
+  "title": "Top K Frequent Elements",
+  "input": "nums = [1,1,1,2,2,3], k = 2",
+  "output": "[1, 2]",
+  "code": "function topKFrequent(nums, k) {\n  const freq = new Map();\n  for (const n of nums) freq.set(n, (freq.get(n) || 0) + 1);\n  const buckets = Array.from({ length: nums.length + 1 }, () => []);\n  for (const [n, f] of freq) buckets[f].push(n);\n  const res = [];\n  for (let f = buckets.length - 1; f > 0 && res.length < k; f--) {\n    res.push(...buckets[f]);\n  }\n  return res.slice(0, k);\n}\nreturn topKFrequent([1, 1, 1, 2, 2, 3], 2);",
+  "cols": [
+   "freq",
+   "buckets",
+   "f",
+   "buckets[f]",
+   "res"
+  ],
+  "steps": [
+   {
+    "note": "count each number",
+    "vals": {
+     "freq": "{1: 3, 2: 2, 3: 1}"
+    }
+   },
+   {
+    "note": "bucket index = frequency",
+    "vals": {
+     "buckets": "[[], [3], [2], [1], [], [], []]"
+    }
+   },
+   {
+    "note": "take bucket 3",
+    "vals": {
+     "f": "3",
+     "buckets[f]": "[1]",
+     "res": "[1]"
+    }
+   },
+   {
+    "note": "take bucket 2",
+    "vals": {
+     "f": "2",
+     "buckets[f]": "[2]",
+     "res": "[1, 2]"
+    }
+   }
+  ]
+ },
+ {
+  "id": "25-word-break",
+  "n": 25,
+  "title": "Word Break",
+  "input": "s = \"leetcode\", wordDict = [\"leet\",\"code\"]",
+  "output": "true",
+  "code": "function wordBreak(s, wordDict) {\n  const dp = new Array(s.length + 1).fill(false);\n  dp[0] = true;\n  for (let i = 1; i <= s.length; i++) {\n    for (const w of wordDict) {\n      if (i >= w.length && dp[i - w.length] && s.slice(i - w.length, i) === w) {\n        dp[i] = true;\n        break;\n      }\n    }\n  }\n  return dp[s.length];\n}\nreturn wordBreak('leetcode', ['leet', 'code']);",
+  "cols": [
+   "i",
+   "prefix",
+   "dp (T/F per length)"
+  ],
+  "steps": [
+   {
+    "note": "'l' cannot be built yet",
+    "vals": {
+     "i": "1",
+     "prefix": "'l'",
+     "dp (T/F per length)": "'TFFFFFFFF'"
+    }
+   },
+   {
+    "note": "'le' cannot be built yet",
+    "vals": {
+     "i": "2",
+     "prefix": "'le'",
+     "dp (T/F per length)": "'TFFFFFFFF'"
+    }
+   },
+   {
+    "note": "'lee' cannot be built yet",
+    "vals": {
+     "i": "3",
+     "prefix": "'lee'",
+     "dp (T/F per length)": "'TFFFFFFFF'"
+    }
+   },
+   {
+    "note": "'leet' can be built",
+    "vals": {
+     "i": "4",
+     "prefix": "'leet'",
+     "dp (T/F per length)": "'TFFFTFFFF'"
+    }
+   },
+   {
+    "note": "'leetc' cannot be built yet",
+    "vals": {
+     "i": "5",
+     "prefix": "'leetc'",
+     "dp (T/F per length)": "'TFFFTFFFF'"
+    }
+   },
+   {
+    "note": "'leetco' cannot be built yet",
+    "vals": {
+     "i": "6",
+     "prefix": "'leetco'",
+     "dp (T/F per length)": "'TFFFTFFFF'"
+    }
+   },
+   {
+    "note": "'leetcod' cannot be built yet",
+    "vals": {
+     "i": "7",
+     "prefix": "'leetcod'",
+     "dp (T/F per length)": "'TFFFTFFFF'"
+    }
+   },
+   {
+    "note": "'leetcode' can be built",
+    "vals": {
+     "i": "8",
+     "prefix": "'leetcode'",
+     "dp (T/F per length)": "'TFFFTFFFT'"
+    }
+   }
+  ]
+ },
+ {
+  "id": "26-debounce",
+  "n": 26,
+  "title": "Debounce",
+  "input": "d = debounce(fn, 50); d(1) at 0ms, d(2) at 20ms, d(3) at 40ms",
+  "output": "[3]",
+  "code": "function debounce(fn, wait) {\n  let timer;\n  return function (...args) {\n    clearTimeout(timer);\n    timer = setTimeout(() => fn.apply(this, args), wait);\n  };\n}\nconst calls = [];\nconst d = debounce((x) => {\n  calls.push(x);\n}, 50);\nd(1);\nadvance(20); // 20ms pass\nd(2);\nadvance(20);\nd(3);\nadvance(60);\nreturn calls;",
+  "cols": [
+   "now",
+   "args",
+   "timer",
+   "fires at",
+   "calls"
+  ],
+  "steps": [
+   {
+    "note": "d(1) at 0ms: clear old timer, set new one",
+    "vals": {
+     "now": "0",
+     "args": "[1]",
+     "timer": "1",
+     "fires at": "50",
+     "calls": "[]"
+    }
+   },
+   {
+    "note": "d(2) at 20ms: clear old timer, set new one",
+    "vals": {
+     "now": "20",
+     "args": "[2]",
+     "timer": "2",
+     "fires at": "70",
+     "calls": "[]"
+    }
+   },
+   {
+    "note": "d(3) at 40ms: clear old timer, set new one",
+    "vals": {
+     "now": "40",
+     "args": "[3]",
+     "timer": "3",
+     "fires at": "90",
+     "calls": "[]"
+    }
+   },
+   {
+    "note": "timer fires at 90ms, fn(3) runs",
+    "vals": {
+     "now": "90",
+     "calls": "[3]"
+    }
+   }
+  ]
+ },
+ {
+  "id": "27-throttle",
+  "n": 27,
+  "title": "Throttle",
+  "input": "t = throttle(fn, 50); calls at 0, 10, 20, 70, 80ms",
+  "output": "[1, 4]",
+  "code": "function throttle(fn, wait) {\n  let last = -Infinity;\n  return function (...args) {\n    const now = Date.now();\n    const ran = now - last >= wait;\n    if (ran) {\n      last = now;\n      fn.apply(this, args);\n    }\n  };\n}\nconst calls = [];\nconst th = throttle((x) => calls.push(x), 50);\nth(1);\nadvance(10);\nth(2);\nadvance(10);\nth(3);\nadvance(50);\nth(4);\nadvance(10);\nth(5);\nreturn calls;",
+  "cols": [
+   "now",
+   "args",
+   "last",
+   "ran",
+   "calls"
+  ],
+  "steps": [
+   {
+    "note": "call(1) at 0ms runs",
+    "vals": {
+     "now": "0",
+     "args": "[1]",
+     "last": "0",
+     "ran": "true",
+     "calls": "[1]"
+    }
+   },
+   {
+    "note": "call(2) at 10ms ignored, only 10ms since last run",
+    "vals": {
+     "now": "10",
+     "args": "[2]",
+     "last": "0",
+     "ran": "false",
+     "calls": "[1]"
+    }
+   },
+   {
+    "note": "call(3) at 20ms ignored, only 20ms since last run",
+    "vals": {
+     "now": "20",
+     "args": "[3]",
+     "last": "0",
+     "ran": "false",
+     "calls": "[1]"
+    }
+   },
+   {
+    "note": "call(4) at 70ms runs",
+    "vals": {
+     "now": "70",
+     "args": "[4]",
+     "last": "70",
+     "ran": "true",
+     "calls": "[1, 4]"
+    }
+   },
+   {
+    "note": "call(5) at 80ms ignored, only 10ms since last run",
+    "vals": {
+     "now": "80",
+     "args": "[5]",
+     "last": "70",
+     "ran": "false",
+     "calls": "[1, 4]"
+    }
+   }
+  ]
+ },
+ {
+  "id": "28-memoize",
+  "n": 28,
+  "title": "Memoize",
+  "input": "m = memoize(add); m(1,2), m(1,2), m(2,1), m('1',2)",
+  "output": "[3, 3, 3, '12']",
+  "code": "function memoize(fn) {\n  const cache = new Map();\n  return function (...args) {\n    const key = JSON.stringify(args);\n    const hit = cache.has(key);\n    if (!hit) cache.set(key, fn.apply(this, args));\n    return cache.get(key);\n  };\n}\nconst m = memoize((a, b) => a + b);\nreturn [m(1, 2), m(1, 2), m(2, 1), m('1', 2)];",
+  "cols": [
+   "key",
+   "hit",
+   "cache"
+  ],
+  "steps": [
+   {
+    "note": "miss for [1,2], call fn and store",
+    "vals": {
+     "key": "'[1,2]'",
+     "hit": "false",
+     "cache": "{'[1,2]': 3}"
+    }
+   },
+   {
+    "note": "cache hit for [1,2]",
+    "vals": {
+     "key": "'[1,2]'",
+     "hit": "true",
+     "cache": "{'[1,2]': 3}"
+    }
+   },
+   {
+    "note": "miss for [2,1], call fn and store",
+    "vals": {
+     "key": "'[2,1]'",
+     "hit": "false",
+     "cache": "{'[1,2]': 3, '[2,1]': 3}"
+    }
+   },
+   {
+    "note": "miss for [\"1\",2], call fn and store",
+    "vals": {
+     "key": "'[\"1\",2]'",
+     "hit": "false",
+     "cache": "{'[1,2]': 3, '[2,1]': 3, '[\"1\",2]': '12'}"
+    }
+   }
+  ]
+ },
+ {
+  "id": "29-curry",
+  "n": 29,
+  "title": "Curry",
+  "input": "curry((a,b,c) => a+b+c)(1)(2)(3), (1,2)(3); sum(1)(2)(3)()",
+  "output": "[6, 6, 6]",
+  "code": "function curry(fn) {\n  return function curried(...args) {\n    if (args.length >= fn.length) return fn(...args);\n    return (...more) => curried(...args, ...more);\n  };\n}\nfunction sum(a) {\n  return function next(b) {\n    if (b === undefined) return a;\n    a += b;\n    return next;\n  };\n}\nconst add3 = curry((a, b, c) => a + b + c);\nreturn [add3(1)(2)(3), add3(1, 2)(3), sum(1)(2)(3)()];",
+  "cols": [
+   "args",
+   "fn.length",
+   "a",
+   "b"
+  ],
+  "steps": [
+   {
+    "note": "1 of 3 args, return a function for more",
+    "vals": {
+     "args": "[1]",
+     "fn.length": "3"
+    }
+   },
+   {
+    "note": "2 of 3 args, return a function for more",
+    "vals": {
+     "args": "[1, 2]",
+     "fn.length": "3"
+    }
+   },
+   {
+    "note": "3 of 3 args, call fn",
+    "vals": {
+     "args": "[1, 2, 3]",
+     "fn.length": "3"
+    }
+   },
+   {
+    "note": "2 of 3 args, return a function for more",
+    "vals": {
+     "args": "[1, 2]",
+     "fn.length": "3"
+    }
+   },
+   {
+    "note": "3 of 3 args, call fn",
+    "vals": {
+     "args": "[1, 2, 3]",
+     "fn.length": "3"
+    }
+   },
+   {
+    "note": "add 2",
+    "vals": {
+     "a": "1",
+     "b": "2"
+    }
+   },
+   {
+    "note": "add 3",
+    "vals": {
+     "a": "3",
+     "b": "3"
+    }
+   },
+   {
+    "note": "called with nothing, return total",
+    "vals": {
+     "a": "6",
+     "b": "-"
+    }
+   }
+  ]
+ },
+ {
+  "id": "30-once",
+  "n": 30,
+  "title": "Once",
+  "input": "init = once(x => x * 2); init(5), init(9)",
+  "output": "[10, 10]",
+  "code": "function once(fn) {\n  let done = false;\n  let result;\n  return function (...args) {\n    const first = !done;\n    if (!done) {\n      done = true;\n      result = fn.apply(this, args);\n    }\n    return result;\n  };\n}\nconst init = once((x) => x * 2);\nreturn [init(5), init(9)];",
+  "cols": [
+   "args",
+   "done",
+   "result"
+  ],
+  "steps": [
+   {
+    "note": "first call (5): run fn, save result",
+    "vals": {
+     "args": "[5]",
+     "done": "true",
+     "result": "10"
+    }
+   },
+   {
+    "note": "later call (9): return saved result",
+    "vals": {
+     "args": "[9]",
+     "done": "true",
+     "result": "10"
+    }
+   }
+  ]
+ },
+ {
+  "id": "31-pipe-and-compose",
+  "n": 31,
+  "title": "Pipe and Compose",
+  "input": "pipe(add1, double, square)(2), compose(add1, double, square)(2)",
+  "output": "[36, 9]",
+  "code": "function pipe(...fns) {\n  return (x) =>\n    fns.reduce((value, fn) => {\n      const next = fn(value);\n      return next;\n    }, x);\n}\nfunction compose(...fns) {\n  return (x) =>\n    fns.reduceRight((value, fn) => {\n      const next = fn(value);\n      return next;\n    }, x);\n}\nconst add1 = (x) => x + 1;\nconst double = (x) => x * 2;\nconst square = (x) => x * x;\nreturn [pipe(add1, double, square)(2), compose(add1, double, square)(2)];",
+  "cols": [
+   "value",
+   "fn",
+   "next"
+  ],
+  "steps": [
+   {
+    "note": "pipe: add1(2)",
+    "vals": {
+     "value": "2",
+     "fn": "'add1'",
+     "next": "3"
+    }
+   },
+   {
+    "note": "pipe: double(3)",
+    "vals": {
+     "value": "3",
+     "fn": "'double'",
+     "next": "6"
+    }
+   },
+   {
+    "note": "pipe: square(6)",
+    "vals": {
+     "value": "6",
+     "fn": "'square'",
+     "next": "36"
+    }
+   },
+   {
+    "note": "compose: square(2)",
+    "vals": {
+     "value": "2",
+     "fn": "'square'",
+     "next": "4"
+    }
+   },
+   {
+    "note": "compose: double(4)",
+    "vals": {
+     "value": "4",
+     "fn": "'double'",
+     "next": "8"
+    }
+   },
+   {
+    "note": "compose: add1(8)",
+    "vals": {
+     "value": "8",
+     "fn": "'add1'",
+     "next": "9"
+    }
+   }
+  ]
+ },
+ {
+  "id": "32-map-filter-reduce-polyfill",
+  "n": 32,
+  "title": "Polyfill map, filter and reduce",
+  "input": "[1,2,3].myMap(x => x * 2), [1,2,3,4].myReduce((a, b) => a + b)",
+  "output": "[[2, 4, 6], 10]",
+  "code": "Array.prototype.myMap = function (callback) {\n  const out = [];\n  for (let i = 0; i < this.length; i++) {\n    out.push(callback(this[i], i, this));\n  }\n  return out;\n};\nArray.prototype.myReduce = function (callback, initialValue) {\n  let i = 0;\n  let acc = initialValue;\n  if (arguments.length < 2) {\n    if (!this.length) throw new TypeError('Reduce of empty array with no initial value');\n    acc = this[0];\n    i = 1;\n  }\n  for (; i < this.length; i++) {\n    acc = callback(acc, this[i], i, this);\n  }\n  return acc;\n};\nreturn [[1, 2, 3].myMap((x) => x * 2), [1, 2, 3, 4].myReduce((a, b) => a + b)];",
+  "cols": [
+   "i",
+   "this[i]",
+   "out",
+   "acc"
+  ],
+  "steps": [
+   {
+    "note": "map: index 0",
+    "vals": {
+     "i": "0",
+     "this[i]": "1",
+     "out": "[2]"
+    }
+   },
+   {
+    "note": "map: index 1",
+    "vals": {
+     "i": "1",
+     "this[i]": "2",
+     "out": "[2, 4]"
+    }
+   },
+   {
+    "note": "map: index 2",
+    "vals": {
+     "i": "2",
+     "this[i]": "3",
+     "out": "[2, 4, 6]"
+    }
+   },
+   {
+    "note": "reduce: no initial value, start from this[0]",
+    "vals": {
+     "i": "1",
+     "acc": "1"
+    }
+   },
+   {
+    "note": "reduce: index 1",
+    "vals": {
+     "i": "1",
+     "this[i]": "2",
+     "acc": "3"
+    }
+   },
+   {
+    "note": "reduce: index 2",
+    "vals": {
+     "i": "2",
+     "this[i]": "3",
+     "acc": "6"
+    }
+   },
+   {
+    "note": "reduce: index 3",
+    "vals": {
+     "i": "3",
+     "this[i]": "4",
+     "acc": "10"
+    }
+   }
+  ]
+ },
+ {
+  "id": "33-call-apply-bind-polyfill",
+  "n": 33,
+  "title": "Polyfill call, apply and bind",
+  "input": "greet.myCall(person, 'Hi', '!'), greet.myBind(person, 'Hey')('?')",
+  "output": "['Hi, Asha!', 'Hey, Asha?']",
+  "code": "Function.prototype.myCall = function (thisArg, ...args) {\n  const ctx = thisArg ?? globalThis;\n  const key = Symbol('fn');\n  ctx[key] = this;\n  const result = ctx[key](...args);\n  delete ctx[key];\n  return result;\n};\nFunction.prototype.myBind = function (thisArg, ...args) {\n  const fn = this;\n  return function (...more) {\n    return fn.myCall(thisArg, ...args, ...more);\n  };\n};\nfunction greet(greeting, mark) {\n  return `${greeting}, ${this.name}${mark}`;\n}\nconst person = { name: 'Asha' };\nreturn [greet.myCall(person, 'Hi', '!'), greet.myBind(person, 'Hey')('?')];",
+  "cols": [
+   "ctx",
+   "args",
+   "result",
+   "fn",
+   "thisArg",
+   "more"
+  ],
+  "steps": [
+   {
+    "note": "myCall: put the function on thisArg under a symbol",
+    "vals": {
+     "ctx": "{name: 'Asha', [fn]: greet}",
+     "args": "['Hi', '!']"
+    }
+   },
+   {
+    "note": "myCall: call it as ctx[key](), so this = ctx, then delete it",
+    "vals": {
+     "ctx": "{name: 'Asha'}",
+     "result": "'Hi, Asha!'"
+    }
+   },
+   {
+    "note": "myBind: remember fn, thisArg and the first args",
+    "vals": {
+     "fn": "greet",
+     "thisArg": "{name: 'Asha'}",
+     "args": "['Hey']"
+    }
+   },
+   {
+    "note": "bound function called: join old and new args",
+    "vals": {
+     "args": "['Hey']",
+     "more": "['?']"
+    }
+   },
+   {
+    "note": "myCall: put the function on thisArg under a symbol",
+    "vals": {
+     "ctx": "{name: 'Asha', [fn]: greet}",
+     "args": "['Hey', '?']"
+    }
+   },
+   {
+    "note": "myCall: call it as ctx[key](), so this = ctx, then delete it",
+    "vals": {
+     "ctx": "{name: 'Asha'}",
+     "result": "'Hey, Asha?'"
+    }
+   }
+  ]
+ },
+ {
+  "id": "34-promise-all-polyfill",
+  "n": 34,
+  "title": "Polyfill Promise.all",
+  "input": "promiseAll([later(1, 30ms), later(2, 10ms), 3])",
+  "output": "[1, 2, 3]",
+  "code": "const later = (value, ms) => new Promise((resolve) => setTimeout(() => resolve(value), ms));\nfunction promiseAll(items) {\n  return new Promise((resolve, reject) => {\n    const out = [];\n    let left = items.length;\n    if (!left) return resolve(out);\n    items.forEach((item, i) => {\n      Promise.resolve(item).then((value) => {\n        out[i] = value;\n        left--;\n        if (left === 0) resolve(out);\n      }, reject);\n    });\n  });\n}\nreturn await promiseAll([later(1, 30), later(2, 10), 3]);",
+  "cols": [
+   "i",
+   "value",
+   "left",
+   "out"
+  ],
+  "steps": [
+   {
+    "note": "item 2 resolved, store at index 2",
+    "vals": {
+     "i": "2",
+     "value": "3",
+     "left": "2",
+     "out": "[-, -, 3]"
+    }
+   },
+   {
+    "note": "item 1 resolved, store at index 1",
+    "vals": {
+     "i": "1",
+     "value": "2",
+     "left": "1",
+     "out": "[-, 2, 3]"
+    }
+   },
+   {
+    "note": "item 0 resolved, none left: resolve(out)",
+    "vals": {
+     "i": "0",
+     "value": "1",
+     "left": "0",
+     "out": "[1, 2, 3]"
+    }
+   }
+  ]
+ },
+ {
+  "id": "35-promise-allsettled-race-any",
+  "n": 35,
+  "title": "Polyfill Promise.allSettled, race and any",
+  "input": "promiseAllSettled([later(1, 20ms), fail('x', 10ms)]), promiseAny([fail('a', 5ms), later('b', 25ms), fail('c', 15ms)])",
+  "output": "[[{status: 'fulfilled', value: 1}, {status: 'rejected', reason: 'x'}], 'b']",
+  "code": "const later = (value, ms) => new Promise((resolve) => setTimeout(() => resolve(value), ms));\nconst fail = (reason, ms) => new Promise((_, reject) => setTimeout(() => reject(reason), ms));\nfunction promiseAllSettled(items) {\n  return new Promise((resolve) => {\n    const out = [];\n    let left = items.length;\n    items.forEach((item, i) => {\n      Promise.resolve(item)\n        .then(\n          (value) => (out[i] = { status: 'fulfilled', value }),\n          (reason) => (out[i] = { status: 'rejected', reason }),\n        )\n        .then(() => {\n          left--;\n          if (left === 0) resolve(out);\n        });\n    });\n  });\n}\nfunction promiseAny(items) {\n  return new Promise((resolve, reject) => {\n    const errors = [];\n    let left = items.length;\n    items.forEach((item, i) => {\n      Promise.resolve(item).then(\n        (value) => {\n          resolve(value);\n        },\n        (e) => {\n          errors[i] = e;\n          left--;\n          if (left === 0) reject(new AggregateError(errors, 'All promises were rejected'));\n        },\n      );\n    });\n  });\n}\nconst settled = await promiseAllSettled([later(1, 20), fail('x', 10)]);\nconst any = await promiseAny([fail('a', 5), later('b', 25), fail('c', 15)]);\nreturn [settled, any];",
+  "cols": [
+   "i",
+   "left",
+   "out",
+   "error",
+   "errors",
+   "value"
+  ],
+  "steps": [
+   {
+    "note": "allSettled: item 1 settled",
+    "vals": {
+     "i": "1",
+     "left": "1",
+     "out": "[-, {status: 'rejected', reason: 'x'}]"
+    }
+   },
+   {
+    "note": "allSettled: item 0 settled",
+    "vals": {
+     "i": "0",
+     "left": "0",
+     "out": "[{status: 'fulfilled', value: 1}, {status: 'rejected', reason: 'x'}]"
+    }
+   },
+   {
+    "note": "any: item 0 rejected, keep the error",
+    "vals": {
+     "i": "0",
+     "error": "'a'",
+     "errors": "['a']",
+     "left": "2"
+    }
+   },
+   {
+    "note": "any: item 2 rejected, keep the error",
+    "vals": {
+     "i": "2",
+     "error": "'c'",
+     "errors": "['a', -, 'c']",
+     "left": "1"
+    }
+   },
+   {
+    "note": "any: item 1 fulfilled, resolve with it",
+    "vals": {
+     "i": "1",
+     "value": "'b'",
+     "errors": "['a', -, 'c']",
+     "left": "1"
+    }
+   }
+  ]
+ },
+ {
+  "id": "36-promise-pool",
+  "n": 36,
+  "title": "Promise Pool (concurrency limit)",
+  "input": "tasks take 60, 20, 50, 20ms; limit = 2",
+  "output": "[1, 2, 3, 4]",
+  "code": "const task = (value, ms) => () => new Promise((resolve) => setTimeout(() => resolve(value), ms));\nasync function promisePool(tasks, limit) {\n  const out = [];\n  let next = 0;\n  async function worker(w) {\n    while (next < tasks.length) {\n      const i = next++;\n      out[i] = await tasks[i]();\n    }\n  }\n  await Promise.all(Array.from({ length: Math.min(limit, tasks.length) }, (_, w) => worker(w)));\n  return out;\n}\nreturn await promisePool([task(1, 60), task(2, 20), task(3, 50), task(4, 20)], 2);",
+  "cols": [
+   "worker",
+   "i",
+   "next",
+   "out"
+  ],
+  "steps": [
+   {
+    "note": "worker 0 starts task 0",
+    "vals": {
+     "worker": "0",
+     "i": "0",
+     "next": "1",
+     "out": "[]"
+    }
+   },
+   {
+    "note": "worker 1 starts task 1",
+    "vals": {
+     "worker": "1",
+     "i": "1",
+     "next": "2",
+     "out": "[]"
+    }
+   },
+   {
+    "note": "worker 1 finished task 1",
+    "vals": {
+     "worker": "1",
+     "i": "1",
+     "next": "2",
+     "out": "[-, 2]"
+    }
+   },
+   {
+    "note": "worker 1 starts task 2",
+    "vals": {
+     "worker": "1",
+     "i": "2",
+     "next": "3",
+     "out": "[-, 2]"
+    }
+   },
+   {
+    "note": "worker 0 finished task 0",
+    "vals": {
+     "worker": "0",
+     "i": "0",
+     "next": "3",
+     "out": "[1, 2]"
+    }
+   },
+   {
+    "note": "worker 0 starts task 3",
+    "vals": {
+     "worker": "0",
+     "i": "3",
+     "next": "4",
+     "out": "[1, 2]"
+    }
+   },
+   {
+    "note": "worker 1 finished task 2",
+    "vals": {
+     "worker": "1",
+     "i": "2",
+     "next": "4",
+     "out": "[1, 2, 3]"
+    }
+   },
+   {
+    "note": "worker 0 finished task 3",
+    "vals": {
+     "worker": "0",
+     "i": "3",
+     "next": "4",
+     "out": "[1, 2, 3, 4]"
+    }
+   }
+  ]
+ },
+ {
+  "id": "37-retry",
+  "n": 37,
+  "title": "Retry",
+  "input": "fn fails twice then returns ok; retry(fn, 3, 10ms)",
+  "output": "'ok'",
+  "code": "let attempts = 0;\nconst flaky = async () => {\n  attempts++;\n  if (attempts <= 2) throw new Error('fail ' + attempts);\n  return 'ok';\n};\nasync function retry(fn, times, delay) {\n  for (let attempt = 1; ; attempt++) {\n    try {\n      const result = await fn();\n      return result;\n    } catch (e) {\n      if (attempt >= times) throw e;\n      await new Promise((resolve) => setTimeout(resolve, delay));\n    }\n  }\n}\nreturn await retry(flaky, 3, 10);",
+  "cols": [
+   "attempt",
+   "times",
+   "error",
+   "result"
+  ],
+  "steps": [
+   {
+    "note": "attempt 1 failed, wait 10ms",
+    "vals": {
+     "attempt": "1",
+     "times": "3",
+     "error": "'fail 1'"
+    }
+   },
+   {
+    "note": "attempt 2 failed, wait 10ms",
+    "vals": {
+     "attempt": "2",
+     "times": "3",
+     "error": "'fail 2'"
+    }
+   },
+   {
+    "note": "attempt 3 succeeded",
+    "vals": {
+     "attempt": "3",
+     "times": "3",
+     "result": "'ok'"
+    }
+   }
+  ]
+ },
+ {
+  "id": "38-sleep-and-event-loop",
+  "n": 38,
+  "title": "Sleep and Event Loop Order",
+  "input": "push A; setTimeout(B); Promise.then(C); queueMicrotask(D); push E",
+  "output": "['A', 'E', 'C', 'D', 'B']",
+  "code": "const order = [];\norder.push('A');\nsetTimeout(() => {\n  order.push('B');\n}, 0);\nPromise.resolve().then(() => {\n  order.push('C');\n});\nqueueMicrotask(() => {\n  order.push('D');\n});\norder.push('E');\nreturn order;",
+  "cols": [
+   "order",
+   "microtasks",
+   "tasks"
+  ],
+  "steps": [
+   {
+    "note": "sync code runs first: push A",
+    "vals": {
+     "order": "['A']",
+     "microtasks": "[]",
+     "tasks": "[]"
+    }
+   },
+   {
+    "note": "setTimeout puts B in the task queue",
+    "vals": {
+     "order": "['A']",
+     "microtasks": "[]",
+     "tasks": "['B']"
+    }
+   },
+   {
+    "note": ".then puts C in the microtask queue",
+    "vals": {
+     "order": "['A']",
+     "microtasks": "['C']",
+     "tasks": "['B']"
+    }
+   },
+   {
+    "note": "queueMicrotask puts D in the microtask queue",
+    "vals": {
+     "order": "['A']",
+     "microtasks": "['C', 'D']",
+     "tasks": "['B']"
+    }
+   },
+   {
+    "note": "still sync: push E",
+    "vals": {
+     "order": "['A', 'E']",
+     "microtasks": "['C', 'D']",
+     "tasks": "['B']"
+    }
+   },
+   {
+    "note": "stack empty, run microtasks first: push C",
+    "vals": {
+     "order": "['A', 'E', 'C']",
+     "microtasks": "['D']",
+     "tasks": "['B']"
+    }
+   },
+   {
+    "note": "next microtask: push D",
+    "vals": {
+     "order": "['A', 'E', 'C', 'D']",
+     "microtasks": "[]",
+     "tasks": "['B']"
+    }
+   },
+   {
+    "note": "task queue runs last: push B",
+    "vals": {
+     "order": "['A', 'E', 'C', 'D', 'B']",
+     "microtasks": "[]",
+     "tasks": "[]"
+    }
+   }
+  ]
+ },
+ {
+  "id": "39-setinterval-with-settimeout",
+  "n": 39,
+  "title": "setInterval using setTimeout",
+  "input": "mySetInterval(tick, 20); clear at 70ms; wait 50ms more",
+  "output": "3",
+  "code": "function mySetInterval(fn, ms) {\n  const id = { timer: null, stopped: false };\n  const tick = () => {\n    id.timer = setTimeout(() => {\n      fn();\n      if (!id.stopped) tick();\n    }, ms);\n  };\n  tick();\n  return id;\n}\nfunction myClearInterval(id) {\n  id.stopped = true;\n  clearTimeout(id.timer);\n}\nlet n = 0;\nconst id = mySetInterval(() => {\n  n++;\n}, 20);\nadvance(70);\nmyClearInterval(id);\nadvance(50);\nreturn n;",
+  "cols": [
+   "now",
+   "n",
+   "timer id",
+   "stopped"
+  ],
+  "steps": [
+   {
+    "note": "tick at 20ms, schedule the next one",
+    "vals": {
+     "now": "20",
+     "n": "1",
+     "timer id": "1"
+    }
+   },
+   {
+    "note": "tick at 40ms, schedule the next one",
+    "vals": {
+     "now": "40",
+     "n": "2",
+     "timer id": "2"
+    }
+   },
+   {
+    "note": "tick at 60ms, schedule the next one",
+    "vals": {
+     "now": "60",
+     "n": "3",
+     "timer id": "3"
+    }
+   },
+   {
+    "note": "myClearInterval: stop flag on, pending timer cleared",
+    "vals": {
+     "now": "70",
+     "n": "3",
+     "stopped": "true"
+    }
+   },
+   {
+    "note": "50ms later: nothing ran",
+    "vals": {
+     "now": "120",
+     "n": "3"
+    }
+   }
+  ]
+ },
+ {
+  "id": "40-flatten-array",
+  "n": 40,
+  "title": "Flatten Array",
+  "input": "flat([1, [2, [3, [4]]]], 2)",
+  "output": "[1, 2, 3, [4]]",
+  "code": "function flat(arr, depth = 1) {\n  const out = [];\n  for (const x of arr) {\n    if (Array.isArray(x) && depth > 0) {\n      out.push(...flat(x, depth - 1));\n    } else {\n      out.push(x);\n    }\n  }\n  return out;\n}\nreturn flat([1, [2, [3, [4]]]], 2);",
+  "cols": [
+   "x",
+   "depth",
+   "out"
+  ],
+  "steps": [
+   {
+    "note": "value: push",
+    "vals": {
+     "x": "1",
+     "depth": "2",
+     "out": "[1]"
+    }
+   },
+   {
+    "note": "array: go inside with depth 1",
+    "vals": {
+     "x": "[2, [3, [4]]]",
+     "depth": "2",
+     "out": "[1]"
+    }
+   },
+   {
+    "note": "value: push",
+    "vals": {
+     "x": "2",
+     "depth": "1",
+     "out": "[2]"
+    }
+   },
+   {
+    "note": "array: go inside with depth 0",
+    "vals": {
+     "x": "[3, [4]]",
+     "depth": "1",
+     "out": "[2]"
+    }
+   },
+   {
+    "note": "value: push",
+    "vals": {
+     "x": "3",
+     "depth": "0",
+     "out": "[3]"
+    }
+   },
+   {
+    "note": "array but depth 0: keep as is",
+    "vals": {
+     "x": "[4]",
+     "depth": "0",
+     "out": "[3, [4]]"
+    }
+   },
+   {
+    "note": "back: spread its result into out",
+    "vals": {
+     "x": "[3, [4]]",
+     "depth": "1",
+     "out": "[2, 3, [4]]"
+    }
+   },
+   {
+    "note": "back: spread its result into out",
+    "vals": {
+     "x": "[2, [3, [4]]]",
+     "depth": "2",
+     "out": "[1, 2, 3, [4]]"
+    }
+   }
+  ]
+ },
+ {
+  "id": "41-flatten-object",
+  "n": 41,
+  "title": "Flatten and Unflatten Object",
+  "input": "flattenObject({ a: { b: 1, c: { d: 2 } }, e: 3 })",
+  "output": "{a.b: 1, a.c.d: 2, e: 3}",
+  "code": "function flattenObject(obj, prefix = '', out = {}) {\n  for (const key in obj) {\n    const path = prefix ? prefix + '.' + key : key;\n    const value = obj[key];\n    const nested = value && typeof value === 'object';\n    if (nested) flattenObject(value, path, out);\n    else out[path] = value;\n  }\n  return out;\n}\nreturn flattenObject({ a: { b: 1, c: { d: 2 } }, e: 3 });",
+  "cols": [
+   "prefix",
+   "key",
+   "path",
+   "value",
+   "out"
+  ],
+  "steps": [
+   {
+    "note": "'a' is an object, go inside",
+    "vals": {
+     "prefix": "''",
+     "key": "'a'",
+     "path": "'a'",
+     "value": "{b: 1, c: {d: 2}}",
+     "out": "{}"
+    }
+   },
+   {
+    "note": "'a.b' is a value, store it",
+    "vals": {
+     "prefix": "'a'",
+     "key": "'b'",
+     "path": "'a.b'",
+     "value": "1",
+     "out": "{a.b: 1}"
+    }
+   },
+   {
+    "note": "'a.c' is an object, go inside",
+    "vals": {
+     "prefix": "'a'",
+     "key": "'c'",
+     "path": "'a.c'",
+     "value": "{d: 2}",
+     "out": "{a.b: 1}"
+    }
+   },
+   {
+    "note": "'a.c.d' is a value, store it",
+    "vals": {
+     "prefix": "'a.c'",
+     "key": "'d'",
+     "path": "'a.c.d'",
+     "value": "2",
+     "out": "{a.b: 1, a.c.d: 2}"
+    }
+   },
+   {
+    "note": "'e' is a value, store it",
+    "vals": {
+     "prefix": "''",
+     "key": "'e'",
+     "path": "'e'",
+     "value": "3",
+     "out": "{a.b: 1, a.c.d: 2, e: 3}"
+    }
+   }
+  ]
+ },
+ {
+  "id": "42-deep-clone",
+  "n": 42,
+  "title": "Deep Clone",
+  "input": "obj = { name: 'loop', tags: ['x'] }; obj.self = obj; deepClone(obj)",
+  "output": "[true, true]",
+  "code": "function deepClone(value, seen = new WeakMap()) {\n  if (value === null || typeof value !== 'object') return value;\n  if (value instanceof Date) return new Date(value);\n  if (seen.has(value)) {\n    return seen.get(value);\n  }\n  const copy = Array.isArray(value) ? [] : {};\n  seen.set(value, copy);\n  for (const key of Object.keys(value)) {\n    copy[key] = deepClone(value[key], seen);\n  }\n  return copy;\n}\nconst obj = { name: 'loop', tags: ['x'] };\nobj.self = obj;\nconst c = deepClone(obj);\nreturn [c.self === c, c !== obj];",
+  "cols": [
+   "value",
+   "copy",
+   "key"
+  ],
+  "steps": [
+   {
+    "note": "new object: register copy in seen before recursing",
+    "vals": {
+     "value": "{name: 'loop', tags: ['x'], self: [circular]}",
+     "copy": "{}"
+    }
+   },
+   {
+    "note": "copied key 'name'",
+    "vals": {
+     "key": "'name'",
+     "copy": "{name: 'loop'}"
+    }
+   },
+   {
+    "note": "new array: register copy in seen before recursing",
+    "vals": {
+     "value": "['x']",
+     "copy": "[]"
+    }
+   },
+   {
+    "note": "copied key '0'",
+    "vals": {
+     "key": "'0'",
+     "copy": "['x']"
+    }
+   },
+   {
+    "note": "copied key 'tags'",
+    "vals": {
+     "key": "'tags'",
+     "copy": "{name: 'loop', tags: ['x']}"
+    }
+   },
+   {
+    "note": "already copied this object: reuse the copy (handles the cycle)",
+    "vals": {
+     "value": "{name: 'loop', tags: ['x'], self: [circular]}",
+     "copy": "{name: 'loop', tags: ['x']}"
+    }
+   },
+   {
+    "note": "copied key 'self'",
+    "vals": {
+     "key": "'self'",
+     "copy": "{name: 'loop', tags: ['x'], self: [circular]}"
+    }
+   }
+  ]
+ },
+ {
+  "id": "43-deep-equal",
+  "n": 43,
+  "title": "Deep Equal",
+  "input": "isEqual({ a: [1, { b: 2 }] }, { a: [1, { b: 3 }] })",
+  "output": "false",
+  "code": "function isEqual(a, b) {\n  if (Object.is(a, b)) {\n    return true;\n  }\n  if (!a || !b || typeof a !== 'object' || typeof b !== 'object') {\n    return false;\n  }\n  if (Array.isArray(a) !== Array.isArray(b)) return false;\n  const keysA = Object.keys(a);\n  const keysB = Object.keys(b);\n  if (keysA.length !== keysB.length) return false;\n  return keysA.every((k) => Object.hasOwn(b, k) && isEqual(a[k], b[k]));\n}\nreturn isEqual({ a: [1, { b: 2 }] }, { a: [1, { b: 3 }] });",
+  "cols": [
+   "a",
+   "b",
+   "keysA",
+   "keysB",
+   "returns"
+  ],
+  "steps": [
+   {
+    "note": "both objects: compare key counts, then each key",
+    "vals": {
+     "a": "{a: [1, {b: 2}]}",
+     "b": "{a: [1, {b: 3}]}",
+     "keysA": "['a']",
+     "keysB": "['a']"
+    }
+   },
+   {
+    "note": "both objects: compare key counts, then each key",
+    "vals": {
+     "a": "[1, {b: 2}]",
+     "b": "[1, {b: 3}]",
+     "keysA": "['0', '1']",
+     "keysB": "['0', '1']"
+    }
+   },
+   {
+    "note": "same value",
+    "vals": {
+     "a": "1",
+     "b": "1",
+     "returns": "true"
+    }
+   },
+   {
+    "note": "both objects: compare key counts, then each key",
+    "vals": {
+     "a": "{b: 2}",
+     "b": "{b: 3}",
+     "keysA": "['b']",
+     "keysB": "['b']"
+    }
+   },
+   {
+    "note": "different and not both objects",
+    "vals": {
+     "a": "2",
+     "b": "3",
+     "returns": "false"
+    }
+   }
+  ]
+ },
+ {
+  "id": "44-get-by-path",
+  "n": 44,
+  "title": "Get Value by Path",
+  "input": "get({ a: { b: [{ c: 5 }] } }, 'a.b[0].c')",
+  "output": "5",
+  "code": "function get(obj, path, defaultValue) {\n  const keys = Array.isArray(path) ? path : path.replace(/\\[(\\w+)\\]/g, '.$1').split('.');\n  let cur = obj;\n  for (const key of keys) {\n    if (cur == null) return defaultValue;\n    cur = cur[key];\n  }\n  return cur === undefined ? defaultValue : cur;\n}\nreturn get({ a: { b: [{ c: 5 }] } }, 'a.b[0].c');",
+  "cols": [
+   "path",
+   "keys",
+   "key",
+   "cur"
+  ],
+  "steps": [
+   {
+    "note": "turn [0] into .0, split on dots",
+    "vals": {
+     "path": "'a.b[0].c'",
+     "keys": "['a', 'b', '0', 'c']"
+    }
+   },
+   {
+    "note": "step into 'a'",
+    "vals": {
+     "key": "'a'",
+     "cur": "{b: [{c: 5}]}"
+    }
+   },
+   {
+    "note": "step into 'b'",
+    "vals": {
+     "key": "'b'",
+     "cur": "[{c: 5}]"
+    }
+   },
+   {
+    "note": "step into '0'",
+    "vals": {
+     "key": "'0'",
+     "cur": "{c: 5}"
+    }
+   },
+   {
+    "note": "step into 'c'",
+    "vals": {
+     "key": "'c'",
+     "cur": "5"
+    }
+   }
+  ]
+ },
+ {
+  "id": "45-event-emitter",
+  "n": 45,
+  "title": "Event Emitter",
+  "input": "on('hi', a), on('hi', b), emit('hi', 1), off('hi', a), emit('hi', 2), once('bye', c), emit('bye', 1), emit('bye', 2)",
+  "output": "['a1', 'b1', 'b2', 'c1']",
+  "code": "class EventEmitter {\n  constructor() {\n    this.events = {};\n  }\n  on(event, listener) {\n    (this.events[event] ??= []).push(listener);\n    return this;\n  }\n  off(event, listener) {\n    this.events[event] = (this.events[event] ?? []).filter((l) => l !== listener && l.listener !== listener);\n    return this;\n  }\n  emit(event, ...args) {\n    const listeners = this.events[event];\n    if (!listeners?.length) return false;\n    [...listeners].forEach((l) => l.apply(this, args));\n    return true;\n  }\n  once(event, listener) {\n    const wrapper = (...args) => {\n      this.off(event, wrapper);\n      listener.apply(this, args);\n    };\n    wrapper.listener = listener;\n    return this.on(event, wrapper);\n  }\n}\nconst log = [];\nconst a = (x) => log.push('a' + x);\nconst b = (x) => log.push('b' + x);\nconst c = (x) => log.push('c' + x);\nconst e = new EventEmitter();\nconst ops = [['on', 'hi', a], ['on', 'hi', b], ['emit', 'hi', 1], ['off', 'hi', a], ['emit', 'hi', 2], ['once', 'bye', c], ['emit', 'bye', 1], ['emit', 'bye', 2]];\nfor (const [op, event, arg] of ops) {\n  e[op](event, arg);\n}\nreturn log;",
+  "cols": [
+   "events",
+   "log"
+  ],
+  "steps": [
+   {
+    "note": "on('hi', a)",
+    "vals": {
+     "events": "{hi: [a]}",
+     "log": "[]"
+    }
+   },
+   {
+    "note": "on('hi', b)",
+    "vals": {
+     "events": "{hi: [a, b]}",
+     "log": "[]"
+    }
+   },
+   {
+    "note": "emit('hi', 1)",
+    "vals": {
+     "events": "{hi: [a, b]}",
+     "log": "['a1', 'b1']"
+    }
+   },
+   {
+    "note": "off('hi', a)",
+    "vals": {
+     "events": "{hi: [b]}",
+     "log": "['a1', 'b1']"
+    }
+   },
+   {
+    "note": "emit('hi', 2)",
+    "vals": {
+     "events": "{hi: [b]}",
+     "log": "['a1', 'b1', 'b2']"
+    }
+   },
+   {
+    "note": "once('bye', c)",
+    "vals": {
+     "events": "{hi: [b], bye: [once(c)]}",
+     "log": "['a1', 'b1', 'b2']"
+    }
+   },
+   {
+    "note": "emit('bye', 1)",
+    "vals": {
+     "events": "{hi: [b], bye: []}",
+     "log": "['a1', 'b1', 'b2', 'c1']"
+    }
+   },
+   {
+    "note": "emit('bye', 2)",
+    "vals": {
+     "events": "{hi: [b], bye: []}",
+     "log": "['a1', 'b1', 'b2', 'c1']"
+    }
+   }
+  ]
+ }
+]

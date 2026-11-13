@@ -30,11 +30,13 @@
     "pretypecheck": "npm run generate",
     "pretest": "npm run generate",
     "pretest:coverage": "npm run generate",
-    "postbuild": "node scripts/check-build.mjs"
+    "postbuild": "node scripts/check-build.mjs",
+    "dsa:traces": "node scripts/dsa-traces.mjs"
   },
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",
     "@xyflow/react": "12.12.0",
+    "acorn": "^8.19.0",
     "lucide-react": "^0.468.0",
     "next": "^16.4.6",
     "prism-react-renderer": "^2.4.1",

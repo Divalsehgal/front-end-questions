@@ -30,7 +30,7 @@ describe('Layout', () => {
     expect(screen.getByRole('banner')).toBeInTheDocument();
     const nav = screen.getByRole('navigation', { name: 'Main' });
     expect(within(nav).getByRole('link', { name: 'Dashboard' })).toHaveAttribute('aria-current', 'page');
-    expect(within(nav).getAllByRole('link')).toHaveLength(3 + SUBJECTS.length);
+    expect(within(nav).getAllByRole('link')).toHaveLength(4 + SUBJECTS.length);
     const main = screen.getByRole('main');
     expect(main).toHaveAttribute('id', MAIN_ID);
     expect(within(main).getByRole('heading', { name: /Page body/ })).toBeInTheDocument();

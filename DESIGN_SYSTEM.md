@@ -97,8 +97,10 @@ src/
     icons/ Kbd/ Layout/ LivePreview/ Page/ ProgressBar/ Prose/ ResultHeader/ Stat/ StatusDot/ Tabs/
   questions/   one folder per view + shared/ (useFirstVerdict, useShortcuts, useDraft, confirmReveal, AnswerDisclosure)
     registry.tsx
-  pages/       Dashboard/ MockSetup/ QuestionPage/ Review/ SessionSummary/ SubjectPage/ Verify/
-  test/        setup.ts (jest-dom, cleanup, Monaco stub), render.tsx (router helper)
+  app/         Next.js App Router: one page.tsx per URL, thin wrappers around screens/
+  screens/     Dashboard/ Dsa/ MockSetup/ QuestionPage/ Review/ SessionSummary/ SubjectPage/ Verify/
+  dsa/         DSA patterns data, dry-run tracer (tracer.js, fmt.js), solved-ticks store
+  test/        setup.ts (jest-dom, cleanup, Monaco stub), navigation.tsx (next/navigation mock), render.tsx
 ```
 
 Grouped folders: `Card` (Card, List), `Badge` (Badge, DifficultyBadge), `Page` (Page, PageHeader, SectionTitle),

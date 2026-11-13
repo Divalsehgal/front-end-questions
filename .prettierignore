@@ -3,3 +3,7 @@ src/content/subjects/*/files/
 
 # Written by scripts/generate-architecture.mjs (stable JSON.stringify output; CI checks it is current).
 src/generated/
+
+# DSA practice: the learner's own exercise files, and reference solutions shown verbatim.
+dsa-exercises/
+scripts/dsa-traces.mjs

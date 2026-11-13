@@ -121,7 +121,7 @@
   "nodes": [
     {
       "data": {
-        "description": "Next.js 16.4.6 App Router app (React 19.0.0) across 9 routes (/, /architecture, /mock, /q/:subject/:id, /review, /s/:subject, /session, /settings, /verify), configured by NEXT_PUBLIC_BASE_PATH, NEXT_PUBLIC_SITE_URL; every route is its own chunk, and pages that need local progress render in the browser only.",
+        "description": "Next.js 16.4.6 App Router app (React 19.0.0) across 13 routes (/, /architecture, /dsa, /dsa/drill, /dsa/dry-run, /dsa/patterns, /mock, /q/:subject/:id, /review, /s/:subject, /session, /settings, /verify), configured by NEXT_PUBLIC_BASE_PATH, NEXT_PUBLIC_SITE_URL; every route is its own chunk, and pages that need local progress render in the browser only.",
         "label": "Next.js app"
       },
       "id": "spa",

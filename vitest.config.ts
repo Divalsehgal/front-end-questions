@@ -38,6 +38,7 @@ export default defineConfig({
         'src/questions/**',
         'src/screens/**',
         'src/architecture/**',
+        'src/dsa/**',
       ],
       exclude: [
         '**/*.test.{ts,tsx}',

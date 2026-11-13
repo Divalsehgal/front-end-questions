@@ -9,3 +9,4 @@ export const SessionSummary = dynamic(() => import('../screens/SessionSummary').
 export const Settings = dynamic(() => import('../screens/Settings').then((m) => m.Settings), { ssr: false });
 export const Architecture = dynamic(() => import('../screens/Architecture').then((m) => m.Architecture), { ssr: false });
 export const Verify = dynamic(() => import('../screens/Verify'), { ssr: false });
+export const DsaDrill = dynamic(() => import('../screens/Dsa/DsaDrill').then((m) => m.DsaDrill), { ssr: false });
