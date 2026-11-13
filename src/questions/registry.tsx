@@ -1,7 +1,7 @@
 import { lazyComponent } from '../ui/lib';
 import { KIND_META, KIND_ORDER, type KindMeta } from './kinds';
-import type { ViewProps } from './shared';
 import type { Kind, Question } from '../content/types';
+import type { ViewProps } from './shared';
 import type { ComponentType } from 'react';
 
 type KindInfo<K extends Kind> = KindMeta & {

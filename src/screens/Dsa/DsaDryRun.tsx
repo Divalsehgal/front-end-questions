@@ -30,7 +30,7 @@ export function DsaDryRun() {
   );
 
   return (
-    <div className="grid items-start gap-7 md:grid-cols-[250px_minmax(0,1fr)]">
+    <div className="grid grid-cols-[minmax(0,1fr)] items-start gap-7 md:grid-cols-[250px_minmax(0,1fr)]">
       <nav
         aria-label="Exercises"
         className="flex max-h-56 flex-col gap-px overflow-auto rounded-xl border border-line p-1 md:sticky md:top-6 md:max-h-[calc(100dvh-3rem)] md:rounded-none md:border-0 md:p-0 md:pr-1"

@@ -96,5 +96,8 @@
     "*.{md,json}": [
       "prettier --write --ignore-unknown"
     ]
+  },
+  "overrides": {
+    "dompurify": "3.4.17"
   }
 }

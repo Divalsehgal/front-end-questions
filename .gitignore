@@ -15,3 +15,9 @@ src/generated/content-manifest.json
 .next
 next-env.d.ts
 out
+
+# Secrets and Vercel CLI state
+.env*
+!.env.example
+.vercel
+.claude/launch.json

@@ -1,6 +1,6 @@
 'use client';
 
-import { DsaNav } from '../../screens/Dsa';
+import { DsaNav } from '../../screens/Dsa/DsaNav';
 import { Page, PageHeader } from '../../ui';
 import type { ReactNode } from 'react';
 
