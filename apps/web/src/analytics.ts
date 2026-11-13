@@ -17,10 +17,16 @@ declare global {
   }
 }
 
+// GTM's data model keeps every key ever pushed, so an earlier event's params would ride along on later
+// events (a search_term on question_answered). Pushing undefined for keys this event lacks clears them.
+const pushedKeys = new Set<string>();
+
 /** Pushes one event to the dataLayer. A no-op on the server and when GTM is not configured. */
 export function track<E extends keyof Events>(event: E, params: Events[E]) {
   if (typeof window === 'undefined' || !GTM_ID) return;
-  (window.dataLayer ??= []).push({ event, ...params });
+  const stale = Object.fromEntries([...pushedKeys].filter((k) => !(k in params)).map((k) => [k, undefined]));
+  Object.keys(params).forEach((k) => pushedKeys.add(k));
+  (window.dataLayer ??= []).push({ event, ...stale, ...params });
 }
 
 /** The standard GTM bootstrap, run in <head> before anything else pushes. */
