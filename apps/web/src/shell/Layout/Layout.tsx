@@ -1,5 +1,5 @@
 'use client';
-import { cn, MOD } from '@fe-grind/ui/lib';
+import { cn, useModKey } from '@fe-grind/ui/lib';
 import { PanelLeftOpen } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 import { setSidebarCollapsed, toggleSidebar, useSidebar } from '../../state/sidebar';
@@ -34,6 +34,7 @@ function useSidebarShortcut() {
 }
 
 export function Layout({ children }: Readonly<{ children: ReactNode }>) {
+  const mod = useModKey();
   const { collapsed } = useSidebar();
   const [searching, setSearching] = useState(false);
   const openSearch = useCallback(() => setSearching(true), []);
@@ -55,7 +56,7 @@ export function Layout({ children }: Readonly<{ children: ReactNode }>) {
           onClick={() => setSidebarCollapsed(false)}
           className="fixed top-3 left-3 z-30 hidden rounded-lg border border-line bg-surface p-2 text-text-muted shadow-sm hover:text-text-main md:block"
           aria-label="Show sidebar"
-          title={`Show sidebar (${MOD}+B)`}
+          title={`Show sidebar (${mod}+B)`}
         >
           <PanelLeftOpen size={16} aria-hidden />
         </button>

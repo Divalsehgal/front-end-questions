@@ -1,4 +1,4 @@
-import { Button, Kbd, MOD } from '@fe-grind/ui';
+import { Button, Kbd, useModKey } from '@fe-grind/ui';
 import { Eye, Loader2, Play, RotateCcw, ShieldCheck } from 'lucide-react';
 
 export function EditorToolbar({
@@ -20,6 +20,7 @@ export function EditorToolbar({
   onReveal: () => void;
   onReset: () => void;
 }>) {
+  const mod = useModKey();
   let RunIcon = typeOnly ? ShieldCheck : Play;
   if (running) RunIcon = Loader2;
   return (
@@ -33,7 +34,7 @@ export function EditorToolbar({
         </Button>
       )}
       <span className="hidden text-xs text-text-muted sm:inline">
-        <Kbd>{MOD}</Kbd> <Kbd>Enter</Kbd>
+        <Kbd>{mod}</Kbd> <Kbd>Enter</Kbd>
       </span>
       <div className="ml-auto flex gap-1">
         {canReveal && (

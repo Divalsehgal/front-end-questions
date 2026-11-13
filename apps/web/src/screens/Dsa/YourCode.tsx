@@ -1,7 +1,7 @@
 'use client';
 import * as helpers from '@fe-grind/dsa/helpers';
 import { dryRun, fmt, type DryRunResult } from '@fe-grind/dsa/tracer';
-import { Button, Callout, Kbd, MOD, withStableKeys } from '@fe-grind/ui';
+import { Button, Callout, Kbd, useModKey, withStableKeys } from '@fe-grind/ui';
 import { useState } from 'react';
 import { TraceTable } from './TraceTable';
 
@@ -29,6 +29,7 @@ const saved = () => {
 
 /** Paste any function and the call to trace; runs it with a probe after every statement. */
 export function YourCode() {
+  const mod = useModKey();
   // Only mounted after a click, so reading localStorage here can't mismatch the server HTML.
   const [code, setCode] = useState(saved);
   const [result, setResult] = useState<(DryRunResult & { tests: Test[] }) | null>(null);
@@ -92,7 +93,7 @@ export function YourCode() {
       />
       <div className="mt-3 mb-5 flex gap-2">
         <Button onClick={() => void run()} disabled={running}>
-          {running ? 'Running' : 'Dry run'} <Kbd>{MOD}+Enter</Kbd>
+          {running ? 'Running' : 'Dry run'} <Kbd>{mod}+Enter</Kbd>
         </Button>
         <Button variant="secondary" onClick={() => save(SAMPLE)}>
           Reset to example
