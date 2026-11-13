@@ -1,0 +1,28 @@
+import { cn, TONES, type Tone } from '../lib';
+import type { ReactNode } from 'react';
+
+export function Badge({ children, tone = 'neutral', className }: Readonly<{ children: ReactNode; tone?: Tone; className?: string }>) {
+  const t = TONES[tone];
+  return (
+    <span
+      className={cn('inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 font-mono text-[11px] font-medium whitespace-nowrap', t.bg, t.text, className)}
+    >
+      {children}
+    </span>
+  );
+}
+
+/** Same union as the content package's Difficulty; the design library depends on no domain package. */
+export type Difficulty = 'easy' | 'medium' | 'hard';
+
+export const DIFFICULTY_TONE: Record<Difficulty, Tone> = { easy: 'success', medium: 'warn', hard: 'error' };
+
+export function DifficultyBadge({ difficulty }: Readonly<{ difficulty?: Difficulty }>) {
+  if (!difficulty) return null;
+  return (
+    <Badge tone={DIFFICULTY_TONE[difficulty]} className="capitalize">
+      <span className="sr-only">Difficulty: </span>
+      {difficulty}
+    </Badge>
+  );
+}

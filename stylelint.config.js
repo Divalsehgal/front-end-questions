@@ -1,13 +1,13 @@
 /** @type {import('stylelint').Config} */
 export default {
   extends: ['stylelint-config-standard-scss', 'stylelint-config-recess-order'],
-  ignoreFiles: ['dist/**', 'coverage/**', 'node_modules/**', 'src/content/subjects/**/files/**'],
+  ignoreFiles: ['**/dist/**', '**/coverage/**', '**/node_modules/**', '**/.next/**', 'packages/content/src/subjects/**/files/**'],
   rules: {
     // Colours come from design tokens; raw hex is only allowed where tokens are defined (see overrides).
     'color-no-hex': true,
     'declaration-no-important': true,
     'max-nesting-depth': 3,
-    // Tailwind v4 at-rules used by src/index.css.
+    // Tailwind v4 at-rules used by packages/ui/src/styles.css.
     'at-rule-no-unknown': null,
     'scss/at-rule-no-unknown': [
       true,
@@ -33,7 +33,7 @@ export default {
     },
     {
       // Token sources are the only place raw colour values may live.
-      files: ['src/styles/tokens/**', 'src/index.css'],
+      files: ['packages/ui/src/styles.css'],
       rules: { 'color-no-hex': null },
     },
   ],

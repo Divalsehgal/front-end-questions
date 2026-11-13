@@ -18,6 +18,9 @@ jobs:
     env:
       # Empty for forks, Dependabot, and until the secret is added: the Sonar step is then skipped, not failed.
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      # Optional Turborepo remote cache (Vercel): unset, every task simply runs.
+      TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+      TURBO_TEAM: ${{ vars.TURBO_TEAM }}
     steps:
       - uses: actions/checkout@v5
         with:
@@ -30,15 +33,17 @@ jobs:
 
       - run: npm ci
 
-      # src/generated/architecture.json is derived from the code: fail if a change forgot to regenerate it.
+      # The app's src/generated/architecture.json is derived from the code: fail if a change forgot to regenerate it.
       - name: Architecture diagram is up to date
         run: npm run architecture:check
 
-      - name: Type-check (app and tests)
-        run: npm run typecheck
+      # Turborepo runs each workspace's tasks in dependency order (generate first) and in parallel,
+      # and skips any task whose inputs are unchanged when a remote cache is configured (TURBO_TOKEN).
+      - name: Type-check, lint, contrast and test with coverage (every workspace)
+        run: npx turbo run typecheck lint check:contrast test:coverage
 
-      - name: Lint (ESLint)
-        run: npm run lint
+      - name: Lint repo-level config (ESLint)
+        run: npm run lint:root
 
       - name: Lint styles (Stylelint)
         run: npm run lint:styles
@@ -46,17 +51,9 @@ jobs:
       - name: Check formatting (Prettier)
         run: npm run format:check
 
-      - name: WCAG AA contrast
-        run: npm run check:contrast
-
-      # Runs unit tests plus the content gate: every drill's reference solution must pass its
-      # tests and type tests, every starter must fail, every output snippet must run.
-      - name: Test with coverage
-        run: npm run test:coverage
-
-      # Full production build: client, SSR bundle, prerendered pages, sitemap and robots.txt.
+      # Full production build of apps/web: prerendered pages, sitemap and robots.txt.
       - name: Build and prerender
-        run: npm run build
+        run: npx turbo run build
 
       # Requires SonarCloud's Automatic Analysis to be OFF (the two modes conflict and the scan exits with code 3).
       - name: SonarCloud scan

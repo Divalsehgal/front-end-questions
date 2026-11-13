@@ -1,0 +1,27 @@
+{
+  "name": "@fe-grind/content",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "The question bank: subjects, typed question data, the light manifest every page ships, on-demand subject loading and git-based dates.",
+  "exports": {
+    "./types": "./src/types.ts",
+    "./registry": "./src/registry.ts",
+    "./loader": "./src/loader.ts",
+    "./bank": "./src/bank.ts",
+    "./manifest": "./src/manifest.ts",
+    "./dates": "./src/dates.ts",
+    "./files": "./src/files.ts"
+  },
+  "scripts": {
+    "generate": "node scripts/generate.mjs",
+    "dev": "node scripts/generate.mjs --watch",
+    "typecheck": "tsc -p tsconfig.json",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  },
+  "devDependencies": {
+    "@fe-grind/runtime": "*"
+  }
+}

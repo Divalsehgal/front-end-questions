@@ -1,0 +1,42 @@
+{
+  "name": "@fe-grind/ui",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Design system: tokens (styles.css), primitives, code editor, highlighter and live preview. Depends on no domain package.",
+  "sideEffects": [
+    "*.css"
+  ],
+  "exports": {
+    ".": "./src/index.ts",
+    "./code": "./src/code.ts",
+    "./theme": "./src/theme/theme.ts",
+    "./styles.css": "./src/styles.css",
+    "./lib/Redirect": "./src/lib/Redirect.tsx",
+    "./lib/stableKeys": "./src/lib/stableKeys.ts",
+    "./lib/useHydrated": "./src/lib/useHydrated.ts",
+    "./CodeEditor/monacoSetup": "./src/CodeEditor/monacoSetup.ts",
+    "./LivePreview/previewDocument": "./src/LivePreview/previewDocument.ts",
+    "./test/setup": "./src/test/setup.ts",
+    "./*": "./src/*/index.ts"
+  },
+  "scripts": {
+    "generate": "node scripts/monaco-types.mjs",
+    "check:contrast": "node scripts/check-contrast.js",
+    "typecheck": "tsc -p tsconfig.json",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@monaco-editor/react": "^4.7.0",
+    "lucide-react": "^0.468.0",
+    "prism-react-renderer": "^2.4.1",
+    "sucrase": "^3.35.0"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "next": "^16.4.6"
+  }
+}
