@@ -7,7 +7,7 @@ only when `NEXT_PUBLIC_GTM_ID` is set at build time.
 
 | Piece                                       | ID / where                                                                     | State                                                                                  |
 | ------------------------------------------- | ------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------- |
-| GTM container                               | `GTM-NK3Z4T9C`                                                                 | Version 2 published                                                                    |
+| GTM container                               | `GTM-W4MN9VC6`                                                                 | Version 2 published                                                                    |
 | GA4 property                                | "FE Grind", Measurement ID `G-72088HPR4D`                                      | Receiving production hits                                                              |
 | Vercel env                                  | `NEXT_PUBLIC_GTM_ID` on Production and Preview                                 | Set; production deployed from `main`                                                   |
 | Custom dimensions                           | `subject`, `session_type`, `correct`, `first_attempt`, `passed`, `search_term` | Created (event scope)                                                                  |
@@ -99,6 +99,20 @@ build time, so **redeploy** afterwards.
    - Reports → Engagement → Events lists every event.
    - Switch the internal-traffic filter from Testing to Active.
 
+## Search Console
+
+- **Property.** URL-prefix property `https://front-end-grind.vercel.app/`, already verified by an **HTML file**.
+- **GTM as a second ownership method.** Search Console → Settings → Ownership verification → Google Tag Manager →
+  Verify. It needs:
+  - the `<noscript>` iframe from the container snippet in `<body>` (`app/layout.tsx` renders it);
+  - "Publish" permission on the container.
+    If the HTML file is ever removed, ownership survives.
+- **GA4 link.** GA4 Admin → Product links → Search Console links → Link, then pick the property and the web stream.
+  Reports → Search Console then shows queries and landing pages, after up to 48 h.
+- **Sitemap.** Search Console → Sitemaps → `sitemap.xml`.
+- **Meta tag (optional).** The `GOOGLE_SITE_VERIFICATION` env var renders a meta tag, but it isn't set on Vercel; GTM
+  covers it.
+
 ## Troubleshooting
 
 | Symptom                                  | Likely cause                                                                                      |
@@ -110,6 +124,7 @@ build time, so **redeploy** afterwards.
 | Only first page view counted             | History-change option off in enhanced measurement                                                 |
 | Duplicate page views                     | A second config tag, the Google tag also firing on History Change, or the app pushing `page_view` |
 | Event shows, params missing in reports   | Custom dimension not created, or created after the event (not retroactive)                        |
+| GSC "could not find a GTM container ID"  | The `<noscript>` iframe is missing from `<body>`, or the deploy with it is not live yet           |
 | Can't mark an event as key               | It hasn't appeared in Admin → Events yet; wait up to 24 h                                         |
 
 ## Notes for doing the console work with Claude's browser pane
