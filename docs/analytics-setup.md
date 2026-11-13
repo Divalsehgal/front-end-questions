@@ -102,11 +102,10 @@ build time, so **redeploy** afterwards.
 ## Search Console
 
 - **Property.** URL-prefix property `https://front-end-grind.vercel.app/`, already verified by an **HTML file**.
-- **GTM as a second ownership method.** Search Console → Settings → Ownership verification → Google Tag Manager →
-  Verify. It needs:
-  - the `<noscript>` iframe from the container snippet in `<body>` (`app/layout.tsx` renders it);
-  - "Publish" permission on the container.
-    If the HTML file is ever removed, ownership survives.
+- **GTM verification does not work here.** Search Console finds the container but rejects it with "snippet is in
+  the wrong location". Next.js renders its own tags above the GTM script in `<head>`, and a hidden `<div>` before the
+  `<noscript>` iframe in `<body>`, and neither is under our control. Keep the HTML file. For a second method, set
+  `GOOGLE_SITE_VERIFICATION` on Vercel (meta tag) or add a DNS record.
 - **GA4 link.** GA4 Admin → Product links → Search Console links → Link, then pick the property and the web stream.
   Reports → Search Console then shows queries and landing pages, after up to 48 h.
 - **Sitemap.** Search Console → Sitemaps → `sitemap.xml`.
