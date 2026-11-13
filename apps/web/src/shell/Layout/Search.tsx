@@ -4,6 +4,7 @@ import { cn } from '@fe-grind/ui/lib';
 import { Search as SearchIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
+import { track } from '../../analytics';
 import type { KeyboardEvent } from 'react';
 
 const LIMIT = 20;
@@ -48,6 +49,7 @@ export function SearchDialog({ onClose }: Readonly<{ onClose: () => void }>) {
 
   const go = (e: Entry | undefined) => {
     if (!e) return;
+    track('search', { search_term: query.trim(), question_key: e.key });
     onClose();
     router.push(hrefOf(e.key));
   };

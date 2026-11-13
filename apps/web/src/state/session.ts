@@ -1,4 +1,5 @@
 import { useSyncExternalStore } from 'react';
+import { track } from '../analytics';
 
 // A "session" is an ordered queue of questions (a review or a mock round).
 // While one is active, "Next" walks the queue instead of the topic.
@@ -47,8 +48,23 @@ function set(next: Session | null) {
   listeners.forEach((l) => l());
 }
 
-export const startSession = (kind: Session['kind'], keys: string[]) => set({ kind, keys, results: {}, startedAt: Date.now() });
-export const endSession = () => set(null);
+export function startSession(kind: Session['kind'], keys: string[]) {
+  set({ kind, keys, results: {}, startedAt: Date.now() });
+  track('session_start', { session_type: kind, question_count: keys.length });
+}
+
+export function endSession() {
+  if (session) {
+    const answers = Object.values(session.results);
+    track('session_end', {
+      session_type: session.kind,
+      question_count: session.keys.length,
+      answered: answers.length,
+      correct: answers.filter(Boolean).length,
+    });
+  }
+  set(null);
+}
 
 export function recordInSession(key: string, correct: boolean) {
   // Only the first answer counts towards the round's score.

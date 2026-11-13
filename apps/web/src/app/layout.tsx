@@ -1,4 +1,5 @@
 import localFont from 'next/font/local';
+import { GTM_ID, GTM_SCRIPT } from '../analytics';
 import { SITE_URL } from '../seo';
 import { Shell } from './Shell';
 import type { Metadata, Viewport } from 'next';
@@ -54,6 +55,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
     <html lang="en" className={inter.variable} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+        {GTM_ID && <script dangerouslySetInnerHTML={{ __html: GTM_SCRIPT }} />}
       </head>
       <body>
         <div id="root">

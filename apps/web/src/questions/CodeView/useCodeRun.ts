@@ -1,6 +1,7 @@
 import { runCodeTests, type TestResult } from '@fe-grind/runtime/sandbox';
 import { checkTypes, type TypeIssue } from '@fe-grind/runtime/typecheck';
 import { useRef, useState } from 'react';
+import { track } from '../../analytics';
 import type { CodeQuestion } from '@fe-grind/content/types';
 import type { Monaco } from '@fe-grind/ui/code';
 
@@ -37,6 +38,7 @@ export function useCodeRun(q: CodeQuestion, code: string, onSolved: () => void, 
     setRun(res);
     setRunning(false);
     onDone();
+    track('code_run', { question_id: q.id, passed: allPassed(res) });
     if (allPassed(res)) onSolved();
   };
 

@@ -1,4 +1,5 @@
 import { useSyncExternalStore } from 'react';
+import { track } from '../analytics';
 import { idbSet } from './storage/db';
 import { writeToFile } from './storage/fileSync';
 
@@ -98,6 +99,7 @@ export function record(key: string, correct: boolean) {
     },
   };
   save();
+  track('question_answered', { question_key: key, subject: key.split(':')[0], correct, first_attempt: !prev });
 }
 
 export function resetProgress() {
