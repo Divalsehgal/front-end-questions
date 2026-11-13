@@ -23,6 +23,7 @@ export function useSubject(slug: string | undefined) {
 
 /** The full entry for a "subject:id" key, loading its subject if needed. */
 export function useFullEntry(key: string) {
-  useSubject(key.split(':')[0]);
-  return fullEntry(key);
+  // Gate on the subject: the React Compiler memoizes this read, and it must redo it once the subject arrives.
+  const subject = useSubject(key.split(':')[0]);
+  return subject && fullEntry(key);
 }

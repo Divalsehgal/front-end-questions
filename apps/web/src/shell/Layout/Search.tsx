@@ -71,9 +71,10 @@ export function SearchDialog({ onClose }: Readonly<{ onClose: () => void }>) {
         open
         aria-modal="true"
         aria-label="Search questions"
-        className="relative m-0 w-full max-w-xl overflow-hidden rounded-xl border border-line bg-surface p-0 text-text-main shadow-xl"
+        className="relative m-0 w-full max-w-xl overflow-hidden rounded-xl border border-line bg-surface p-0 text-text-main shadow-xl focus-within:border-focus"
       >
-        <div className="flex items-center gap-2 border-b border-line px-4">
+        {/* The dialog's border is the focus indicator: the global outline would be clipped by overflow-hidden. */}
+        <div className="flex items-center gap-2 px-4">
           <SearchIcon size={16} aria-hidden className="shrink-0 text-text-muted" />
           <input
             // eslint-disable-next-line jsx-a11y/no-autofocus
@@ -91,10 +92,10 @@ export function SearchDialog({ onClose }: Readonly<{ onClose: () => void }>) {
             }}
             onKeyDown={onKeyDown}
             placeholder="Search questions…"
-            className="min-w-0 flex-1 bg-transparent py-3 text-sm text-text-main outline-none placeholder:text-text-muted"
+            className="min-w-0 flex-1 bg-transparent py-3 text-sm text-text-main outline-none! placeholder:text-text-muted"
           />
         </div>
-        <ul id={listId} role="listbox" aria-label="Results" className="max-h-[50vh] overflow-y-auto p-2">
+        <ul id={listId} role="listbox" aria-label="Results" className="max-h-[50vh] overflow-y-auto border-t border-line p-2 empty:hidden">
           {results.map((e, i) => (
             // Arrow keys and Enter on the combobox drive the options; the click is for mice.
             // eslint-disable-next-line jsx-a11y/click-events-have-key-events
@@ -115,7 +116,7 @@ export function SearchDialog({ onClose }: Readonly<{ onClose: () => void }>) {
             </li>
           ))}
         </ul>
-        {query.trim() && !results.length && <p className="px-4 pb-4 text-sm text-text-muted">No questions match “{query.trim()}”.</p>}
+        {query.trim() && !results.length && <p className="border-t border-line px-4 py-3 text-sm text-text-muted">No questions match “{query.trim()}”.</p>}
       </dialog>
     </div>
   );
