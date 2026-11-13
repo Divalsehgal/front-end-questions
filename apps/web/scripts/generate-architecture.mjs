@@ -37,24 +37,18 @@ const union = (fact) => [...new Set(packages.flatMap((p) => fact(p.r)))].sort((x
 const findFile = (...files) => packages.flatMap((p) => files.filter((f) => p.r.exists(f)).map((f) => p.dir + f))[0];
 const list = (items) => items.join(', ');
 
-/** Each candidate node: its fact (falsy drops it) and how to describe it from that fact. */
-function candidates() {
+const node = (id, type, tier, label, description) => ({ id, type, tier, label, description });
+/** `text` when `cond` holds, else '': keeps optional clauses out of nested template literals. */
+const when = (cond, text) => (cond ? text : '');
+
+/** The app itself, its packages and what runs at build time. */
+function appNodes() {
   const routes = facts.routes(a);
   const env = union(facts.envVars);
-  const keys = union(facts.localStorageKeys);
-  const idb = facts.indexedDb(a);
-  const sync = facts.fileSync(a);
-  const cdn = v('@monaco-editor/react') && facts.monacoCdn(r);
-  const contentPkg = packages.find((p) => facts.content(p.r));
-  const bank = contentPkg && { ...facts.content(contentPkg.r), at: contentPkg.dir };
   const worker = findFile('src/sandbox.worker.ts', 'src/runtime/sandbox.worker.ts');
-  const host = facts.vercel(a);
-  const ci = facts.workflows(r);
-  const sonar = facts.sonar(r);
-  const gsc = facts.searchConsole(a);
-  const { wrangler, docker } = facts.otherInfra(r);
-  const node = (id, type, tier, label, description) => ({ id, type, tier, label, description });
-
+  const configured = when(env.length, ', configured by ' + list(env));
+  const sucrase = when(v('sucrase'), ' with sucrase ' + v('sucrase'));
+  const checked = when(a.exists('scripts/check-build.mjs'), `; ${app.dir}scripts/check-build.mjs checks each page carries its content inline`);
   return [
     v('react') &&
       a.exists('src/app/layout.tsx') &&
@@ -63,8 +57,7 @@ function candidates() {
         'frontend',
         'client',
         'Next.js app',
-        `Next.js ${v('next') ?? '?'} App Router app (React ${v('react')}) across ${routes.length} routes (${list(routes)})` +
-          `${env.length ? `, configured by ${list(env)}` : ''}; every route is its own chunk, and pages that need local progress render in the browser only.`,
+        `Next.js ${v('next') ?? '?'} App Router app (React ${v('react')}) across ${routes.length} routes (${list(routes)})${configured}; every route is its own chunk, and pages that need local progress render in the browser only.`,
       ),
     v('@monaco-editor/react') &&
       node(
@@ -74,18 +67,17 @@ function candidates() {
         'Monaco editor',
         `@monaco-editor/react ${v('@monaco-editor/react')} code editor, loaded on demand for coding questions.`,
       ),
-    ...facts
-      .workspaces(r, rootPkg)
-      .map((w) =>
-        node(`pkg:${w.name}`, 'frontend', 'client', w.name, `Workspace package in ${w.dir}${w.deps.length ? ` that depends on ${list(w.deps)}` : ''}.`),
-      ),
+    ...facts.workspaces(r, rootPkg).map((w) => {
+      const deps = when(w.deps.length, ' that depends on ' + list(w.deps));
+      return node(`pkg:${w.name}`, 'frontend', 'client', w.name, `Workspace package in ${w.dir}${deps}.`);
+    }),
     worker &&
       node(
         'sandbox',
         'backend',
         'compute',
         'Sandbox Web Worker',
-        `A fresh module Web Worker per run (${worker}) compiles learner code${v('sucrase') ? ` with sucrase ${v('sucrase')}` : ''} and runs it off the main thread, so infinite loops can be killed.`,
+        `A fresh module Web Worker per run (${worker}) compiles learner code${sucrase} and runs it off the main thread, so infinite loops can be killed.`,
       ),
     v('next') &&
       node(
@@ -93,7 +85,7 @@ function candidates() {
         'backend',
         'compute',
         'Static generation',
-        `At build time next build renders every public route (generateStaticParams) to static HTML${a.exists('scripts/check-build.mjs') ? `; ${app.dir}scripts/check-build.mjs checks each page carries its content inline` : ''}.`,
+        `At build time next build renders every public route (generateStaticParams) to static HTML${checked}.`,
       ),
     a.exists('src/app/sitemap.xml/route.ts') &&
       node(
@@ -103,14 +95,27 @@ function candidates() {
         'Sitemap and robots',
         `Static route handlers in ${app.dir}src/app build sitemap.xml, per-subject sitemaps, robots.txt and llms.txt from the registry.`,
       ),
+  ];
+}
+
+/** Hosting, CI and third-party services. */
+function serviceNodes() {
+  const cdn = v('@monaco-editor/react') && facts.monacoCdn(r);
+  const host = facts.vercel(a);
+  const ci = facts.workflows(r);
+  const sonar = facts.sonar(r);
+  const gsc = facts.searchConsole(a);
+  const { wrangler, docker } = facts.otherInfra(r);
+  const rewrites = when(host?.rewrites.length, ' and rewrites ' + list(host?.rewrites ?? []));
+  const ciRuns = ci.map((w) => `${w.file} ("${w.name}", jobs: ${list(w.jobs)}) runs ${w.steps} steps on ${list(w.triggers)}`).join('; ');
+  return [
     host &&
       node(
         'vercel',
         'external',
         'compute',
         'Vercel',
-        `Serves the ${host.framework} build with ${host.redirects} redirect(s), ${host.headers} header rule(s)` +
-          `${host.rewrites.length ? ` and rewrites ${list(host.rewrites)}` : ''}.`,
+        `Serves the ${host.framework} build with ${host.redirects} redirect(s), ${host.headers} header rule(s)${rewrites}.`,
       ),
     wrangler && node('cloudflare', 'external', 'compute', 'Cloudflare Workers', `Deploys the worker "${wrangler.name}" configured in wrangler.`),
     docker && node('docker', 'backend', 'compute', 'Docker image', `Container built from ${docker.from} (Dockerfile).`),
@@ -118,14 +123,7 @@ function candidates() {
     ...facts.sdks(pkg).map((s) => node(`sdk:${s.name}`, 'external', 'compute', s.label, `${s.name} ${s.version} SDK, called from the app.`)),
     cdn &&
       node('cdn', 'external', 'compute', 'jsDelivr CDN', `${cdn.host} hosts ${cdn.pkg}, which @monaco-editor/loader downloads the first time an editor opens.`),
-    ci.length &&
-      node(
-        'ci',
-        'external',
-        'compute',
-        'GitHub Actions',
-        `${ci.map((w) => `${w.file} ("${w.name}", jobs: ${list(w.jobs)}) runs ${w.steps} steps on ${list(w.triggers)}`).join('; ')}.`,
-      ),
+    ci.length && node('ci', 'external', 'compute', 'GitHub Actions', `${ciRuns}.`),
     sonar &&
       node(
         'sonar',
@@ -136,6 +134,18 @@ function candidates() {
       ),
     gsc.length &&
       node('gsc', 'external', 'compute', 'Google Search Console', `Ownership verified by public/${gsc[0]}; crawls the prerendered pages and the sitemap.`),
+  ];
+}
+
+/** Where progress and content live. */
+function dataNodes() {
+  const keys = union(facts.localStorageKeys);
+  const idb = facts.indexedDb(a);
+  const sync = facts.fileSync(a);
+  const contentPkg = packages.find((p) => facts.content(p.r));
+  const bank = contentPkg && { ...facts.content(contentPkg.r), at: contentPkg.dir };
+  const manifest = when(bank?.manifest, ', indexed by a manifest generated at build time');
+  return [
     keys.length && node('localStorage', 'data', 'data', 'localStorage', `Synchronous copy read before first paint, under the keys ${list(keys)}.`),
     idb &&
       node(
@@ -159,11 +169,13 @@ function candidates() {
         'data',
         'data',
         'Content bank',
-        `${bank.subjects.length} subjects in ${bank.at}${bank.dir} (${list(bank.subjects)}), each a lazily loaded chunk` +
-          `${bank.manifest ? ', indexed by a manifest generated at build time' : ''}.`,
+        `${bank.subjects.length} subjects in ${bank.at}${bank.dir} (${list(bank.subjects)}), each a lazily loaded chunk${manifest}.`,
       ),
-  ].filter(Boolean);
+  ];
 }
+
+/** Each candidate node; a falsy entry (its fact is missing) is dropped. */
+const candidates = () => [...appNodes(), ...serviceNodes(), ...dataNodes()].filter(Boolean);
 
 /** [source, target, label, options]: kept only when both ends exist. Two-way pairs bend apart. */
 const EDGES = [

@@ -123,7 +123,7 @@ describe('LivePreview', () => {
     const frame = screen.getByTitle('Logs') as HTMLIFrameElement;
     const post = (source: MessageEventSource | null, data: unknown) => {
       act(() => {
-        window.dispatchEvent(new MessageEvent('message', { source, data }));
+        window.dispatchEvent(new MessageEvent('message', { origin: 'null', source, data }));
       });
     };
     post(frame.contentWindow, { source: 'fe-grind-preview', type: 'console', message: { level: 'log', text: 'hello' } });
@@ -158,7 +158,7 @@ describe('LivePreview', () => {
     expect(next.getAttribute('srcdoc')).toContain('<p>b</p>');
     expect(screen.getByTitle('Swap').getAttribute('srcdoc')).toContain('<p>a</p>'); // old run stays up meanwhile
     act(() => {
-      window.dispatchEvent(new MessageEvent('message', { source: next.contentWindow, data: { source: 'fe-grind-preview', type: 'rendered' } }));
+      window.dispatchEvent(new MessageEvent('message', { origin: 'null', source: next.contentWindow, data: { source: 'fe-grind-preview', type: 'rendered' } }));
     });
     expect(screen.queryByTitle('Swap (updating)')).not.toBeInTheDocument();
     expect(screen.getByTitle('Swap')).toBe(next); // the same, already-loaded element: no reload on swap
@@ -181,7 +181,7 @@ describe('LivePreview', () => {
     const heap = (bytes: number) => {
       act(() => {
         window.dispatchEvent(
-          new MessageEvent('message', { source: frame.contentWindow, data: { source: 'fe-grind-preview', type: 'memory', message: bytes } }),
+          new MessageEvent('message', { origin: 'null', source: frame.contentWindow, data: { source: 'fe-grind-preview', type: 'memory', message: bytes } }),
         );
       });
     };

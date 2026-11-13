@@ -50,13 +50,21 @@ function parseLog(log: string) {
     const commit = COMMIT.exec(line);
     if (commit) date = commit[1];
     else if (line.startsWith('+++ ')) {
-      file = line.startsWith('+++ b/') ? current(line.slice(6)) : '';
+      file = headerPath(line);
       if (file) touched.set(file, date);
     } else if (file) {
-      const id = ADDED_ID.exec(line)?.[1];
-      const key = id && `${slugOf(file)}:${id}`;
+      const key = addedKey(file, line);
       if (key && !added.has(key)) added.set(key, date);
     }
   }
   return { added, touched };
+}
+
+/** The current path of a `+++ ` diff header, or '' when the file was deleted (`+++ /dev/null`). */
+const headerPath = (line: string) => (line.startsWith('+++ b/') ? current(line.slice(6)) : '');
+
+/** "subject:id" when this diff line adds a question's `id:`. */
+function addedKey(file: string, line: string) {
+  const id = ADDED_ID.exec(line)?.[1];
+  return id ? `${slugOf(file)}:${id}` : undefined;
 }

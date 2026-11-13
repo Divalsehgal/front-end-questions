@@ -54,6 +54,15 @@ function skipParens(src: string, i: number): number {
 const keywordAt = (src: string, i: number, word: string) =>
   src.startsWith(word, i) && !IDENT.test(src[i - 1] ?? '') && src[i - 1] !== '.' && !IDENT.test(src[i + word.length] ?? '');
 
+/** Where the body of a loop starting at i begins (`for`, `for await`, `while`, `do`), or -1 if no loop starts there. */
+function loopBodyAt(src: string, i: number): number {
+  if (keywordAt(src, i, 'do')) return skipSpace(src, i + 2);
+  if (!keywordAt(src, i, 'for') && !keywordAt(src, i, 'while')) return -1;
+  let j = skipSpace(src, i + (src[i] === 'f' ? 3 : 5));
+  if (keywordAt(src, j, 'await')) j = skipSpace(src, j + 5);
+  return src[j] === '(' ? skipSpace(src, skipParens(src, j)) : -1;
+}
+
 export function protectLoops(src: string): string {
   const inserts: number[] = [];
   let i = 0;
@@ -63,14 +72,7 @@ export function protectLoops(src: string): string {
       i = next;
       continue;
     }
-    let body = -1;
-    if (keywordAt(src, i, 'for') || keywordAt(src, i, 'while')) {
-      let j = skipSpace(src, i + (src[i] === 'f' ? 3 : 5));
-      if (keywordAt(src, j, 'await')) j = skipSpace(src, j + 5);
-      if (src[j] === '(') body = skipSpace(src, skipParens(src, j));
-    } else if (keywordAt(src, i, 'do')) {
-      body = skipSpace(src, i + 2);
-    }
+    const body = loopBodyAt(src, i);
     if (body !== -1 && src[body] === '{') inserts.push(body + 1);
     i++;
   }

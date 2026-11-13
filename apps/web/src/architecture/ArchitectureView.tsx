@@ -42,7 +42,7 @@ export function ArchitectureView({ architecture }: Readonly<{ architecture: Arch
   const seen = useSeen(ref);
   // Same size and frame as the canvas (ArchitectureDiagram), so nothing shifts when it arrives.
   const placeholder = (
-    <div className="h-[560px] rounded-lg border border-line bg-surface" role="status" aria-label="Loading diagram" data-testid="architecture-placeholder" />
+    <output className="block h-[560px] rounded-lg border border-line bg-surface" aria-label="Loading diagram" data-testid="architecture-placeholder" />
   );
 
   return (

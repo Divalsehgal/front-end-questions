@@ -22,7 +22,7 @@ vi.mock('../../state/storage/persist', () => ({ isPersisted: vi.fn(), requestPer
 vi.mock('../../state/storage/backup', () => ({ downloadBackup: vi.fn() }));
 
 // The router test helper's <output> is a status too: pick the panel's message.
-const message = () => screen.getAllByRole('status').find((el) => el.tagName === 'P');
+const message = () => screen.getAllByRole('status').find((el) => el.dataset.testid !== 'location');
 const attempt = { status: 'correct', attempts: 1, firstTry: true, box: 2, due: 0, updated: 1 };
 const backupFile = (content: string, name = 'backup.json') => new File([content], name, { type: 'application/json' });
 

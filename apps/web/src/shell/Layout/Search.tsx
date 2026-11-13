@@ -67,11 +67,11 @@ export function SearchDialog({ onClose }: Readonly<{ onClose: () => void }>) {
     // The backdrop is a mouse convenience; Escape is the keyboard way out.
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 px-4 pt-[12vh]" onClick={(e) => e.target === e.currentTarget && onClose()}>
-      <div
-        role="dialog"
+      <dialog
+        open
         aria-modal="true"
         aria-label="Search questions"
-        className="w-full max-w-xl overflow-hidden rounded-xl border border-line bg-surface shadow-xl"
+        className="relative m-0 w-full max-w-xl overflow-hidden rounded-xl border border-line bg-surface p-0 text-text-main shadow-xl"
       >
         <div className="flex items-center gap-2 border-b border-line px-4">
           <SearchIcon size={16} aria-hidden className="shrink-0 text-text-muted" />
@@ -116,7 +116,7 @@ export function SearchDialog({ onClose }: Readonly<{ onClose: () => void }>) {
           ))}
         </ul>
         {query.trim() && !results.length && <p className="px-4 pb-4 text-sm text-text-muted">No questions match “{query.trim()}”.</p>}
-      </div>
+      </dialog>
     </div>
   );
 }

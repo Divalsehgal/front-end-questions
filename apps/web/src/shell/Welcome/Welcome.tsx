@@ -7,7 +7,7 @@ import { updateProfile, useProfile } from '../../state/profile';
 import { isAbort, useFileSync } from '../../state/storage/fileSync';
 import { requestPersistence } from '../../state/storage/persist';
 import { connectProgressFile } from '../../state/sync';
-import type { FormEvent } from 'react';
+import type { SubmitEvent } from 'react';
 
 type Where = 'browser' | 'file';
 
@@ -23,7 +23,7 @@ export function Welcome() {
   const [error, setError] = useState('');
   if (welcomed) return null;
 
-  const finish = async (e: FormEvent) => {
+  const finish = async (e: SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (where === 'file') {
       try {

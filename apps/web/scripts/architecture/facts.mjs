@@ -35,7 +35,7 @@ export function createReader(root) {
       const rel = `${dir}/${name}`;
       if (name === 'node_modules' || name === 'files') continue;
       if (statSync(path(rel)).isDirectory()) out.push(...walk(rel));
-      else out.push(relative(root, path(rel)).split('\\').join('/'));
+      else out.push(relative(root, path(rel)).replaceAll('\\', '/'));
     }
     return out;
   };
@@ -148,9 +148,9 @@ export function workflows(r) {
       const on = src.split(/^on:\s*$/m)[1]?.split(/^\S/m)[0] ?? '';
       return {
         file: f,
-        name: src.match(/^name:\s*(.+)$/m)?.[1]?.trim() ?? f,
+        name: src.match(/^name:(.+)$/m)?.[1]?.trim() ?? f,
         jobs: [...jobs.matchAll(/^ {2}([\w-]+):\s*$/gm)].map((m) => m[1]),
-        steps: [...src.matchAll(/^\s*- (?:name|run|uses):/gm)].length,
+        steps: [...src.matchAll(/^[ \t]*- (?:name|run|uses):/gm)].length,
         triggers: [...on.matchAll(/^ {2}([\w-]+):/gm)].map((m) => m[1].replaceAll('_', ' ')),
       };
     });
@@ -160,7 +160,12 @@ export function workflows(r) {
 export function sonar(r) {
   const src = r.read('sonar-project.properties');
   if (!src) return null;
-  const get = (k) => src.match(new RegExp(String.raw`^${k.replaceAll('.', String.raw`\.`)}=(.+)$`, 'm'))?.[1]?.trim();
+  const get = (k) =>
+    src
+      .split('\n')
+      .find((line) => line.startsWith(k + '='))
+      ?.slice(k.length + 1)
+      .trim();
   return { org: get('sonar.organization') ?? 'unknown', project: get('sonar.projectKey') ?? 'unknown' };
 }
 

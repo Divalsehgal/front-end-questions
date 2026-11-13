@@ -36,11 +36,7 @@ export function BackupPanel() {
           </Button>
           <input ref={input} type="file" accept="application/json,.json" className="hidden" aria-label="Backup file" onChange={(e) => void restore(e)} />
         </div>
-        {message && (
-          <p role="status" className={message.ok ? 'mt-3 text-success' : 'mt-3 text-error'}>
-            {message.text}
-          </p>
-        )}
+        {message && <output className={message.ok ? 'mt-3 block text-success' : 'mt-3 block text-error'}>{message.text}</output>}
       </Card>
     </>
   );

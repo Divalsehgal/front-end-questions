@@ -8,7 +8,8 @@ export function withStableKeys<T>(items: readonly T[], toKey: (item: T) => strin
   return items.map((item) => {
     const base = toKey(item);
     let key = base;
-    for (let n = 1; used.has(key); n++) key = `${base}#${n}`;
+    let n = 0;
+    while (used.has(key)) key = `${base}#${++n}`;
     used.add(key);
     return { item, key };
   });

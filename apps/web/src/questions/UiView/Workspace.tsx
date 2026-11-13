@@ -26,14 +26,14 @@ const paneTabs = (split: boolean, previewOpen: boolean, showReference: boolean):
 /** Run state: with auto-run off, the preview keeps the last code you ran (Run or Cmd/Ctrl+Enter). */
 function useRun(code: string, showPreview: () => void) {
   const [previewOpen, setPreviewOpen] = useState(true);
-  const [autoRun, setAuto] = useState(true);
+  const [autoRun, setAutoRun] = useState(true);
   const [ranCode, setRanCode] = useState(code);
   return {
     previewOpen,
     setPreviewOpen,
     autoRun,
     setAutoRun: (on: boolean) => {
-      setAuto(on);
+      setAutoRun(on);
       setRanCode(code);
     },
     previewCode: autoRun ? code : ranCode,
@@ -160,7 +160,7 @@ function RunControls({
     <>
       <label className="flex cursor-pointer items-center gap-1.5 px-2 text-xs text-text-muted">
         <input type="checkbox" role="switch" checked={autoRun} onChange={(e) => onAutoRun(e.target.checked)} className="accent-primary" />
-        Auto-run
+        <span>Auto-run</span>
       </label>
       {!autoRun && (
         <Button variant="secondary" size="sm" onClick={onRun} title="Run (Cmd/Ctrl+Enter)">

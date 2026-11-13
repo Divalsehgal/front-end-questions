@@ -36,6 +36,8 @@ type Frames = { slots: [Frame | null, Frame | null]; active: 0 | 1 };
 // The buffered frame is swapped in when it reports it rendered or errored, or after this long regardless.
 const SWAP_TIMEOUT = 4000;
 const SANDBOX = 'allow-scripts allow-modals allow-forms allow-popups';
+// The frames are sandboxed without allow-same-origin, so their messages always come from origin "null".
+const isPreviewMessage = (e: MessageEvent) => e.origin === 'null' && e.data?.source === 'fe-grind-preview' && !!e.source;
 const EMPTY: Frames = { slots: [{ id: 0, doc: '' }, null], active: 0 };
 
 async function buildDoc(framework: 'react' | 'vanilla', code: string) {
@@ -113,12 +115,12 @@ export function LivePreview({ framework, code, title }: Readonly<{ framework: 'r
 
   useEffect(() => {
     const onMessage = (e: MessageEvent) => {
-      if (e.data?.source !== 'fe-grind-preview' || !e.source) return;
+      if (!isPreviewMessage(e)) return;
       const shown = slotEls.current[active.current];
       const next = slotEls.current[1 - active.current];
       const fromNext = !!next && e.source === next.contentWindow;
       // While a run is buffered, the outgoing frame no longer speaks for the console.
-      if (!fromNext && !(shown && e.source === shown.contentWindow && !next)) return;
+      if (!fromNext && !(e.source === shown?.contentWindow && !next)) return;
       if (fromNext && (e.data.type === 'rendered' || e.data.type === 'error')) setFrames((f) => promoted(f));
       const { log, stop, clear } = readMessage(e.data.type, e.data.message, baseHeap);
       if (clear) setLogs([]);

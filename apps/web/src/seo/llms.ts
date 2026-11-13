@@ -34,8 +34,13 @@ export function llmsTxt() {
     '',
   ];
   for (const s of SUBJECTS) {
-    lines.push(`## ${s.title}`, '', s.blurb, '');
-    lines.push(`- [${s.title} interview questions](${absoluteUrl(subjectHref(s.slug))}): ${count(questionCount(s), 'question')}`);
+    lines.push(
+      `## ${s.title}`,
+      '',
+      s.blurb,
+      '',
+      `- [${s.title} interview questions](${absoluteUrl(subjectHref(s.slug))}): ${count(questionCount(s), 'question')}`,
+    );
     for (const t of s.topics) lines.push(`- ${t.title}: ${count(t.questions.length, 'question')}`);
     lines.push('');
   }
@@ -58,14 +63,14 @@ function questionBody(q: Question): string[] {
         q.prompt,
         ...(q.code ? [fence(q.code, 'ts')] : []),
         q.options.map((o, i) => `${letter(i)}. ${o}`).join('\n'),
-        `**Answer:** ${[...correct].map((i) => `${letter(i)}. ${q.options[i]}`).join('; ')}`,
+        '**Answer:** ' + [...correct].map((i) => `${letter(i)}. ${q.options[i]}`).join('; '),
         `**Why:** ${q.why}`,
       ];
     }
     case 'flashcard':
       return [q.front, ...(q.code ? [fence(q.code, 'ts')] : []), `**Answer:**\n\n${q.back}`];
     case 'order':
-      return [q.prompt, `**Correct order:**\n\n${q.items.map((item, i) => `${i + 1}. ${item}`).join('\n')}`, `**Why:** ${q.why}`];
+      return [q.prompt, '**Correct order:**\n\n' + q.items.map((item, i) => `${i + 1}. ${item}`).join('\n'), `**Why:** ${q.why}`];
     case 'output':
       return [outputLead(q.lang), fence(q.code, q.lang ?? 'js'), `**Explanation:** ${q.why}`];
     case 'code':
@@ -73,7 +78,7 @@ function questionBody(q: Question): string[] {
     case 'ui':
       return [
         q.prompt,
-        `**Requirements:**\n\n${q.requirements.map((r) => `- ${r}`).join('\n')}`,
+        '**Requirements:**\n\n' + q.requirements.map((r) => `- ${r}`).join('\n'),
         ...(q.solution ? ['**Reference solution:**', fence(q.solution, q.framework === 'react' ? 'tsx' : 'html')] : []),
       ];
   }

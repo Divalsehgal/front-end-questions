@@ -38,8 +38,7 @@ export function PaneResizer({
   const cursor = top ? 'cursor-row-resize' : 'cursor-col-resize';
   return (
     // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions -- window splitter (ARIA APG)
-    <div
-      role="separator"
+    <hr
       aria-orientation={top ? 'horizontal' : 'vertical'}
       aria-label={label}
       aria-valuenow={size}
@@ -74,9 +73,9 @@ export function PaneResizer({
         clamp(current(e.currentTarget) + step, e.currentTarget);
       }}
       className={cn(
-        'absolute z-30 touch-none hover:bg-brand focus-visible:bg-brand focus-visible:outline-none',
+        'absolute z-30 m-0 touch-none border-0 hover:bg-brand focus-visible:bg-brand focus-visible:outline-none',
         cursor,
-        top ? 'inset-x-0 -top-1 h-2' : 'inset-y-0 -right-1 w-2',
+        top ? 'inset-x-0 -top-1 h-2' : 'inset-y-0 -right-1 h-auto w-2',
       )}
     />
   );
