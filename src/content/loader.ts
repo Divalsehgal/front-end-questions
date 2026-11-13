@@ -1,12 +1,26 @@
 // Full subjects (question bodies and code fixtures), one lazily loaded chunk per subject, so a page
-// downloads only the subject it shows. Reads are synchronous once loaded: main.tsx awaits
-// preloadPath() before hydrating, so the first client render matches the prerendered HTML, and the
-// prerender/tests seed everything up front via ./bank.
-import { useEffect, useSyncExternalStore } from 'react';
+// downloads only the subject it shows. Reads are synchronous once loaded; ./useSubject suspends
+// the server render and hydration until the subject is in, so the HTML always has the full question.
+// Server routes and tests seed everything up front via ./bank.
 import { entriesFrom, getSubject, SUBJECTS, type FullEntry } from './registry';
 import type { Subject } from './types';
 
-const chunks = import.meta.glob<Record<string, unknown>>('./subjects/*/index.ts');
+// One chunk per subject (keep in step with ./subjects/index.ts: loader.test.tsx checks).
+export const SUBJECT_CHUNKS: Record<string, () => Promise<Record<string, unknown>>> = {
+  css: () => import('./subjects/css'),
+  dsa: () => import('./subjects/dsa'),
+  html: () => import('./subjects/html'),
+  javascript: () => import('./subjects/javascript'),
+  'machine-coding': () => import('./subjects/machine-coding'),
+  nextjs: () => import('./subjects/nextjs'),
+  nodejs: () => import('./subjects/nodejs'),
+  patterns: () => import('./subjects/patterns'),
+  react: () => import('./subjects/react'),
+  security: () => import('./subjects/security'),
+  'system-design': () => import('./subjects/system-design'),
+  testing: () => import('./subjects/testing'),
+  typescript: () => import('./subjects/typescript'),
+};
 const loaded = new Map<string, Subject>();
 const byKey = new Map<string, FullEntry>();
 const inflight = new Map<string, Promise<Subject | undefined>>();
@@ -33,7 +47,7 @@ export const fullEntry = (key: string) => byKey.get(key);
 export function loadSubject(slug: string): Promise<Subject | undefined> {
   const hit = loaded.get(slug);
   if (hit) return Promise.resolve(hit);
-  const chunk = chunks[`./subjects/${slug}/index.ts`];
+  const chunk = Object.hasOwn(SUBJECT_CHUNKS, slug) ? SUBJECT_CHUNKS[slug] : undefined;
   if (!chunk) return Promise.resolve(undefined);
   let pending = inflight.get(slug);
   if (!pending) {
@@ -57,33 +71,10 @@ export function subjectForPath(pathname: string) {
   return slug && getSubject(slug) ? slug : undefined;
 }
 
-/** Source module of a subject's chunk, for the prerender's <link rel="modulepreload">. */
-export const subjectModule = (slug: string) => `src/content/subjects/${slug}/index.ts`;
-
-export const preloadPath = (pathname: string) => {
-  const slug = subjectForPath(pathname);
-  return slug ? loadSubject(slug) : Promise.resolve(undefined);
-};
-
-const subscribe = (listener: () => void) => {
+/** Re-renders `listener` whenever a subject arrives (./useSubject). */
+export const subscribe = (listener: () => void) => {
   listeners.add(listener);
   return () => {
     listeners.delete(listener);
   };
 };
-
-/** The full subject, loading it if needed; undefined while it loads (or for an unknown slug). */
-export function useSubject(slug: string | undefined) {
-  const read = () => (slug ? loaded.get(slug) : undefined);
-  const subject = useSyncExternalStore(subscribe, read, read);
-  useEffect(() => {
-    if (slug && !subject) loadSubject(slug).catch((err: unknown) => console.error(`Could not load subject "${slug}"`, err));
-  }, [slug, subject]);
-  return subject;
-}
-
-/** The full entry for a "subject:id" key, loading its subject if needed. */
-export function useFullEntry(key: string) {
-  useSubject(key.split(':')[0]);
-  return byKey.get(key);
-}

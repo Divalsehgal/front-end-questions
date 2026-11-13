@@ -2,8 +2,8 @@ import type { ComponentType } from 'react';
 
 /**
  * React.lazy with a synchronous fast path: once preload() has resolved, the component renders
- * straight away instead of suspending. main.tsx preloads what a prerendered page shows before
- * hydrating, so the first client render matches the HTML; later navigations suspend as usual.
+ * straight away instead of suspending. Until then it suspends (on the server, while hydrating
+ * and on client navigations), so the HTML and the first client render always match.
  */
 export function lazyComponent<P extends object>(load: () => Promise<ComponentType<P>>) {
   let Loaded: ComponentType<P> | undefined;

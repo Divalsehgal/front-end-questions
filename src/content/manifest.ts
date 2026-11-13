@@ -1,6 +1,6 @@
 // The content manifest: every subject, topic and question minus the question bodies. It is
-// generated from the real question bank at build/dev time (vite-plugins/content-manifest.ts serves
-// it as `virtual:content-manifest`), so it can never drift from the content. Full subjects load
+// generated from the real question bank at build/dev time (scripts/generate-content.mjs writes
+// it to src/generated/content-manifest.json), so it can never drift from the content. Full subjects load
 // on demand, one chunk each (./loader).
 import type { QuestionDates } from './dates';
 import type { Subject, SubjectMeta } from './types';

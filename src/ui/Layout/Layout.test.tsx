@@ -1,26 +1,23 @@
 import { act, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { ALL, hrefOf, subjectHref, SUBJECTS } from '../../content/registry';
 import { updateProfile } from '../../state/profile';
 import { record, resetProgress } from '../../state/progress';
+import { setRoute, usePathname } from '../../test/navigation';
 import { searchQuestions } from './Search';
 import { Layout, MAIN_ID } from '.';
 
 function Page() {
-  return <h1>Page body {useLocation().pathname}</h1>;
+  return <h1>Page body {usePathname()}</h1>;
 }
 
 function renderLayout(route = '/') {
+  setRoute(route);
   return render(
-    <MemoryRouter initialEntries={[route]}>
-      <Routes>
-        <Route element={<Layout />}>
-          <Route path="*" element={<Page />} />
-        </Route>
-      </Routes>
-    </MemoryRouter>,
+    <Layout>
+      <Page />
+    </Layout>,
   );
 }
 

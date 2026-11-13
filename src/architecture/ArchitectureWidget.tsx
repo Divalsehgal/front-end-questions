@@ -1,5 +1,6 @@
+'use client';
 import { ArrowUpRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 // A six-dot sketch of the system: the browser at the top, three services, two stores. Each edge
 // carries a pulse; the keyframes live in the SVG so they ship with the component.
@@ -61,7 +62,7 @@ function Thumbnail() {
 export function ArchitectureWidget() {
   return (
     <Link
-      to="/architecture"
+      href="/architecture"
       className="group flex items-center gap-5 rounded-lg border border-line bg-surface p-5 transition-colors hover:border-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
     >
       <Thumbnail />

@@ -1,7 +1,7 @@
 // llms.txt (https://llmstxt.org) and llms-full.txt: plain-markdown views of the site for LLMs and
 // answer engines. llms.txt is a short map of subjects and topics; llms-full.txt carries every
 // question with its answer and explanation, the same text the prerendered pages show (answers sit in
-// their collapsed disclosures). Built at build time from the full bank (src/entry-server.tsx).
+// their collapsed disclosures). Built at build time from the full bank (src/app/llms.txt, src/app/llms-full.txt).
 import { fullEntry } from '../content/loader';
 import { ALL, hrefOf, keyOf, SUBJECTS, subjectHref } from '../content/registry';
 import { outputLead, questionCount } from './jsonld';

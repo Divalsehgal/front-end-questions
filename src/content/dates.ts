@@ -1,5 +1,5 @@
 // Real publish / update dates for each question, from git history (read at build time by
-// vite-plugins/content-manifest.ts). Nothing here invents a date: a question git doesn't know gets none.
+// scripts/generate-content.mjs). Nothing here invents a date: a question git doesn't know gets none.
 
 export type QuestionDates = { published: string; modified: string };
 

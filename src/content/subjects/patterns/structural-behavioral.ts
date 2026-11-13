@@ -1,7 +1,8 @@
+import files from '../../../generated/files/patterns.json';
 import { codeFiles } from '../../files';
 import type { Topic } from '../../types';
 
-const code = codeFiles('patterns', import.meta.glob<string>('./files/*', { query: '?raw', import: 'default', eager: true }));
+const code = codeFiles('patterns', files);
 
 export const structuralBehavioral: Topic = {
   slug: 'structural-behavioral',

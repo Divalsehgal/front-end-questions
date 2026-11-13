@@ -1,7 +1,8 @@
+import files from '../../../generated/files/html.json';
 import { uiFiles } from '../../files';
 import type { Topic } from '../../types';
 
-const ui = uiFiles('html', import.meta.glob<string>('./files/*', { query: '?raw', import: 'default', eager: true }));
+const ui = uiFiles('html', files);
 
 export const accessibility: Topic = {
   slug: 'accessibility',

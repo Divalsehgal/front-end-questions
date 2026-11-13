@@ -89,7 +89,7 @@
     },
     {
       "id": "prerender->vercel",
-      "label": "static pages in dist/",
+      "label": "static HTML pages",
       "source": "prerender",
       "target": "vercel"
     },
@@ -121,8 +121,8 @@
   "nodes": [
     {
       "data": {
-        "description": "React 19.0.0 app routed by react-router-dom 7.5.0 across 8 routes (/, /s/:subject, /q/:subject/:id, /review, /mock, /session, /settings, /architecture), configured by VITE_SITE_URL; every page is its own lazily loaded chunk.",
-        "label": "React SPA"
+        "description": "Next.js 16.4.6 App Router app (React 19.0.0) across 9 routes (/, /architecture, /mock, /q/:subject/:id, /review, /s/:subject, /session, /settings, /verify), configured by NEXT_PUBLIC_BASE_PATH, NEXT_PUBLIC_SITE_URL; every route is its own chunk, and pages that need local progress render in the browser only.",
+        "label": "Next.js app"
       },
       "id": "spa",
       "position": {
@@ -160,8 +160,8 @@
     },
     {
       "data": {
-        "description": "At build time scripts/prerender.js renders every public route through the SSR bundle of src/entry-server.tsx into static HTML in dist/.",
-        "label": "Static prerender"
+        "description": "At build time next build renders every public route (generateStaticParams) to static HTML; scripts/check-build.mjs checks each page carries its content inline.",
+        "label": "Static generation"
       },
       "id": "prerender",
       "position": {
@@ -173,8 +173,8 @@
     },
     {
       "data": {
-        "description": "scripts/generate-sitemap.js writes sitemap.xml, per-subject sitemaps and robots.txt from the registry.",
-        "label": "Sitemap generator"
+        "description": "Static route handlers in src/app build sitemap.xml, per-subject sitemaps, robots.txt and llms.txt from the registry.",
+        "label": "Sitemap and robots"
       },
       "id": "sitemap",
       "position": {
@@ -186,7 +186,7 @@
     },
     {
       "data": {
-        "description": "Serves the static dist/ build (framework: vite) with 1 redirect(s), 2 header rule(s) and rewrites /:route(review|mock|session|settings|architecture)/ → /404.html.",
+        "description": "Serves the nextjs build with 1 redirect(s), 1 header rule(s).",
         "label": "Vercel"
       },
       "id": "vercel",
@@ -290,7 +290,7 @@
     },
     {
       "data": {
-        "description": "13 subjects in src/content/subjects (css, dsa, html, javascript, machine-coding, nextjs, nodejs, patterns, react, security, system-design, testing, typescript), each a lazily loaded chunk, indexed by the virtual:content-manifest Vite plugin.",
+        "description": "13 subjects in src/content/subjects (css, dsa, html, javascript, machine-coding, nextjs, nodejs, patterns, react, security, system-design, testing, typescript), each a lazily loaded chunk, indexed by the manifest scripts/generate-content.mjs builds.",
         "label": "Content bank"
       },
       "id": "content",

@@ -1,9 +1,9 @@
+import files from '../../../generated/files/machine-coding.json';
 import { codeFiles, uiFiles } from '../../files';
 import type { Topic } from '../../types';
 
-const raw = import.meta.glob<string>('./files/*', { query: '?raw', import: 'default', eager: true });
-const ui = uiFiles('machine-coding', raw);
-const code = codeFiles('machine-coding', raw);
+const ui = uiFiles('machine-coding', files);
+const code = codeFiles('machine-coding', files);
 
 export const dataTopic: Topic = {
   slug: 'data',

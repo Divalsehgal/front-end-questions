@@ -48,23 +48,27 @@ export function depVersion(pkg, name) {
   return v ? v.replace(/^[\^~]/, '') : null;
 }
 
-/** Router paths from the ROUTES table in src/App.tsx: `{ index: true }` is "/", `{ path: 'x' }` is "/x". */
+/** Next App Router paths: one per page.tsx under src/app, with [param] segments as :param ("/", "/s/:subject"). */
 export function routes(r) {
-  const src = r.read('src/App.tsx');
-  const table = src?.match(/const ROUTES[^=]*=\s*\[([\s\S]*?)\];/)?.[1];
-  if (!table) return [];
-  return [...table.matchAll(/\{([^}]*)\}/g)].flatMap(([, body]) => {
-    if (/index:\s*true/.test(body)) return ['/'];
-    const p = body.match(/path:\s*'([^']+)'/)?.[1];
-    return p ? [`/${p}`] : [];
-  });
+  return r
+    .walk('src/app')
+    .filter((f) => /\/page\.(tsx|ts|jsx|js)$/.test(f))
+    .map(
+      (f) =>
+        `/${f
+          .split('/')
+          .slice(2, -1)
+          .map((seg) => seg.replace(/^\[(.+)\]$/, ':$1'))
+          .join('/')}`,
+    )
+    .sort((a, b) => a.localeCompare(b));
 }
 
-/** `import.meta.env.VITE_*` names used in app code (tests excluded), plus ones defined in vite.config. */
+/** `process.env.NEXT_PUBLIC_*` names used in app code (tests excluded), plus ones next.config sets. */
 export function envVars(r) {
   const names = new Set();
-  const sources = [...r.walk('src').filter((f) => /\.(ts|tsx|js|jsx)$/.test(f) && !/\.test\./.test(f)), 'vite.config.ts', 'vite.config.js'];
-  for (const f of sources) for (const m of (r.read(f) ?? '').matchAll(/import\.meta\.env\.(VITE_\w+)/g)) names.add(m[1]);
+  const sources = [...r.walk('src').filter((f) => /\.(ts|tsx|js|jsx)$/.test(f) && !/\.test\./.test(f)), 'next.config.ts', 'next.config.mjs'];
+  for (const f of sources) for (const m of (r.read(f) ?? '').matchAll(/\b(NEXT_PUBLIC_\w+)/g)) names.add(m[1]);
   return [...names].sort((a, b) => a.localeCompare(b));
 }
 
@@ -102,12 +106,11 @@ export function monacoCdn(r) {
   return null;
 }
 
-/** Subject folders of the content bank and whether vite.config serves the virtual manifest. */
+/** Subject folders of the content bank and whether scripts/generate-content.mjs builds its manifest. */
 export function content(r) {
   const subjects = r.list('src/content/subjects').filter((d) => r.exists(`src/content/subjects/${d}/index.ts`));
   if (!subjects.length) return null;
-  const manifest = /virtual:content-manifest|contentManifest/.test(r.read('vite.config.ts') ?? '');
-  return { subjects, manifest };
+  return { subjects, manifest: r.exists('scripts/generate-content.mjs') };
 }
 
 /** Summary of vercel.json: rewrites, redirects, header rules. */
@@ -116,7 +119,6 @@ export function vercel(r) {
   if (!cfg) return null;
   return {
     framework: cfg.framework ?? 'static',
-    output: cfg.outputDirectory ?? 'dist',
     rewrites: (cfg.rewrites ?? []).map((x) => `${x.source} → ${x.destination}`),
     redirects: (cfg.redirects ?? []).length,
     headers: (cfg.headers ?? []).length,
@@ -152,13 +154,6 @@ export function sonar(r) {
 
 /** Google Search Console HTML verification files in public/. */
 export const searchConsole = (r) => r.list('public').filter((f) => /^google[\da-f]+\.html$/.test(f));
-
-/** Dev-server proxies from vite.config: `'/api': 'http://...'` or `'/api': { target: '...' }`. */
-export function viteProxies(r) {
-  const src = r.read('vite.config.ts') ?? r.read('vite.config.js') ?? '';
-  const block = src.match(/proxy:\s*\{([\s\S]*?)\n\s{4}\}/)?.[1] ?? '';
-  return [...block.matchAll(/'(\/[^']*)':\s*(?:\{\s*target:\s*)?'([^']+)'/g)].map((m) => ({ path: m[1], target: m[2] }));
-}
 
 /** Third-party SDKs we know how to label, from package.json dependencies. */
 const SDKS = {

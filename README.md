@@ -89,8 +89,8 @@ The Sonar step needs a one-time setup. Import the repo at sonarcloud.io, turn of
 
 The site is hosted on **Vercel** (`https://front-end-grind.vercel.app/`) through its Git integration: every
 push to `main` deploys to production and every pull request gets a preview URL. `vercel.json` sets the build
-(`npm run build` → `dist/`), trailing-slash URLs that match the prerendered folders, rewrites for the client-only
-routes `/review/`, `/mock/` and `/session/`, year-long caching for hashed assets, and basic security headers.
+(framework Next.js, `npm run build`), the old-domain redirect and basic security headers. Trailing-slash URLs are set in
+`next.config.ts`.
 GitHub Actions (`ci.yml`) only verifies; protect `main` with its `verify` check so failing code never reaches
 production. The one-time manual setup is in [docs/LAUNCH_CHECKLIST.md](docs/LAUNCH_CHECKLIST.md).
 
@@ -100,17 +100,20 @@ Every page with content is a real URL with its own static HTML, so search engine
 
 - **`SITE_URL`** is the only place the public address lives. It defaults to `https://front-end-grind.vercel.app/`.
   Override it at build time, for example `SITE_URL=https://fegrind.dev/ npm run build`, or set `SITE_URL` as a Vercel
-  environment variable. Vite's `base`, canonical URLs, Open Graph tags, the sitemap and `robots.txt` all derive from
+  environment variable. the Next base path, canonical URLs, Open Graph tags, the sitemap and `robots.txt` all derive from
   it, so a custom domain is a one-line change.
-- **`npm run build`** builds the client, builds `src/entry-server.tsx` for Node (`dist-ssr/`), then:
-  - `scripts/prerender.js` writes `dist/<route>/index.html` for `/`, every `/s/<subject>/` and every
-    `/q/<subject>/<id>/`. Each page has full HTML that the client then hydrates, plus its own `<title>`, description,
-    canonical URL, Open Graph and Twitter tags and JSON-LD (`src/seo/`). Answers and explanations are in a collapsed
+- **`npm run build`** runs `next build` (Next.js App Router, routes in `src/app/`):
+  - It statically renders `/`, every `/s/<subject>/` and every `/q/<subject>/<id>/` (`generateStaticParams`). Each
+    page has full HTML that the client then hydrates, plus its own `<title>`, description, canonical URL, Open Graph
+    and Twitter tags (`generateMetadata`) and JSON-LD (`src/seo/`). Answers and explanations are in a collapsed
     "Show answer & explanation" disclosure, so they can be indexed without spoiling the question. Opening it before
-    you answer counts as a reveal. The script also writes `404.html`: an empty, `noindex` app shell that Vercel serves
-    for unknown URLs and that `vercel.json` rewrites `/review/`, `/mock/` and `/session/` to.
-  - `scripts/generate-sitemap.js` writes `dist/sitemap.xml`, a sitemap index with one sitemap per subject under
-    `dist/sitemaps/`, and `dist/robots.txt`. `<lastmod>` is the last git commit that touched the subject's folder.
+    you answer counts as a reveal. `/review/`, `/mock/`, `/session/`, `/settings/` and `/architecture/` render in the
+    browser only and are `noindex`; unknown URLs answer 404 and send people to the dashboard.
+  - Static route handlers in `src/app/` serve `sitemap.xml` (an index with one sitemap per subject under
+    `sitemaps/`), `robots.txt`, `llms.txt` and `llms-full.txt`. `<lastmod>` comes from git.
+  - `scripts/check-build.mjs` (postbuild) fails the build if a public page lacks its `<h1>` or its content is not inline.
+- **`npm run generate`** (run before dev, build, typecheck and tests) writes `src/generated/`: each subject's code
+  fixtures, React's type files for the editor, and the content manifest with git dates.
 - **Adding a question needs no SEO work.** Its page, meta tags, structured data and sitemap entry all come from the
   registry. `src/seo/sitemap.test.ts` fails if any question is missing from the sitemap.
 - The favicon, app icons and the 1200×630 Open Graph image in `public/` come from `scripts/generate-icons.js`

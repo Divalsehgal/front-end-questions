@@ -1,7 +1,8 @@
+import files from '../../../generated/files/typescript.json';
 import { codeFiles } from '../../files';
 import type { Topic } from '../../types';
 
-const code = codeFiles('typescript', import.meta.glob<string>('./files/*', { query: '?raw', import: 'default', eager: true }));
+const code = codeFiles('typescript', files);
 
 export const narrowing: Topic = {
   slug: 'narrowing',

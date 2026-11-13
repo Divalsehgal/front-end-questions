@@ -9,7 +9,7 @@ type KindInfo<K extends Kind> = KindMeta & {
 };
 
 // Each view is its own chunk (an output question never downloads the editor or live preview).
-// main.tsx preloads the current question's view before hydrating; the prerender loads them all.
+// A view suspends until its chunk is in, on the server and while hydrating too (see lazyComponent).
 const VIEWS: { [K in Kind]: KindInfo<K>['View'] } = {
   quiz: lazyComponent(() => import('./QuizView').then((m) => m.QuizView)),
   output: lazyComponent(() => import('./OutputView').then((m) => m.OutputView)),
@@ -17,17 +17,6 @@ const VIEWS: { [K in Kind]: KindInfo<K>['View'] } = {
   ui: lazyComponent(() => import('./UiView').then((m) => m.UiView)),
   flashcard: lazyComponent(() => import('./FlashcardView').then((m) => m.FlashcardView)),
   order: lazyComponent(() => import('./OrderView').then((m) => m.OrderView)),
-};
-
-/** Source module of each kind's view, for the prerender's per-page <link rel="modulepreload">. */
-export const viewModule = (kind: Kind) => `src/questions/${VIEW_DIRS[kind]}/index.ts`;
-const VIEW_DIRS: Record<Kind, string> = {
-  quiz: 'QuizView',
-  output: 'OutputView',
-  code: 'CodeView',
-  ui: 'UiView',
-  flashcard: 'FlashcardView',
-  order: 'OrderView',
 };
 
 // Everything the app needs to know about a question kind: its name and icon (./kinds) and its view.

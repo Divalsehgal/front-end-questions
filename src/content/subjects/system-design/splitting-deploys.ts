@@ -1,7 +1,8 @@
+import files from '../../../generated/files/system-design.json';
 import { codeFiles } from '../../files';
 import type { Topic } from '../../types';
 
-const code = codeFiles('system-design', import.meta.glob<string>('./files/*', { query: '?raw', import: 'default', eager: true }));
+const code = codeFiles('system-design', files);
 
 export const splittingDeploys: Topic = {
   slug: 'splitting-deploys',

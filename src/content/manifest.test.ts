@@ -1,4 +1,4 @@
-// Duplicate "subject:id" keys fail the manifest build (vite-plugins/content-manifest.ts).
+// Duplicate "subject:id" keys fail the manifest build (scripts/generate-content.mjs).
 import { describe, expect, it } from 'vitest';
 import { duplicateKeys, toManifest } from './manifest';
 import type { Subject } from './types';

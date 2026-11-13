@@ -1,7 +1,7 @@
 // Code-heavy questions keep their starter/tests/solution as real files next to the
 // subject (src/content/subjects/<subject>/files/<id>.<part>.<ext>) so they can use
 // backticks and template literals freely. Each subject module passes in its own files
-// (an eager `import.meta.glob('./files/*', { query: '?raw' })`), so fixtures ship in that
+// (src/generated/files/<subject>.json, written by scripts/generate-content.mjs), so fixtures ship in that
 // subject's chunk only; this finds them by naming convention.
 export type RawFiles = Record<string, string>;
 

@@ -1,5 +1,6 @@
+'use client';
+import Link from 'next/link';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { updateProfile, useProfile } from '../../state/profile';
 import { isAbort, useFileSync } from '../../state/storage/fileSync';
 import { requestPersistence } from '../../state/storage/persist';
@@ -86,7 +87,7 @@ export function Welcome() {
         )}
 
         <div className="mt-4 flex items-center gap-2">
-          <Link to="/settings" className="text-sm text-text-muted underline underline-offset-2 hover:text-text-main">
+          <Link href="/settings" className="text-sm text-text-muted underline underline-offset-2 hover:text-text-main">
             Backups & settings
           </Link>
           <Button variant="ghost" className="ml-auto" onClick={() => updateProfile({ welcomed: true })}>

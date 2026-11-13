@@ -1,7 +1,8 @@
+import files from '../../../generated/files/testing.json';
 import { codeFiles } from '../../files';
 import type { Subject } from '../../types';
 
-const code = codeFiles('testing', import.meta.glob<string>('./files/*', { query: '?raw', import: 'default', eager: true }));
+const code = codeFiles('testing', files);
 
 export const testing: Subject = {
   slug: 'testing',

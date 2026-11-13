@@ -1,7 +1,8 @@
+import files from '../../../generated/files/react.json';
 import { codeFiles } from '../../files';
 import type { Topic } from '../../types';
 
-const code = codeFiles('react', import.meta.glob<string>('./files/*', { query: '?raw', import: 'default', eager: true }));
+const code = codeFiles('react', files);
 
 export const rendering: Topic = {
   slug: 'rendering',

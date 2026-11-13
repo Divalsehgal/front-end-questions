@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Writes src/generated/architecture.json, the architecture diagram shown at /architecture, from facts
-// read out of the code (package.json, the ROUTES table, storage modules, vercel.json, CI config...).
+// read out of the code (package.json, the src/app routes, storage modules, vercel.json, CI config...).
 // A node exists only when its fact does, so the diagram follows the system as it changes.
 //
 //   node scripts/generate-architecture.mjs           write the file
@@ -45,14 +45,14 @@ function candidates() {
 
   return [
     v('react') &&
-      r.exists('src/App.tsx') &&
+      r.exists('src/app/layout.tsx') &&
       node(
         'spa',
         'frontend',
         'client',
-        'React SPA',
-        `React ${v('react')} app routed by react-router-dom ${v('react-router-dom') ?? '?'} across ${routes.length} routes (${list(routes)})` +
-          `${env.length ? `, configured by ${list(env)}` : ''}; every page is its own lazily loaded chunk.`,
+        'Next.js app',
+        `Next.js ${v('next') ?? '?'} App Router app (React ${v('react')}) across ${routes.length} routes (${list(routes)})` +
+          `${env.length ? `, configured by ${list(env)}` : ''}; every route is its own chunk, and pages that need local progress render in the browser only.`,
       ),
     v('@monaco-editor/react') &&
       node(
@@ -75,22 +75,21 @@ function candidates() {
         'Sandbox Web Worker',
         `A fresh module Web Worker per run (src/runtime/sandbox.worker.ts) compiles learner code${v('sucrase') ? ` with sucrase ${v('sucrase')}` : ''} and runs it off the main thread, so infinite loops can be killed.`,
       ),
-    r.exists('scripts/prerender.js') &&
-      r.exists('src/entry-server.tsx') &&
+    v('next') &&
       node(
         'prerender',
         'backend',
         'compute',
-        'Static prerender',
-        'At build time scripts/prerender.js renders every public route through the SSR bundle of src/entry-server.tsx into static HTML in dist/.',
+        'Static generation',
+        `At build time next build renders every public route (generateStaticParams) to static HTML${r.exists('scripts/check-build.mjs') ? '; scripts/check-build.mjs checks each page carries its content inline' : ''}.`,
       ),
-    r.exists('scripts/generate-sitemap.js') &&
+    r.exists('src/app/sitemap.xml/route.ts') &&
       node(
         'sitemap',
         'backend',
         'compute',
-        'Sitemap generator',
-        'scripts/generate-sitemap.js writes sitemap.xml, per-subject sitemaps and robots.txt from the registry.',
+        'Sitemap and robots',
+        'Static route handlers in src/app build sitemap.xml, per-subject sitemaps, robots.txt and llms.txt from the registry.',
       ),
     host &&
       node(
@@ -98,14 +97,11 @@ function candidates() {
         'external',
         'compute',
         'Vercel',
-        `Serves the static ${host.output}/ build (framework: ${host.framework}) with ${host.redirects} redirect(s), ${host.headers} header rule(s)` +
+        `Serves the ${host.framework} build with ${host.redirects} redirect(s), ${host.headers} header rule(s)` +
           `${host.rewrites.length ? ` and rewrites ${list(host.rewrites)}` : ''}.`,
       ),
     wrangler && node('cloudflare', 'external', 'compute', 'Cloudflare Workers', `Deploys the worker "${wrangler.name}" configured in wrangler.`),
     docker && node('docker', 'backend', 'compute', 'Docker image', `Container built from ${docker.from} (Dockerfile).`),
-    ...facts
-      .viteProxies(r)
-      .map((p) => node(`proxy:${p.path}`, 'backend', 'compute', `API ${p.path}`, `Dev server proxies ${p.path} to ${p.target} (vite.config).`)),
     ...facts.services(r).map((f) => node(`service:${f}`, 'backend', 'compute', f.split('/').at(-1), `Service module ${f}.`)),
     ...facts.sdks(pkg).map((s) => node(`sdk:${s.name}`, 'external', 'compute', s.label, `${s.name} ${s.version} SDK, called from the app.`)),
     cdn &&
@@ -152,7 +148,7 @@ function candidates() {
         'data',
         'Content bank',
         `${bank.subjects.length} subjects in src/content/subjects (${list(bank.subjects)}), each a lazily loaded chunk` +
-          `${bank.manifest ? ', indexed by the virtual:content-manifest Vite plugin' : ''}.`,
+          `${bank.manifest ? ', indexed by the manifest scripts/generate-content.mjs builds' : ''}.`,
       ),
   ].filter(Boolean);
 }
@@ -172,7 +168,7 @@ const EDGES = [
   ['spa', 'fileSync', 'writes progress file'],
   ['fileSync', 'indexedDb', 'stores file handle'],
   ['prerender', 'content', 'renders every question'],
-  ['prerender', 'vercel', 'static pages in dist/'],
+  ['prerender', 'vercel', 'static HTML pages'],
   ['sitemap', 'vercel', 'sitemap.xml and robots.txt'],
   ['ci', 'prerender', 'runs the production build'],
   ['ci', 'sonar', 'uploads coverage (lcov)'],
@@ -194,7 +190,6 @@ function build() {
   });
   const generated = [
     ...facts.workspaces(r, pkg).flatMap((w) => w.deps.map((d) => [`pkg:${w.name}`, `pkg:${d}`, 'imports'])),
-    ...facts.viteProxies(r).map((p) => ['spa', `proxy:${p.path}`, `fetch ${p.path}`]),
     ...facts.services(r).map((f) => ['spa', `service:${f}`, 'calls']),
     ...facts.sdks(pkg).map((s) => ['spa', `sdk:${s.name}`, 'reports to']),
   ];

@@ -1,9 +1,9 @@
-// Public identity of the site. SITE_URL comes from vite.config.ts (env SITE_URL at build time),
+// Public identity of the site. SITE_URL comes from next.config.ts (env SITE_URL at build time),
 // so canonical URLs, the sitemap and Open Graph tags all follow a domain change automatically.
 const FALLBACK = 'https://front-end-grind.vercel.app/';
 
 /** Absolute site root, always ending in "/". */
-export const SITE_URL = withSlash((import.meta.env.VITE_SITE_URL as string | undefined) ?? FALLBACK);
+export const SITE_URL = withSlash(process.env.NEXT_PUBLIC_SITE_URL || FALLBACK);
 export const SITE_NAME = 'FE Grind';
 /** What people actually type into search; schema.org alternateName and the home title carry it. */
 export const SITE_ALT_NAMES = ['Front End Grind', 'Frontend Grind'];

@@ -1,7 +1,8 @@
+import files from '../../../generated/files/security.json';
 import { codeFiles } from '../../files';
 import type { Topic } from '../../types';
 
-const code = codeFiles('security', import.meta.glob<string>('./files/*', { query: '?raw', import: 'default', eager: true }));
+const code = codeFiles('security', files);
 
 export const xssInjection: Topic = {
   slug: 'xss-injection',

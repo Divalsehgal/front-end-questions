@@ -1,6 +1,7 @@
+'use client';
 import { Search as SearchIcon } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { ALL, hrefOf, type Entry } from '../../content/registry';
 import { cn } from '../lib';
 import type { KeyboardEvent } from 'react';
@@ -38,7 +39,7 @@ export function SearchDialog({ onClose }: Readonly<{ onClose: () => void }>) {
   const [query, setQuery] = useState('');
   const [active, setActive] = useState(0);
   const results = useMemo(() => searchQuestions(query), [query]);
-  const navigate = useNavigate();
+  const router = useRouter();
   const listId = useId();
   const returnFocus = useRef(document.activeElement);
 
@@ -48,7 +49,7 @@ export function SearchDialog({ onClose }: Readonly<{ onClose: () => void }>) {
   const go = (e: Entry | undefined) => {
     if (!e) return;
     onClose();
-    void navigate(hrefOf(e.key));
+    router.push(hrefOf(e.key));
   };
 
   const onKeyDown = (e: KeyboardEvent) => {

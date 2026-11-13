@@ -1,27 +1,30 @@
 import { render, type RenderOptions } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MemoryRouter, Route, Routes, useLocation } from 'react-router-dom';
+import { matchPath, setRoute, usePathname } from './navigation';
 import type { Attempt } from '../state/progress';
 import type { Session } from '../state/session';
 import type { ReactElement } from 'react';
 
 /** Shows the current path so tests can assert on navigation. */
 function LocationProbe() {
-  const { pathname } = useLocation();
+  const pathname = usePathname();
   return <output data-testid="location">{pathname}</output>;
+}
+
+/** Renders children only while the current path matches `path`, like a route. */
+function AtPath({ path, children }: Readonly<{ path: string; children: ReactElement }>) {
+  return matchPath(path, usePathname()) ? children : null;
 }
 
 /** Renders `ui` inside a router at `route`; `path` is the route pattern when the component reads params. */
 export function renderWithRouter(ui: ReactElement, { route = '/', path = '*', ...options }: { route?: string; path?: string } & RenderOptions = {}) {
   const user = userEvent.setup();
+  setRoute(route, path);
   const result = render(
-    <MemoryRouter initialEntries={[route]}>
-      <Routes>
-        <Route path={path} element={ui} />
-        {path !== '*' && <Route path="*" element={null} />}
-      </Routes>
+    <>
+      <AtPath path={path}>{ui}</AtPath>
       <LocationProbe />
-    </MemoryRouter>,
+    </>,
     options,
   );
   return { user, ...result };

@@ -10,7 +10,7 @@ import { preloadEditor } from '../ui/CodeEditor';
 Element.prototype.scrollIntoView = function scrollIntoView() {};
 window.scrollTo = (() => {}) as typeof window.scrollTo;
 
-// Lazily loaded UI renders synchronously once preloaded, as it does after main.tsx's preload.
+// Lazily loaded UI renders synchronously once preloaded, as it does once its chunk has loaded.
 await preloadEditor();
 
 afterEach(() => {

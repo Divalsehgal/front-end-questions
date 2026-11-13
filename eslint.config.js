@@ -20,7 +20,7 @@ import tseslint from 'typescript-eslint';
 const FIXTURES = ['src/content/subjects/**/files/**'];
 
 export default tseslint.config(
-  { ignores: ['dist/**', 'dist-ssr/**', 'coverage/**', 'node_modules/**', 'index.js', ...FIXTURES] },
+  { ignores: ['.next/**', 'next-env.d.ts', 'coverage/**', 'node_modules/**', 'index.js', ...FIXTURES] },
 
   js.configs.recommended,
   ...tseslint.configs.strict,
@@ -133,10 +133,11 @@ export default tseslint.config(
   },
 
   // App code never imports the whole question bank: it would put every subject in each page's
-  // initial JS. Subjects load on demand through src/content/loader.ts.
+  // initial JS. Subjects load on demand through src/content/loader.ts. Server-only routes that
+  // need every question body (question meta, llms-full.txt) are the exception.
   {
     files: ['src/**/*.{ts,tsx}'],
-    ignores: ['src/**/*.test.{ts,tsx}', 'src/test/**', 'src/entry-server.tsx', 'src/content/bank.ts', 'src/content/subjects/**'],
+    ignores: ['src/**/*.test.{ts,tsx}', 'src/test/**', 'src/app/q/**', 'src/app/llms-full.txt/**', 'src/content/bank.ts', 'src/content/subjects/**'],
     rules: {
       'no-restricted-imports': [
         'error',
@@ -147,7 +148,7 @@ export default tseslint.config(
 
   // Node-side config files.
   {
-    files: ['*.{js,ts,mjs,cjs}', 'scripts/**', 'vite-plugins/**'],
+    files: ['*.{js,ts,mjs,cjs}', 'scripts/**'],
     languageOptions: { globals: { ...globals.node } },
   },
 

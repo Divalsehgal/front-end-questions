@@ -11,7 +11,7 @@ type Base = {
   difficulty?: Difficulty;
   /**
    * Optional deep dive (markdown, ~150–300 words): the concept behind the question, an example and
-   * common mistakes. Shown collapsed under the question (src/pages/QuestionPage), so it may give the answer away.
+   * common mistakes. Shown collapsed under the question (src/screens/QuestionPage), so it may give the answer away.
    */
   explanation?: string;
 };

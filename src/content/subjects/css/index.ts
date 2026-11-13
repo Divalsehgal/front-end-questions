@@ -1,7 +1,8 @@
+import files from '../../../generated/files/css.json';
 import { uiFiles } from '../../files';
 import type { Subject } from '../../types';
 
-const ui = uiFiles('css', import.meta.glob<string>('./files/*', { query: '?raw', import: 'default', eager: true }));
+const ui = uiFiles('css', files);
 
 export const css: Subject = {
   slug: 'css',

@@ -1,7 +1,8 @@
+import files from '../../../generated/files/dsa.json';
 import { codeFiles } from '../../files';
 import type { Topic } from '../../types';
 
-const code = codeFiles('dsa', import.meta.glob<string>('./files/*', { query: '?raw', import: 'default', eager: true }));
+const code = codeFiles('dsa', files);
 
 export const backtrackingDp: Topic = {
   slug: 'backtracking-dp',

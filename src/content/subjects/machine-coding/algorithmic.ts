@@ -1,7 +1,8 @@
+import files from '../../../generated/files/machine-coding.json';
 import { uiFiles } from '../../files';
 import type { Topic } from '../../types';
 
-const ui = uiFiles('machine-coding', import.meta.glob<string>('./files/*', { query: '?raw', import: 'default', eager: true }));
+const ui = uiFiles('machine-coding', files);
 
 export const algorithmic: Topic = {
   slug: 'algorithmic',

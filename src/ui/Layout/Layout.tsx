@@ -1,16 +1,16 @@
+'use client';
 import { PanelLeftOpen } from 'lucide-react';
-import { Suspense, useCallback, useEffect, useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { useCallback, useEffect, useState } from 'react';
 import { setSidebarCollapsed, toggleSidebar, useSidebar } from '../../state/sidebar';
 import { cn, MOD } from '../lib';
 import { Welcome } from '../Welcome';
 import { SearchDialog, useSearchShortcut } from './Search';
 import { Sidebar } from './Sidebar';
-import type { MouseEvent } from 'react';
+import type { MouseEvent, ReactNode } from 'react';
 
 export const MAIN_ID = 'main-content';
 
-// A plain fragment link (BrowserRouter leaves hashes alone), plus an explicit focus move so
+// A plain fragment link (the router leaves hashes alone), plus an explicit focus move so
 // every browser lands keyboard focus in <main> (focusable via tabIndex={-1}), not just scrolls.
 function skipToContent(e: MouseEvent<HTMLAnchorElement>) {
   e.preventDefault();
@@ -33,7 +33,7 @@ function useSidebarShortcut() {
   }, []);
 }
 
-export function Layout() {
+export function Layout({ children }: Readonly<{ children: ReactNode }>) {
   const { collapsed } = useSidebar();
   const [searching, setSearching] = useState(false);
   const openSearch = useCallback(() => setSearching(true), []);
@@ -62,10 +62,9 @@ export function Layout() {
       )}
       {/* With the sidebar hidden, leave room for the floating "show sidebar" button. */}
       <main id={MAIN_ID} tabIndex={-1} className={cn('min-w-0 flex-1', collapsed && 'md:pl-12')}>
-        {/* Pages are lazy chunks: keep the sidebar up while the first one loads. */}
-        <Suspense fallback={null}>
-          <Outlet />
-        </Suspense>
+        {/* No Suspense here: the server HTML then carries each page inline, and client navigations
+            (transitions) keep the current page up until the next one is ready. */}
+        {children}
       </main>
       <Welcome />
       {searching && <SearchDialog onClose={() => setSearching(false)} />}

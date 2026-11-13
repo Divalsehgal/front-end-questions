@@ -1,9 +1,10 @@
 // Server render smoke test, in plain Node (no window/document/localStorage): every kind of
-// question page renders its crawlable content, exactly as scripts/prerender.js does at build time.
+// question page renders its crawlable content, as the static build does.
 import { describe, expect, it } from 'vitest';
 import { BANK_ENTRIES as ALL } from '../content/bank';
 import { hrefOf, subjectHref, type FullEntry as Entry } from '../content/registry';
-import { render } from '../entry-server';
+import { preloadAllViews } from '../questions/registry';
+import { renderPage as render } from '../test/app';
 import { stripMarkdown } from './text';
 import type { Kind } from '../content/types';
 
@@ -19,6 +20,9 @@ const opening = (md: string) =>
   stripMarkdown(md.split(/```|\n\|/)[0].split('\n')[0])
     .slice(0, 40)
     .trim();
+// Every view chunk up front, as a build worker has them once it has rendered one page of each kind.
+await preloadAllViews();
+
 const first = (kind: Kind) => ALL.find((e) => e.q.kind === kind)!;
 const page = (e: Entry) => render(hrefOf(e.key));
 
@@ -31,7 +35,7 @@ describe('server render', () => {
   it('renders a quiz page with title, prompt, options and the explanation in a closed <details>', () => {
     const e = first('quiz');
     if (e.q.kind !== 'quiz') throw new Error('unreachable');
-    const { html, head } = page(e);
+    const { html, meta } = page(e);
     const text = textOf(html);
     expect(html.match(/<h1/g)).toHaveLength(1);
     expect(text).toContain(stripMarkdown(e.q.title));
@@ -40,8 +44,8 @@ describe('server render', () => {
     expect(html).toMatch(/<details[^>]*>(?!.*<details).*Show answer &amp; explanation/s);
     expect(html).not.toMatch(/<details[^>]* open/);
     expect(text).toContain(opening(e.q.why));
-    expect(head).toContain('<link rel="canonical"');
-    expect(head).toContain('"@type":"Quiz"');
+    expect(meta.canonical).toMatch(/^https:/);
+    expect(JSON.stringify(meta.jsonLd)).toContain('"@type":"Quiz"');
   });
 
   it.each(['output', 'order'] as const)('renders the %s explanation', (kind) => {
@@ -66,7 +70,7 @@ describe('server render', () => {
   it('links to the subject through the breadcrumb trail with real hrefs', () => {
     const e = first('quiz');
     const { html } = page(e);
-    expect(html).toContain(`href="${import.meta.env.BASE_URL}${subjectHref(e.subject.slug).slice(1)}"`);
+    expect(html).toContain(`href="${subjectHref(e.subject.slug)}"`);
     expect(html).toMatch(/aria-label="Breadcrumb"/);
   });
 

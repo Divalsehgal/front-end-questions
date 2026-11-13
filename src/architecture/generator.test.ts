@@ -50,7 +50,7 @@ describe('generated architecture', () => {
 
   it('--check exits 1 with a hint when the output is stale or missing', () => {
     const stale = join(temp, 'stale.json');
-    writeFileSync(stale, readFileSync(COMMITTED, 'utf8').replace('"React SPA"', '"Renamed"'));
+    writeFileSync(stale, readFileSync(COMMITTED, 'utf8').replace('"Next.js app"', '"Renamed"'));
     const result = run('--check', '--out', stale);
     expect(result.status).toBe(1);
     expect(result.stderr).toContain('npm run architecture');
@@ -74,14 +74,15 @@ describe('generated architecture', () => {
 
     const small = join(temp, 'small');
     mkdirSync(join(small, 'src/runtime'), { recursive: true });
+    mkdirSync(join(small, 'src/app/about'), { recursive: true });
     writeFileSync(join(small, 'package.json'), JSON.stringify({ name: 'tiny', dependencies: { react: '^19.1.0' } }));
-    writeFileSync(join(small, 'src/App.tsx'), "const ROUTES = [\n  { index: true, page: 'home' },\n  { path: 'about', page: 'about' },\n];\n");
+    for (const f of ['layout.tsx', 'page.tsx', 'about/page.tsx']) writeFileSync(join(small, 'src/app', f), '');
     writeFileSync(join(small, 'src/runtime/sandbox.worker.ts'), '');
     expect(run('--root', small).status).toBe(0);
     const tiny = architectureSchema.parse(readJson(join(small, 'src/generated/architecture.json')));
     expect(tiny.title).toBe('tiny architecture');
     expect(tiny.nodes.map((n) => n.id)).toEqual(['spa', 'sandbox']);
-    expect(tiny.nodes[0].data.description).toContain('React 19.1.0 app routed by react-router-dom ? across 2 routes (/, /about)');
+    expect(tiny.nodes[0].data.description).toContain('Next.js ? App Router app (React 19.1.0) across 2 routes (/, /about)');
     expect(tiny.edges.map((e) => e.id)).toEqual(['spa->sandbox', 'sandbox->spa']);
   });
 });

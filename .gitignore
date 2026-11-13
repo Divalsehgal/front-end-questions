@@ -7,3 +7,11 @@ dist
 *.tsbuildinfo
 coverage
 dist-ssr
+
+# Built by scripts/generate-content.mjs
+src/generated/files
+src/generated/monaco-types.json
+src/generated/content-manifest.json
+.next
+next-env.d.ts
+out

@@ -1,5 +1,7 @@
+'use client';
 import { LayoutDashboard, Moon, Search, PanelLeftClose, RotateCcw, Settings, Sun, Timer, Zap } from 'lucide-react';
-import { NavLink } from 'react-router-dom';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { ALL, subjectHref, SUBJECTS } from '../../content/registry';
 import { isDue, useProgress } from '../../state/progress';
 import { setSidebarCollapsed, useSidebar } from '../../state/sidebar';
@@ -8,13 +10,30 @@ import { SubjectIcon } from '../icons';
 import { Kbd } from '../Kbd';
 import { cn, MOD } from '../lib';
 import { SidebarResizer } from './SidebarResizer';
-import type { CSSProperties } from 'react';
+import type { ComponentProps, CSSProperties } from 'react';
 
 const navClass = ({ isActive }: { isActive: boolean }) =>
   cn(
     'flex shrink-0 items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
     isActive ? 'bg-brand-soft text-brand-strong' : 'text-text-muted hover:bg-surface-muted hover:text-text-main',
   );
+
+const trim = (path: string) => (path.endsWith('/') ? path.slice(0, -1) : path);
+
+/** A link that knows when it points at the current page (or, unless `end`, one under it). */
+function NavLink({
+  to,
+  end,
+  className,
+  ...rest
+}: Readonly<Omit<ComponentProps<'a'>, 'className' | 'href'> & { to: string; end?: boolean; className: string | ((state: { isActive: boolean }) => string) }>) {
+  const path = trim(usePathname());
+  const target = trim(to);
+  const isActive = path === target || (!end && target !== '' && path.startsWith(`${target}/`));
+  return (
+    <Link {...rest} href={to} className={typeof className === 'function' ? className({ isActive }) : className} aria-current={isActive ? 'page' : undefined} />
+  );
+}
 
 function ThemeToggle() {
   const dark = useTheme() === 'dark';

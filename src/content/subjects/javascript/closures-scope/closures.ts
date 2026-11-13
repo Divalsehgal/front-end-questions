@@ -1,7 +1,8 @@
+import files from '../../../../generated/files/javascript.json';
 import { codeFiles } from '../../../files';
 import type { Question } from '../../../types';
 
-const code = codeFiles('javascript', import.meta.glob<string>('../files/*', { query: '?raw', import: 'default', eager: true }));
+const code = codeFiles('javascript', files);
 
 export const closuresQuestions: Question[] = [
   {

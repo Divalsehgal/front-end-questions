@@ -1,10 +1,8 @@
-import { act, render } from '@testing-library/react';
-import { MemoryRouter, useNavigate } from 'react-router-dom';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { render } from '@testing-library/react';
+import { describe, expect, it } from 'vitest';
 import { ALL, hrefOf } from '../content/registry';
-import { applyHead, headTags, renderHead, SEO_ATTR } from './head';
+import { JsonLd, toMetadata } from './head';
 import { pageMeta, type PageMeta } from './meta';
-import { Seo } from './Seo';
 import { SITE_URL } from './site';
 
 const meta: PageMeta = {
@@ -16,72 +14,41 @@ const meta: PageMeta = {
   jsonLd: [{ '@type': 'Thing', name: '</script>' }],
 };
 
-const tag = (sel: string) => document.head.querySelector(sel);
-
-beforeEach(() => {
-  document.head.innerHTML = '<meta charset="utf-8"><link rel="icon" href="/favicon.svg">';
-});
-
-describe('renderHead', () => {
-  it('renders an escaped title, meta, canonical, Open Graph, Twitter and JSON-LD tags', () => {
-    const html = renderHead(meta);
-    expect(html).toContain('<title>A &lt;b&gt; &amp; &quot;c&quot;</title>');
-    expect(html).toContain('<meta name="description" content="Desc &quot;quoted&quot; &lt;tag&gt;" data-seo>');
-    expect(html).toContain('<link rel="canonical" href="https://example.com/a/" data-seo>');
-    expect(html).toContain('<meta property="og:url" content="https://example.com/a/" data-seo>');
-    expect(html).toContain(`<meta property="og:image" content="${SITE_URL}og-image.png" data-seo>`);
-    expect(html).toContain('<meta name="twitter:card" content="summary_large_image" data-seo>');
-    expect(html).toContain(String.raw`<script type="application/ld+json" data-seo>{"@type":"Thing","name":"\u003c/script\u003e"}</script>`);
-    expect(html).not.toContain('robots');
+describe('toMetadata', () => {
+  it('maps title, description, canonical, Open Graph and Twitter tags', () => {
+    const m = toMetadata(meta);
+    expect(m.title).toEqual({ absolute: meta.title });
+    expect(m.description).toBe(meta.description);
+    expect(m.alternates).toEqual({ canonical: meta.canonical });
+    expect(m.robots).toBeUndefined();
+    expect(m.openGraph).toMatchObject({
+      type: 'article',
+      url: meta.canonical,
+      locale: 'en_US',
+      images: [{ url: `${SITE_URL}og-image.png`, width: 1200, height: 630 }],
+    });
+    expect(m.twitter).toMatchObject({ card: 'summary_large_image', title: meta.title, images: [`${SITE_URL}og-image.png`] });
   });
 
-  it('adds robots noindex and drops the canonical for noindex pages', () => {
-    const tags = headTags({ ...meta, canonical: null, noindex: true });
-    expect(tags).toContainEqual({ tag: 'meta', attrs: { name: 'robots', content: 'noindex, follow' } });
-    expect(tags.some((t) => t.tag === 'link')).toBe(false);
-  });
-});
-
-describe('applyHead', () => {
-  it('replaces only the tags it owns', () => {
-    applyHead(meta);
-    applyHead({ ...meta, title: 'Second', canonical: null, noindex: true, jsonLd: [] });
-    expect(document.title).toBe('Second');
-    expect(tag('link[rel="canonical"]')).toBeNull();
-    expect(tag('meta[name="robots"]')).toHaveAttribute('content', 'noindex, follow');
-    expect(document.head.querySelectorAll('script[type="application/ld+json"]')).toHaveLength(0);
-    expect(document.head.querySelectorAll('meta[name="description"]')).toHaveLength(1);
-    expect(tag('meta[charset]')).not.toBeNull();
-    expect(tag('link[rel="icon"]')).not.toBeNull();
-    expect(document.head.querySelectorAll(`[${SEO_ATTR}]`).length).toBeGreaterThan(5);
+  it('adds robots noindex, follow and drops the canonical for noindex pages', () => {
+    const m = toMetadata({ ...meta, canonical: null, noindex: true });
+    expect(m.robots).toEqual({ index: false, follow: true });
+    expect(m.alternates).toBeUndefined();
+    expect(m.openGraph).not.toHaveProperty('url');
   });
 
-  it('writes JSON-LD as script text', () => {
-    applyHead(meta);
-    expect(JSON.parse(tag('script[type="application/ld+json"]')!.textContent!)).toEqual(meta.jsonLd[0]);
+  it('gives question pages their own canonical URL', () => {
+    const path = hrefOf(ALL[0].key);
+    expect(toMetadata(pageMeta(path)).alternates).toEqual({ canonical: `${SITE_URL}${path.slice(1)}` });
+    expect(toMetadata(pageMeta('/review')).robots).toEqual({ index: false, follow: true });
   });
 });
 
-describe('Seo', () => {
-  let go: (to: string) => void = () => {};
-  function Nav() {
-    go = useNavigate();
-    return null;
-  }
-
-  it('follows client-side navigation', async () => {
-    const e = ALL[0];
-    render(
-      <MemoryRouter initialEntries={['/']}>
-        <Seo />
-        <Nav />
-      </MemoryRouter>,
-    );
-    expect(document.title).toBe(pageMeta('/').title);
-    await act(async () => go(hrefOf(e.key)));
-    expect(document.title).toBe(pageMeta(hrefOf(e.key)).title);
-    expect(tag('link[rel="canonical"]')).toHaveAttribute('href', `${SITE_URL}${hrefOf(e.key).slice(1)}`);
-    await act(async () => go('/review'));
-    expect(tag('meta[name="robots"]')).toHaveAttribute('content', 'noindex, follow');
+describe('JsonLd', () => {
+  it('writes each JSON-LD object as an escaped script', () => {
+    const { container } = render(<JsonLd meta={meta} />);
+    const script = container.querySelector('script[type="application/ld+json"]')!;
+    expect(script.innerHTML).not.toContain('</script');
+    expect(JSON.parse(script.textContent!)).toEqual(meta.jsonLd[0]);
   });
 });

@@ -1,8 +1,9 @@
+import files from '../../../generated/files/typescript.json';
 import { codeFiles } from '../../files';
 import type { Question } from '../../types';
 
 // Fixtures live in ./files/tsr-*.{starter,solution,types}.ts (copy them into subjects/typescript/files/).
-const code = codeFiles('typescript', import.meta.glob<string>('./files/*', { query: '?raw', import: 'default', eager: true }));
+const code = codeFiles('typescript', files);
 
 export const reactTsCodeQuestions: Question[] = [
   {

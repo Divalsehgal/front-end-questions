@@ -1,7 +1,8 @@
+import files from '../../../generated/files/javascript.json';
 import { codeFiles } from '../../files';
 import type { Topic } from '../../types';
 
-const code = codeFiles('javascript', import.meta.glob<string>('./files/*', { query: '?raw', import: 'default', eager: true }));
+const code = codeFiles('javascript', files);
 
 export const utilities: Topic = {
   slug: 'utilities',

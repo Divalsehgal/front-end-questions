@@ -1,6 +1,5 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { resetSidebarWidth, setSidebarCollapsed, SIDEBAR_DEFAULT, SIDEBAR_MAX, SIDEBAR_MIN, useSidebar } from '../../state/sidebar';
 import { Layout } from '.';
@@ -12,13 +11,9 @@ function Probe() {
 
 function renderLayout() {
   return render(
-    <MemoryRouter>
-      <Routes>
-        <Route element={<Layout />}>
-          <Route path="*" element={<Probe />} />
-        </Route>
-      </Routes>
-    </MemoryRouter>,
+    <Layout>
+      <Probe />
+    </Layout>,
   );
 }
 

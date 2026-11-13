@@ -1,7 +1,7 @@
 // Everything every page needs about the question bank, from the light manifest: subjects, topics,
 // and each question's id/title/kind/difficulty. Question bodies live in per-subject chunks that
 // ./loader fetches on demand (only question pages need them).
-import MANIFEST from 'virtual:content-manifest';
+import MANIFEST from '../generated/content-manifest.json';
 import type { Kind, Subject, SubjectMeta } from './types';
 
 type EntryOf<S extends SubjectMeta> = {
@@ -16,7 +16,7 @@ export type Entry = EntryOf<SubjectMeta>;
 export type FullEntry = EntryOf<Subject>;
 
 export const keyOf = (subject: string, id: string) => `${subject}:${id}`;
-// Trailing slashes match the prerendered dist/<path>/index.html files, so links never hit a redirect.
+// Trailing slashes match next.config's trailingSlash, so links never hit a redirect.
 export const hrefOf = (key: string) => `/q/${key.replace(':', '/')}/`;
 export const subjectHref = (slug: string) => `/s/${slug}/`;
 
@@ -28,7 +28,7 @@ export const entriesFrom = <S extends SubjectMeta>(subjects: S[]): EntryOf<S>[] 
   );
 
 // Order is the order on the dashboard and in the sidebar (src/content/subjects/index.ts).
-export const SUBJECTS: SubjectMeta[] = MANIFEST;
+export const SUBJECTS = MANIFEST as SubjectMeta[];
 export const ALL: Entry[] = entriesFrom(SUBJECTS);
 
 const byKey = new Map(ALL.map((e) => [e.key, e]));

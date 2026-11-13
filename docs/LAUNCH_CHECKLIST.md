@@ -21,8 +21,8 @@ Live site: `https://front-end-grind.vercel.app/` · Repository: `github.com/Diva
 The project already exists and is connected to the repository. In the Vercel dashboard → the project:
 
 - [ ] **Settings → Git:** Production Branch is **`main`**. Previews for other branches and PRs are on by default.
-- [ ] **Settings → Build and Deployment:** leave everything on "use `vercel.json`". It sets framework Vite, build
-      command `npm run build` and output directory `dist`, so don't override them in the UI.
+- [ ] **Settings → Build and Deployment:** leave everything on "use `vercel.json`". It sets framework Next.js and build
+      command `npm run build`, so don't override them in the UI.
 - [ ] **Settings → Environment Variables** (Production and Preview). Add each one when you need it:
   - `GOOGLE_SITE_VERIFICATION`: the code from Search Console (step 4). The build adds the meta tag to every page.
   - `SITE_URL`: only for a custom domain, for example `https://fegrind.dev/`. Without it, the build uses
@@ -102,7 +102,7 @@ A short domain such as `fegrind.dev` ranks and shares better than `*.vercel.app`
 - [ ] Buy the domain, then in Vercel go to **Settings → Domains → Add** and follow the DNS records it shows (an `A`
       record for the apex, a `CNAME` for `www`). Set the apex as primary and redirect `www` to it. HTTPS is automatic.
 - [ ] Set the `SITE_URL` Vercel environment variable to `https://<domain>/` and redeploy, so canonical URLs, the
-      sitemap and Open Graph tags use the new domain. Then change `DEFAULT_SITE_URL` in `vite.config.ts` to match.
+      sitemap and Open Graph tags use the new domain. Then change `DEFAULT_SITE_URL` in `next.config.ts` to match.
 - [ ] In Search Console, add a **Domain** property for the new domain and submit its sitemap. Keep the
       `vercel.app` property for a while; Vercel redirects nothing by itself, but the canonical tags tell Google which
       URL to prefer.
