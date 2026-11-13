@@ -19,6 +19,8 @@ export default function config(): NextConfig {
     // Cache Components: pages are static by default and prerendered into a static shell (Partial
     // Prerendering); anything slower or request-specific is either cached ('use cache') or streams in.
     cacheComponents: true,
+    // Links prefetch each route's static shell (the recommended pairing with Cache Components).
+    partialPrefetching: true,
     // Automatic memoization at build time, instead of hand-written useMemo / useCallback.
     reactCompiler: true,
     reactStrictMode: true,

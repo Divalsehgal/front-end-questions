@@ -6,6 +6,12 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const app = join(import.meta.dirname, '../.next/server/app');
+// On Vercel the build adapter keeps prerendered pages in its own output, not here. CI (and every local
+// build) runs this check on the same commit, so Vercel skips it rather than fail on a missing file.
+if (process.env.VERCEL) {
+  console.warn('Static HTML check: skipped on Vercel (CI runs it)');
+  process.exit(0);
+}
 // Cache Components also emits fallback shells for param routes (s/[subject].html); those aren't pages.
 const pages = ['index.html', ...readdirSync(app, { recursive: true, encoding: 'utf8' }).filter((f) => /^[sq]\/.+\.html$/.test(f) && !f.includes('['))];
 const bad = pages.filter((f) => {
