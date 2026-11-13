@@ -6,7 +6,8 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const app = join(import.meta.dirname, '../.next/server/app');
-const pages = ['index.html', ...readdirSync(app, { recursive: true, encoding: 'utf8' }).filter((f) => /^[sq]\/.+\.html$/.test(f))];
+// Cache Components also emits fallback shells for param routes (s/[subject].html); those aren't pages.
+const pages = ['index.html', ...readdirSync(app, { recursive: true, encoding: 'utf8' }).filter((f) => /^[sq]\/.+\.html$/.test(f) && !f.includes('['))];
 const bad = pages.filter((f) => {
   const html = readFileSync(join(app, f), 'utf8');
   return !html.includes('<h1') || html.includes('<template id="B:');

@@ -139,7 +139,8 @@ export function useProgress(): Progress {
   );
 }
 
-export const isDue = (a: Attempt | undefined, now = Date.now()) => !!a && a.due <= now;
+/** `now` comes from the caller (useNow in components), so rendering never reads the clock itself. */
+export const isDue = (a: Attempt | undefined, now: number) => !!a && a.due <= now;
 
 // Per-question code drafts, so a half-written solution survives a reload.
 const draftKey = (id: string) => `grind:draft:${id}`;

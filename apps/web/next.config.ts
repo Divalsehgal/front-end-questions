@@ -16,6 +16,11 @@ export default function config(): NextConfig {
     env: { NEXT_PUBLIC_SITE_URL: siteUrl.href, NEXT_PUBLIC_BASE_PATH: basePath },
     // Workspace packages ship TypeScript source; Next compiles them with the app.
     transpilePackages: ['@fe-grind/content', '@fe-grind/dsa', '@fe-grind/runtime', '@fe-grind/ui'],
+    // Cache Components: pages are static by default and prerendered into a static shell (Partial
+    // Prerendering); anything slower or request-specific is either cached ('use cache') or streams in.
+    cacheComponents: true,
+    // Automatic memoization at build time, instead of hand-written useMemo / useCallback.
+    reactCompiler: true,
     reactStrictMode: true,
     poweredByHeader: false,
   };

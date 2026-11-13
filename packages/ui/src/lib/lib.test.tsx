@@ -1,4 +1,6 @@
 import { act, renderHook } from '@testing-library/react';
+import { createElement } from 'react';
+import { renderToString } from 'react-dom/server';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cn, rovingIndex, TONES, useNow, withStableKeys } from '.';
 import type { KeyboardEvent } from 'react';
@@ -66,5 +68,12 @@ describe('useNow', () => {
     expect(still.result.current).toBe(1_000);
     expect(ticking.result.current).toBe(4_000);
     ticking.unmount();
+  });
+
+  it('is 0 on the server: a prerendered page never reads the clock', () => {
+    function Clock() {
+      return createElement('time', null, useNow(1000));
+    }
+    expect(renderToString(createElement(Clock))).toBe('<time>0</time>');
   });
 });

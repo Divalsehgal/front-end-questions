@@ -59,14 +59,12 @@ describe('spaced repetition', () => {
     expect(stored()['js:d']).toMatchObject({ status: 'wrong', box: 0, due: 10 * DAY, firstTry: true, attempts: 3 });
   });
 
-  it('isDue is false for unseen cards and uses Date.now by default', async () => {
+  it('isDue is false for unseen cards and true from the due time on', async () => {
     const { isDue } = await load();
-    expect(isDue(undefined)).toBe(false);
+    expect(isDue(undefined, 10)).toBe(false);
     const a = { status: 'correct' as const, attempts: 1, firstTry: true, box: 2, due: 5, updated: 0 };
-    vi.setSystemTime(4);
-    expect(isDue(a)).toBe(false);
-    vi.setSystemTime(5);
-    expect(isDue(a)).toBe(true);
+    expect(isDue(a, 4)).toBe(false);
+    expect(isDue(a, 5)).toBe(true);
   });
 });
 

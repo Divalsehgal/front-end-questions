@@ -2,7 +2,7 @@
 import { ALL, subjectHref, SUBJECTS } from '@fe-grind/content/registry';
 import { SubjectIcon } from '@fe-grind/ui/icons';
 import { Kbd } from '@fe-grind/ui/Kbd';
-import { cn, MOD } from '@fe-grind/ui/lib';
+import { cn, MOD, useNow } from '@fe-grind/ui/lib';
 import { toggleTheme, useTheme } from '@fe-grind/ui/theme';
 import { LayoutDashboard, Moon, Network, Search, PanelLeftClose, RotateCcw, Settings, Sun, Timer, Zap } from 'lucide-react';
 import Link from 'next/link';
@@ -70,7 +70,8 @@ function SubjectLinks() {
 export function Sidebar({ onSearch }: Readonly<{ onSearch: () => void }>) {
   const progress = useProgress();
   const { width, collapsed } = useSidebar();
-  const due = ALL.filter((e) => isDue(progress[e.key])).length;
+  const now = useNow(60_000);
+  const due = ALL.filter((e) => isDue(progress[e.key], now)).length;
   return (
     <header
       style={{ '--sidebar-w': `${width}px` } as CSSProperties}

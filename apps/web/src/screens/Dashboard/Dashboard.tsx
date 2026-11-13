@@ -1,6 +1,6 @@
 'use client';
 import { ALL, hrefOf, SUBJECTS } from '@fe-grind/content/registry';
-import { buttonClass, Card, inline, Page, PageHeader, SectionTitle, Stat } from '@fe-grind/ui';
+import { buttonClass, Card, inline, Page, PageHeader, SectionTitle, Stat, useNow } from '@fe-grind/ui';
 import { ArrowRight, Flame, RotateCcw, Target, Timer } from 'lucide-react';
 import Link from 'next/link';
 import { ArchitectureWidget } from '../../architecture/ArchitectureWidget';
@@ -19,7 +19,8 @@ export function Dashboard() {
   const attempted = ALL.filter((e) => progress[e.key]);
   const solved = attempted.filter((e) => progress[e.key].status === 'correct');
   const firstTry = attempted.filter((e) => progress[e.key].firstTry).length;
-  const due = ALL.filter((e) => isDue(progress[e.key])).length;
+  const now = useNow(60_000);
+  const due = ALL.filter((e) => isDue(progress[e.key], now)).length;
   const nextUp = ALL.find((e) => !progress[e.key]) ?? ALL.find((e) => progress[e.key]?.status === 'wrong');
   const weak = weakTopics(progress);
   const name = useProfile().name.trim();

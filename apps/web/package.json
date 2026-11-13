@@ -33,6 +33,7 @@
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.5",
+    "babel-plugin-react-compiler": "^1.0.0",
     "postcss": "^8.5.32",
     "tailwindcss": "^4.2.2"
   }
