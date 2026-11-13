@@ -1,4 +1,4 @@
-import { Button, Card, Kbd, MOD } from '@fe-grind/ui';
+import { Button, Card, Kbd, useModKey } from '@fe-grind/ui';
 import { Check, Eye, Lightbulb } from 'lucide-react';
 import { useId } from 'react';
 
@@ -24,6 +24,7 @@ export function AnswerForm({
   lineCount: number | null;
   busy: boolean;
 }>) {
+  const mod = useModKey();
   const id = useId();
   return (
     <Card className="p-4">
@@ -51,7 +52,7 @@ export function AnswerForm({
           <Check size={16} aria-hidden /> Check answer
         </Button>
         <span className="text-xs text-text-muted">
-          <Kbd>{MOD}</Kbd> <Kbd>Enter</Kbd>
+          <Kbd>{mod}</Kbd> <Kbd>Enter</Kbd>
         </span>
         <div className="ml-auto flex gap-2">
           <Button variant="ghost" onClick={onHint} disabled={lineCount !== null}>

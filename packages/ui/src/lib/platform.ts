@@ -1,3 +1,7 @@
-export const isMac = typeof navigator !== 'undefined' && /Mac|iPhone|iPad/.test(navigator.platform);
-/** Label for the platform's primary modifier key. */
-export const MOD = isMac ? '⌘' : 'Ctrl';
+import { useHydrated } from './useHydrated';
+
+/**
+ * Label for the platform's primary modifier key. The server can't know the visitor's platform, so
+ * prerendered HTML and the hydration pass say "Ctrl"; on a Mac it switches to ⌘ right after.
+ */
+export const useModKey = () => (useHydrated() && /Mac|iPhone|iPad/.test(navigator.platform) ? '⌘' : 'Ctrl');

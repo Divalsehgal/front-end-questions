@@ -2,7 +2,7 @@
 import { ALL, subjectHref, SUBJECTS } from '@fe-grind/content/registry';
 import { SubjectIcon } from '@fe-grind/ui/icons';
 import { Kbd } from '@fe-grind/ui/Kbd';
-import { cn, MOD, useNow } from '@fe-grind/ui/lib';
+import { cn, useModKey, useNow } from '@fe-grind/ui/lib';
 import { toggleTheme, useTheme } from '@fe-grind/ui/theme';
 import { LayoutDashboard, Moon, Network, Search, PanelLeftClose, RotateCcw, Settings, Sun, Timer, Zap } from 'lucide-react';
 import Link from 'next/link';
@@ -68,6 +68,7 @@ function SubjectLinks() {
 }
 
 export function Sidebar({ onSearch }: Readonly<{ onSearch: () => void }>) {
+  const mod = useModKey();
   const progress = useProgress();
   const { width, collapsed } = useSidebar();
   const now = useNow(60_000);
@@ -103,7 +104,7 @@ export function Sidebar({ onSearch }: Readonly<{ onSearch: () => void }>) {
             onClick={() => setSidebarCollapsed(true)}
             className="hidden rounded-lg p-1.5 text-text-muted hover:bg-surface-muted hover:text-text-main md:block"
             aria-label="Hide sidebar"
-            title={`Hide sidebar (${MOD}+B)`}
+            title={`Hide sidebar (${mod}+B)`}
           >
             <PanelLeftClose size={16} aria-hidden />
           </button>
@@ -114,7 +115,7 @@ export function Sidebar({ onSearch }: Readonly<{ onSearch: () => void }>) {
         <button type="button" onClick={onSearch} aria-keyshortcuts="Meta+K Control+K" className={navClass({ isActive: false })}>
           <Search size={16} aria-hidden /> <span className="whitespace-nowrap">Search</span>
           <span className="ml-auto hidden md:inline">
-            <Kbd>{MOD}+K</Kbd>
+            <Kbd>{mod}+K</Kbd>
           </span>
         </button>
         <NavLink to="/" end className={navClass}>

@@ -22,8 +22,8 @@ function fmtObject(v, f) {
   if (v instanceof Date) return `Date(${v.getTime()})`;
   if (v instanceof Promise) return 'Promise';
   if (v instanceof Map) return '{' + [...v].map(([k, x]) => `${f(k)}: ${f(x)}`).join(', ') + '}';
-  if (v instanceof Set) return '{' + [...v].map(f).join(', ') + '}';
-  if (Array.isArray(v)) return '[' + Array.from(v, f).join(', ') + ']';
+  if (v instanceof Set) return '{' + [...v].map((x) => f(x)).join(', ') + '}';
+  if (Array.isArray(v)) return '[' + Array.from(v, (x) => f(x)).join(', ') + ']';
   const parts = Object.entries(v).map(([k, x]) => `${k}: ${f(x)}`);
   for (const sym of Object.getOwnPropertySymbols(v)) parts.push(`[${sym.description}]: ${f(v[sym])}`);
   return '{' + parts.join(', ') + '}';
