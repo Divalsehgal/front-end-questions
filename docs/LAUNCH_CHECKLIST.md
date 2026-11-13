@@ -21,8 +21,11 @@ Live site: `https://front-end-grind.vercel.app/` · Repository: `github.com/Diva
 The project already exists and is connected to the repository. In the Vercel dashboard → the project:
 
 - [ ] **Settings → Git:** Production Branch is **`main`**. Previews for other branches and PRs are on by default.
-- [ ] **Settings → Build and Deployment:** leave everything on "use `vercel.json`". It sets framework Next.js and build
-      command `npm run build`, so don't override them in the UI.
+- [ ] **Settings → Build and Deployment:** set **Root Directory** to **`apps/web`** (the repo is a Turborepo). Leave
+      the rest on "use `vercel.json`": `apps/web/vercel.json` sets framework Next.js, build command `turbo run build`
+      and the ignore step `npx turbo-ignore`, so don't override them in the UI.
+- [ ] **Settings → Environment Variables:** add `VERCEL_DEEP_CLONE` = `true`. The sitemap's `<lastmod>` and the
+      published dates come from git history, which a shallow clone doesn't have.
 - [ ] **Settings → Environment Variables** (Production and Preview). Add each one when you need it:
   - `GOOGLE_SITE_VERIFICATION`: the code from Search Console (step 4). The build adds the meta tag to every page.
   - `SITE_URL`: only for a custom domain, for example `https://fegrind.dev/`. Without it, the build uses
@@ -109,6 +112,6 @@ A short domain such as `fegrind.dev` ranks and shares better than `*.vercel.app`
 
 ## 6. Adding content later
 
-Nothing to do by hand. Add questions under `src/content/subjects/` and open a PR. Each question gets its own
+Nothing to do by hand. Add questions under `packages/content/src/subjects/` and open a PR. Each question gets its own
 prerendered page, meta tags, structured data and sitemap entry. The build fails on duplicate question ids, and the
 content gate fails if a reference solution doesn't pass its tests.
