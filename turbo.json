@@ -14,7 +14,7 @@
     },
     "build": {
       "dependsOn": ["^generate", "generate"],
-      "env": ["SITE_URL", "GOOGLE_SITE_VERIFICATION", "VERCEL_*"],
+      "env": ["SITE_URL", "GOOGLE_SITE_VERIFICATION", "NEXT_PUBLIC_GTM_ID", "VERCEL_*"],
       "outputs": [".next/**", "!.next/cache/**"]
     },
     "typecheck": {
