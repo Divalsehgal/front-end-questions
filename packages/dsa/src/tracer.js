@@ -44,7 +44,8 @@ export function instrument(src) {
           .map((v) => v.name),
       ),
     ];
-    return `__t(${node.loc.start.line}, {${names.map((n) => `${JSON.stringify(n)}: () => ${n}`).join(', ')}});`;
+    const getters = names.map((n) => JSON.stringify(n) + ': () => ' + n).join(', ');
+    return `__t(${node.loc.start.line}, {${getters}});`;
   };
   const scoped = (fn) => {
     scopes.push([]);
@@ -160,7 +161,12 @@ export function instrument(src) {
         return;
       case 'SwitchStatement':
         expr(s.discriminant);
-        return scoped(() => s.cases.forEach((c) => (expr(c.test), block(c.consequent))));
+        return scoped(() =>
+          s.cases.forEach((c) => {
+            expr(c.test);
+            block(c.consequent);
+          }),
+        );
       case 'LabeledStatement':
         return stmt(s.body, false);
       default:

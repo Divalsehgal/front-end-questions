@@ -14,7 +14,6 @@ const subjectsDir = join(root, 'src/subjects');
 const out = join(root, 'src/generated');
 const repoRoot = join(root, '../..');
 
-
 /** Writes only when the contents changed, so a dev server doesn't reload for nothing. */
 function write(path, text) {
   const file = join(out, path);
@@ -42,7 +41,6 @@ function writeFixtures() {
   }
 }
 
-
 /** Question dates from git, or none (with a warning) when history is missing or shallow: never guessed. */
 function gitDates(contentDates, logArgs) {
   // Sonar S4036 (PATH lookup): a build step in a trusted environment, fixed argv, no shell.
@@ -56,7 +54,7 @@ function gitDates(contentDates, logArgs) {
     for (const name of readdirSync(subjectsDir, { recursive: true, encoding: 'utf8' })) {
       // Question definitions only: fixtures under files/ have ids of their own.
       if (name.endsWith('.ts') && !name.split('/').includes('files')) {
-        files[relative(repoRoot, join(subjectsDir, name)).split('\\').join('/')] = readFileSync(join(subjectsDir, name), 'utf8');
+        files[relative(repoRoot, join(subjectsDir, name)).replaceAll('\\', '/')] = readFileSync(join(subjectsDir, name), 'utf8');
       }
     }
     return contentDates(git(logArgs), files);

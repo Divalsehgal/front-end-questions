@@ -21,9 +21,9 @@ const FIXTURES = ['packages/content/src/subjects/**/files/**'];
 
 /**
  * DSA practice: the exercise files are the learner's own workspace (run with node, edited in VS Code),
- * and packages/dsa/scripts/traces.mjs holds the reference solutions shown verbatim in the dry-run view.
+ * and packages/dsa/scripts/traces/solutions.mjs holds the reference solutions shown verbatim in the dry-run view.
  */
-const DSA_PRACTICE = ['packages/dsa/exercises/**', 'packages/dsa/scripts/traces.mjs'];
+const DSA_PRACTICE = ['packages/dsa/exercises/**', 'packages/dsa/scripts/traces/solutions.mjs'];
 
 export default tseslint.config(
   { ignores: ['**/.next/**', '**/next-env.d.ts', '**/coverage/**', '**/node_modules/**', '**/.turbo/**', '**/src/generated/**', ...FIXTURES, ...DSA_PRACTICE] },
