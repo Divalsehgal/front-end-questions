@@ -1,0 +1,28 @@
+{
+  "name": "@fe-grind/runtime",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Runs learner code: a Web Worker sandbox and Monaco type checks in the browser, plus node mirrors (node/*) for the CI content gate.",
+  "exports": {
+    "./sandbox": "./src/sandbox.ts",
+    "./typecheck": "./src/typecheck.ts",
+    "./format": "./src/format.ts",
+    "./harness": "./src/harness.ts",
+    "./node/sandbox": "./src/node/sandbox.ts",
+    "./node/typecheck": "./src/node/typecheck.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "sucrase": "^3.35.0"
+  },
+  "peerDependencies": {
+    "@monaco-editor/react": "^4.7.0",
+    "typescript": "^5.7.0"
+  }
+}

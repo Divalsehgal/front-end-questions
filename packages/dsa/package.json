@@ -1,0 +1,33 @@
+{
+  "name": "@fe-grind/dsa",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "description": "DSA patterns: the question tree, a dry-run tracer for pasted JS, traced reference runs, and the runnable practice exercises (node exercises/NN-name/index.js).",
+  "exports": {
+    "./data": "./src/data/index.ts",
+    "./done": "./src/done.ts",
+    "./tracer": {
+      "types": "./src/tracer.d.ts",
+      "default": "./src/tracer.js"
+    },
+    "./traces": "./src/generated/traces.json",
+    "./helpers": {
+      "types": "./exercises/helpers.d.ts",
+      "default": "./exercises/helpers.js"
+    }
+  },
+  "scripts": {
+    "traces": "node scripts/traces.mjs",
+    "typecheck": "tsc -p tsconfig.json",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "acorn": "^8.19.0"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0"
+  }
+}

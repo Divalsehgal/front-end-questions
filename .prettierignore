@@ -1,5 +1,14 @@
 # Code-question fixtures keep their author's formatting (they are shown verbatim in the app).
-src/content/subjects/*/files/
+packages/content/src/subjects/*/files/
 
-# Written by scripts/generate-architecture.mjs (stable JSON.stringify output; CI checks it is current).
-src/generated/
+# Machine-written output: generators (turbo `generate`, the architecture script) own the format.
+**/src/generated/
+
+# DSA practice: the learner's own exercise files, and reference solutions shown verbatim.
+packages/dsa/exercises/
+packages/dsa/scripts/traces.mjs
+
+# Build output.
+**/.next/
+**/.turbo/
+**/coverage/

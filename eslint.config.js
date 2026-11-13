@@ -15,12 +15,18 @@ import tseslint from 'typescript-eslint';
  * Code fixtures shown verbatim to users (machine-coding solutions, drill starters, output
  * snippets). Their length, console usage and style are part of the content, so the size and
  * style rules below would distort them. Correctness is enforced by the content test gate
- * (src/content/content.test.ts): solutions must pass, starters must fail, snippets must run.
+ * (packages/content/src/content.test.ts): solutions must pass, starters must fail, snippets must run.
  */
-const FIXTURES = ['src/content/subjects/**/files/**'];
+const FIXTURES = ['packages/content/src/subjects/**/files/**'];
+
+/**
+ * DSA practice: the exercise files are the learner's own workspace (run with node, edited in VS Code),
+ * and packages/dsa/scripts/traces.mjs holds the reference solutions shown verbatim in the dry-run view.
+ */
+const DSA_PRACTICE = ['packages/dsa/exercises/**', 'packages/dsa/scripts/traces.mjs'];
 
 export default tseslint.config(
-  { ignores: ['dist/**', 'dist-ssr/**', 'coverage/**', 'node_modules/**', 'index.js', ...FIXTURES] },
+  { ignores: ['**/.next/**', '**/next-env.d.ts', '**/coverage/**', '**/node_modules/**', '**/.turbo/**', '**/src/generated/**', ...FIXTURES, ...DSA_PRACTICE] },
 
   js.configs.recommended,
   ...tseslint.configs.strict,
@@ -35,7 +41,8 @@ export default tseslint.config(
     },
     plugins: { 'import-x': importX, unicorn, regexp },
     settings: {
-      'import-x/resolver': { typescript: true, node: true },
+      // One tsconfig per workspace (tsconfig.base.json holds the shared options).
+      'import-x/resolver': { typescript: { project: ['apps/*/tsconfig.json', 'packages/*/tsconfig.json'], noWarnOnMultipleProjects: true }, node: true },
     },
     rules: {
       // TypeScript
@@ -89,14 +96,16 @@ export default tseslint.config(
   // Promises must be awaited, handled or explicitly ignored with `void` (mirrors SonarCloud S6544).
   // The only type-aware rule, so only it pays for the TypeScript program.
   {
-    files: ['src/**/*.{ts,tsx}'],
-    languageOptions: { parserOptions: { project: ['./tsconfig.json', './tsconfig.test.json'], tsconfigRootDir: import.meta.dirname } },
+    files: ['**/src/**/*.{ts,tsx}'],
+    languageOptions: {
+      parserOptions: { project: ['apps/*/tsconfig.json', 'apps/*/tsconfig.test.json', 'packages/*/tsconfig.json'], tsconfigRootDir: import.meta.dirname },
+    },
     rules: { '@typescript-eslint/no-floating-promises': 'error' },
   },
 
   // React + accessibility (WCAG) for components.
   {
-    files: ['src/**/*.{ts,tsx}'],
+    files: ['**/src/**/*.{ts,tsx}'],
     plugins: { react, 'jsx-a11y': jsxA11y },
     settings: { react: { version: 'detect' } },
     rules: {
@@ -116,7 +125,7 @@ export default tseslint.config(
 
   // Tests: describe/it blocks are naturally long.
   {
-    files: ['src/**/*.test.{ts,tsx}', 'src/test/**'],
+    files: ['**/src/**/*.test.{ts,tsx}', '**/src/test/**', 'packages/runtime/src/node/**'],
     languageOptions: { globals: { ...globals.node } },
     plugins: { vitest },
     rules: {
@@ -133,21 +142,35 @@ export default tseslint.config(
   },
 
   // App code never imports the whole question bank: it would put every subject in each page's
-  // initial JS. Subjects load on demand through src/content/loader.ts.
+  // initial JS. Subjects load on demand through @fe-grind/content/loader. Server-only routes that
+  // need every question body (question meta, llms-full.txt) are the exception.
   {
-    files: ['src/**/*.{ts,tsx}'],
-    ignores: ['src/**/*.test.{ts,tsx}', 'src/test/**', 'src/entry-server.tsx', 'src/content/bank.ts', 'src/content/subjects/**'],
+    files: ['apps/web/src/**/*.{ts,tsx}'],
+    ignores: ['**/*.test.{ts,tsx}', 'apps/web/src/test/**', 'apps/web/src/app/q/**', 'apps/web/src/app/llms-full.txt/**'],
     rules: {
       'no-restricted-imports': [
         'error',
-        { patterns: [{ regex: '(^|/)(content/)?(bank|subjects)$', message: 'Load subjects on demand via src/content/loader.ts.' }] },
+        { patterns: [{ regex: '(^|/)(content/)?(bank|subjects)$', message: 'Load subjects on demand via @fe-grind/content/loader.' }] },
+      ],
+    },
+  },
+
+  // Package boundaries: the dependency graph is app -> packages, never back, and packages don't
+  // reach into each other (the content gate's tests may run code through @fe-grind/runtime).
+  {
+    files: ['packages/*/src/**/*.{ts,tsx,js}', 'packages/*/scripts/**'],
+    ignores: ['packages/content/src/**/*.test.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        { patterns: [{ group: ['@fe-grind/*'], message: 'Packages depend on no other workspace package; move shared code down or wire it in apps/web.' }] },
       ],
     },
   },
 
   // Node-side config files.
   {
-    files: ['*.{js,ts,mjs,cjs}', 'scripts/**', 'vite-plugins/**'],
+    files: ['*.{js,ts,mjs,cjs}', '*/*/*.{js,ts,mjs,cjs}', '**/scripts/**'],
     languageOptions: { globals: { ...globals.node } },
   },
 

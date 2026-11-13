@@ -2,7 +2,7 @@
 
 Every screen is built from the same tokens and components, so new question types and pages look consistent, support
 dark mode without extra work, and meet **WCAG 2.2 AA**. Styling is Tailwind v4; tokens are exposed to it through
-`@theme` in `src/index.css`.
+`@theme` in `packages/ui/src/styles.css`.
 
 ## Palette
 
@@ -21,7 +21,7 @@ Inter. A faint grid sits behind the top of the canvas (`body::before`, colour `-
 ### Tokens and measured contrast
 
 Ratios are WCAG 2.x relative-luminance contrast, measured by `npm run check:contrast` (the same check runs in CI as
-`src/test/contrast.test.ts`). Text pairs need ≥ 4.5:1, non-text UI pairs ≥ 3:1.
+`packages/ui/src/contrast.test.ts`). Text pairs need ≥ 4.5:1, non-text UI pairs ≥ 3:1.
 
 | Token                | Light     | Dark      | Checked against (lowest ratio light / dark)          |
 | -------------------- | --------- | --------- | ---------------------------------------------------- |
@@ -76,29 +76,33 @@ Headline pairs: text on surface **17.85:1** (light) / **14.67:1** (dark).
 - Status is never colour-only: pair it with an icon, a label, or `sr-only` text.
 - Spacing and radius come from Tailwind's scale. Cards are `rounded-xl`, controls `rounded-lg`.
 - Animate only `transform`, `opacity` and colours. `prefers-reduced-motion` collapses all transitions and animations
-  globally (`src/index.css`).
+  globally (`packages/ui/src/styles.css`).
 
 ## Folder pattern
 
 Every component, question view and page lives in its own folder:
 
 ```
-src/ui/<Component>/
+packages/ui/src/<Component>/
   index.ts              re-exports the public API
   <Component>.tsx       the component (≤ 250 lines; split helpers into sibling files)
   <Component>.test.tsx  React Testing Library tests (jsdom)
 ```
 
 ```
-src/
-  ui/          design library; import from '../../ui' (src/ui/index.ts barrel)
-    lib/       cn(), TONES, MOD, useNow(), useHydrated(), rovingIndex()/focusItem()
-    Badge/ Button/ Callout/ Card/ Chips/ CodeBlock/ CodeEditor/ EmptyState/ IconButton/
-    icons/ Kbd/ Layout/ LivePreview/ Page/ ProgressBar/ Prose/ ResultHeader/ Stat/ StatusDot/ Tabs/
-  questions/   one folder per view + shared/ (useFirstVerdict, useShortcuts, useDraft, confirmReveal, AnswerDisclosure)
+packages/ui/src/   @fe-grind/ui, the design library; apps import from '@fe-grind/ui' (index.ts barrel)
+  lib/             cn(), TONES, MOD, useNow(), useHydrated(), rovingIndex()/focusItem()
+  Badge/ Button/ Callout/ Card/ Chips/ CodeBlock/ CodeEditor/ EmptyState/ IconButton/
+  icons/ Kbd/ LivePreview/ Page/ PaneResizer/ ProgressBar/ Prose/ ResultHeader/ SplitPane/ Stat/ StatusDot/ Tabs/
+  test/setup.ts    jest-dom, cleanup, Monaco stub (shared by every package's DOM tests)
+apps/web/src/
+  questions/       one folder per view + shared/ (useFirstVerdict, useShortcuts, useDraft, confirmReveal, AnswerDisclosure)
     registry.tsx
-  pages/       Dashboard/ MockSetup/ QuestionPage/ Review/ SessionSummary/ SubjectPage/ Verify/
-  test/        setup.ts (jest-dom, cleanup, Monaco stub), render.tsx (router helper)
+  app/             Next.js App Router: one page.tsx per URL, thin wrappers around screens/
+  screens/         Architecture/ Dashboard/ Dsa/ MockSetup/ QuestionPage/ Review/ SessionSummary/ Settings/ SubjectPage/ Verify/
+  shell/           Layout/ (sidebar, search) and Welcome/
+  test/            navigation.tsx (next/navigation mock), render.tsx
+packages/dsa/      DSA patterns data, dry-run tracer (tracer.js, fmt.js), solved-ticks store
 ```
 
 Grouped folders: `Card` (Card, List), `Badge` (Badge, DifficultyBadge), `Page` (Page, PageHeader, SectionTitle),
@@ -127,13 +131,13 @@ Variants are plain maps (`BUTTON_VARIANTS`, `TONES`) combined with `cn()`; no cl
 
 ### Adding a component
 
-1. Create `src/ui/<Name>/<Name>.tsx` using only semantic tokens; put variants in a `const` map keyed by variant name.
-2. Add `src/ui/<Name>/index.ts` re-exporting it, and an `export * from './<Name>'` line in `src/ui/index.ts`.
-3. Write `src/ui/<Name>/<Name>.test.tsx`: every variant, its ARIA attributes, and keyboard behaviour if interactive.
-4. Inside `src/ui`, import siblings by folder (`../Card`), never through the barrel, to avoid cycles.
-5. If it introduces a new colour pair, add it to `scripts/check-contrast.js` and run `npm run check:contrast`.
+1. Create `packages/ui/src/<Name>/<Name>.tsx` using only semantic tokens; put variants in a `const` map keyed by variant name.
+2. Add `packages/ui/src/<Name>/index.ts` re-exporting it, and an `export * from './<Name>'` line in `packages/ui/src/index.ts`.
+3. Write `packages/ui/src/<Name>/<Name>.test.tsx`: every variant, its ARIA attributes, and keyboard behaviour if interactive.
+4. Inside `packages/ui/src`, import siblings by folder (`../Card`), never through the barrel, to avoid cycles.
+5. If it introduces a new colour pair, add it to `packages/ui/scripts/check-contrast.js` and run `npm run check:contrast`.
 
-## Question views (`src/questions/`)
+## Question views (`apps/web/src/questions/`)
 
 Each kind has one view that receives `{ q, subject, onResult }` and reports a verdict once through `useFirstVerdict`.
 Register a new kind in `questions/registry.tsx` (label, plural, icon, blurb, view) and add its type to

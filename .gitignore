@@ -1,9 +1,23 @@
 .vscode
-
-node_modules
-dist
 .DS_Store
-.env
-*.tsbuildinfo
+node_modules
 coverage
-dist-ssr
+*.tsbuildinfo
+
+# Build output and Turborepo's local cache
+.next
+next-env.d.ts
+out
+dist
+.turbo
+
+# Built by each package's `generate` task (turbo runs it before dev, build, typecheck and tests)
+packages/content/src/generated/files
+packages/content/src/generated/content-manifest.json
+packages/ui/src/generated/monaco-types.json
+
+# Secrets and Vercel CLI state
+.env*
+!.env.example
+.vercel
+.claude/launch.json

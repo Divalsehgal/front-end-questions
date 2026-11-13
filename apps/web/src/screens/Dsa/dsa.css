@@ -1,0 +1,63 @@
+/* Connector lines of the DSA pattern tree (DsaTree). Branches are top-aligned, so opening one never
+   moves the nodes above it. --dsa-elbow is the vertical centre of a node's first line. */
+.dsa-tree {
+  --dsa-gap: 28px;
+  --dsa-elbow: 20px;
+  --dsa-line: var(--border-strong);
+}
+
+.dsa-children {
+  position: relative;
+  padding: 0;
+  margin: 0 0 0 var(--dsa-gap);
+  list-style: none;
+}
+
+.dsa-children::before {
+  position: absolute;
+  top: var(--dsa-elbow);
+  left: calc(-1 * var(--dsa-gap));
+  width: var(--dsa-gap);
+  content: '';
+  border-top: 1px solid var(--dsa-line);
+}
+
+.dsa-item {
+  position: relative;
+  padding: 0 0 10px var(--dsa-gap);
+}
+
+.dsa-item:last-child {
+  padding-bottom: 0;
+}
+
+.dsa-item::before {
+  position: absolute;
+  top: var(--dsa-elbow);
+  left: 0;
+  width: var(--dsa-gap);
+  content: '';
+  border-top: 1px solid var(--dsa-line);
+}
+
+.dsa-item::after {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  content: '';
+  border-left: 1px solid var(--dsa-line);
+}
+
+.dsa-item:first-child::after {
+  top: var(--dsa-elbow);
+}
+
+.dsa-item:last-child::after {
+  bottom: auto;
+  height: var(--dsa-elbow);
+}
+
+.dsa-item:only-child::after {
+  display: none;
+}
