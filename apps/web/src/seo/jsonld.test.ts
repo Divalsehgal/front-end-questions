@@ -16,7 +16,7 @@ describe('WebSite', () => {
   it('names the site and its author, without a SearchAction (there is no site search)', () => {
     const [site] = homeJsonLd() as Ld[];
     expect(site).toMatchObject({
-      alternateName: expect.arrayContaining(['Front End Grind']),
+      alternateName: expect.arrayContaining(['FE Grind']),
       '@context': 'https://schema.org',
       '@type': 'WebSite',
       url: SITE_URL,

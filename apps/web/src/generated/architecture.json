@@ -398,5 +398,5 @@
     }
   ],
   "subtitle": "19 parts and 23 connections, generated from the code by apps/web/scripts/generate-architecture.mjs.",
-  "title": "FE Grind architecture"
+  "title": "Front End Grind architecture"
 }

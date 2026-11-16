@@ -8,7 +8,7 @@ import type { PageMeta } from './meta';
 import type { Metadata } from 'next';
 
 export function toMetadata(meta: PageMeta): Metadata {
-  const image = { url: SITE_URL + OG_IMAGE, width: 1200, height: 630, alt: `${SITE_ALT_NAMES[0]} (${SITE_NAME}): frontend interview practice` };
+  const image = { url: SITE_URL + OG_IMAGE, width: 1200, height: 630, alt: `${SITE_NAME} (${SITE_ALT_NAMES[0]}): frontend interview practice` };
   return {
     title: { absolute: meta.title },
     description: meta.description,

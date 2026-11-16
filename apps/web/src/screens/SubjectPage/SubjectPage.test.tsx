@@ -22,7 +22,7 @@ describe('SubjectPage', () => {
 
   it('lists every topic with progress and starts at the first open question', async () => {
     const { user } = page();
-    expect(screen.getByRole('heading', { level: 1, name: subject.title })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: `${subject.title} interview questions` })).toBeInTheDocument();
     expect(screen.getByText(`0 of ${entries.length} solved`)).toBeInTheDocument();
     // One per topic card, plus "Topics" and the FAQ.
     expect(screen.getAllByRole('heading', { level: 2 })).toHaveLength(subject.topics.length + 2);

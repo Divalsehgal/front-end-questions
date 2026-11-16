@@ -21,10 +21,13 @@ export type PageMeta = {
 
 const SUFFIX = ` | ${SITE_NAME}`;
 
-/** "{main} — {qualifier}{suffix}", dropping parts (then truncating main) until it fits in 60 characters. */
+/**
+ * "{main} — {qualifier}{suffix}", dropping parts (then truncating main) until it fits in 60 characters.
+ * Search keywords outrank the brand: Google shows the site name above the result anyway.
+ */
 export function pageTitle(main: string, qualifiers: string[]) {
   const plain = stripMarkdown(main);
-  const options = [...qualifiers.map((q) => `${plain} — ${q}${SUFFIX}`), `${plain}${SUFFIX}`];
+  const options = [...qualifiers.flatMap((q) => [`${plain} — ${q}${SUFFIX}`, `${plain} — ${q}`]), `${plain}${SUFFIX}`];
   const fit = options.find((o) => o.length <= TITLE_MAX);
   return fit ?? `${truncate(plain, TITLE_MAX - SUFFIX.length)}${SUFFIX}`;
 }
@@ -69,7 +72,7 @@ function subjectMeta(s: SubjectMeta, path: string): PageMeta {
 }
 
 const HOME: PageMeta = {
-  title: `${SITE_ALT_NAMES[0]} (${SITE_NAME}): free frontend interview practice`,
+  title: `${SITE_NAME} (${SITE_ALT_NAMES[0]}): free frontend interview practice`,
   description: truncate(SITE_DESCRIPTION, DESCRIPTION_MAX),
   canonical: absoluteUrl('/'),
   noindex: false,

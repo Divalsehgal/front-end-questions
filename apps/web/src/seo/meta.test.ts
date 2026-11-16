@@ -11,16 +11,16 @@ const MARKDOWN = /`|\*\*|```/;
 
 describe('pageTitle', () => {
   it('uses the longest form that fits in 60 characters', () => {
-    expect(pageTitle('Closures', ['JavaScript interview question', 'JavaScript'])).toBe('Closures — JavaScript interview question | FE Grind');
+    expect(pageTitle('Closures', ['JavaScript interview question', 'JavaScript'])).toBe('Closures — JavaScript interview question | Front End Grind');
     const mid = pageTitle('Generators vs async/await', ['JavaScript interview question', 'JavaScript']);
-    expect(mid).toBe('Generators vs async/await — JavaScript | FE Grind');
+    expect(mid).toBe('Generators vs async/await — JavaScript interview question');
   });
 
   it('drops the subject, then truncates very long titles', () => {
     const long = pageTitle('A very long question title that keeps going and going and going on', ['React']);
     expect(long.length).toBeLessThanOrEqual(TITLE_MAX);
-    expect(long).toMatch(/… \| FE Grind$/);
-    expect(pageTitle('`useEffect` cleanup', [])).toBe('useEffect cleanup | FE Grind');
+    expect(long).toMatch(/… \| Front End Grind$/);
+    expect(pageTitle('`useEffect` cleanup', [])).toBe('useEffect cleanup | Front End Grind');
   });
 });
 
@@ -76,8 +76,8 @@ describe('pageMeta', () => {
       expect(m.canonical).toBeNull();
       expect(m.jsonLd).toEqual([]);
     }
-    expect(pageMeta('/review').title).toBe('Review | FE Grind');
-    expect(pageMeta('/nope').title).toBe('Page not found | FE Grind');
+    expect(pageMeta('/review').title).toBe('Review | Front End Grind');
+    expect(pageMeta('/nope').title).toBe('Page not found | Front End Grind');
     expect(pageMeta('/q/react/does-not-exist').noindex).toBe(true);
     expect(pageMeta('/q/react/a/b').noindex).toBe(true);
     expect(pageMeta('/s/nope').noindex).toBe(true);

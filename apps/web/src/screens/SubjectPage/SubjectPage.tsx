@@ -46,7 +46,7 @@ export function SubjectPage() {
   return (
     <Page width="narrow">
       <PageHeader
-        title={subject.title}
+        title={`${subject.title} interview questions`}
         description={
           <>
             <p>{inline(subject.blurb)}</p>
