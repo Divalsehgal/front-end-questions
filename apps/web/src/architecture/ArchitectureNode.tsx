@@ -42,7 +42,7 @@ export function ArchitectureNode({ id, data }: NodeProps<FlowNode>) {
         <Icon size={16} aria-hidden data-icon="" className="shrink-0" />
         <span className="truncate">{data.label}</span>
       </button>
-      <p className="mt-0.5 font-mono text-[10px] tracking-wide text-text-muted uppercase">{TYPE_LABEL[data.kind]}</p>
+      <p className="mt-0.5 text-[11px] text-text-muted">{TYPE_LABEL[data.kind]}</p>
       <Handle type="source" position={Position.Bottom} isConnectable={false} className={HANDLE} />
     </div>
   );

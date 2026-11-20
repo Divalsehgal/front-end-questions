@@ -58,7 +58,7 @@ function SubjectLinks() {
       <NavLink key={s.slug} to={subjectHref(s.slug)} className={navClass}>
         <SubjectIcon name={s.icon} size={16} className="shrink-0" />
         <span className="truncate whitespace-nowrap">{s.title}</span>
-        <span className="ml-auto hidden shrink-0 font-mono text-[11px] text-text-muted tabular-nums md:inline">
+        <span className="ml-auto hidden shrink-0 text-xs text-text-muted tabular-nums md:inline">
           {solved}/{keys.length}
           <span className="sr-only"> solved</span>
         </span>
@@ -84,7 +84,7 @@ export function Sidebar({ onSearch }: Readonly<{ onSearch: () => void }>) {
       {/* Must fit SIDEBAR_MIN: the name gives way before the buttons cross the sidebar's edge. */}
       <div className="flex items-center justify-between gap-2 px-4 py-4">
         <NavLink to="/" className="flex min-w-0 items-center gap-2 text-base font-semibold">
-          <span aria-hidden className="grid size-7 shrink-0 place-items-center rounded-md bg-linear-to-br from-brand to-secondary text-on-primary">
+          <span aria-hidden className="grid size-7 shrink-0 place-items-center rounded-md bg-primary text-on-primary">
             <Zap size={16} />
           </span>
           <span className="truncate tracking-tight whitespace-nowrap">FE Grind</span>
@@ -137,7 +137,7 @@ export function Sidebar({ onSearch }: Readonly<{ onSearch: () => void }>) {
           <Network size={16} aria-hidden /> <span className="whitespace-nowrap">DSA patterns</span>
         </NavLink>
 
-        <p className="mt-5 mb-1 hidden px-3 font-mono text-[11px] font-medium tracking-widest text-text-muted uppercase md:block">Subjects</p>
+        <p className="mt-6 mb-1 hidden px-3 text-xs font-medium text-text-muted md:block">Subjects</p>
         <SubjectLinks />
       </nav>
       <SidebarResizer />

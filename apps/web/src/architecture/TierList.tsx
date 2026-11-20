@@ -25,7 +25,7 @@ export function TierList({ architecture }: Readonly<{ architecture: Architecture
                   <h3 className="flex items-center gap-2 font-medium">
                     <Icon size={16} aria-hidden data-icon="" />
                     {node.data.label}
-                    <span className="font-mono text-[11px] font-normal tracking-wide text-text-muted uppercase">{TYPE_LABEL[node.type]}</span>
+                    <span className="text-xs text-text-muted">{TYPE_LABEL[node.type]}</span>
                   </h3>
                   <p className="mt-1 text-sm leading-6 text-text-muted [overflow-wrap:anywhere]">{node.data.description}</p>
                   {outgoing.length > 0 && (

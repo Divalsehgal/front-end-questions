@@ -5,34 +5,33 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 /*
- * Three-colour scheme on slate neutrals:
- *   ink     slate #0f172a / #e6e9f2  text, surfaces
- *   violet  #6e56cf / #a18cff        brand: primary buttons, links, selection, focus
- *   cyan    #0891b2 / #22d3ee        secondary: progress, stats, highlights
- * Status colours (success / error / warn) only ever mean state. Components use these tokens,
- * so dark mode is one override block. Every pair the UI renders is checked against WCAG 2.2 AA
- * by packages/ui/scripts/check-contrast.js (npm run check:contrast). --brand and --secondary are for
- * focus, borders, fills and icons; use the -strong variants for coloured text.
+ * Ink wash: graphite neutrals on a cream ground, one slate accent.
+ *   ink    #2b2b2b / #ffffe3   text; #4a4a4a is the primary button (an off-white in dark)
+ *   cream  #ffffe3             light canvas, dark-theme ink
+ *   slate  #6d8196 / #8fa2b6   accent: selection, focus, progress, links (-strong for text)
+ * --secondary-* alias the slate accent so there is one hue in the chrome. Status colours
+ * (success / error / warn) only ever mean state. Every pair the UI renders is checked against
+ * WCAG 2.2 AA by packages/ui/scripts/check-contrast.js (npm run check:contrast).
  */
 :root {
-  --canvas: #f8fafc;
-  --surface: #fff;
-  --surface-muted: #f1f5f9;
-  --code-bg: #f6f8fb;
-  --border: #e2e8f0;
-  --border-strong: #7d8899;
-  --text: #0f172a;
-  --text-muted: #526075;
-  --brand: #6e56cf;
-  --brand-strong: #5a3fc0;
-  --brand-soft: #f1edff;
-  --secondary: #0891b2;
-  --secondary-strong: #0e7490;
-  --secondary-soft: #e6f8fc;
-  --focus: #6e56cf;
-  --primary: #6e56cf;
-  --primary-hover: #5a3fc0;
-  --on-primary: #fff;
+  --canvas: #ffffe3;
+  --surface: #fffff4;
+  --surface-muted: #f3f3dc;
+  --code-bg: #f8f8e8;
+  --border: #e2e2cf;
+  --border-strong: #82827c;
+  --text: #2b2b2b;
+  --text-muted: #5a5a56;
+  --brand: #6d8196;
+  --brand-strong: #4a5d72;
+  --brand-soft: #e8ebdf;
+  --secondary: #6d8196;
+  --secondary-strong: #4a5d72;
+  --secondary-soft: #e8ebdf;
+  --focus: #6d8196;
+  --primary: #4a4a4a;
+  --primary-hover: #333;
+  --on-primary: #ffffe3;
   --on-status: #fff;
   --success: #157a3c;
   --success-soft: #edfaf2;
@@ -40,54 +39,52 @@
   --error-soft: #fef1f1;
   --warn: #93510a;
   --warn-soft: #fff8e8;
-  --syntax-plain: #0f172a;
+  --syntax-plain: #2b2b2b;
   --syntax-comment: #64708a;
   --syntax-keyword: #6a3fd1;
   --syntax-string: #157a3c;
   --syntax-number: #a14d06;
   --syntax-function: #0e7490;
   --syntax-tag: #be1a45;
-  --syntax-punctuation: #526075;
-  --grid: #eceff5;
+  --syntax-punctuation: #5a5a56;
 
   color-scheme: light;
 }
 
 .dark {
-  --canvas: #0b1020;
-  --surface: #11172a;
-  --surface-muted: #1a2238;
-  --code-bg: #0d1324;
-  --border: #232c45;
-  --border-strong: #5f6b8b;
-  --text: #e6e9f2;
-  --text-muted: #9aa4bd;
-  --brand: #a18cff;
-  --brand-strong: #bcaeff;
-  --brand-soft: #231d47;
-  --secondary: #22d3ee;
-  --secondary-strong: #67e8f9;
-  --secondary-soft: #0a2a35;
-  --focus: #a18cff;
-  --primary: #a18cff;
-  --primary-hover: #b8a8ff;
-  --on-primary: #0b1020;
-  --on-status: #0b1020;
+  --canvas: #1b1b1a;
+  --surface: #222221;
+  --surface-muted: #2b2b29;
+  --code-bg: #181817;
+  --border: #343432;
+  --border-strong: #75756f;
+  --text: #ffffe3;
+  --text-muted: #b0b0a8;
+  --brand: #8fa2b6;
+  --brand-strong: #b6c3d1;
+  --brand-soft: #262d35;
+  --secondary: #8fa2b6;
+  --secondary-strong: #b6c3d1;
+  --secondary-soft: #262d35;
+  --focus: #8fa2b6;
+  --primary: #e9e9d0;
+  --primary-hover: #ffffe3;
+  --on-primary: #1b1b1a;
+  --on-status: #1b1b1a;
   --success: #4ade80;
   --success-soft: #0b2416;
   --error: #f87171;
   --error-soft: #2a1113;
   --warn: #fbbf24;
   --warn-soft: #261c07;
-  --syntax-plain: #e6e9f2;
+  --syntax-plain: #ffffe3;
   --syntax-comment: #8590aa;
   --syntax-keyword: #c4a5ff;
   --syntax-string: #86efac;
   --syntax-number: #fdba74;
   --syntax-function: #67e8f9;
   --syntax-tag: #fda4af;
-  --syntax-punctuation: #9aa4bd;
-  --grid: #141a2d;
+  --syntax-punctuation: #b0b0a8;
 
   color-scheme: dark;
 }
@@ -147,19 +144,6 @@ body {
   color: var(--text);
   background: var(--canvas);
   -webkit-font-smoothing: antialiased;
-}
-
-/* A faint engineering grid behind the top of the page, fading out; surfaces cover it. */
-body::before {
-  position: fixed;
-  inset: 0 0 auto;
-  z-index: -1;
-  height: 28rem;
-  pointer-events: none;
-  content: '';
-  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
-  background-size: 2rem 2rem;
-  mask-image: radial-gradient(ellipse 70% 100% at 50% 0%, #000 0%, transparent 75%);
 }
 
 ::selection {

@@ -41,7 +41,7 @@ export const metadata: Metadata = {
   ...(googleVerification && { verification: { google: googleVerification } }),
 };
 
-export const viewport: Viewport = { themeColor: '#0b1020' };
+export const viewport: Viewport = { themeColor: '#1b1b1a' };
 
 // Apply the saved / system theme before first paint, so prerendered pages don't flash light.
 const THEME_SCRIPT = `try {

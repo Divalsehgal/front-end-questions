@@ -6,51 +6,50 @@ dark mode without extra work, and meet **WCAG 2.2 AA**. Styling is Tailwind v4; 
 
 ## Palette
 
-Three colours on slate neutrals, each with one job. Status colours (success / error / warn) only ever mean state.
+**Ink wash**: graphite neutrals on a cream ground, with one slate accent. Colour stays out of the chrome; status colours
+(success / error / warn) only ever mean state.
 
 | Colour | Light     | Dark      | Job                                                                      |
 | ------ | --------- | --------- | ------------------------------------------------------------------------ |
-| Ink    | `#0f172a` | `#e6e9f2` | Text and surfaces (slate)                                                |
-| Violet | `#6e56cf` | `#a18cff` | Brand: primary buttons, links, active nav, selection, focus ring         |
-| Cyan   | `#0891b2` | `#22d3ee` | Secondary: progress fills (violet→cyan gradient), stat icons, highlights |
+| Ink    | `#2b2b2b` | `#ffffe3` | Text; `#4a4a4a` is the light primary button, an off-white the dark one   |
+| Cream  | `#ffffe3` | `#1b1b1a` | Canvas; surfaces are one small tone step from it                         |
+| Slate  | `#6d8196` | `#8fa2b6` | The one accent: selection, active nav, focus ring, progress fills, links |
 
-Violet and cyan pass 3:1 for non-text UI; coloured text uses the **`-strong`** variants (`--brand-strong`,
-`--secondary-strong`). Numbers, counts, badges and section labels use the system monospace font; everything else is
-Inter. A faint grid sits behind the top of the canvas (`body::before`, colour `--grid`) and fades out.
+Slate passes 3:1 for non-text UI; coloured text uses **`--brand-strong`**. The `--secondary-*` tokens alias the slate
+accent, so there is one hue in the chrome. Monospace is for code only: counts and figures use Inter with
+`tabular-nums`. Labels are sentence case, never uppercase-tracked. No gradients, glows or background patterns.
 
 ### Tokens and measured contrast
 
 Ratios are WCAG 2.x relative-luminance contrast, measured by `npm run check:contrast` (the same check runs in CI as
 `packages/ui/src/contrast.test.ts`). Text pairs need ≥ 4.5:1, non-text UI pairs ≥ 3:1.
 
-| Token                | Light     | Dark      | Checked against (lowest ratio light / dark)          |
-| -------------------- | --------- | --------- | ---------------------------------------------------- |
-| `--canvas`           | `#f8fafc` | `#0b1020` | app background                                       |
-| `--surface`          | `#fff`    | `#11172a` | cards, sidebar                                       |
-| `--surface-muted`    | `#f1f5f9` | `#1a2238` | hover rows, inline code, tracks                      |
-| `--code-bg`          | `#f6f8fb` | `#0d1324` | code blocks, answer box                              |
-| `--border`           | `#e2e8f0` | `#232c45` | decorative dividers only (no contrast requirement)   |
-| `--border-strong`    | `#7d8899` | `#5f6b8b` | input / control boundary: 3.37 / 3.36 (UI)           |
-| `--text`             | `#0f172a` | `#e6e9f2` | every surface and soft tone: 15.56 / 12.40           |
-| `--text-muted`       | `#526075` | `#9aa4bd` | canvas, surfaces, code, soft tones: 5.56 / 6.29      |
-| `--brand`            | `#6e56cf` | `#a18cff` | canvas, surface, surface-muted: 4.92 / 5.80 (UI)     |
-| `--brand-strong`     | `#5a3fc0` | `#bcaeff` | canvas, surfaces, brand-soft: 6.29 / 7.95            |
-| `--brand-soft`       | `#f1edff` | `#231d47` | selected / active backgrounds                        |
-| `--secondary`        | `#0891b2` | `#22d3ee` | canvas, surface, surface-muted: 3.36 / 8.74 (UI)     |
-| `--secondary-strong` | `#0e7490` | `#67e8f9` | canvas, surfaces, secondary-soft: 4.89 / 10.38       |
-| `--secondary-soft`   | `#e6f8fc` | `#0a2a35` | highlight backgrounds                                |
-| `--focus`            | `#6e56cf` | `#a18cff` | canvas, surfaces, code, brand-soft: 4.70 / 5.76 (UI) |
-| `--primary`          | `#6e56cf` | `#a18cff` | primary button background                            |
-| `--primary-hover`    | `#5a3fc0` | `#b8a8ff` | primary button hover                                 |
-| `--on-primary`       | `#fff`    | `#0b1020` | on primary / hover: 5.39 / 6.95                      |
-| `--on-status`        | `#fff`    | `#0b1020` | on success / error fills: 5.41 / 6.84                |
-| `--success`          | `#157a3c` | `#4ade80` | success-soft, surface, canvas, code: 5.04 / 9.43     |
-| `--error`            | `#c0262d` | `#f87171` | error-soft, surface, canvas, code: 5.36 / 6.39       |
-| `--warn`             | `#93510a` | `#fbbf24` | warn-soft, surface, canvas, code: 5.77 / 10.05       |
-| `--*-soft`           | see css   | see css   | tinted backgrounds for the tone above                |
-| `--syntax-*`         | 8 tokens  | 8 tokens  | Prism token colours on `--code-bg`: 4.67 / 5.78      |
+| Token             | Light     | Dark      | Checked against (lowest ratio light / dark)          |
+| ----------------- | --------- | --------- | ---------------------------------------------------- |
+| `--canvas`        | `#ffffe3` | `#1b1b1a` | app background                                       |
+| `--surface`       | `#fffff4` | `#222221` | cards, sidebar                                       |
+| `--surface-muted` | `#f3f3dc` | `#2b2b29` | hover rows, inline code, tracks                      |
+| `--code-bg`       | `#f8f8e8` | `#181817` | code blocks, answer box                              |
+| `--border`        | `#e2e2cf` | `#343432` | decorative dividers only (no contrast requirement)   |
+| `--border-strong` | `#82827c` | `#75756f` | input / control boundary: 3.60 / 3.44 (UI)           |
+| `--text`          | `#2b2b2b` | `#ffffe3` | every surface and soft tone: 11.72 / 13.69           |
+| `--text-muted`    | `#5a5a56` | `#b0b0a8` | canvas, surfaces, code, brand-soft: 5.73 / 6.38      |
+| `--brand`         | `#6d8196` | `#8fa2b6` | canvas, surface, surface-muted: 3.57 / 5.41 (UI)     |
+| `--brand-strong`  | `#4a5d72` | `#b6c3d1` | canvas, surfaces, brand-soft: 5.61 / 7.76            |
+| `--brand-soft`    | `#e8ebdf` | `#262d35` | selected / active backgrounds                        |
+| `--secondary-*`   | = brand   | = brand   | aliases of the three brand tokens                    |
+| `--focus`         | `#6d8196` | `#8fa2b6` | canvas, surfaces, code, brand-soft: 3.32 / 5.31 (UI) |
+| `--primary`       | `#4a4a4a` | `#e9e9d0` | primary button background                            |
+| `--primary-hover` | `#333`    | `#ffffe3` | primary button hover                                 |
+| `--on-primary`    | `#ffffe3` | `#1b1b1a` | on primary / hover: 8.72 / 13.98                     |
+| `--on-status`     | `#fff`    | `#1b1b1a` | on success / error fills: 5.41 / 6.23                |
+| `--success`       | `#157a3c` | `#4ade80` | success-soft, surface, canvas, code: 5.04 / 9.14     |
+| `--error`         | `#c0262d` | `#f87171` | error-soft, surface, canvas, code: 5.36 / 5.76       |
+| `--warn`          | `#93510a` | `#fbbf24` | warn-soft, surface, canvas, code: 5.72 / 9.54        |
+| `--*-soft`        | see css   | see css   | tinted backgrounds for the tone above                |
+| `--syntax-*`      | 8 tokens  | 8 tokens  | Prism token colours on `--code-bg`: 4.63 / 5.56      |
 
-Headline pairs: text on surface **17.85:1** (light) / **14.67:1** (dark).
+Headline pairs: text on surface **14.07:1** (light) / **15.67:1** (dark).
 
 ### Tailwind classes
 
@@ -64,7 +63,7 @@ Headline pairs: text on surface **17.85:1** (light) / **14.67:1** (dark).
 | `bg-brand-soft`                                            | Selected / active background                   |
 | `bg-primary text-on-primary hover:bg-primary-hover`        | Primary action                                 |
 | `success` / `error` / `warn` (+ `-soft`), `text-on-status` | Verdicts, difficulty, status badges            |
-| `font-sans` (Inter, self-hosted) / `font-mono` (system)    | Text / code                                    |
+| `font-sans` (Inter, self-hosted) / `font-mono` (system)    | Text and figures / code only                   |
 
 ### Token rules
 

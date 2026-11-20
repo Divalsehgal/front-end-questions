@@ -27,7 +27,7 @@ export function FlashcardView({ q, onResult }: Readonly<ViewProps<FlashcardQuest
   return (
     <div className="space-y-5">
       <Card className="p-6">
-        <p className="mb-2 flex items-center gap-2 text-xs font-semibold tracking-wider text-text-muted uppercase">
+        <p className="mb-2 flex items-center gap-2 text-sm font-medium text-text-muted">
           <Repeat2 size={14} aria-hidden /> Recall it before you reveal
         </p>
         <p className="text-lg leading-8 font-medium">{inline(q.front)}</p>

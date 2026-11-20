@@ -4,9 +4,9 @@
 import { mkdirSync, writeFileSync } from 'node:fs';
 import { deflateSync } from 'node:zlib';
 
-const INK = [0x0b, 0x10, 0x20];
-const PAPER = [0xf8, 0xfa, 0xfc];
-const ACCENT = [0xa1, 0x8c, 0xff];
+const INK = [0x2b, 0x2b, 0x2b];
+const PAPER = [0xff, 0xff, 0xe3];
+const ACCENT = [0x8f, 0xa2, 0xb6];
 const OUT = new URL('../public/', import.meta.url);
 
 // The lightning bolt from the app header (lucide "zap", simplified), on a 24-unit grid.
@@ -157,7 +157,7 @@ function ogImage() {
 
 const iconUnit = (n) => (n * 0.64 + 4.32).toFixed(2);
 const boltPath = BOLT.map(([x, y], i) => `${i ? 'L' : 'M'}${iconUnit(x)} ${iconUnit(y)}`).join('');
-const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="#0b1020"/><path d="${boltPath}Z" fill="#a18cff"/></svg>\n`;
+const svgIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect width="24" height="24" rx="5" fill="#2b2b2b"/><path d="${boltPath}Z" fill="#8fa2b6"/></svg>\n`;
 
 mkdirSync(OUT, { recursive: true });
 writeFileSync(new URL('favicon.svg', OUT), svgIcon);

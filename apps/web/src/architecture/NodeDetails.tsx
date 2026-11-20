@@ -8,7 +8,7 @@ function Links({ title, links, arrow }: Readonly<{ title: string; links: Link[];
   if (!links.length) return null;
   return (
     <>
-      <h3 className="mt-4 font-mono text-[11px] font-medium tracking-widest text-text-muted uppercase">{title}</h3>
+      <h3 className="mt-4 text-xs font-medium text-text-muted">{title}</h3>
       <ul className="mt-1 space-y-1 text-sm">
         {links.map(({ edge, node }) => (
           <li key={edge.id}>

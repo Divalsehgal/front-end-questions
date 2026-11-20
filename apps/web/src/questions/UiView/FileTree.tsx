@@ -19,7 +19,7 @@ export function FileTree({
   return (
     <nav aria-label="Files" style={{ width }} className="relative flex shrink-0 flex-col border-r border-line bg-surface-muted text-xs">
       <PaneResizer edge="right" size={width} min={120} reserve={240} label="Resize files panel" onResize={setWidth} />
-      <div className="flex items-center justify-between py-1 pr-1 pl-2 font-semibold tracking-wide text-text-muted uppercase">
+      <div className="flex items-center justify-between py-1 pr-1 pl-2 font-medium text-text-muted">
         Files
         <IconButton label="New file" onClick={() => setDraft('')} className="border-0 bg-transparent p-1">
           <FilePlus size={14} aria-hidden />

@@ -6,11 +6,11 @@ export function Stat({ icon, value, label }: Readonly<{ icon: ReactNode; value: 
     <Card className="p-4">
       <p className="flex items-center justify-between text-xs text-text-muted">
         {label}
-        <span aria-hidden className="text-secondary-strong">
+        <span aria-hidden className="text-text-muted">
           {icon}
         </span>
       </p>
-      <p className="mt-2 font-mono text-2xl font-medium tracking-tight tabular-nums">{value}</p>
+      <p className="mt-2 text-2xl font-medium tracking-tight tabular-nums">{value}</p>
     </Card>
   );
 }
