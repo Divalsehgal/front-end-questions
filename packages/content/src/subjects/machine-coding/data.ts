@@ -128,7 +128,7 @@ export const dataTopic: Topic = {
     {
       kind: 'code',
       id: 'sort-rows',
-      title: 'sortRows: a correct table comparator',
+      title: 'Sort table rows by column (sortRows)',
       difficulty: 'medium',
       prompt: `\`sortRows(rows, key, dir = 'asc')\` returns the rows sorted by \`row[key]\`. The starter is the take-home's \`<\`/\`>\` comparator; make it correct:
 

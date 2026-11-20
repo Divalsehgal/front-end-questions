@@ -29,7 +29,7 @@ export const testing: Subject = {
         {
           kind: 'quiz',
           id: 'ts-q1',
-          title: 'FIRST',
+          title: 'FIRST principles of unit testing',
           prompt: 'In the FIRST principles, what does the I stand for, and what does it rule out?',
           options: [
             "Isolated: tests don't depend on each other or on shared mutable state, so they can run in any order or in parallel",
