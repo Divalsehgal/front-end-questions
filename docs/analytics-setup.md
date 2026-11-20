@@ -42,6 +42,10 @@ dimension will show both kinds of value.
   have. `analytics.test.ts` covers this.
 - **Turbo.** `turbo.json`'s `build` task lists `NEXT_PUBLIC_GTM_ID` in `env`. Strict env mode drops unlisted vars, so
   without it production builds silently ship with no GTM.
+- **Owner mode (keep your own visits out).** Open any page with `?owner=1` once per browser or device. The head script
+  saves `fe-grind-owner` in localStorage, and from then on that browser never loads GTM and `track` sends nothing, so
+  page views and events stay out of GA4. `?owner=0` turns it off. Check it: `dataLayer` is `undefined` and there is no
+  `gtm.js` request. It is per browser, so a private window or cleared site data counts as a normal visitor again.
 - **Adding an event:**
   1. Add it to `Events` and call `track`.
   2. Add its name to the GTM trigger regex.
