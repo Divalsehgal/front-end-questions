@@ -45,6 +45,8 @@ describe('Dashboard', () => {
     expect(screen.getByText('50%')).toBeInTheDocument();
     const weak = screen.getByRole('list', { name: 'Weakest topics' });
     expect(within(weak).getByText('1 missed')).toBeInTheDocument();
+    const subjectBar = screen.getByRole('progressbar', { name: `${a.subject.title} progress` });
+    expect(subjectBar).toHaveAttribute('aria-valuetext', expect.stringMatching(/^\d+ solved, \d+ missed, \d+ untried$/));
     await user.click(screen.getByRole('link', { name: /Review 1 due/ }));
     expect(location()).toBe('/review');
   });

@@ -1,12 +1,12 @@
 'use client';
-import { ALL, hrefOf, SUBJECTS } from '@fe-grind/content/registry';
+import { ALL, hrefOf } from '@fe-grind/content/registry';
 import { buttonClass, Card, inline, Page, PageHeader, SectionTitle, Stat, useNow } from '@fe-grind/ui';
 import { ArrowRight, Flame, RotateCcw, Target, Timer } from 'lucide-react';
 import Link from 'next/link';
 import { ArchitectureWidget } from '../../architecture/ArchitectureWidget';
 import { useProfile } from '../../state/profile';
 import { isDue, useProgress } from '../../state/progress';
-import { SubjectCard } from './SubjectCard';
+import { SubjectStrip } from './SubjectRow';
 import { weakTopics } from './weakTopics';
 
 function greeting(started: boolean, name: string) {
@@ -59,12 +59,8 @@ export function Dashboard() {
         </Link>
       </div>
 
-      <SectionTitle>Subjects</SectionTitle>
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {SUBJECTS.map((s) => (
-          <SubjectCard key={s.slug} subject={s} progress={progress} />
-        ))}
-      </div>
+      <SectionTitle id="subjects">Subjects</SectionTitle>
+      <SubjectStrip progress={progress} labelledBy="subjects" />
 
       {weak.length > 0 && (
         <>
