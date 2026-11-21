@@ -25,7 +25,7 @@ beforeEach(() => {
 describe('Welcome', () => {
   it('asks for an optional name and a storage choice, defaulting to this browser', () => {
     renderWithRouter(<Welcome />);
-    expect(screen.getByRole('region', { name: 'Welcome to FE Grind' })).toBeInTheDocument();
+    expect(screen.getByRole('region', { name: 'Welcome to Front End Grind' })).toBeInTheDocument();
     expect(screen.getByRole('textbox', { name: /What should we call you/ })).toHaveValue('');
     expect(screen.getByRole('radio', { name: /This browser/ })).toBeChecked();
     expect(screen.getByRole('radio', { name: /A file on your computer/ })).toBeEnabled();

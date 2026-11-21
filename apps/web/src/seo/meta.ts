@@ -1,7 +1,7 @@
 import { fullEntry } from '@fe-grind/content/loader';
 import { getSubject, keyOf, type FullEntry } from '@fe-grind/content/registry';
 import { shortSubject } from './faq';
-import { homeJsonLd, questionJsonLd, questionLead, subjectJsonLd } from './jsonld';
+import { aboutJsonLd, homeJsonLd, questionJsonLd, questionLead, subjectJsonLd } from './jsonld';
 import { absoluteUrl, isNoindex, normalizePath, SITE_ALT_NAMES, SITE_DESCRIPTION, SITE_NAME } from './site';
 import { fitFirst, stripMarkdown, truncate } from './text';
 import type { SubjectMeta } from '@fe-grind/content/types';
@@ -80,6 +80,15 @@ const HOME: PageMeta = {
   jsonLd: homeJsonLd(),
 };
 
+const ABOUT: PageMeta = {
+  title: `About ${SITE_NAME}: who builds it and how it works`,
+  description: metaDescription(`What ${SITE_NAME} is, who builds it, how answers are checked, where your progress lives and how to report a mistake.`),
+  canonical: absoluteUrl('/about'),
+  noindex: false,
+  ogType: 'website',
+  jsonLd: aboutJsonLd(absoluteUrl('/about')),
+};
+
 const NOINDEX_TITLES: Record<string, string> = {
   review: 'Review',
   mock: 'Mock round',
@@ -94,6 +103,7 @@ export function pageMeta(pathname: string): PageMeta {
   const path = normalizePath(pathname);
   const [section, a, b] = path.split('/').filter(Boolean);
   if (!section) return HOME;
+  if (section === 'about' && !a) return ABOUT;
   if (section === 'q' && a && b && !path.split('/')[4]) {
     // Question pages need their subject loaded (see Seo and packages/content/src/loader.ts).
     const entry = fullEntry(keyOf(a, b));

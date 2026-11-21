@@ -24,7 +24,7 @@ const RW: PermissionMode = { mode: 'readwrite' };
 const WRITE_DELAY = 400;
 const PICKER_OPTIONS = {
   suggestedName: 'fe-grind-progress.json',
-  types: [{ description: 'FE Grind progress', accept: { 'application/json': ['.json'] } }],
+  types: [{ description: 'Front End Grind progress', accept: { 'application/json': ['.json'] } }],
 };
 
 /** The user closed the file picker: not an error. */

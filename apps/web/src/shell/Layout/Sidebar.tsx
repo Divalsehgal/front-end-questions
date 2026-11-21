@@ -4,7 +4,7 @@ import { SubjectIcon } from '@fe-grind/ui/icons';
 import { Kbd } from '@fe-grind/ui/Kbd';
 import { cn, useModKey, useNow } from '@fe-grind/ui/lib';
 import { toggleTheme, useTheme } from '@fe-grind/ui/theme';
-import { LayoutDashboard, Moon, Network, Search, PanelLeftClose, RotateCcw, Settings, Sun, Timer, Zap } from 'lucide-react';
+import { Info, LayoutDashboard, Moon, Network, Search, PanelLeftClose, RotateCcw, Settings, Sun, Timer, Zap } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { isDue, useProgress } from '../../state/progress';
@@ -87,7 +87,7 @@ export function Sidebar({ onSearch }: Readonly<{ onSearch: () => void }>) {
           <span aria-hidden className="grid size-7 shrink-0 place-items-center rounded-md bg-primary text-on-primary">
             <Zap size={16} />
           </span>
-          <span className="truncate tracking-tight whitespace-nowrap">FE Grind</span>
+          <span className="truncate tracking-tight whitespace-nowrap">Front End Grind</span>
         </NavLink>
         <div className="flex shrink-0 items-center gap-0.5">
           <NavLink
@@ -135,6 +135,9 @@ export function Sidebar({ onSearch }: Readonly<{ onSearch: () => void }>) {
         </NavLink>
         <NavLink to="/dsa/" className={navClass}>
           <Network size={16} aria-hidden /> <span className="whitespace-nowrap">DSA patterns</span>
+        </NavLink>
+        <NavLink to="/about" className={navClass}>
+          <Info size={16} aria-hidden /> <span className="whitespace-nowrap">About</span>
         </NavLink>
 
         <p className="mt-6 mb-1 hidden px-3 text-xs font-medium text-text-muted md:block">Subjects</p>

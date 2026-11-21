@@ -1,7 +1,7 @@
 import { BANK_ENTRIES as ALL } from '@fe-grind/content/bank';
 import { getEntry, getSubject, type FullEntry as Entry } from '@fe-grind/content/registry';
 import { describe, expect, it } from 'vitest';
-import { breadcrumbs, homeJsonLd, questionJsonLd, serializeJsonLd, subjectJsonLd } from './jsonld';
+import { aboutJsonLd, breadcrumbs, homeJsonLd, questionJsonLd, serializeJsonLd, siteDates, subjectJsonLd } from './jsonld';
 import { SITE_URL } from './site';
 import { stripMarkdown } from './text';
 import type { QuizQuestion } from '@fe-grind/content/types';
@@ -23,6 +23,25 @@ describe('WebSite', () => {
       author: { '@type': 'Person', name: 'Dival Sehgal' },
     });
     expect(site).not.toHaveProperty('potentialAction');
+  });
+});
+
+describe('Organization and page dates', () => {
+  it('home carries the Organization (logo, sameAs, contact) and the newest question date', () => {
+    const [site, org, page] = homeJsonLd() as Ld[];
+    expect(org).toMatchObject({ '@type': 'Organization', name: 'Front End Grind', url: SITE_URL, logo: expect.stringMatching(/\.png$/) });
+    expect(org.sameAs).toEqual(expect.arrayContaining([expect.stringContaining('github.com')]));
+    expect(org).toHaveProperty('contactPoint.url');
+    expect(site.publisher).toEqual({ '@id': org['@id'] });
+    const { published, modified } = siteDates();
+    expect(modified).toMatch(/^\d{4}-\d{2}-\d{2}/);
+    expect(page).toMatchObject({ '@type': 'WebPage', datePublished: published, dateModified: modified });
+    expect(published! <= modified!).toBe(true);
+  });
+
+  it('about page is an AboutPage with its FAQ', () => {
+    const types = (aboutJsonLd(SITE_URL + 'about/') as Ld[]).map((d) => d['@type']);
+    expect(types).toEqual(['BreadcrumbList', 'AboutPage', 'Organization', 'FAQPage']);
   });
 });
 

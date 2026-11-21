@@ -30,7 +30,7 @@ describe('sitemaps', () => {
 
   it('lists exactly the prerendered pages', () => {
     expect([...urls].sort()).toEqual(prerenderPaths().map(absoluteUrl).sort());
-    expect(prerenderPaths()).toHaveLength(1 + SUBJECTS.length + ALL.length);
+    expect(prerenderPaths()).toHaveLength(2 + SUBJECTS.length + ALL.length);
   });
 
   it('has an index pointing at one well-formed sitemap per subject plus the core pages', () => {

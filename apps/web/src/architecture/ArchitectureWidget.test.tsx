@@ -6,7 +6,7 @@ import { ArchitectureWidget } from './ArchitectureWidget';
 describe('ArchitectureWidget', () => {
   it('is a named link to /architecture with a decorative, animated thumbnail', async () => {
     const { user, container } = renderWithRouter(<ArchitectureWidget />);
-    const link = screen.getByRole('link', { name: /How FE Grind is built/ });
+    const link = screen.getByRole('link', { name: /How Front End Grind is built/ });
     expect(link).toHaveAttribute('href', '/architecture');
 
     const svg = container.querySelector('svg[viewBox]')!;

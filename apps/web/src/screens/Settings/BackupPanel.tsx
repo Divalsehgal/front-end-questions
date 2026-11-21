@@ -18,7 +18,7 @@ export function BackupPanel() {
       const n = importProgress(await file.text());
       setMessage({ ok: true, text: `Restored ${n} question${n === 1 ? '' : 's'}. Newer answers on this device were kept.` });
     } catch {
-      setMessage({ ok: false, text: `${file.name} isn't an FE Grind backup.` });
+      setMessage({ ok: false, text: `${file.name} isn't a Front End Grind backup.` });
     }
   };
 

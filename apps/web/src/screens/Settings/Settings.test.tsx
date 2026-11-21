@@ -139,7 +139,7 @@ describe('Settings', () => {
     await act(async () => {
       fireEvent.change(screen.getByLabelText('Backup file'), { target: { files: [withText(backupFile('oops', 'notes.txt'), 'oops')] } });
     });
-    expect(message()).toHaveTextContent("notes.txt isn't an FE Grind backup.");
+    expect(message()).toHaveTextContent("notes.txt isn't a Front End Grind backup.");
     await act(async () => {
       fireEvent.change(screen.getByLabelText('Backup file'), { target: { files: [] } });
     });

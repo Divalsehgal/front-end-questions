@@ -1,7 +1,7 @@
 // schema.org JSON-LD builders. Every answer/explanation here is also in the page's HTML
 // (the "Show answer & explanation" disclosure), as Google requires for structured data.
-import { getEntry, hrefOf, subjectHref, type FullEntry } from '@fe-grind/content/registry';
-import { subjectFaq } from './faq';
+import { ALL, getEntry, hrefOf, subjectHref, type FullEntry } from '@fe-grind/content/registry';
+import { SITE_FAQ, subjectFaq, type Faq } from './faq';
 import { AUTHOR, AUTHOR_PROFILES, REPO_URL, SITE_ALT_NAMES, SITE_DESCRIPTION, SITE_NAME, SITE_URL, absoluteUrl } from './site';
 import { stripMarkdown } from './text';
 import type { Difficulty, SubjectMeta } from '@fe-grind/content/types';
@@ -12,22 +12,79 @@ const LEVEL: Record<Difficulty, string> = { easy: 'Beginner', medium: 'Intermedi
 
 export const questionCount = (s: SubjectMeta) => s.topics.reduce((n, t) => n + t.questions.length, 0);
 
+const ORG_ID = `${SITE_URL}#organization`;
+const WEBSITE_ID = `${SITE_URL}#website`;
+
+/** The site as an entity: what answer engines tie the brand name, logo and profiles to. */
+function organization() {
+  return {
+    '@context': CONTEXT,
+    '@type': 'Organization',
+    '@id': ORG_ID,
+    name: SITE_NAME,
+    alternateName: SITE_ALT_NAMES,
+    url: SITE_URL,
+    logo: SITE_URL + 'icon-512.png',
+    description: SITE_DESCRIPTION,
+    founder: author,
+    sameAs: [REPO_URL, ...AUTHOR_PROFILES],
+    contactPoint: { '@type': 'ContactPoint', contactType: 'customer support', url: `${REPO_URL}/issues`, availableLanguage: 'en' },
+  };
+}
+
+const newest = (dates: (string | undefined)[]) => dates.reduce<string | undefined>((a, b) => (b && (!a || b > a) ? b : a), undefined);
+const oldest = (dates: (string | undefined)[]) => dates.reduce<string | undefined>((a, b) => (b && (!a || b < a) ? b : a), undefined);
+
+/** First publish and latest edit across every question (git dates from the manifest). */
+export function siteDates() {
+  return { published: oldest(ALL.map((e) => e.q.published)), modified: newest(ALL.map((e) => e.q.modified)) };
+}
+
+const faqPage = (faq: Faq[]) => ({
+  '@context': CONTEXT,
+  '@type': 'FAQPage',
+  mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+});
+
+function webPage(type: 'WebPage' | 'AboutPage', url: string, name: string) {
+  const { published, modified } = siteDates();
+  return {
+    '@context': CONTEXT,
+    '@type': type,
+    url,
+    name,
+    inLanguage: 'en',
+    ...(published && { datePublished: published }),
+    ...(modified && { dateModified: modified }),
+    isPartOf: { '@id': WEBSITE_ID },
+    about: { '@id': ORG_ID },
+  };
+}
+
 export function homeJsonLd() {
   return [
     {
       '@context': CONTEXT,
       '@type': 'WebSite',
+      '@id': WEBSITE_ID,
       name: SITE_NAME,
       alternateName: SITE_ALT_NAMES,
       url: SITE_URL,
       description: SITE_DESCRIPTION,
       inLanguage: 'en',
       author,
-      publisher: author,
+      publisher: { '@id': ORG_ID },
       isAccessibleForFree: true,
       sameAs: [REPO_URL],
     },
+    organization(),
+    webPage('WebPage', SITE_URL, SITE_NAME),
   ];
+}
+
+/** /about: the page, the entity it describes, and the FAQ it shows. */
+export function aboutJsonLd(url: string) {
+  return [breadcrumbs([homeCrumb(), { name: 'About', url }]), webPage('AboutPage', url, `About ${SITE_NAME}`), organization(), faqPage(SITE_FAQ)];
 }
 
 export function breadcrumbs(items: { name: string; url: string }[]) {
@@ -57,11 +114,7 @@ export function subjectJsonLd(s: SubjectMeta) {
         url: absoluteUrl(hrefOf(`${s.slug}:${q.id}`)),
       })),
     },
-    {
-      '@context': CONTEXT,
-      '@type': 'FAQPage',
-      mainEntity: subjectFaq(s).map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
-    },
+    faqPage(subjectFaq(s)),
   ];
 }
 

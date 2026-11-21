@@ -68,7 +68,7 @@ export function ArchitectureWidget() {
       <Thumbnail />
       <span className="min-w-0 flex-1">
         <span className="flex items-center gap-1 font-semibold">
-          How FE Grind is built
+          How Front End Grind is built
           <ArrowUpRight size={16} aria-hidden className="text-text-muted transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
         </span>
         <span className="mt-1 block text-sm text-text-muted">What talks to what, and why: an architecture map generated from the code.</span>

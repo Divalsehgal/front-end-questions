@@ -44,7 +44,7 @@ export function Welcome() {
     >
       <form onSubmit={(e) => void finish(e)}>
         <h2 id="welcome-title" className="text-base font-semibold">
-          Welcome to FE Grind
+          Welcome to Front End Grind
         </h2>
         <p className="mt-1 text-sm text-text-muted">Two quick choices. No account, and nothing leaves your device.</p>
 

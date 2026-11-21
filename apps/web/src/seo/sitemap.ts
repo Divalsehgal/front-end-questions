@@ -9,7 +9,7 @@ export const sitemapFile = (name: string) => `sitemaps/${name}.xml`;
 
 /** Every router path that gets its own prerendered index.html (and a sitemap entry). */
 export function prerenderPaths() {
-  return ['/', ...SUBJECTS.map((s) => subjectHref(s.slug)), ...ALL.map((e) => hrefOf(e.key))];
+  return ['/', '/about', ...SUBJECTS.map((s) => subjectHref(s.slug)), ...ALL.map((e) => hrefOf(e.key))];
 }
 
 export type Sitemaps = {
@@ -43,7 +43,16 @@ export function buildSitemaps(lastmod: (subject: string) => string | undefined, 
     return { name: s.slug, entries: [{ path: subjectHref(s.slug), lastmod: own }, ...questions] };
   });
   const home = newest(subjects.flatMap((g) => g.entries.map((e) => e.lastmod))) || fallback;
-  const groups = [{ name: 'pages', entries: [{ path: '/', lastmod: home }] }, ...subjects];
+  const groups = [
+    {
+      name: 'pages',
+      entries: [
+        { path: '/', lastmod: home },
+        { path: '/about', lastmod: home },
+      ],
+    },
+    ...subjects,
+  ];
   const files: Record<string, string> = {};
   for (const g of groups) files[sitemapFile(g.name)] = urlset(g.entries.map((e) => ({ loc: absoluteUrl(e.path), lastmod: e.lastmod })));
   files[SITEMAP_INDEX] = [

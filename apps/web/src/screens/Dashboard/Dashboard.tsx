@@ -32,7 +32,7 @@ export function Dashboard() {
         description="Output questions are marked by the real JS engine, coding drills by test suites, and anything you miss comes back in Review."
       />
       <p className="-mt-4 mb-8 max-w-3xl text-sm leading-6 text-text-muted">
-        FE Grind is free frontend interview practice with no login required. Explore questions across JavaScript, TypeScript, React, Next.js, CSS,
+        Front End Grind is free frontend interview practice with no login required. Explore questions across JavaScript, TypeScript, React, Next.js, CSS,
         accessibility, DSA, system design, security, testing, and Node.js. Practise with quizzes, coding challenges, flashcards, and machine coding rounds. Your
         progress stays in your browser.{' '}
       </p>

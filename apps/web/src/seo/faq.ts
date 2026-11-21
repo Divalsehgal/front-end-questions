@@ -40,3 +40,27 @@ export function subjectFaq(s: SubjectMeta): Faq[] {
     },
   ];
 }
+
+/** Site-wide FAQ: the About page shows it and aboutJsonLd marks the same text up as FAQPage. */
+export const SITE_FAQ: Faq[] = [
+  {
+    q: 'Is Front End Grind free?',
+    a: 'Yes. Every question, answer and explanation is free, with no account, login or paywall.',
+  },
+  {
+    q: 'What does Front End Grind cover?',
+    a: 'Frontend interview topics: JavaScript, TypeScript, React, Next.js, HTML, CSS, accessibility, DSA, system design, security, testing and Node.js, as quizzes, flashcards, output prediction, coding drills and machine coding rounds.',
+  },
+  {
+    q: 'How are answers checked?',
+    a: 'Output questions run in the real JavaScript engine in your browser, coding drills run against test suites, and quizzes show the correct answer with an explanation.',
+  },
+  {
+    q: 'Where is my progress stored?',
+    a: 'Only in your browser. Nothing is sent to a server; you can export a backup file from Settings and import it on another device.',
+  },
+  {
+    q: 'Who makes Front End Grind, and how do I report a mistake?',
+    a: 'Front End Grind is built by Dival Sehgal and is open source on GitHub. Report a wrong answer or suggest a question by opening an issue on the GitHub repository.',
+  },
+];
