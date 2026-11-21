@@ -4,7 +4,7 @@ export const useRefQuestions: Question[] = [
   {
     kind: 'quiz',
     id: 'h-18',
-    title: 'mutating a ref does not re-render',
+    title: 'Mutating a ref does not re-render',
     prompt: 'Does clicking the button cause a visible re-render, and does incrementing `renderCount.current` itself trigger a re-render?',
     code: `function App() {
   const renderCount = useRef(0);
@@ -29,7 +29,7 @@ export const useRefQuestions: Question[] = [
   {
     kind: 'quiz',
     id: 'h-19',
-    title: 'previous value with a ref',
+    title: 'Previous value with a ref',
     prompt: 'After clicking `+` twice (count now `2`), what does the `<p>` show?',
     code: `function App() {
   const [count, setCount] = useState(0);
@@ -71,7 +71,7 @@ export const useRefQuestions: Question[] = [
   {
     kind: 'quiz',
     id: 'h-21',
-    title: 'plain variable vs ref with no re-render',
+    title: 'Plain variable vs ref with no re-render',
     prompt: 'Click the button 3 times. What logs each time (assume no re-render is triggered by anything else)?',
     code: `function App() {
   let count = 0;
@@ -96,7 +96,7 @@ export const useRefQuestions: Question[] = [
   {
     kind: 'quiz',
     id: 'h-22',
-    title: 'latest value via ref in an interval',
+    title: 'Latest value via ref in an interval',
     prompt: 'Click the button twice within the first two seconds. What does the interval log show — stale values or up-to-date values?',
     code: `function App() {
   const [count, setCount] = useState(0);
@@ -119,7 +119,7 @@ export const useRefQuestions: Question[] = [
   {
     kind: 'quiz',
     id: 'h-23',
-    title: 'ref persists across renders',
+    title: 'Ref persists across renders',
     prompt: 'The button is clicked 3 times in a row. What do the three `alert` calls show?',
     code: `function App() {
   const ref = useRef(0);

@@ -42,7 +42,7 @@ export function fileNameError(raw: string, existing: string[]) {
   return null;
 }
 
-export type TreeRow = { kind: 'folder' | 'file'; path: string; name: string; depth: number };
+type TreeRow = { kind: 'folder' | 'file'; path: string; name: string; depth: number };
 
 // Folders before files at each level, then by name: the order an editor's explorer uses.
 function comparePaths(a: string, b: string) {

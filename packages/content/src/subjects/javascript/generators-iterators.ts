@@ -11,7 +11,7 @@ export const generators: Topic = {
     {
       kind: 'output',
       id: 'gen-1',
-      title: 'the first next() argument is ignored',
+      title: 'The first next() argument is ignored',
       code: `function* ids(start = 0) {
   let id = start;
   while (true) yield id++;
@@ -41,7 +41,7 @@ console.log(g.next());`,
     {
       kind: 'output',
       id: 'gen-3',
-      title: 'asking questions with a generator',
+      title: 'Asking questions with a generator',
       code: `function* startGame() {
   const answer = yield 'Do you love JavaScript?';
   if (answer !== 'Yes') return "Oh wow... Guess we're done here";
@@ -69,7 +69,7 @@ for (const v of g()) console.log(v);`,
     {
       kind: 'output',
       id: 'gen-5',
-      title: 'tagged template literals',
+      title: 'Tagged template literals',
       code: `function tag(strings, ...values) {
   console.log(strings);
   console.log(values);
@@ -83,7 +83,7 @@ console.log(tag\`\${person} is \${age} years old\`);`,
     {
       kind: 'output',
       id: 'gen-6',
-      title: 'a hand-written iterator',
+      title: 'A hand-written iterator',
       code: `const range = {
   start: 1,
   end: 3,

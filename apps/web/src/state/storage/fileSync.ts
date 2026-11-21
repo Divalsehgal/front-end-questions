@@ -5,12 +5,12 @@ import { idbDelete, idbGet, idbSet } from './db';
 // The file survives clearing browser data. Its handle is kept in IndexedDB; browsers forget the
 // write permission between visits, so after a reload the file may need one click to reconnect.
 
-export type FileSyncStatus = 'unsupported' | 'off' | 'connected' | 'needs-permission' | 'error';
+type FileSyncStatus = 'unsupported' | 'off' | 'connected' | 'needs-permission' | 'error';
 export type FileSyncState = { status: FileSyncStatus; name?: string };
 
 type Writable = { write: (data: string) => Promise<void>; close: () => Promise<void> };
 type PermissionMode = { mode: 'readwrite' };
-export type SyncHandle = {
+type SyncHandle = {
   name: string;
   getFile: () => Promise<{ text: () => Promise<string> }>;
   createWritable: () => Promise<Writable>;

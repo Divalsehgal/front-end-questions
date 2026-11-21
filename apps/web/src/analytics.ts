@@ -23,7 +23,7 @@ const pushedKeys = new Set<string>();
 
 // Owner mode: visit any page with ?owner=1 once and this browser never loads GTM or tracks, so the site owner's
 // own visits stay out of the numbers. ?owner=0 turns it off. Set and read by GTM_SCRIPT, before GTM loads.
-export const OWNER_KEY = 'fe-grind-owner';
+const OWNER_KEY = 'fe-grind-owner';
 
 function isOwner() {
   try {

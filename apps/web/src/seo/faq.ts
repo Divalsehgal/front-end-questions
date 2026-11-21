@@ -19,10 +19,10 @@ export function kindSummary(questions: QuestionMeta[]) {
   }).join(', ');
 }
 
-/** The paragraph under a subject page's title. */
+/** The sentence that follows the subject's blurb under its title. */
 export function subjectIntro(s: SubjectMeta) {
   const count = s.topics.reduce((n, t) => n + t.questions.length, 0);
-  return `Practise ${shortSubject(s)} for frontend interviews with ${count} free questions in ${s.topics.length} topics. Every question shows its answer and an explanation once you have tried it.`;
+  return `${count} free questions in ${s.topics.length} topics, each with its answer and an explanation once you have tried it.`;
 }
 
 export function subjectFaq(s: SubjectMeta): Faq[] {

@@ -17,7 +17,7 @@ export function memoryDb(map: Map<string, unknown>) {
   };
 }
 
-export type FakeHandle = ReturnType<typeof fakeHandle>;
+type FakeHandle = ReturnType<typeof fakeHandle>;
 
 /** A FileSystemFileHandle look-alike whose content and permission tests can read and change. */
 export function fakeHandle(name = 'progress.json', content = '', permission: PermissionState = 'granted') {

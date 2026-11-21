@@ -77,7 +77,7 @@ a.link.active { color: purple; }    /* D */`,
         {
           kind: 'flashcard',
           id: 'css-f1',
-          title: 'position values',
+          title: 'Position values',
           front: 'Explain static, relative, absolute, fixed and sticky.',
           back: `- **static**: normal flow; top/left/z-index are ignored.
 - **relative**: normal flow, then nudged by top/left; becomes the **containing block** for absolute children.

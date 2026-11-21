@@ -7,7 +7,7 @@ export const SIDEBAR_MAX = 420;
 export const SIDEBAR_DEFAULT = 256;
 export const COLLAPSE_AT = 140;
 
-export type SidebarState = { width: number; collapsed: boolean };
+type SidebarState = { width: number; collapsed: boolean };
 
 const KEY = 'grind:sidebar';
 const DEFAULT: SidebarState = { width: SIDEBAR_DEFAULT, collapsed: false };

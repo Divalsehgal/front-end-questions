@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { KIND_META } from '../../questions/kinds';
 
 /** Up to `limit` other questions from the same topic, starting after this one (wrapping around). */
-export function relatedTo(entry: Entry, limit = 5) {
+function relatedTo(entry: Entry, limit = 5) {
   const list = ALL.filter((e) => e.subject.slug === entry.subject.slug && e.topic.slug === entry.topic.slug);
   const i = list.findIndex((e) => e.key === entry.key);
   return [...list.slice(i + 1), ...list.slice(0, i)].slice(0, limit);

@@ -11,7 +11,7 @@ export const thisBinding: Topic = {
     {
       kind: 'output',
       id: 'th-1',
-      title: 'method, detached, arrow, nested',
+      title: 'Method, detached, arrow, nested',
       code: `const obj = {
   name: 'outer',
   regular() {
@@ -33,7 +33,7 @@ console.log(obj.regular(), regular(), obj.arrow(), obj.nested());`,
     {
       kind: 'output',
       id: 'th-2',
-      title: 'methods passed to setTimeout',
+      title: 'Methods passed to setTimeout',
       code: `const user = {
   name: 'Ann',
   greet() {
@@ -77,7 +77,7 @@ console.log(p.name, p instanceof Person);`,
     {
       kind: 'output',
       id: 'th-4',
-      title: 'class method vs class-field arrow, destructured',
+      title: 'Class method vs class-field arrow, destructured',
       code: `class Btn {
   label = 'ok';
   handleArrow = () => this.label;
@@ -92,7 +92,7 @@ console.log(handle(), handleArrow());`,
     {
       kind: 'output',
       id: 'th-5',
-      title: 'regular callback inside map, with and without thisArg',
+      title: 'Regular callback inside map, with and without thisArg',
       code: `const obj = {
   prefix: '>',
   list: ['a', 'b'],
@@ -113,7 +113,7 @@ console.log(obj.print(), obj.printFixed());`,
     {
       kind: 'output',
       id: 'th-6',
-      title: 'method chaining, then detaching',
+      title: 'Method chaining, then detaching',
       code: `const counter = {
   count: 0,
   inc() {
@@ -169,7 +169,7 @@ Hint: temporarily attach \`fn\` to the target under a \`Symbol\` key.
     {
       kind: 'output',
       id: 'th-7',
-      title: 'the `self = this` pattern',
+      title: 'The `self = this` pattern',
       code: `const b = {
   name: 'Vivek',
   f: function () {

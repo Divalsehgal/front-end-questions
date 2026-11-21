@@ -7,7 +7,7 @@ export const hooksReducerContext: Topic = {
     {
       kind: 'quiz',
       id: 'h-30',
-      title: 'sequential dispatches compound',
+      title: 'Sequential dispatches compound',
       prompt: 'After one click, what does the button show?',
       code: `function reducer(state, action) {
   switch (action.type) {
@@ -33,7 +33,7 @@ function App() {
     {
       kind: 'quiz',
       id: 'h-31',
-      title: 'reducer returns the same state',
+      title: 'Reducer returns the same state',
       prompt:
         "Dispatching `{ type: 'noop' }` (which returns the *same* state object via `default`) — does the component re-render, and does `'reducer called with noop'` log?",
       code: `function reducer(state, action) {
@@ -86,7 +86,7 @@ function App({ start }) {
     {
       kind: 'quiz',
       id: 'h-33',
-      title: 'dispatching an unknown action',
+      title: 'Dispatching an unknown action',
       prompt: 'What happens when the button is clicked?',
       code: `function reducer(state, action) {
   switch (action.type) {
@@ -111,7 +111,7 @@ function App() {
     {
       kind: 'quiz',
       id: 'h-34',
-      title: 'three dispatches in one handler',
+      title: 'Three dispatches in one handler',
       prompt: 'After one click, what does the button show?',
       code: `function reducer(state, action) {
   return { ...state, count: state.count + action };
@@ -135,7 +135,7 @@ function App() {
     {
       kind: 'quiz',
       id: 'h-35',
-      title: 'context consumers re-render',
+      title: 'Context consumers re-render',
       prompt: 'Clicking "inc" twice — how many times does `\'Display rendered with\'` log (including mount)?',
       code: `const CountContext = createContext(0);
 
@@ -161,7 +161,7 @@ function App() {
     {
       kind: 'quiz',
       id: 'h-36',
-      title: 'nested providers: innermost wins',
+      title: 'Nested providers: innermost wins',
       prompt: 'What theme value does the button render?',
       code: `const ThemeContext = createContext('light');
 

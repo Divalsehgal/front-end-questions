@@ -3,7 +3,7 @@
 // backticks and template literals freely. Each subject module passes in its own files
 // (src/generated/files/<subject>.json, written by packages/content/scripts/generate.mjs), so fixtures ship in that
 // subject's chunk only; this finds them by naming convention.
-export type RawFiles = Record<string, string>;
+type RawFiles = Record<string, string>;
 
 export function filesFor(subject: string, raw: RawFiles) {
   return (id: string) => {

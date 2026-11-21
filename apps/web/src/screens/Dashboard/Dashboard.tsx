@@ -1,7 +1,7 @@
 'use client';
 import { ALL, hrefOf } from '@fe-grind/content/registry';
 import { buttonClass, Card, inline, Page, PageHeader, SectionTitle, Stat, useNow } from '@fe-grind/ui';
-import { ArrowRight, Flame, RotateCcw, Target, Timer } from 'lucide-react';
+import { ArrowRight, RotateCcw, Timer } from 'lucide-react';
 import Link from 'next/link';
 import { ArchitectureWidget } from '../../architecture/ArchitectureWidget';
 import { useProfile } from '../../state/profile';
@@ -29,18 +29,13 @@ export function Dashboard() {
     <Page>
       <PageHeader
         title={greeting(attempted.length > 0, name)}
-        description="Output questions are marked by the real JS engine, coding drills by test suites, and anything you miss comes back in Review."
+        description="Front End Grind is free frontend interview practice with no login: JavaScript, TypeScript, React, Next.js, CSS, accessibility, DSA, system design, security, testing and Node.js. Output questions are marked by the real JS engine, coding drills by test suites, and anything you miss comes back in Review."
       />
-      <p className="-mt-4 mb-8 max-w-3xl text-sm leading-6 text-text-muted">
-        Front End Grind is free frontend interview practice with no login required. Explore questions across JavaScript, TypeScript, React, Next.js, CSS,
-        accessibility, DSA, system design, security, testing, and Node.js. Practise with quizzes, coding challenges, flashcards, and machine coding rounds. Your
-        progress stays in your browser.{' '}
-      </p>
 
       <div className="grid gap-3 sm:grid-cols-3">
-        <Stat icon={<Target size={18} />} value={`${solved.length} / ${ALL.length}`} label="Solved" />
-        <Stat icon={<Flame size={18} />} value={attempted.length ? `${Math.round((firstTry / attempted.length) * 100)}%` : '–'} label="First-try accuracy" />
-        <Stat icon={<RotateCcw size={18} />} value={due} label="Due for review" />
+        <Stat value={`${solved.length} / ${ALL.length}`} label="Solved" />
+        <Stat value={attempted.length ? `${Math.round((firstTry / attempted.length) * 100)}%` : '–'} label="First-try accuracy" />
+        <Stat value={due} label="Due for review" />
       </div>
 
       <div className="mt-6 flex flex-wrap gap-3">

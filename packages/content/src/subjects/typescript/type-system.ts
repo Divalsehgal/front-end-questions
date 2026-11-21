@@ -79,7 +79,7 @@ const v: User = { name: 'Bo', password: 'y' }; // (2)`,
     {
       kind: 'output',
       id: 'ts-o1',
-      title: 'numeric enums have a reverse mapping',
+      title: 'Numeric enums have a reverse mapping',
       lang: 'ts',
       code: `enum Direction { Up = 1, Down, Left, Right }
 enum Role { Admin = 'admin', Reader = 'read_only' }
@@ -91,7 +91,7 @@ console.log(Role.Admin, (Role as any)['admin']);`,
     {
       kind: 'output',
       id: 'ts-o2',
-      title: 'type assertions do nothing at runtime',
+      title: 'Type assertions do nothing at runtime',
       lang: 'ts',
       code: `type User = { name: string; age: number };
 const data: unknown = JSON.parse('{"name":"Ann"}');
@@ -102,7 +102,7 @@ console.log(user.age.toFixed(0));`,
     {
       kind: 'output',
       id: 'ts-o3',
-      title: 'optional vs default parameters',
+      title: 'Optional vs default parameters',
       lang: 'ts',
       code: `function sum(numbers: number[], divisor?: number) {
   const total = numbers.reduce((a, b) => a + b, 0);

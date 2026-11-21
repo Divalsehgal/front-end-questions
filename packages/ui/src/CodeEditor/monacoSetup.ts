@@ -8,7 +8,7 @@ const loadTypeFiles = () => import('../generated/monaco-types.json').then((m) =>
 
 // Any other package (lucide-react, dayjs, …) loads from esm.sh in the preview; type it loosely.
 // A pattern like this is only a fallback, so React still resolves to its real types above.
-export const LOOSE_MODULES = "declare module '*';";
+const LOOSE_MODULES = "declare module '*';";
 
 let configured = false;
 export const configureMonaco: BeforeMount = (monaco) => {

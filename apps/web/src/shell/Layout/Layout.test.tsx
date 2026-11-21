@@ -30,7 +30,7 @@ describe('Layout', () => {
     expect(screen.getByRole('banner')).toBeInTheDocument();
     const nav = screen.getByRole('navigation', { name: 'Main' });
     expect(within(nav).getByRole('link', { name: 'Dashboard' })).toHaveAttribute('aria-current', 'page');
-    expect(within(nav).getAllByRole('link')).toHaveLength(5 + SUBJECTS.length);
+    expect(within(nav).getAllByRole('link')).toHaveLength(6 + SUBJECTS.length);
     const main = screen.getByRole('main');
     expect(main).toHaveAttribute('id', MAIN_ID);
     expect(within(main).getByRole('heading', { name: /Page body/ })).toBeInTheDocument();
@@ -39,7 +39,7 @@ describe('Layout', () => {
   it('links to settings from the header and shows the welcome card on a first visit', () => {
     updateProfile({ welcomed: false });
     renderLayout();
-    expect(within(screen.getByRole('banner')).getByRole('link', { name: 'Settings and backups' })).toHaveAttribute('href', '/settings');
+    expect(within(screen.getByRole('navigation', { name: 'Main' })).getByRole('link', { name: 'Settings' })).toHaveAttribute('href', '/settings');
     expect(screen.getByRole('region', { name: 'Welcome to Front End Grind' })).toBeInTheDocument();
     updateProfile({ welcomed: true });
   });

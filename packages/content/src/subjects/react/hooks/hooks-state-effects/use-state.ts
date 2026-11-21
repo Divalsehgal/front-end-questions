@@ -4,7 +4,7 @@ export const useStateQuestions: Question[] = [
   {
     kind: 'quiz',
     id: 'h-1',
-    title: 'three setCount(count + 1) in one click',
+    title: 'Three setCount(count + 1) in one click',
     prompt: "After one click, what does the button show, and how many times does `'render'` log (including initial mount)?",
     code: `function App() {
   const [count, setCount] = useState(0);
@@ -25,7 +25,7 @@ export const useStateQuestions: Question[] = [
   {
     kind: 'quiz',
     id: 'h-2',
-    title: 'functional updates chain',
+    title: 'Functional updates chain',
     prompt: 'After one click, what does the button show?',
     code: `function App() {
   const [count, setCount] = useState(0);
@@ -45,7 +45,7 @@ export const useStateQuestions: Question[] = [
   {
     kind: 'quiz',
     id: 'h-3',
-    title: 'mutating state and setting the same object',
+    title: 'Mutating state and setting the same object',
     prompt: 'After clicking, what is rendered?',
     code: `function App() {
   const [obj, setObj] = useState({ a: 1 });
@@ -68,7 +68,7 @@ export const useStateQuestions: Question[] = [
   {
     kind: 'quiz',
     id: 'h-4',
-    title: 'lazy initializer runs once',
+    title: 'Lazy initializer runs once',
     prompt: "Clicking the button 3 times — how many times does `'initializer ran'` log in total?",
     code: `function Counter() {
   const [count, setCount] = useState(() => {
@@ -107,7 +107,7 @@ export const useStateQuestions: Question[] = [
   {
     kind: 'quiz',
     id: 'h-6',
-    title: 'logging state right after setState',
+    title: 'Logging state right after setState',
     prompt: 'Starting from `count = 0`, after one click what gets logged to the console?',
     code: `function App() {
   const [count, setCount] = useState(0);
@@ -126,7 +126,7 @@ export const useStateQuestions: Question[] = [
   {
     kind: 'quiz',
     id: 'h-7',
-    title: 'lazy initializer captures the first value',
+    title: 'Lazy initializer captures the first value',
     prompt: 'The user types `"hello"` into the input over several keystrokes. What does the `<p>` show?',
     code: `function Form() {
   const [text, setText] = useState('hi');
@@ -146,7 +146,7 @@ export const useStateQuestions: Question[] = [
   {
     kind: 'quiz',
     id: 'h-8',
-    title: 'setting the same value twice',
+    title: 'Setting the same value twice',
     prompt: 'Click the button twice. What does the button display after both clicks (mount is render 1)?',
     code: `let renderCount = 0;
 

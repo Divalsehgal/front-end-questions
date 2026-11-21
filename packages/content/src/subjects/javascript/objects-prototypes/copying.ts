@@ -8,7 +8,7 @@ export const copyingQuestions: Question[] = [
   {
     kind: 'output',
     id: 'cp-1',
-    title: 'spread vs structuredClone',
+    title: 'Spread vs structuredClone',
     code: `const original = { a: 1, nested: { b: 2 }, list: [1] };
 const spread = { ...original };
 const cloned = structuredClone(original);
@@ -21,7 +21,7 @@ console.log(original.a, original.nested.b, original.list.length);`,
   {
     kind: 'output',
     id: 'cp-2',
-    title: 'what JSON round-tripping loses',
+    title: 'What JSON round-tripping loses',
     code: `const src = { d: new Date(0), u: undefined, f() {}, n: NaN, s: new Set([1]) };
 const copy = JSON.parse(JSON.stringify(src));
 console.log(typeof copy.d, 'u' in copy, 'f' in copy, copy.n, copy.s);`,
@@ -44,7 +44,7 @@ console.log(cfg.level, cfg.inner.level);`,
   {
     kind: 'output',
     id: 'cp-4',
-    title: 'reference equality, NaN lookups, Set',
+    title: 'Reference equality, NaN lookups, Set',
     code: 'console.log([1, 2] === [1, 2], [NaN].includes(NaN), [NaN].indexOf(NaN), new Set([NaN, NaN, 0, -0]).size);',
     why: 'Objects compare by reference. includes uses SameValueZero (finds NaN); indexOf uses === (cannot). Set also uses SameValueZero: NaNs collapse, 0 and -0 are the same → size 2.',
   },

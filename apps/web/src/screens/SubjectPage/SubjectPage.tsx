@@ -49,8 +49,9 @@ export function SubjectPage() {
         title={`${subject.title} interview questions`}
         description={
           <>
-            <p>{inline(subject.blurb)}</p>
-            <p className="mt-2">{subjectIntro(subject)}</p>
+            <p>
+              {inline(subject.blurb)} {subjectIntro(subject)}
+            </p>
             <p className="mt-2 text-sm">
               {solved} of {entries.length} solved
             </p>

@@ -21,3 +21,6 @@ packages/ui/src/generated/monaco-types.json
 !.env.example
 .vercel
 .claude/launch.json
+
+# graphify knowledge graph (local only)
+graphify-out/

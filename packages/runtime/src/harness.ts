@@ -81,7 +81,7 @@ export const assert = {
 // Mocks stand in for callbacks of any signature, so `any` is deliberate here (unknown[] params
 // would make a mock unassignable to typed callbacks).
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export type MockFn = ((...args: any[]) => any) & { calls: unknown[][]; callCount: number };
+type MockFn = ((...args: any[]) => any) & { calls: unknown[][]; callCount: number };
 
 export function fn(impl?: (...args: any[]) => any): MockFn {
   /* eslint-enable @typescript-eslint/no-explicit-any */

@@ -4,7 +4,7 @@ export const promiseOutputQuestions: Question[] = [
   {
     kind: 'output',
     id: 'el-1',
-    title: 'sync vs microtask vs macrotask',
+    title: 'Sync vs microtask vs macrotask',
     code: `console.log(1);
 setTimeout(() => console.log(2), 0);
 Promise.resolve()
@@ -25,7 +25,7 @@ console.log(9);`,
   {
     kind: 'output',
     id: 'el-2',
-    title: 'where does an async function pause?',
+    title: 'Where does an async function pause?',
     code: `async function a() {
   console.log(1);
   await b();
@@ -42,7 +42,7 @@ console.log(5);`,
   {
     kind: 'output',
     id: 'el-3',
-    title: 'promise executor runs sync; settles once',
+    title: 'Promise executor runs sync; settles once',
     code: `const p = new Promise((resolve, reject) => {
   console.log('a');
   resolve(1);
@@ -57,7 +57,7 @@ console.log('c');`,
   {
     kind: 'output',
     id: 'el-4',
-    title: 'what flows through finally?',
+    title: 'What flows through finally?',
     code: `Promise.resolve(1)
   .then((v) => {
     console.log(v);
@@ -89,7 +89,7 @@ console.log('c');`,
   {
     kind: 'output',
     id: 'el-6',
-    title: 'two chains interleave',
+    title: 'Two chains interleave',
     code: `Promise.resolve()
   .then(() => console.log('a1'))
   .then(() => console.log('a2'));

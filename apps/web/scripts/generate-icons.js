@@ -146,7 +146,8 @@ function ogImage() {
   fill(img, [0, 0, 1200, 630], INK, roundRect(40, 40, 1160, 590, 36));
   fill(img, [96, 112, 232, 248], ACCENT, roundRect(96, 112, 232, 248, 28));
   bolt(img, 116, 132, 96, INK);
-  text(img, 'FE GRIND', 272, 128, 15, PAPER);
+  // Scale 9 fits the full name between the tile and the right margin, centred on the tile.
+  text(img, 'FRONT END GRIND', 272, 148, 9, PAPER);
   const lines = ['FREE FRONTEND INTERVIEW', 'QUESTIONS, QUIZZES', 'AND CODING DRILLS'];
   lines.forEach((l, i) => text(img, l, 96, 312 + i * 64, 7, PAPER));
   fill(img, [96, 516, 1104, 524], ACCENT, () => true);

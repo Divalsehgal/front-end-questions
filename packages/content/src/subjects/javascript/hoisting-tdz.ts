@@ -18,7 +18,7 @@ console.log(typeof d);`,
     {
       kind: 'output',
       id: 'ho-2',
-      title: 'same as ho-1 without the let',
+      title: 'Same as ho-1 without the let',
       code: `console.log(typeof a, typeof c, typeof d);
 var a = 1;
 function c() {}`,
@@ -37,7 +37,7 @@ console.log(typeof foo);`,
     {
       kind: 'output',
       id: 'ho-4',
-      title: 'calling function expressions early',
+      title: 'Calling function expressions early',
       code: `try {
   sayHi();
 } catch (e) {
@@ -57,7 +57,7 @@ const sayBye = () => console.log('bye');`,
     {
       kind: 'output',
       id: 'ho-5',
-      title: 'shadowing let inside a function',
+      title: 'Shadowing let inside a function',
       code: `let x = 'outer';
 function f() {
   console.log(x);

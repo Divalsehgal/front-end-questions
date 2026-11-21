@@ -4,7 +4,7 @@ export const useEffectQuestions: Question[] = [
   {
     kind: 'quiz',
     id: 'h-9',
-    title: 'effect with no dependency array',
+    title: 'Effect with no dependency array',
     explanation: `\`useEffect\` lets a component sync with something outside React (a subscription, a timer, the document title) **after** React has committed a render to the screen. The dependency array decides which commits trigger it, and there are three shapes to know:
 
 - **No array**: the effect runs after every commit, the first one and every re-render.
@@ -39,7 +39,7 @@ If an effect only computes something from props or state, you probably don't nee
   {
     kind: 'quiz',
     id: 'h-10',
-    title: 'empty dependency array: mount and unmount',
+    title: 'Empty dependency array: mount and unmount',
     prompt: 'The button is clicked 3 times, then the component unmounts. What logs, in order?',
     code: `function App() {
   const [count, setCount] = useState(0);
@@ -63,7 +63,7 @@ If an effect only computes something from props or state, you probably don't nee
   {
     kind: 'quiz',
     id: 'h-11',
-    title: 'stale count inside setInterval',
+    title: 'Stale count inside setInterval',
     prompt: 'After 5 seconds, what does the `<div>` show?',
     code: `function Timer() {
   const [count, setCount] = useState(0);
@@ -105,7 +105,7 @@ If an effect only computes something from props or state, you probably don't nee
   {
     kind: 'quiz',
     id: 'h-13',
-    title: 'parent re-render, same primitive dependency',
+    title: 'Parent re-render, same primitive dependency',
     prompt:
       "Parent re-renders `<App userId={1} />` three times in a row with the **same** `userId` value of `1` each time. How many times does `'fetching 1'` log?",
     code: `function App({ userId }) {
@@ -122,7 +122,7 @@ If an effect only computes something from props or state, you probably don't nee
   {
     kind: 'quiz',
     id: 'h-14',
-    title: 'a derived boolean as a dependency',
+    title: 'A derived boolean as a dependency',
     prompt: "Clicking the button 6 times (count goes 0→6), how many total times (including mount) does `'effect ran'` log?",
     code: `function App() {
   const [count, setCount] = useState(0);
@@ -140,7 +140,7 @@ If an effect only computes something from props or state, you probably don't nee
   {
     kind: 'quiz',
     id: 'h-15',
-    title: 'inline callback as an effect dependency',
+    title: 'Inline callback as an effect dependency',
     prompt: "Clicking the button 3 times — how many times does `'updated'` log (including mount)?",
     code: `function Child({ onUpdate }) {
   useEffect(() => {
@@ -167,7 +167,7 @@ function Parent() {
   {
     kind: 'quiz',
     id: 'h-16',
-    title: 'event listener reading stale state',
+    title: 'Event listener reading stale state',
     prompt: "Click the button 3 times (value becomes 3), then trigger a `resize` event. What does the console log show for `'current value:'`?",
     code: `function App() {
   const [value, setValue] = useState(0);
@@ -189,7 +189,7 @@ function Parent() {
   {
     kind: 'quiz',
     id: 'h-17',
-    title: 'cleanup on unmount',
+    title: 'Cleanup on unmount',
     prompt: 'From the first render through clicking the "hide" button, what logs in total?',
     code: `function App() {
   const [show, setShow] = useState(true);

@@ -10,8 +10,7 @@ import { SITEMAP_INDEX } from './sitemap';
 import type { FullEntry } from '@fe-grind/content/registry';
 import type { Question } from '@fe-grind/content/types';
 
-export const LLMS_TXT = 'llms.txt';
-export const LLMS_FULL_TXT = 'llms-full.txt';
+const LLMS_FULL_TXT = 'llms-full.txt';
 
 /** A fenced code block whose fence is longer than any backtick run inside the code. */
 export function fence(code: string, lang = '') {

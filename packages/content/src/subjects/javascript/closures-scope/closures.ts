@@ -34,7 +34,7 @@ for (let j = 0; j < 3; j++) {
   {
     kind: 'output',
     id: 'cl-2',
-    title: 'independent counters; destructured method',
+    title: 'Independent counters; destructured method',
     code: `function makeCounter() {
   let count = 0;
   return { inc: () => ++count, get: () => count };
@@ -53,7 +53,7 @@ console.log(a.get());`,
   {
     kind: 'output',
     id: 'cl-3',
-    title: 'closure captures the variable, not the value',
+    title: 'Closure captures the variable, not the value',
     code: `let x = 1;
 function show() {
   console.log(x);
@@ -65,7 +65,7 @@ x = 2;`,
   {
     kind: 'output',
     id: 'cl-4',
-    title: 'array of functions built with var',
+    title: 'Array of functions built with var',
     code: `var fns = [];
 for (var i = 0; i < 3; i++) fns.push(() => i * 10);
 console.log(fns[0](), fns[2]());`,
@@ -74,7 +74,7 @@ console.log(fns[0](), fns[2]());`,
   {
     kind: 'output',
     id: 'cl-5',
-    title: 'lexical, not dynamic, scope',
+    title: 'Lexical, not dynamic, scope',
     code: `const name = 'module';
 function outer() {
   const name = 'outer';

@@ -64,7 +64,7 @@ function App() {
   {
     kind: 'quiz',
     id: 'h-47',
-    title: 'why useSyncExternalStore exists',
+    title: 'Why useSyncExternalStore exists',
     prompt:
       'If `store.increment()` is called from **outside** React (e.g., a browser devtools console or a non-React event), does the `<Counter>` component re-render to reflect the new value?',
     code: `let listeners = [];
@@ -100,7 +100,7 @@ function Counter() {
   {
     kind: 'quiz',
     id: 'h-48',
-    title: 'conditionally calling a hook',
+    title: 'Conditionally calling a hook',
     prompt: '`showExtra` toggles between renders (`true` then `false`). What happens?',
     code: `function App({ showExtra }) {
   const [a, setA] = useState(0);
@@ -122,7 +122,7 @@ function Counter() {
   {
     kind: 'quiz',
     id: 'h-49',
-    title: 'two instances of a custom hook',
+    title: 'Two instances of a custom hook',
     prompt:
       'Clicking the first button twice and the second button once — what do the two buttons show? Do `useCounter(0)` and `useCounter(100)` share any state?',
     code: `function useCounter(initial) {
@@ -154,7 +154,7 @@ function App() {
   {
     kind: 'quiz',
     id: 'h-50',
-    title: 'stale closure in a delayed log',
+    title: 'Stale closure in a delayed log',
     prompt:
       'Click the button, then click it again 1 second later (before the first `setTimeout` fires). What does the first `setTimeout`\'s console log print after 3 seconds — the "stale" closure value or the latest state?',
     code: `function App() {

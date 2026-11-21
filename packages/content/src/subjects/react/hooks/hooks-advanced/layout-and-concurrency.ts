@@ -4,7 +4,7 @@ export const layoutAndConcurrencyQuestions: Question[] = [
   {
     kind: 'quiz',
     id: 'h-38',
-    title: 'render vs useLayoutEffect vs useEffect order',
+    title: 'Render vs useLayoutEffect vs useEffect order',
     prompt: 'On mount, in what order do these three logs fire?',
     code: `function App() {
   console.log('render');
@@ -31,7 +31,7 @@ export const layoutAndConcurrencyQuestions: Question[] = [
   {
     kind: 'quiz',
     id: 'h-39',
-    title: 'measuring the DOM before paint',
+    title: 'Measuring the DOM before paint',
     prompt: 'Why is `useLayoutEffect` used here instead of `useEffect`?',
     code: `function Tooltip() {
   const ref = useRef(null);
@@ -82,7 +82,7 @@ export const layoutAndConcurrencyQuestions: Question[] = [
   {
     kind: 'quiz',
     id: 'h-41',
-    title: 'what useTransition returns',
+    title: 'What useTransition returns',
     prompt: 'What does `useTransition()` return, and what is the correct destructuring order shown above?',
     code: `function App() {
   const [isPending, startTransition] = useTransition();
@@ -113,7 +113,7 @@ export const layoutAndConcurrencyQuestions: Question[] = [
   {
     kind: 'quiz',
     id: 'h-42',
-    title: 'what useDeferredValue does',
+    title: 'What useDeferredValue does',
     prompt:
       'The user types `"a"`, then quickly `"ab"`, then `"abc"` into a controlled input that sets `query`. Broadly, what does `useDeferredValue` allow React to do?',
     code: `function List({ query }) {
@@ -135,7 +135,7 @@ export const layoutAndConcurrencyQuestions: Question[] = [
   {
     kind: 'quiz',
     id: 'h-43',
-    title: 'urgent vs transition updates',
+    title: 'Urgent vs transition updates',
     prompt:
       'Is the first `setCount` call (outside `startTransition`) treated as urgent or non-urgent, and does wrapping the second call in `startTransition` change what final value is eventually rendered?',
     code: `function App() {
@@ -163,7 +163,7 @@ export const layoutAndConcurrencyQuestions: Question[] = [
   {
     kind: 'quiz',
     id: 'h-44',
-    title: 'deferring an expensive child',
+    title: 'Deferring an expensive child',
     prompt: 'What is the primary benefit of using `deferredText` (instead of `text` directly) as the prop to `ExpensiveList`?',
     code: `function SearchResults() {
   const [text, setText] = useState('');

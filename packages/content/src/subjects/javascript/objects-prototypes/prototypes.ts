@@ -4,7 +4,7 @@ export const prototypesQuestions: Question[] = [
   {
     kind: 'output',
     id: 'pr-1',
-    title: 'reassigning Fn.prototype after creating instances',
+    title: 'Reassigning Fn.prototype after creating instances',
     code: `function Animal(name) {
   this.name = name;
 }
@@ -41,7 +41,7 @@ console.log(dog.speak(), Object.hasOwn(dog, 'speak'), 'speak' in dog);`,
   {
     kind: 'output',
     id: 'pr-3',
-    title: 'own property shadows the prototype',
+    title: 'Own property shadows the prototype',
     code: `const proto = {
   greet() {
     return 'proto';
@@ -59,7 +59,7 @@ console.log(obj.greet());`,
   {
     kind: 'output',
     id: 'pr-4',
-    title: 'array on the prototype is shared',
+    title: 'Array on the prototype is shared',
     code: `function Team() {}
 Team.prototype.members = [];
 const t1 = new Team();
@@ -72,7 +72,7 @@ console.log(t1.members, t2.members, new Team().members);`,
   {
     kind: 'output',
     id: 'pr-5',
-    title: 'constructor that returns something',
+    title: 'Constructor that returns something',
     code: `function A() {
   this.x = 1;
   return { x: 2 };
@@ -87,7 +87,7 @@ console.log(new A().x, new B().x);`,
   {
     kind: 'output',
     id: 'pr-6',
-    title: 'parent constructor calls an overridden method',
+    title: 'Parent constructor calls an overridden method',
     code: `class Base {
   constructor() {
     this.init();
@@ -108,7 +108,7 @@ console.log(new Child().type);`,
   {
     kind: 'output',
     id: 'pr-7',
-    title: 'walking the chain',
+    title: 'Walking the chain',
     code: `class X {}
 const x = new X();
 console.log(

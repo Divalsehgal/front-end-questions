@@ -90,14 +90,6 @@ export function Sidebar({ onSearch }: Readonly<{ onSearch: () => void }>) {
           <span className="truncate tracking-tight whitespace-nowrap">Front End Grind</span>
         </NavLink>
         <div className="flex shrink-0 items-center gap-0.5">
-          <NavLink
-            to="/settings"
-            aria-label="Settings and backups"
-            title="Settings and backups"
-            className="rounded-lg p-1.5 text-text-muted hover:bg-surface-muted hover:text-text-main"
-          >
-            <Settings size={16} aria-hidden />
-          </NavLink>
           <ThemeToggle />
           <button
             type="button"
@@ -138,6 +130,9 @@ export function Sidebar({ onSearch }: Readonly<{ onSearch: () => void }>) {
         </NavLink>
         <NavLink to="/about" className={navClass}>
           <Info size={16} aria-hidden /> <span className="whitespace-nowrap">About</span>
+        </NavLink>
+        <NavLink to="/settings" className={navClass}>
+          <Settings size={16} aria-hidden /> <span className="whitespace-nowrap">Settings</span>
         </NavLink>
 
         <p className="mt-6 mb-1 hidden px-3 text-xs font-medium text-text-muted md:block">Subjects</p>

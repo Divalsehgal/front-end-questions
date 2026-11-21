@@ -4,7 +4,7 @@
 import { z } from 'zod';
 import raw from '../generated/architecture.json';
 
-export const NODE_TYPES = ['frontend', 'backend', 'external', 'data'] as const;
+const NODE_TYPES = ['frontend', 'backend', 'external', 'data'] as const;
 export const TIERS = ['client', 'compute', 'data'] as const;
 
 const nodeSchema = z.object({

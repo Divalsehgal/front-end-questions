@@ -55,7 +55,7 @@ export const scopeTrapsQuestions: Question[] = [
   {
     kind: 'output',
     id: 'cl-9',
-    title: 'closures read the latest value; var is hoisted',
+    title: 'Closures read the latest value; var is hoisted',
     code: `let x = 10;
 function A() {
   setTimeout(function () {
@@ -71,7 +71,7 @@ var y = 20;`,
   {
     kind: 'output',
     id: 'cl-10',
-    title: 'default parameters vs passing the object',
+    title: 'Default parameters vs passing the object',
     code: `const value = { number: 10 };
 const multiply = (x = { ...value }) => {
   console.log((x.number *= 2));
@@ -86,7 +86,7 @@ multiply({ ...value });`,
   {
     kind: 'output',
     id: 'cl-11',
-    title: 'how closures power React hooks',
+    title: 'How closures power React hooks',
     code: `const React = (function () {
   let hooks = [];
   let current = 0;

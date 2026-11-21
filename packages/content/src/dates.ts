@@ -4,7 +4,7 @@
 export type QuestionDates = { published: string; modified: string };
 
 /** Where the subjects live, repo-relative, and where they lived before the move to packages/content. */
-export const SUBJECTS_PATH = 'packages/content/src/subjects';
+const SUBJECTS_PATH = 'packages/content/src/subjects';
 const LEGACY_PATH = 'src/content/subjects';
 
 /**

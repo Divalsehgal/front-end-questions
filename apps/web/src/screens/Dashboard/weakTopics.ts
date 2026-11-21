@@ -2,7 +2,7 @@ import { SUBJECTS } from '@fe-grind/content/registry';
 import type { Attempt } from '../../state/progress';
 import type { SubjectMeta, TopicMeta } from '@fe-grind/content/types';
 
-export type WeakTopic = { subject: SubjectMeta; topic: TopicMeta; wrong: number; first: string };
+type WeakTopic = { subject: SubjectMeta; topic: TopicMeta; wrong: number; first: string };
 
 /** Topics where you've missed the most, so you know what to revise. */
 export function weakTopics(progress: Record<string, Attempt>, limit = 5): WeakTopic[] {

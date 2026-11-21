@@ -19,7 +19,7 @@ function lastCommitDate(slug: string) {
   }
 }
 
-export const CONTENT_TAG = 'content';
+const CONTENT_TAG = 'content';
 
 /** Every sitemap file by name (the index plus one per subject and one for pages). */
 // eslint-disable-next-line require-await -- 'use cache' functions must be async

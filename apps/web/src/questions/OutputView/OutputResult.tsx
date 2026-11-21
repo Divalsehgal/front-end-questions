@@ -5,7 +5,7 @@ import { Check, Play, X } from 'lucide-react';
 export type Result = { real: string[]; mine: string[]; correct: boolean; gaveUp: boolean };
 
 // Underlines the words in your line that don't appear at the same position in the real line.
-export function TokenDiff({ line, against }: Readonly<{ line: string; against: string }>) {
+function TokenDiff({ line, against }: Readonly<{ line: string; against: string }>) {
   const theirs = against.split(/\s+/).map(normalizeLine);
   return (
     <>

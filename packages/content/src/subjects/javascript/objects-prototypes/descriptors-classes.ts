@@ -4,7 +4,7 @@ export const descriptorsClassesQuestions: Question[] = [
   {
     kind: 'output',
     id: 'ob-1',
-    title: 'property flags in strict mode',
+    title: 'Property flags in strict mode',
     code: `const user = {};
 Object.defineProperty(user, 'id', { value: 101, writable: false, enumerable: true, configurable: true });
 Object.defineProperty(user, 'secret', { value: '123', enumerable: false });
@@ -41,7 +41,7 @@ console.log(sealed.item, frozen.item);`,
   {
     kind: 'output',
     id: 'ob-3',
-    title: 'getters and setters',
+    title: 'Getters and setters',
     code: `const user = {
   first: 'John',
   last: 'Doe',
@@ -82,7 +82,7 @@ console.log(target.c, 'c' in proxy);`,
   {
     kind: 'output',
     id: 'ob-5',
-    title: 'static methods are not on instances',
+    title: 'Static methods are not on instances',
     code: `class Chameleon {
   static colorChange(newColor) {
     this.newColor = newColor;
@@ -132,7 +132,7 @@ console.log(Object.assign({}, obj1, obj2, obj3));`,
   {
     kind: 'output',
     id: 'ob-8',
-    title: 'return values people forget',
+    title: 'Return values people forget',
     code: `const newList = [1, 2, 3].push(4);
 console.log(newList);
 console.log(parseInt('7*6', 10), parseInt('12px'), Number('12px'));

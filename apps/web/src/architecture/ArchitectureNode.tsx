@@ -5,7 +5,7 @@ import { TYPE_LABEL } from './model';
 import { TYPE_ACCENT, TYPE_ICON } from './typeStyle';
 import type { NodeType, Tier } from './schema';
 
-export type FlowNodeData = { label: string; description: string; kind: NodeType; tier: Tier };
+type FlowNodeData = { label: string; description: string; kind: NodeType; tier: Tier };
 export type FlowNode = Node<FlowNodeData, 'architecture'>;
 
 /**
